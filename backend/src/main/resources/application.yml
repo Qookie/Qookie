@@ -1,0 +1,24 @@
+server:
+  port: 8000
+  ssl:
+    enabled: false
+spring:
+  profiles:
+    active: secret
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  servlet:
+    multipart:
+      max-file-size: 1MB
+      max-request-size: 1MB
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
