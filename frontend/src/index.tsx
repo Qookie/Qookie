@@ -2,22 +2,15 @@ import React from "react"
 import ReactDOM from "react-dom/client"
 import "./index.css"
 // router
-import { BrowserRouter, Route, Routes } from "react-router-dom"
-// import App from "./App"
+import Router from "./router/Router"
 // PWA
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration"
 import reportWebVitals from "./reportWebVitals"
-// pages
-import Login from "./pages/Login"
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement)
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Login />}/>
-      </Routes>
-    </BrowserRouter>
+    <Router />
   </React.StrictMode>,
 )
 
