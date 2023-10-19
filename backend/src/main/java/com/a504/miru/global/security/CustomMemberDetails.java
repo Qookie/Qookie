@@ -1,6 +1,6 @@
 package com.a504.miru.global.security;
 
-import com.a504.miru.domain.member.Member;
+import com.a504.miru.domain.member.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;

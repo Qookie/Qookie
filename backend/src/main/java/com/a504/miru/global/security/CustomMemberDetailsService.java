@@ -1,18 +1,14 @@
 package com.a504.miru.global.security;
 
-import com.a504.miru.domain.member.Member;
 import com.a504.miru.domain.member.MemberService;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import com.a504.miru.domain.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-import javax.swing.text.html.Option;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 public class CustomMemberDetailsService implements UserDetailsService {

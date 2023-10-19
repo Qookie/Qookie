@@ -1,8 +1,8 @@
 package com.a504.miru.global.jwt;
 
-import com.a504.miru.domain.member.Member;
 import com.a504.miru.domain.member.MemberRepositoryImpl;
 import com.a504.miru.domain.member.MemberService;
+import com.a504.miru.domain.member.entity.Member;
 import com.a504.miru.global.jwt.dto.JwtObject;
 import com.a504.miru.global.security.CustomMemberDetails;
 import com.auth0.jwt.exceptions.JWTVerificationException;
@@ -22,7 +22,6 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
 
-    private final MemberService memberService;
     private final MemberRepositoryImpl memberRepository;
 
     @Override
@@ -57,8 +56,4 @@ public class JwtFilter extends OncePerRequestFilter {
             response.sendError(500, "Jwt verification error: " + e.getMessage());
         }
     }
-
-//    private Boolean isNewMember(JwtObject token) {
-//        return memberRepository.findByUid(token.getJwtPayload().getUid()).isEmpty();
-//    }
 }
