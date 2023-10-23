@@ -50,7 +50,7 @@ pipeline {
 				mattermostSend (color: 'danger', 
 				message: "빌드 실패: ${env.JOB_NAME} #${env.BUILD_NUMBER} by ${Author_ID}(${Author_Name})\n(<${env.BUILD_URL}|Details>)", 
 				endpoint: 'https://meeting.ssafy.com/hooks/iouefjsyhtny8xr64fpxmmqrjr', 
-				channel: 'A504 MR 알림방'
+				channel: 'a504-mr'
 				)
 			}
 		}
@@ -61,7 +61,7 @@ pipeline {
 				mattermostSend (color: 'danger', 
 				message: "빌드 실패: ${env.JOB_NAME} #${env.BUILD_NUMBER} by ${Author_ID}(${Author_Name})\n(<${env.BUILD_URL}|Details>)", 
 				endpoint: 'https://meeting.ssafy.com/hooks/iouefjsyhtny8xr64fpxmmqrjr', 
-				channel: 'A504 MR 알림방'
+				channel: 'a504-mr'
 				)
 			}
 		}
