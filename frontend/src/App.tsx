@@ -14,8 +14,10 @@ function App() {
 const Layout = styled.div`
   max-width: 430px;
   width: 100%;
-  margin: 0 auto;
   min-height: 100vh;
+  @media screen and (min-width: 431px) {
+    margin: 0 auto;
+  }
 `;
 
 export default App;
