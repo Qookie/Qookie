@@ -37,7 +37,7 @@ pipeline {
 					sh "docker rm frontend || true"
 
 					sh "docker build -t frontend ."
-					sh "docker run -p 3000:3000 -d --name frontend frontend"
+					sh "docker run -v /front_nginx_log:/var/log/nginx -p 3000:3000 -d --name frontend frontend"
 				}
 			}
 		}
@@ -50,7 +50,7 @@ pipeline {
 				mattermostSend (color: 'danger', 
 				message: "빌드 실패: ${env.JOB_NAME} #${env.BUILD_NUMBER} by ${Author_ID}(${Author_Name})\n(<${env.BUILD_URL}|Details>)", 
 				endpoint: 'https://meeting.ssafy.com/hooks/iouefjsyhtny8xr64fpxmmqrjr', 
-				channel: 'a504mr'
+				channel: 'A504 MR 알림방'
 				)
 			}
 		}
@@ -61,7 +61,7 @@ pipeline {
 				mattermostSend (color: 'danger', 
 				message: "빌드 실패: ${env.JOB_NAME} #${env.BUILD_NUMBER} by ${Author_ID}(${Author_Name})\n(<${env.BUILD_URL}|Details>)", 
 				endpoint: 'https://meeting.ssafy.com/hooks/iouefjsyhtny8xr64fpxmmqrjr', 
-				channel: 'a504mr'
+				channel: 'A504 MR 알림방'
 				)
 			}
 		}
