@@ -1,10 +1,8 @@
 package com.a504.miru.domain.member;
 
 import com.a504.miru.domain.member.dto.LoginRequest;
-import com.a504.miru.global.jwt.JwtUtil;
 import com.a504.miru.global.response.BaseResponse;
 import com.a504.miru.global.security.CustomMemberDetails;
-import com.a504.miru.global.security.CustomMemberDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -25,7 +25,7 @@ import java.util.Arrays;
 public class SecurityConfig {
 
     private final MemberRepositoryImpl memberRepository;
-    private final CustomMemberDetailsService customMemberDetailsService;
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
@@ -47,12 +47,5 @@ public class SecurityConfig {
                 UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();
-    }
-
-    @Bean
-    DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-        daoAuthenticationProvider.setUserDetailsService(this.customMemberDetailsService);
-        return daoAuthenticationProvider;
     }
 }

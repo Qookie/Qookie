@@ -21,8 +21,7 @@ public class MemberService {
 
     @Transactional
     public void createMember(LoginRequest loginRequest, Member member) {
-        // check if loginRequest is
-        System.out.println(loginRequest);
+        // check if loginRequest has valid uid
         if (loginRequest.getUid().equals(member.getUid())) {
             member.addInfo(loginRequest);
             memberRepository.save(member);
