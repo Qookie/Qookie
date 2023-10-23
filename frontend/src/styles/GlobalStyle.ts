@@ -32,7 +32,7 @@ const GlobalStyle = createGlobalStyle`
     }
     
     html, body{
-        font-family: "Pretendard"
+        font-family: "Pretendard";
     }
 `;
 export default GlobalStyle;
