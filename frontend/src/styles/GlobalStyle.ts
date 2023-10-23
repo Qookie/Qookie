@@ -1,9 +1,9 @@
-import { createGlobalStyle } from "styled-components";
-import { ColorSystem } from "./ColorSystem";
-import reset from "styled-reset";
-import PretendardBold from "../assets/fonts/Pretendard/Pretendard-Bold.woff2";
-import PretendardSemiBold from "../assets/fonts/Pretendard/Pretendard-SemiBold.woff2";
-import PretendardRegular from "../assets/fonts/Pretendard/Pretendard-Regular.woff2";
+import { createGlobalStyle } from 'styled-components';
+import { ColorSystem } from './ColorSystem';
+import reset from 'styled-reset';
+import PretendardBold from '../assets/fonts/Pretendard/Pretendard-Bold.woff2';
+import PretendardSemiBold from '../assets/fonts/Pretendard/Pretendard-SemiBold.woff2';
+import PretendardRegular from '../assets/fonts/Pretendard/Pretendard-Regular.woff2';
 
 const GlobalStyle = createGlobalStyle`
     ${reset};
