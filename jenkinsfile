@@ -1,0 +1,69 @@
+pipeline {
+	agent any
+	stages {
+		stage("Clone") {
+			steps {
+				git branch: 'develop',
+					credentialsId: 'jenkins_hunn000', 
+					url: 'https://lab.ssafy.com/s09-final/S09P31A504.git'
+			}
+		}
+		stage("Build Backend") {
+			steps {
+				dir ("./backend") {
+					// stop running containers and remove images
+					sh "docker stop backend-server || true"
+					sh "docker rm backend-server || true"
+					sh "docker stop backend-redis || true"
+					sh "docker rm backend-redis || true"
+
+					// copy application-secret to cloned repo
+					sh "rm ./src/main/resources/application-secret.yml || true"
+					sh "cp /var/jenkins_home/secrets/application-secret.yml ./src/main/resources/"
+
+					// copy .env file for docker compose to cloned repo
+					sh "rm ./.env || true"
+					sh "cp /var/jenkins_home/secrets/.env ./"
+
+					sh "docker compose up --build -d"
+				}
+			}
+		}
+		stage("Build Frontend") {
+			steps {
+				dir ("./frontend") {
+					// stop running containers and remove images
+					sh "docker stop frontend || true"
+					sh "docker rm frontend || true"
+
+					sh "docker build -t frontend ."
+					sh "docker run -p 3000:3000 -d --name frontend frontend"
+				}
+			}
+		}
+	}
+	post {
+		success {
+			script {
+				def Author_ID = sh(script: "git show -s --pretty=%an", returnStdout: true).trim()
+				def Author_Name = sh(script: "git show -s --pretty=%ae", returnStdout: true).trim()
+				mattermostSend (color: 'danger', 
+				message: "빌드 실패: ${env.JOB_NAME} #${env.BUILD_NUMBER} by ${Author_ID}(${Author_Name})\n(<${env.BUILD_URL}|Details>)", 
+				endpoint: 'https://meeting.ssafy.com/hooks/iouefjsyhtny8xr64fpxmmqrjr', 
+				channel: 'a504mr'
+				)
+			}
+		}
+		failure {
+			script {
+				def Author_ID = sh(script: "git show -s --pretty=%an", returnStdout: true).trim()
+				def Author_Name = sh(script: "git show -s --pretty=%ae", returnStdout: true).trim()
+				mattermostSend (color: 'danger', 
+				message: "빌드 실패: ${env.JOB_NAME} #${env.BUILD_NUMBER} by ${Author_ID}(${Author_Name})\n(<${env.BUILD_URL}|Details>)", 
+				endpoint: 'https://meeting.ssafy.com/hooks/iouefjsyhtny8xr64fpxmmqrjr', 
+				channel: 'a504mr'
+				)
+			}
+		}
+	}
+}

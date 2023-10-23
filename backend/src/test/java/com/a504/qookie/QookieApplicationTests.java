@@ -1,10 +1,10 @@
-package com.a504.miru;
+package com.a504.qookie;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class MiruApplicationTests {
+class QookieApplicationTests {
 
 	@Test
 	void contextLoads() {
