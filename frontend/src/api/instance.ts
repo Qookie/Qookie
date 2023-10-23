@@ -1,12 +1,12 @@
-import Axios from "axios";
+import Axios from 'axios';
 
 // Todo: 서버 세팅후 .env 파일로 분리
-export const BASE_URL = "http://localhost:8080";
+export const BASE_URL = 'http://localhost:8000';
 
 const axios = Axios.create({
   baseURL: BASE_URL,
   headers: {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   },
 });
 
