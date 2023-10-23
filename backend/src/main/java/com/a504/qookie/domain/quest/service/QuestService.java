@@ -1,11 +1,11 @@
-package com.a504.miru.domain.quest.service;
+package com.a504.qookie.domain.quest.service;
 
 import org.springframework.stereotype.Service;
 
-import com.a504.miru.domain.member.entity.Member;
-import com.a504.miru.domain.member.entity.MemberQuest;
-import com.a504.miru.domain.member.repository.MemberQuestRepository;
-import com.a504.miru.domain.quest.repository.QuestRepository;
+import com.a504.qookie.domain.member.entity.Member;
+import com.a504.qookie.domain.member.entity.MemberQuest;
+import com.a504.qookie.domain.member.repository.MemberQuestRepository;
+import com.a504.qookie.domain.quest.repository.QuestRepository;
 
 import lombok.RequiredArgsConstructor;
 

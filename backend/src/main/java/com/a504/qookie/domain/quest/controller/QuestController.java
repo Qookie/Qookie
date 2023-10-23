@@ -1,4 +1,4 @@
-package com.a504.miru.domain.quest.controller;
+package com.a504.qookie.domain.quest.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.a504.miru.domain.quest.service.QuestService;
-import com.a504.miru.global.response.BaseResponse;
-import com.a504.miru.global.security.CustomMemberDetails;
+import com.a504.qookie.domain.quest.service.QuestService;
+import com.a504.qookie.global.response.BaseResponse;
+import com.a504.qookie.global.security.CustomMemberDetails;
 
 import lombok.RequiredArgsConstructor;
 
