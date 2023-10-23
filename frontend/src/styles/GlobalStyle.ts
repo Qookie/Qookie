@@ -34,6 +34,7 @@ const GlobalStyle = createGlobalStyle`
     html, body{
         font-family: "Pretendard";
         -ms-overflow-style: none;
+        width: 100%;
     }
 
     ::-webkit-scrollbar {
