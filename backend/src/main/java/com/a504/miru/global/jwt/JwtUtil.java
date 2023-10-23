@@ -41,19 +41,20 @@ public class JwtUtil {
         jwtPublicKeyRedisRepository = j;
     }
 
-    public static JwtObject getTokenAndVerify(HttpServletRequest request)
-            throws JsonProcessingException, JWTVerificationException {
-        String raw = request.getHeader("Authorization").split(" ")[1];
-        String[] tokenParts = raw.split("\\.");
+    public static JwtObject getTokenAndVerify(String tokenString)
+            throws JsonProcessingException, JWTVerificationException, NullPointerException {
+
+        String[] tokenParts = tokenString.split("\\.");
         String headerString = new String(Base64.getUrlDecoder().decode(tokenParts[0]));
         String payloadString = new String(Base64.getUrlDecoder().decode(tokenParts[1]));
 
         ObjectMapper objectMapper = new ObjectMapper();
         JwtHeader jwtHeader = objectMapper.readValue(headerString, JwtHeader.class);
+        // change kakao payload? use oath id token?
         JwtPayload jwtPayload = objectMapper.readValue(payloadString, JwtPayload.class);
         String provider = objectMapper.readTree(payloadString).get("firebase").get("sign_in_provider").toString();
         JwtObject token = new JwtObject(jwtHeader, jwtPayload, provider);
-        verifyToken(token, raw);
+        verifyToken(token, tokenString);
         return token;
     }
 
@@ -74,8 +75,8 @@ public class JwtUtil {
             JWTVerifier verifier = JWT.require(
                     Algorithm.RSA256((RSAPublicKey) publicKey, null))
                     .ignoreIssuedAt()
-                    .withIssuer("https://securetoken.google.com/miru-472a5")
-                    .withAudience("miru-472a5")
+                    .withIssuer("https://securetoken.google.com/a504-qookie")
+                    .withAudience("a504-qookie")
                     .build();
             DecodedJWT verify = verifier.verify(raw);
         } catch (Exception e) {

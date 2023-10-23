@@ -18,6 +18,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Enumeration;
 
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
@@ -31,7 +33,9 @@ public class JwtFilter extends OncePerRequestFilter {
             FilterChain filterChain) throws ServletException, IOException {
         try {
             System.out.println("==================== JWT FILTER START ====================");
-            JwtObject token = JwtUtil.getTokenAndVerify(request);
+            String tokenString = request.getHeader("Authorization").split(" ")[1];
+
+            JwtObject token = JwtUtil.getTokenAndVerify(tokenString);
             // if expired 401 to response and end process
             if (JwtUtil.isTokenExpired(token)) {
                 response.sendError(401, "ACCESS TOKEN EXPIRED");
@@ -49,11 +53,17 @@ public class JwtFilter extends OncePerRequestFilter {
             System.out.println("==================== JWT FILTER SUCCESS ====================");
             filterChain.doFilter(request, response);
         } catch (JsonProcessingException e) {
+            System.out.println("case1");
             e.printStackTrace();
-            response.sendError(500, "Jwt Json processing error: " + e.getMessage());
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Jwt Json processing error: " + e.getMessage());
         } catch (JWTVerificationException e) {
+            System.out.println("case2");
             e.printStackTrace();
-            response.sendError(500, "Jwt verification error: " + e.getMessage());
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Jwt verification error: " + e.getMessage());
+        } catch (NullPointerException e) {
+            System.out.println("case3");
+            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Token Header Not Included" + e.getMessage());
         }
     }
 }

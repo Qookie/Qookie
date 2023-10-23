@@ -18,6 +18,7 @@ public class CustomMemberDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String uid) throws UsernameNotFoundException {
         try {
+            System.out.println("WHAT");
             Member member = memberService.findByUid(uid);
             return new CustomMemberDetails(member);
         } catch (NoSuchElementException e) {

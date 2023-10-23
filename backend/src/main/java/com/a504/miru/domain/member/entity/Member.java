@@ -2,13 +2,16 @@ package com.a504.miru.domain.member.entity;
 
 import java.time.LocalTime;
 
+import com.a504.miru.domain.member.dto.LoginRequest;
 import com.a504.miru.global.jwt.dto.JwtObject;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(
@@ -42,5 +45,11 @@ public class Member {
 		email = token.getJwtPayload().getEmail();
 		name = token.getJwtPayload().getName();
 		uid = token.getJwtPayload().getUid();
+	}
+
+	public void addInfo(LoginRequest loginRequest) {
+		email = loginRequest.getEmail();
+		name = loginRequest.getDisplayName();
+		uid = loginRequest.getUid();
 	}
 }
