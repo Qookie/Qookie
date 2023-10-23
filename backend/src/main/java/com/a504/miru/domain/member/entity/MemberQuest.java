@@ -2,10 +2,14 @@ package com.a504.miru.domain.member.entity;
 
 import java.time.LocalDateTime;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import com.a504.miru.domain.quest.entity.Quest;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,6 +27,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 @Builder
+@EntityListeners(AuditingEntityListener.class)
 public class MemberQuest {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,6 +45,7 @@ public class MemberQuest {
 	@Column(name = "image")
 	private String image;
 
+	@CreatedDate
 	@Column(name = "created_at")
 	private LocalDateTime createdAt;
 }
