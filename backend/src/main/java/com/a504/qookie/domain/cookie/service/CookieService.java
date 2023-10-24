@@ -1,5 +1,6 @@
 package com.a504.qookie.domain.cookie.service;
 
+import com.a504.qookie.domain.cookie.dto.CookieResponse;
 import com.a504.qookie.domain.cookie.entity.Body;
 import com.a504.qookie.domain.cookie.entity.Cookie;
 import com.a504.qookie.domain.cookie.entity.Eye;
@@ -11,6 +12,8 @@ import com.a504.qookie.domain.cookie.repository.MouthRepository;
 import com.a504.qookie.domain.member.entity.Member;
 import com.a504.qookie.domain.quest.service.AwsS3Service;
 import jakarta.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -92,5 +95,20 @@ public class CookieService {
                 .build());
 
         return url;
+    }
+
+    @Transactional
+    public List<CookieResponse> cookieList(Member member) {
+
+        List<Cookie> cookies = cookieRepository.findAllByMemberAndActive(member, 0);
+
+        List<CookieResponse> cookieResponses = new ArrayList<>();
+        for (Cookie cookie:cookies) {
+            System.out.println("3 " + cookie);
+            CookieResponse cookieResponse = new CookieResponse(cookie);
+            cookieResponses.add(cookieResponse);
+        }
+
+        return cookieResponses;
     }
 }

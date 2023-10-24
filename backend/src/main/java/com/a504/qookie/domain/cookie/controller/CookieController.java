@@ -2,10 +2,12 @@ package com.a504.qookie.domain.cookie.controller;
 
 import com.a504.qookie.domain.cookie.dto.CookieCreateRequest;
 import com.a504.qookie.domain.cookie.dto.CookieModifyRequest;
+import com.a504.qookie.domain.cookie.dto.CookieResponse;
 import com.a504.qookie.domain.cookie.entity.Cookie;
 import com.a504.qookie.domain.cookie.service.CookieService;
 import com.a504.qookie.global.response.BaseResponse;
 import com.a504.qookie.global.security.CustomMemberDetails;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +30,15 @@ public class CookieController {
         Cookie cookie = cookieService.create(customMemberDetails.getMember(), cookieCreateRequest.cookieName(), cookieCreateRequest.eyeId(), cookieCreateRequest.mouthId());
 
         return BaseResponse.okWithData(HttpStatus.OK, "cookie create OK", cookie);
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<?> cookieList(
+            @AuthenticationPrincipal CustomMemberDetails customMemberDetails) {
+
+        List<CookieResponse> cookieResponses = cookieService.cookieList(customMemberDetails.getMember());
+
+        return BaseResponse.okWithData(HttpStatus.OK, "cookie list OK", cookieResponses);
     }
 
     @PatchMapping("/modify")
