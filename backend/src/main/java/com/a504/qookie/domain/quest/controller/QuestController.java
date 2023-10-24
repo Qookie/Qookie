@@ -46,4 +46,10 @@ public class QuestController {
 		questService.walkQuest(member.getMember());
 		return BaseResponse.ok(HttpStatus.OK, "산책 퀘스트 완료");
 	}
+	// 산책 퀘스트 완료
+	@PostMapping("/walk")
+	public ResponseEntity<?> squatQuest(@AuthenticationPrincipal CustomMemberDetails member){
+		questService.walkQuest(member.getMember());
+		return BaseResponse.ok(HttpStatus.OK, "스쿼트 퀘스트 완료");
+	}
 }
