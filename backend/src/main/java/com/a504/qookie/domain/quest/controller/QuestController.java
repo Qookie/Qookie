@@ -77,4 +77,11 @@ public class QuestController {
 		return BaseResponse.ok(HttpStatus.OK, "친구와 약속 퀘스트 완료");
 	}
 
+	// 물마시기 퀘스트 완료
+	@PostMapping("/water")
+	public ResponseEntity<?> waterQuest(@AuthenticationPrincipal CustomMemberDetails member){
+		questService.waterQuest(member.getMember());
+		return BaseResponse.ok(HttpStatus.OK, "친구와 약속 퀘스트 완료");
+	}
+
 }
