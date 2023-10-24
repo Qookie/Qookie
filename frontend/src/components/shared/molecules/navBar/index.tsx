@@ -50,7 +50,6 @@ const NavItem = styled(NavLink)`
   color: var(--MR_GRAY1);
   &.active {
     color: var(--MR_BLACK);
-    position: relative;
   }
   & > svg {
     width: 1.6rem;
