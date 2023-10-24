@@ -2,7 +2,7 @@ import { StoryObj, Meta } from '@storybook/react';
 import { BrowserRouter } from 'react-router-dom';
 import NavBar from '.';
 
-export default {
+const meta: Meta<typeof NavBar> = {
   component: NavBar,
   decorators: [
     (Story) => (
@@ -11,16 +11,10 @@ export default {
       </BrowserRouter>
     ),
   ],
-} as Meta<typeof NavBar>;
+  title: 'NavBar',
+};
 
+export default meta;
 type Story = StoryObj<typeof NavBar>;
 
-const Template: Story = {
-  name: 'Default',
-  render: () => <NavBar />,
-};
-
-export const Default: Story = {
-  ...Template,
-  name: 'Default',
-};
+export const Default: Story = {};
