@@ -41,7 +41,8 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.cors(Customizer.withDefaults())    // need to set cors setting active
                     .csrf(AbstractHttpConfigurer::disable);
-        httpSecurity.addFilterBefore(new JwtFilter(memberRepository),
+        httpSecurity.securityMatcher("/api/**")
+                .addFilterBefore(new JwtFilter(memberRepository),
                 UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();
