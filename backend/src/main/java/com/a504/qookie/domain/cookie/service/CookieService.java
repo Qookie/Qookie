@@ -79,4 +79,14 @@ public class CookieService {
 
         return url;
     }
+
+    public String uploadMouth(MultipartFile image) {
+        String url = awsS3Service.uploadImageToS3(image);
+
+        mouthRepository.save(Mouth.builder()
+                .image(url)
+                .build());
+
+        return url;
+    }
 }
