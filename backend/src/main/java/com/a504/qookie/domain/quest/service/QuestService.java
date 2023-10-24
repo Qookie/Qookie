@@ -47,4 +47,12 @@ public class QuestService {
 				.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 퀘스트입니다.")))
 			.build());
 	}
+
+	public void promiseQuest(Member member){
+		memberQuestRepository.save(MemberQuest.builder()
+			.member(member)
+			.quest(questRepository.findById(5L)
+				.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 퀘스트입니다.")))
+			.build());
+	}
 }

@@ -46,10 +46,18 @@ public class QuestController {
 		questService.walkQuest(member.getMember());
 		return BaseResponse.ok(HttpStatus.OK, "산책 퀘스트 완료");
 	}
-	// 산책 퀘스트 완료
-	@PostMapping("/walk")
+
+	// 스쿼트 퀘스트 완료
+	@PostMapping("/squat")
 	public ResponseEntity<?> squatQuest(@AuthenticationPrincipal CustomMemberDetails member){
-		questService.walkQuest(member.getMember());
+		questService.squatQuest(member.getMember());
 		return BaseResponse.ok(HttpStatus.OK, "스쿼트 퀘스트 완료");
+	}
+
+	// 친구와 약속 퀘스트 완료
+	@PostMapping("/promise")
+	public ResponseEntity<?> promiseQuest(@AuthenticationPrincipal CustomMemberDetails member){
+		questService.promiseQuest(member.getMember());
+		return BaseResponse.ok(HttpStatus.OK, "친구와 약속 퀘스트 완료");
 	}
 }
