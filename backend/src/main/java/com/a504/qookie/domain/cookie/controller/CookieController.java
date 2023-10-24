@@ -27,9 +27,9 @@ public class CookieController {
             @AuthenticationPrincipal CustomMemberDetails customMemberDetails,
             @RequestBody CookieCreateRequest cookieCreateRequest) {
 
-        Cookie cookie = cookieService.create(customMemberDetails.getMember(), cookieCreateRequest.cookieName(), cookieCreateRequest.eyeId(), cookieCreateRequest.mouthId());
+        CookieResponse cookieResponse = cookieService.create(customMemberDetails.getMember(), cookieCreateRequest.cookieName(), cookieCreateRequest.eyeId(), cookieCreateRequest.mouthId());
 
-        return BaseResponse.okWithData(HttpStatus.OK, "cookie create OK", cookie);
+        return BaseResponse.okWithData(HttpStatus.OK, "cookie create OK", cookieResponse);
     }
 
     @GetMapping("/list")

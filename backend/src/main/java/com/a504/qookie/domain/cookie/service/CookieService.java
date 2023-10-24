@@ -28,7 +28,7 @@ public class CookieService {
     private final MouthRepository mouthRepository;
     private final AwsS3Service awsS3Service;
 
-    public Cookie create(Member member, String cookieName, Long eyeId, Long mouthId) {
+    public CookieResponse create(Member member, String cookieName, Long eyeId, Long mouthId) {
 
         Body body = bodyRepository.findByStage(1)
                 .orElseThrow(() -> new IllegalArgumentException("일치하는 몸이 없습니다"));
@@ -43,7 +43,9 @@ public class CookieService {
 
         cookieRepository.save(cookie);
 
-        return cookie;
+        CookieResponse cookieResponse = new CookieResponse(cookie);
+
+        return cookieResponse;
     }
 
     @Transactional
