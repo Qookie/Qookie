@@ -27,7 +27,6 @@ export const NavItem = styled(NavLink)`
   &.active {
     color: var(--MR_BLACK);
     position: relative;
-    top: 2px;
   }
   & > svg {
     width: 1.6rem;
