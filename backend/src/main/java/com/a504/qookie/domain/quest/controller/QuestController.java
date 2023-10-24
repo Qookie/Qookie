@@ -67,21 +67,27 @@ public class QuestController {
 		@RequestPart MultipartFile image){
 		String imageName = awsS3Service.uploadImageToS3(image);
 		questService.photoQuest(member.getMember(), imageName);
-		return BaseResponse.okWithData(HttpStatus.OK, "식사 퀘스트 완료", imageName);
+		return BaseResponse.okWithData(HttpStatus.OK, "하늘 사진 찍기 퀘스트 완료", imageName);
 	}
 
 	// 명상 퀘스트 완료
 	@PostMapping("/meditation")
 	public ResponseEntity<?> meditationQuest(@AuthenticationPrincipal CustomMemberDetails member){
 		questService.meditationQuest(member.getMember());
-		return BaseResponse.ok(HttpStatus.OK, "친구와 약속 퀘스트 완료");
+		return BaseResponse.ok(HttpStatus.OK, "명상 퀘스트 완료");
 	}
 
 	// 물마시기 퀘스트 완료
 	@PostMapping("/water")
 	public ResponseEntity<?> waterQuest(@AuthenticationPrincipal CustomMemberDetails member){
 		questService.waterQuest(member.getMember());
-		return BaseResponse.ok(HttpStatus.OK, "친구와 약속 퀘스트 완료");
+		return BaseResponse.ok(HttpStatus.OK, "물 마시기 퀘스트 완료");
 	}
 
+	// 물마시기 퀘스트 완료
+	@PostMapping("/stretch")
+	public ResponseEntity<?> stretchQuest(@AuthenticationPrincipal CustomMemberDetails member){
+		questService.stretchQuest(member.getMember());
+		return BaseResponse.ok(HttpStatus.OK, "스트레칭 퀘스트 완료");
+	}
 }
