@@ -25,7 +25,7 @@ export default function NavBar() {
   );
 }
 
-export const NavContainer = styled.div`
+const NavContainer = styled.div`
   width: 100%;
   height: 3.4rem;
   position: fixed;
@@ -40,7 +40,7 @@ export const NavContainer = styled.div`
   z-index: 5;
 `;
 
-export const NavItem = styled(NavLink)`
+const NavItem = styled(NavLink)`
   width: 25%;
   height: 100%;
   display: inline-flex;
@@ -58,7 +58,7 @@ export const NavItem = styled(NavLink)`
   }
 `;
 
-export const NavName = styled.div`
+const NavName = styled.div`
   font-size: 0.75rem;
   font-style: normal;
   font-weight: 600;
