@@ -76,7 +76,7 @@ public class Cookie {
 	private Long shoe;
 
 	@Column(name = "background")
-	private Long backgorund;
+	private Long background;
 
 	public static Cookie createCookie(Member member, String name, Body body, Eye eye, Mouth mouth) {
 		Cookie cookie = Cookie.builder()
