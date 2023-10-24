@@ -27,7 +27,7 @@ export default function NavBar() {
 
 const NavContainer = styled.div`
   width: 100%;
-  height: 3.4rem;
+  height: 2.1rem;
   position: fixed;
   bottom: 0;
   left: 0;
@@ -36,12 +36,12 @@ const NavContainer = styled.div`
   justify-content: center;
   background-color: var(--MR_WHITE);
   box-shadow: 0px -4px 8px 0px rgba(224, 224, 224, 0.15);
-  padding: 1.1rem 0;
+  padding: 0.7rem 0;
   z-index: 5;
 `;
 
 const NavItem = styled(NavLink)`
-  width: 25%;
+  width: 100%;
   height: 100%;
   display: inline-flex;
   flex-direction: column;
