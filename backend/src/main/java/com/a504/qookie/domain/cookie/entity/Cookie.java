@@ -51,4 +51,46 @@ public class Cookie {
 	@Column(name = "level")
 	private int level;
 
+	@JoinColumn(name = "body_id")
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Body body;
+
+	@JoinColumn(name = "eye_id")
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Eye eye;
+
+	@JoinColumn(name = "mouth_id")
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Mouth mouth;
+
+	@Column(name = "hat")
+	private Long hat;
+
+	@Column(name = "top")
+	private Long top;
+
+	@Column(name = "bottom")
+	private Long bottom;
+
+	@Column(name = "shoe")
+	private Long shoe;
+
+	@Column(name = "background")
+	private Long backgorund;
+
+	public static Cookie createCookie(Member member, String name, Body body, Eye eye, Mouth mouth) {
+		Cookie cookie = Cookie.builder()
+				.member(member)
+				.name(name)
+				.createdAt(LocalDateTime.now())
+				.active(1)
+				.exp(0)
+				.level(1)
+				.body(body)
+				.eye(eye)
+				.mouth(mouth)
+				.build();
+		return cookie;
+	}
+
 }
