@@ -4,7 +4,7 @@ import { HomeIcon, CalendarIcon, EnvelopeIcon, UserIcon } from '@heroicons/react
 export default function NavBar() {
   return (
     <S.NavContainer>
-      <S.NavItem to={'/'}>
+      <S.NavItem to={'/home'}>
         <HomeIcon />
         <S.NavName>홈</S.NavName>
       </S.NavItem>
