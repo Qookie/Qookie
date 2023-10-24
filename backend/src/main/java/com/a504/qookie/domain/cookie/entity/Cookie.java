@@ -93,4 +93,8 @@ public class Cookie {
 		return cookie;
 	}
 
+	public void changeName(String cookieName) {
+		this.name = cookieName;
+	}
+
 }

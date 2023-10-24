@@ -5,6 +5,7 @@ import com.a504.qookie.domain.cookie.entity.Cookie;
 import com.a504.qookie.domain.cookie.entity.Eye;
 import com.a504.qookie.domain.cookie.entity.Mouth;
 import com.a504.qookie.domain.cookie.repository.BodyRepository;
+import com.a504.qookie.domain.cookie.repository.CookieRepository;
 import com.a504.qookie.domain.cookie.repository.EyeRepository;
 import com.a504.qookie.domain.cookie.repository.MouthRepository;
 import com.a504.qookie.domain.member.entity.Member;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CookieService {
 
+    private final CookieRepository cookieRepository;
     private final BodyRepository bodyRepository;
     private final EyeRepository eyeRepository;
     private final MouthRepository mouthRepository;
@@ -33,4 +35,24 @@ public class CookieService {
         return Cookie.createCookie(member, cookieName, body, eye, mouth);
     }
 
+    public Cookie modify(Member member, Long cookieId, String cookieName) {
+
+        Cookie cookie = cookieRepository.findById(cookieId)
+                .orElseThrow(() -> new IllegalArgumentException("쿠키가 없습니다"));
+
+        cookie.changeName(cookieName);
+
+        return cookie;
+    }
+
+    public boolean checkMember(Member member, Long cookieId) {
+        Cookie cookie = null;
+        cookie = cookieRepository.findByIdAndMember(cookieId, member);
+
+        if (cookie == null) {
+            return false;
+        }
+
+        return true;
+    }
 }

@@ -1,6 +1,7 @@
 package com.a504.qookie.domain.cookie.controller;
 
 import com.a504.qookie.domain.cookie.dto.CookieCreateRequest;
+import com.a504.qookie.domain.cookie.dto.CookieModifyRequest;
 import com.a504.qookie.domain.cookie.entity.Cookie;
 import com.a504.qookie.domain.cookie.service.CookieService;
 import com.a504.qookie.global.response.BaseResponse;
@@ -26,5 +27,19 @@ public class CookieController {
         Cookie cookie = cookieService.create(customMemberDetails.getMember(), cookieCreateRequest.cookieName(), cookieCreateRequest.eyeId(), cookieCreateRequest.mouthId());
 
         return BaseResponse.okWithData(HttpStatus.OK, "cookie create OK", cookie);
+    }
+
+    @PatchMapping("/modify")
+    public ResponseEntity<?> modify(
+            @AuthenticationPrincipal CustomMemberDetails customMemberDetails,
+            @RequestBody CookieModifyRequest cookieModifyRequest) {
+
+        if (!cookieService.checkMember(customMemberDetails.getMember(), cookieModifyRequest.cookieId())) {
+            return BaseResponse.fail(HttpStatus.BAD_REQUEST, "허용되지 않은 접근입니다");
+        }
+
+        Cookie cookie = cookieService.modify(customMemberDetails.getMember(), cookieModifyRequest.cookieId(), cookieModifyRequest.cookieName());
+
+        return BaseResponse.okWithData(HttpStatus.OK, "cookie modify OK", cookie);
     }
 }
