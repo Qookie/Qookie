@@ -38,7 +38,7 @@ public class CookieService {
         return Cookie.createCookie(member, cookieName, body, eye, mouth);
     }
 
-    public Cookie modify(Member member, Long cookieId, String cookieName) {
+    public Cookie modify(Long cookieId, String cookieName) {
 
         Cookie cookie = cookieRepository.findById(cookieId)
                 .orElseThrow(() -> new IllegalArgumentException("쿠키가 없습니다"));

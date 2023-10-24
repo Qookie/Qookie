@@ -5,5 +5,5 @@ import com.a504.qookie.domain.member.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CookieRepository extends JpaRepository<Cookie, Long> {
-    public Cookie findByIdAndMember(Long Id, Member member);
+    Cookie findByIdAndMember(Long Id, Member member);
 }

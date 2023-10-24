@@ -39,7 +39,7 @@ public class CookieController {
             return BaseResponse.fail(HttpStatus.BAD_REQUEST, "허용되지 않은 접근입니다");
         }
 
-        Cookie cookie = cookieService.modify(customMemberDetails.getMember(), cookieModifyRequest.cookieId(), cookieModifyRequest.cookieName());
+        Cookie cookie = cookieService.modify(cookieModifyRequest.cookieId(), cookieModifyRequest.cookieName());
 
         return BaseResponse.okWithData(HttpStatus.OK, "cookie modify OK", cookie);
     }
