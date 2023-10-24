@@ -76,7 +76,7 @@ public class Cookie {
 	private Long shoe;
 
 	@Column(name = "background")
-	private Long backgorund;
+	private Long background;
 
 	public static Cookie createCookie(Member member, String name, Body body, Eye eye, Mouth mouth) {
 		Cookie cookie = Cookie.builder()
@@ -91,6 +91,10 @@ public class Cookie {
 				.mouth(mouth)
 				.build();
 		return cookie;
+	}
+
+	public void changeName(String cookieName) {
+		this.name = cookieName;
 	}
 
 }
