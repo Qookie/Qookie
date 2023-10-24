@@ -53,4 +53,13 @@ public class CookieController {
 
         return BaseResponse.okWithData(HttpStatus.OK, "cookie body upload OK", url);
     }
+
+    @PostMapping("/uploadEye")
+    public ResponseEntity<?> uploadEye(
+            @RequestPart MultipartFile image) {
+
+        String url = cookieService.uploadEye(image);
+
+        return BaseResponse.okWithData(HttpStatus.OK, "cookie eye upload OK", url);
+    }
 }

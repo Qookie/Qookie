@@ -69,4 +69,14 @@ public class CookieService {
 
         return url;
     }
+
+    public String uploadEye(MultipartFile image) {
+        String url = awsS3Service.uploadImageToS3(image);
+
+        eyeRepository.save(Eye.builder()
+                .image(url)
+                .build());
+
+        return url;
+    }
 }
