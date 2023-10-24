@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Login from '../pages/Login';
-import NavBar from '../components/shared/navBar';
+import NavBar from '../components/shared/molecules/navBar';
 import Home from '../pages/Home';
 
 const Router = () => {
