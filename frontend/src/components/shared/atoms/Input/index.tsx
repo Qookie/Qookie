@@ -23,7 +23,7 @@ const Label = styled.label`
   display: block;
   margin-bottom: 4px;
   color: var(--MR_GRAY2);
-  font-size: 0.8em;
+  font-size: 1rem;
   line-height: 1.5rem;
 `;
 
@@ -32,10 +32,10 @@ const StyledInput = styled.input`
   background-color: #f7f7f7;
   outline: none;
   border: 0;
+  border-radius: 8px;
   padding: 0.6em 0.7em;
   font-weight: 500;
   font-family: inherit;
-  border-radius: 8px;
   font-size: inherit;
 
   &::placeholder {
