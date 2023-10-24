@@ -9,8 +9,10 @@ import com.a504.qookie.domain.cookie.repository.CookieRepository;
 import com.a504.qookie.domain.cookie.repository.EyeRepository;
 import com.a504.qookie.domain.cookie.repository.MouthRepository;
 import com.a504.qookie.domain.member.entity.Member;
+import com.a504.qookie.domain.quest.service.AwsS3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +22,7 @@ public class CookieService {
     private final BodyRepository bodyRepository;
     private final EyeRepository eyeRepository;
     private final MouthRepository mouthRepository;
+    private final AwsS3Service awsS3Service;
 
     public Cookie create(Member member, String cookieName, Long eyeId, Long mouthId) {
 
@@ -54,5 +57,16 @@ public class CookieService {
         }
 
         return true;
+    }
+
+    public String uploadBody(MultipartFile image, int stage) {
+        String url = awsS3Service.uploadImageToS3(image);
+
+        bodyRepository.save(Body.builder()
+                        .stage(stage)
+                        .image(url)
+                        .build());
+
+        return url;
     }
 }

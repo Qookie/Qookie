@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -41,5 +42,15 @@ public class CookieController {
         Cookie cookie = cookieService.modify(customMemberDetails.getMember(), cookieModifyRequest.cookieId(), cookieModifyRequest.cookieName());
 
         return BaseResponse.okWithData(HttpStatus.OK, "cookie modify OK", cookie);
+    }
+
+    @PostMapping("/uploadBody/{stage}")
+    public ResponseEntity<?> uploadBody(
+            @RequestPart MultipartFile image,
+            @PathVariable int stage) {
+
+        String url = cookieService.uploadBody(image, stage);
+
+        return BaseResponse.okWithData(HttpStatus.OK, "cookie body upload OK", url);
     }
 }
