@@ -32,4 +32,60 @@ public class QuestService {
 			.image(imageName)
 			.build());
 	}
+
+	public void walkQuest(Member member){
+		memberQuestRepository.save(MemberQuest.builder()
+			.member(member)
+			.quest(questRepository.findById(3L)
+				.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 퀘스트입니다.")))
+			.build());
+	}
+	public void squatQuest(Member member){
+		memberQuestRepository.save(MemberQuest.builder()
+			.member(member)
+			.quest(questRepository.findById(4L)
+				.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 퀘스트입니다.")))
+			.build());
+	}
+
+	public void promiseQuest(Member member){
+		memberQuestRepository.save(MemberQuest.builder()
+			.member(member)
+			.quest(questRepository.findById(5L)
+				.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 퀘스트입니다.")))
+			.build());
+	}
+	public void photoQuest(Member member, String imageName){
+		memberQuestRepository.save(MemberQuest.builder()
+			.member(member)
+			.quest(questRepository.findById(6L)
+				.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 퀘스트입니다.")))
+			.image(imageName)
+			.build());
+	}
+
+	public void meditationQuest(Member member){
+		memberQuestRepository.save(MemberQuest.builder()
+			.member(member)
+			.quest(questRepository.findById(7L)
+				.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 퀘스트입니다.")))
+			.build());
+	}
+
+	public void waterQuest(Member member){
+		memberQuestRepository.save(MemberQuest.builder()
+			.member(member)
+			.quest(questRepository.findById(8L)
+				.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 퀘스트입니다.")))
+			.build());
+	}
+
+	public void stretchQuest(Member member){
+		memberQuestRepository.save(MemberQuest.builder()
+			.member(member)
+			.quest(questRepository.findById(9L)
+				.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 퀘스트입니다.")))
+			.build());
+	}
+
 }

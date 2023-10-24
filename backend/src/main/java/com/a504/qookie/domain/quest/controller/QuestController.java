@@ -39,4 +39,55 @@ public class QuestController {
 		questService.eatQuest(member.getMember(), imageName);
 		return BaseResponse.okWithData(HttpStatus.OK, "식사 퀘스트 완료", imageName);
 	}
+
+	// 산책 퀘스트 완료
+	@PostMapping("/walk")
+	public ResponseEntity<?> walkQuest(@AuthenticationPrincipal CustomMemberDetails member){
+		questService.walkQuest(member.getMember());
+		return BaseResponse.ok(HttpStatus.OK, "산책 퀘스트 완료");
+	}
+
+	// 스쿼트 퀘스트 완료
+	@PostMapping("/squat")
+	public ResponseEntity<?> squatQuest(@AuthenticationPrincipal CustomMemberDetails member){
+		questService.squatQuest(member.getMember());
+		return BaseResponse.ok(HttpStatus.OK, "스쿼트 퀘스트 완료");
+	}
+
+	// 친구와 약속 퀘스트 완료
+	@PostMapping("/promise")
+	public ResponseEntity<?> promiseQuest(@AuthenticationPrincipal CustomMemberDetails member){
+		questService.promiseQuest(member.getMember());
+		return BaseResponse.ok(HttpStatus.OK, "친구와 약속 퀘스트 완료");
+	}
+
+	// 하늘사진 찍기 퀘스트 완료
+	@PostMapping("/photo")
+	public ResponseEntity<?> photoQuest(@AuthenticationPrincipal CustomMemberDetails member,
+		@RequestPart MultipartFile image){
+		String imageName = awsS3Service.uploadImageToS3(image);
+		questService.photoQuest(member.getMember(), imageName);
+		return BaseResponse.okWithData(HttpStatus.OK, "하늘 사진 찍기 퀘스트 완료", imageName);
+	}
+
+	// 명상 퀘스트 완료
+	@PostMapping("/meditation")
+	public ResponseEntity<?> meditationQuest(@AuthenticationPrincipal CustomMemberDetails member){
+		questService.meditationQuest(member.getMember());
+		return BaseResponse.ok(HttpStatus.OK, "명상 퀘스트 완료");
+	}
+
+	// 물마시기 퀘스트 완료
+	@PostMapping("/water")
+	public ResponseEntity<?> waterQuest(@AuthenticationPrincipal CustomMemberDetails member){
+		questService.waterQuest(member.getMember());
+		return BaseResponse.ok(HttpStatus.OK, "물 마시기 퀘스트 완료");
+	}
+
+	// 물마시기 퀘스트 완료
+	@PostMapping("/stretch")
+	public ResponseEntity<?> stretchQuest(@AuthenticationPrincipal CustomMemberDetails member){
+		questService.stretchQuest(member.getMember());
+		return BaseResponse.ok(HttpStatus.OK, "스트레칭 퀘스트 완료");
+	}
 }
