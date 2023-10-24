@@ -10,6 +10,7 @@ import com.a504.qookie.domain.cookie.repository.EyeRepository;
 import com.a504.qookie.domain.cookie.repository.MouthRepository;
 import com.a504.qookie.domain.member.entity.Member;
 import com.a504.qookie.domain.quest.service.AwsS3Service;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,14 +43,13 @@ public class CookieService {
         return cookie;
     }
 
-    public Cookie modify(Long cookieId, String cookieName) {
+    @Transactional
+    public void modify(Long cookieId, String cookieName) {
 
         Cookie cookie = cookieRepository.findById(cookieId)
                 .orElseThrow(() -> new IllegalArgumentException("쿠키가 없습니다"));
 
         cookie.changeName(cookieName);
-
-        return cookie;
     }
 
     public boolean checkMember(Member member, Long cookieId) {
