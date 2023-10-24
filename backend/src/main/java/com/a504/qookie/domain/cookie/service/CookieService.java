@@ -35,7 +35,11 @@ public class CookieService {
         Mouth mouth = mouthRepository.findById(mouthId)
                         .orElseThrow(() -> new IllegalArgumentException("일치하는 입이 없습니다"));
 
-        return Cookie.createCookie(member, cookieName, body, eye, mouth);
+        Cookie cookie = Cookie.createCookie(member, cookieName, body, eye, mouth);
+
+        cookieRepository.save(cookie);
+
+        return cookie;
     }
 
     public Cookie modify(Long cookieId, String cookieName) {
