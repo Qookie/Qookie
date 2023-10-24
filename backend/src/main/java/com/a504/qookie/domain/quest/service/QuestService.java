@@ -64,4 +64,13 @@ public class QuestService {
 			.build());
 	}
 
+	public void meditationQuest(Member member){
+		memberQuestRepository.save(MemberQuest.builder()
+			.member(member)
+			.quest(questRepository.findById(7L)
+				.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 퀘스트입니다.")))
+			.build());
+	}
+
+
 }

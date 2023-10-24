@@ -69,4 +69,12 @@ public class QuestController {
 		questService.photoQuest(member.getMember(), imageName);
 		return BaseResponse.okWithData(HttpStatus.OK, "식사 퀘스트 완료", imageName);
 	}
+
+	// 명상 퀘스트 완료
+	@PostMapping("/meditation")
+	public ResponseEntity<?> meditationQuest(@AuthenticationPrincipal CustomMemberDetails member){
+		questService.meditationQuest(member.getMember());
+		return BaseResponse.ok(HttpStatus.OK, "친구와 약속 퀘스트 완료");
+	}
+
 }
