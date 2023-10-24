@@ -7,17 +7,23 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 
 function Input({ label, ...props }: InputProps) {
   return (
-    <div>
+    <Container>
       <Label>{label}</Label>
       <StyledInput {...props} />
-    </div>
+    </Container>
   );
 }
+
+const Container = styled.div`
+  font-size: 1.25rem;
+  line-height: 1.25rem;
+`;
 
 const Label = styled.label`
   display: block;
   margin-bottom: 4px;
   color: var(--MR_GRAY2);
+  font-size: 1rem;
   line-height: 1.5rem;
 `;
 
@@ -26,12 +32,11 @@ const StyledInput = styled.input`
   background-color: #f7f7f7;
   outline: none;
   border: 0;
-  font-size: 1.25rem;
-  padding: 0.75rem 0.875rem;
+  border-radius: 8px;
+  padding: 0.6em 0.7em;
   font-weight: 500;
   font-family: inherit;
-  border-radius: 0.5rem;
-  line-height: 1.25rem;
+  font-size: inherit;
 
   &::placeholder {
     font-weight: 400;
