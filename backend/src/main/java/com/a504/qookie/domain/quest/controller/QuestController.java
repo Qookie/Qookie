@@ -60,4 +60,13 @@ public class QuestController {
 		questService.promiseQuest(member.getMember());
 		return BaseResponse.ok(HttpStatus.OK, "친구와 약속 퀘스트 완료");
 	}
+
+	// 하늘사진 찍기 퀘스트 완료
+	@PostMapping("/photo")
+	public ResponseEntity<?> photoQuest(@AuthenticationPrincipal CustomMemberDetails member,
+		@RequestPart MultipartFile image){
+		String imageName = awsS3Service.uploadImageToS3(image);
+		questService.photoQuest(member.getMember(), imageName);
+		return BaseResponse.okWithData(HttpStatus.OK, "식사 퀘스트 완료", imageName);
+	}
 }
