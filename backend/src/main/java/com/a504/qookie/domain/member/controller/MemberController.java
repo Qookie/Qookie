@@ -1,5 +1,6 @@
 package com.a504.qookie.domain.member.controller;
 
+import com.a504.qookie.domain.member.dto.MemberResponse;
 import com.a504.qookie.domain.member.dto.WakeTimeRequest;
 import com.a504.qookie.domain.member.service.MemberService;
 import com.a504.qookie.domain.member.dto.LoginRequest;
@@ -39,5 +40,14 @@ public class MemberController {
         memberService.setTime(customMemberDetails.getMember(), wakeTimeRequest.wakeTime());
 
         return BaseResponse.ok(HttpStatus.OK, "Set Time OK");
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getInfo(
+            @AuthenticationPrincipal CustomMemberDetails customMemberDetails) {
+
+        MemberResponse memberResponse = memberService.getInfo(customMemberDetails.getMember());
+
+        return BaseResponse.okWithData(HttpStatus.OK, "member getInfo OK", memberResponse);
     }
 }

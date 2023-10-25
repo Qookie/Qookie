@@ -1,6 +1,7 @@
 package com.a504.qookie.domain.member.service;
 
 import com.a504.qookie.domain.member.dto.LoginRequest;
+import com.a504.qookie.domain.member.dto.MemberResponse;
 import com.a504.qookie.domain.member.entity.Member;
 import com.a504.qookie.domain.member.repository.MemberRepository;
 import java.time.LocalTime;
@@ -33,5 +34,12 @@ public class MemberService {
 
         member.setTime(LocalTime.parse(wakeTime));
         memberRepository.save(member);
+    }
+
+    public MemberResponse getInfo(Member member) {
+
+        MemberResponse memberResponse = memberRepository.findMemberIfoById(member.getId());
+
+        return memberResponse;
     }
 }
