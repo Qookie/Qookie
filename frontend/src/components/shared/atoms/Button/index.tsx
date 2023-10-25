@@ -3,7 +3,7 @@ import { styled } from 'styled-components';
 
 interface BtnProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   theme?: 'default' | 'finished' | 'disabled' | 'transparent';
-  size?: 'sm' | 'icon' | 'medium' | 'large';
+  size?: 'small' | 'icon' | 'medium' | 'large';
   background?: string;
   color?: string;
   opacity?: string;
@@ -54,6 +54,7 @@ const SIZE_VARIANT = {
   `,
   icon: `
     width: 114px;
+    gap: 8px;
   `,
   medium: `
     width: 140px;
