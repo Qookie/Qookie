@@ -70,35 +70,46 @@ ext {
 	set('snippetsDir', "build/generated-snippets")
 }
 
-tasks.named('test') {
+tasks.register('deleteOldDoc') {
 	doFirst {
-		delete 'src/main/resources/static/docs/'
+		println("deleteOldDoc")
+		delete 'src/main/resources/static/docs/index.html'
 	}
+}
+
+tasks.named('test') {
+	dependsOn deleteOldDoc
 	outputs.dir snippetsDir
+	println("test")
 	useJUnitPlatform()
 }
 
 tasks.named('asciidoctor') {
 	dependsOn test
+	println("asciidoctor")
 	inputs.dir snippetsDir
 }
-
+//
 //bootJar {
 //	dependsOn asciidoctor
 //	copy {
 //		from "${asciidoctor.outputDir}"
-//		into "BOOT-INF/classes/static/docs" //???
+////		into "BOOT-INF/classes/static/docs" //???
+//		into "src/main/resources/static/docs"
 //	}
 //}
 
 tasks.register('copyDocument') {
 	dependsOn asciidoctor
-	copy {
-		from "${asciidoctor.outputDir}"
-		into "src/main/resources/static/docs"
+	doLast {
+		copy {
+			println("copyDocument")
+			from "${asciidoctor.outputDir}"
+			into "src/main/resources/static/docs"
+		}
 	}
 }
 
 build {
-	dependsOn(copyDocument)
+	dependsOn copyDocument
 }
