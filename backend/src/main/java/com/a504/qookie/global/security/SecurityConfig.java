@@ -1,6 +1,6 @@
 package com.a504.qookie.global.security;
 
-import com.a504.qookie.domain.member.MemberRepository;
+import com.a504.qookie.domain.member.repository.MemberRepository;
 import com.a504.qookie.global.jwt.JwtFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
