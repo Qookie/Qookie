@@ -12,7 +12,7 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class MemberService {
 
-    private final MemberRepositoryImpl memberRepository;
+    private final MemberRepository memberRepository;
 
     public Member findByUid(String uid) throws NoSuchElementException{
         return memberRepository.findByUid(uid).orElseThrow(NoSuchElementException::new);
