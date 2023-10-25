@@ -1,9 +1,7 @@
 package com.a504.qookie.domain.cookie.controller;
 
 import com.a504.qookie.domain.cookie.dto.CookieCreateRequest;
-import com.a504.qookie.domain.cookie.dto.CookieModifyRequest;
 import com.a504.qookie.domain.cookie.dto.CookieResponse;
-import com.a504.qookie.domain.cookie.entity.Cookie;
 import com.a504.qookie.domain.cookie.service.CookieService;
 import com.a504.qookie.global.response.BaseResponse;
 import com.a504.qookie.global.security.CustomMemberDetails;
@@ -39,20 +37,6 @@ public class CookieController {
         List<CookieResponse> cookieResponses = cookieService.cookieList(customMemberDetails.getMember());
 
         return BaseResponse.okWithData(HttpStatus.OK, "cookie list OK", cookieResponses);
-    }
-
-    @PatchMapping("/modify")
-    public ResponseEntity<?> modify(
-            @AuthenticationPrincipal CustomMemberDetails customMemberDetails,
-            @RequestBody CookieModifyRequest cookieModifyRequest) {
-
-        if (!cookieService.checkMember(customMemberDetails.getMember(), cookieModifyRequest.cookieId())) {
-            return BaseResponse.fail(HttpStatus.BAD_REQUEST, "허용되지 않은 접근입니다");
-        }
-
-        cookieService.modify(cookieModifyRequest.cookieId(), cookieModifyRequest.cookieName());
-
-        return BaseResponse.ok(HttpStatus.OK, "cookie modify OK");
     }
 
     @PostMapping("/uploadBody/{stage}")
