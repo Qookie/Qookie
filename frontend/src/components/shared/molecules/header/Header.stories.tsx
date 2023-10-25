@@ -17,4 +17,25 @@ const meta: Meta<typeof Header> = {
 export default meta;
 type Story = StoryObj<typeof Header>;
 
-export const Default: Story = {};
+const Template: Story = {
+  argTypes: {
+    page: {
+      type: 'string',
+      control: 'select',
+      options: ['tab', 'home', 'none', 'other'],
+      description: '페이지',
+    },
+  },
+  render: (args) => <Header {...args} />,
+};
+
+
+export const Default: Story = {
+  ...Template,
+  name: 'Default',
+  args: {
+    ...Template.args,
+    page: 'home',
+    title: '타이틀 테스트',
+  },
+};
