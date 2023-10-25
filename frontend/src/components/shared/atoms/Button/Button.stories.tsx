@@ -11,7 +11,7 @@ type Story = StoryObj<typeof Button>;
 
 export const Default: Story = {
   args: {
-    type: 'default',
+    theme: 'default',
   },
 
   render: (args) => <Button {...args}>기상 완료</Button>,
@@ -19,7 +19,7 @@ export const Default: Story = {
 
 export const Finished: Story = {
   args: {
-    type: 'finished',
+    theme: 'finished',
   },
 
   render: (args) => <Button {...args}>기상 완료</Button>,
@@ -27,7 +27,7 @@ export const Finished: Story = {
 
 export const Disabled: Story = {
   args: {
-    type: 'disabled',
+    theme: 'disabled',
   },
 
   render: (args) => <Button {...args}>기상 완료</Button>,
@@ -35,7 +35,7 @@ export const Disabled: Story = {
 
 export const Transparent: Story = {
   args: {
-    type: 'transparent',
+    theme: 'transparent',
   },
 
   render: (args) => <Button {...args}>기상 완료</Button>,
