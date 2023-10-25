@@ -14,7 +14,7 @@ export default function Button({ theme = 'default', size = 'large', background, 
 }
 
 const DefaultBtn = styled.button<BtnProps>`
-  width: 328px;
+  width: 100%;
   height: 44px;
   border-radius: 12px;
   display: flex;
@@ -47,7 +47,7 @@ const THEME_VARIANT = {
 };
 
 const SIZE_VARIANT = {
-  sm: `
+  small: `
     width: 60px;
     height: 28px;
     font-size: 16px
