@@ -50,14 +50,14 @@ export default function Header({ page, title }: HeaderProps) {
     }
   };
 
-  return <HeaderContainer>{headerType(page)}</HeaderContainer>;
+  return <HeaderContainer page={page}>{headerType(page)}</HeaderContainer>;
 }
 
-const HeaderContainer = styled.div`
+const HeaderContainer = styled.div<HeaderProps>`
   width: 100%;
   height: 4rem;
   position: fixed;
-  background-color: var(--MR_WHITE);
+  background-color: ${({ page }) => (page != 'home' ? 'var(--MR_WHITE)' : 'transparent')};
   z-index: 5;
 `;
 
