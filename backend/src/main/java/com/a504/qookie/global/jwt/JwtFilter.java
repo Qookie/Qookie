@@ -31,6 +31,19 @@ public class JwtFilter extends OncePerRequestFilter {
             System.out.println("==================== JWT FILTER START ====================");
             String tokenString = request.getHeader("Authorization").split(" ")[1];
 
+            // Todo: delete before deploying to master
+            if (tokenString.equals("accessTokenHere")) {
+                CustomMemberDetails customMemberDetails = new CustomMemberDetails(
+                        new Member("userName", "userEmail", "userUid")
+                );
+                UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
+                        customMemberDetails, null, customMemberDetails.getAuthorities()
+                );
+                SecurityContextHolder.getContext().setAuthentication(auth);
+                filterChain.doFilter(request, response);
+                return;
+            }
+
             JwtObject token = JwtUtil.getTokenAndVerify(tokenString);
             // if expired 401 to response and end process
             if (JwtUtil.isTokenExpired(token)) {

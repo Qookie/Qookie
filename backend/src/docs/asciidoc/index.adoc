@@ -1,3 +1,7 @@
+ifndef::snippets[]
+:snippets: build/generated-snippets
+endif::[]
+
 = Qookie는 큐키라고 읽습니다.
 :doctype: book
 :icons: font
@@ -11,4 +15,9 @@
 
 [[Member-Login]]
 === Member-Login
-include::{snippets}/member-login/request-body.adoc[]
+==== REQUEST
+include::{snippets}/member-login/http-request.adoc[]
+==== REQUEST FIELDS
+include::{snippets}/member-login/request-fields.adoc[]
+==== RESPONSE
+include::{snippets}/member-login/http-response.adoc[]

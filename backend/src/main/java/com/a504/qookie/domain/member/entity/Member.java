@@ -47,6 +47,13 @@ public class Member {
 		uid = token.getJwtPayload().getUid();
 	}
 
+	public Member(String testEmail, String testName, String testUid) {
+		// for test codes
+		email = testEmail;
+		name = testName;
+		uid = testUid;
+	}
+
 	public void addInfo(LoginRequest loginRequest) {
 		email = loginRequest.getEmail();
 		name = loginRequest.getDisplayName();
