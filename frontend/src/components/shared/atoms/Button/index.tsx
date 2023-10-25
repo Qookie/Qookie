@@ -1,18 +1,19 @@
-import styled from 'styled-components';
+import { ButtonHTMLAttributes } from 'react';
+import { styled } from 'styled-components';
 
-interface BtnProps {
-  type?: 'default' | 'finished' | 'disabled' | 'transparent';
+interface BtnProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  theme?: 'default' | 'finished' | 'disabled' | 'transparent';
+  size?: 'sm' | 'icon' | 'medium' | 'large';
   background?: string;
   color?: string;
   opacity?: string;
 }
 
-export default function Button({ type = 'default', background, color, opacity, ...props }: BtnProps) {
-  return <DefaultBtn type={type} background={background} color={color} opacity={opacity} {...props} />
+export default function Button({ theme = 'default', size = 'large', background, color, opacity, ...props }: BtnProps) {
+  return <DefaultBtn theme={theme} size={size} background={background} color={color} opacity={opacity} {...props} />
 }
 
 const DefaultBtn = styled.button<BtnProps>`
-  /* 공통 */
   width: 328px;
   height: 44px;
   border-radius: 12px;
@@ -24,11 +25,13 @@ const DefaultBtn = styled.button<BtnProps>`
   font-size: 20px;
   color: var(--MR_WHITE);
   background: var(--MR_RED);
+  cursor: pointer;
 
-  ${({ type }) => (type ? TYPE_VARIANT[type] : '')};
+  ${({ theme }) => (theme ? THEME_VARIANT[theme] : '')};
+  ${({ size }) => (size ? SIZE_VARIANT[size] : '')}
 `;
 
-const TYPE_VARIANT = {
+const THEME_VARIANT = {
   default: `
   `,
   finished: `
@@ -40,5 +43,21 @@ const TYPE_VARIANT = {
   transparent: `
     color: var(--MR_BLACK);  
     background: none;
-  `
+  `,
+};
+
+const SIZE_VARIANT = {
+  sm: `
+    width: 60px;
+    height: 28px;
+    font-size: 16px
+  `,
+  icon: `
+    width: 114px;
+  `,
+  medium: `
+    width: 140px;
+  `,
+  large: `
+  `,
 };
