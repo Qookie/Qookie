@@ -3,6 +3,7 @@ package com.a504.qookie.domain.member.service;
 import com.a504.qookie.domain.member.dto.LoginRequest;
 import com.a504.qookie.domain.member.entity.Member;
 import com.a504.qookie.domain.member.repository.MemberRepository;
+import java.time.LocalTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,4 +29,9 @@ public class MemberService {
         }
     }
 
+    public void setTime(Member member, String wakeTime) {
+
+        member.setTime(LocalTime.parse(wakeTime));
+        memberRepository.save(member);
+    }
 }

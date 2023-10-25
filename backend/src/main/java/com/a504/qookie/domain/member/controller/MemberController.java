@@ -1,5 +1,6 @@
 package com.a504.qookie.domain.member.controller;
 
+import com.a504.qookie.domain.member.dto.WakeTimeRequest;
 import com.a504.qookie.domain.member.service.MemberService;
 import com.a504.qookie.domain.member.dto.LoginRequest;
 import com.a504.qookie.global.response.BaseResponse;
@@ -28,5 +29,15 @@ public class MemberController {
         // kakao면 name, email null임 카카오에서 안보내주는데 설정해야할듯.
 
         return BaseResponse.okWithData(HttpStatus.OK, "LOGIN OK", null);
+    }
+
+    @PostMapping("/time")
+    public ResponseEntity<?> setTime(
+            @AuthenticationPrincipal CustomMemberDetails customMemberDetails,
+            @RequestBody WakeTimeRequest wakeTimeRequest) {
+
+        memberService.setTime(customMemberDetails.getMember(), wakeTimeRequest.wakeTime());
+
+        return BaseResponse.ok(HttpStatus.OK, "Set Time OK");
     }
 }
