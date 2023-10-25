@@ -22,23 +22,20 @@ const Router = () => {
 
 const HeaderWrapper = () => {
   const location = useLocation();
-
-  const checkPath = () => {
-    switch (location.pathname) {
-      case '/home':
-        return 'home';
-      case '/mind':
-        return '마음함';
-      case '/calendar':
-        return '캘린더';
-      case '/mypage':
-        return '마이페이지';
-      default:
-        return location.pathname;
-    }
-  };
-
-  return <Header page={checkPath()} />;
+  switch (location.pathname) {
+    case '/home':
+      return <Header page="home" />;
+    case '/mind':
+      return <Header page="tab" title="마음함" />;
+    case '/calendar':
+      return <Header page="tab" title="캘린더" />;
+    case '/mypage':
+      return <Header page="tab" title="마이페이지" />;
+    case '/':
+      return <Header page="none" />;
+    default:
+      return <Header page="default" />;
+  }
 };
 
 const NavBarWrapper = () => {
@@ -46,10 +43,16 @@ const NavBarWrapper = () => {
 
   const checkPath = () => {
     switch (location.pathname) {
-      case '/':
-        return false;
-      default:
+      case '/home':
         return true;
+      case '/mind':
+        return true;
+      case '/calendar':
+        return true;
+      case '/mypage':
+        return true;
+      default:
+        return false;
     }
   };
 

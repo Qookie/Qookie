@@ -1,14 +1,25 @@
 import styled from 'styled-components';
 import { ChevronLeftIcon, BellIcon } from '@heroicons/react/24/outline';
 import { ReactComponent as LogoCoin } from '../../../../assets/coin.svg';
+import { useNavigate } from 'react-router-dom';
+import Text from '../../atoms/Text';
 
 export interface HeaderProps {
   page: string;
+  title?: string;
 }
 
-export default function Header({ page }: HeaderProps) {
+export default function Header({ page, title }: HeaderProps) {
+  const navigate = useNavigate();
+
+  const movePrevPage = () => {
+    navigate(-1);
+  };
+
   const headerType = (page: string) => {
     switch (page) {
+      case 'none':
+        return;
       case 'home':
         return (
           <HomeContainer>
@@ -20,14 +31,18 @@ export default function Header({ page }: HeaderProps) {
             </HeaderIcon>
           </HomeContainer>
         );
-      case '캘린더':
-      case '마음함':
-      case '마이페이지':
-        return <TitleContainer>{page}</TitleContainer>;
+      case 'tab':
+        return (
+          <TitleContainer>
+            <Text typography="title" color={'var(--MR_BLACK)'}>
+              {title}
+            </Text>
+          </TitleContainer>
+        );
       default:
         return (
           <TitleContainer>
-            <HeaderIcon>
+            <HeaderIcon onClick={movePrevPage}>
               <ChevronLeftIcon />
             </HeaderIcon>
           </TitleContainer>
@@ -60,9 +75,6 @@ const TitleContainer = styled.div`
   display: flex;
   align-items: center;
   padding: 0 1rem;
-  font-weight: 700;
-  font-family: inherit;
-  font-size: inherit;
 `;
 
 const HeaderIcon = styled.div`
