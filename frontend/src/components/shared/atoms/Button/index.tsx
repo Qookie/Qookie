@@ -4,13 +4,10 @@ import { styled } from 'styled-components';
 interface BtnProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   theme?: 'default' | 'finished' | 'disabled' | 'transparent';
   size?: 'small' | 'icon' | 'medium' | 'large';
-  background?: string;
-  color?: string;
-  opacity?: string;
 }
 
-export default function Button({ theme = 'default', size = 'large', background, color, opacity, ...props }: BtnProps) {
-  return <DefaultBtn theme={theme} size={size} background={background} color={color} opacity={opacity} {...props} />
+export default function Button({ theme = 'default', size = 'large', color, ...props }: BtnProps) {
+  return <DefaultBtn theme={theme} size={size} {...props} />
 }
 
 const DefaultBtn = styled.button<BtnProps>`
@@ -41,7 +38,7 @@ const THEME_VARIANT = {
     background: var(--MR_GRAY1);
   `,
   transparent: `
-    color: var(--MR_BLACK);  
+    color: var(--MR_GRAY2);  
     background: none;
   `,
 };
