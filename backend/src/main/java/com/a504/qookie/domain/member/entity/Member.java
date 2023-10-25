@@ -56,4 +56,8 @@ public class Member {
 	public void setTime(LocalTime wakeUp) {
 		this.wakeUp = wakeUp;
 	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 }
