@@ -8,9 +8,9 @@ import {
 import { auth } from '../firebase/firebaseConfig';
 import { useEffect } from 'react';
 import Text from '../components/shared/atoms/Text';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
-import CookieGroup from '../assets/pngs/Group 12269.png';
+import CookieGrow from '../assets/pngs/CookieGrow.png';
 import Title from '../components/login/atoms/Title';
 import SocialLoginButton, {
   Social,
@@ -69,16 +69,8 @@ const Login = () => {
           Qookie를 시작해보세요
         </Text>
       </Top>
-      <img
-        src={CookieGroup}
-        alt="쿠키 그룹"
-        style={{
-          width: '100%',
-          display: 'block',
-          margin: '0 auto',
-          marginBottom: '9.625vh',
-        }}
-      />
+
+      <CookieSlide />
       <ButtonContainer>
         {socialLogin.map((social: Social) => (
           <SocialLoginButton
@@ -96,6 +88,24 @@ const Top = styled.div`
   margin-top: 7vh;
   padding: 0 1rem;
   margin-bottom: 8vh;
+`;
+
+const move = keyframes`
+  0% {
+    background-position: 0 center;
+  }
+
+  100% {
+    background-position: 200% center;
+  }
+`;
+
+const CookieSlide = styled.div`
+  width: 100%;
+  height: min(28vh, 332px);
+  margin-bottom: 9vh;
+  background: url(${CookieGrow}) 0 center / 200% repeat-x;
+  animation: ${move} 15s linear infinite;
 `;
 
 const ButtonContainer = styled.div`
