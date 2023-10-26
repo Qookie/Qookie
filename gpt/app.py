@@ -9,7 +9,7 @@ load_dotenv()
 key = os.environ.get("KEY")
 
 
-@app.route('/', methods=["POST"])
+@app.route("/", methods=["POST"])
 def send_message():
     data = request.json
     print(data)
@@ -19,15 +19,13 @@ def send_message():
 
 
 def test(user_name, category, user_input):
-    # with open("./test1_korean_papago.txt", "r", encoding="UTF-8") as fr:
-    #     user_input = fr.readlines()
-    # user_input = ' '.join(user_input)
-    data = json.dumps({
-        "model": "gpt-4",
-        "messages": [
-            {
-                "role": "system",
-                "content": f"""
+    data = json.dumps(
+        {
+            "model": "gpt-4",
+            "messages": [
+                {
+                    "role": "system",
+                    "content": f"""
                     You are going to offer appropriate feedback to {user_name}'s letter feeling {category}
                     Because you are a psychology doctor, you use psychology theories to analyze the letter.
                     Pick appropriate one among Albert Ellis' ABC model, Beck's Cognitive Triad, 
@@ -39,24 +37,21 @@ def test(user_name, category, user_input):
                     When using Korean speak in plain language. You don't need to be too much polite.
                     Lastly, keep it mind to make letter not to be too long.
                     Make it under ten to twelve sentences long.
-                """
-            },
-            {
-                "role": "user",
-                "content": user_input
-            }
-        ],
-        "temperature": 0.8
-    })
-    return requests.post(
-        "https://api.openai.com/v1/chat/completions",
-        headers={
-            "Content-Type": "application/json",
-            "Authorization": "Bearer " + key
-        },
-        data=data
+                """,
+                },
+                {"role": "user", "content": user_input},
+            ],
+            "temperature": 0.8,
+        }
     )
+    response = requests.post(
+        "https://api.openai.com/v1/chat/completions",
+        headers={"Content-Type": "application/json", "Authorization": "Bearer " + key},
+        data=data,
+    )
+    print(response)
+    return response
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(debug=True, port=5000)
