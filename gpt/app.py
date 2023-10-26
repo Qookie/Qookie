@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from dotenv import load_dotenv
 import requests
 import os
@@ -9,12 +9,21 @@ load_dotenv()
 key = os.environ.get("KEY")
 
 
-@app.route("/", methods=["POST"])
-def send_message():
+@app.route("/gpt", methods=["POST"])
+def send_letter():
     data = request.json
-    print(data)
     ret = test(data["name"], data["category"], data["letter"])
-    print(data)
+    return ret.json()
+
+
+@app.route("/gpt", methods=["GET"])
+def send_test():
+    return jsonify("server working!")
+
+
+@app.route("/gpt/fast", methods=["POST"])
+def send_fast():
+    ret = test("testName", "testCategory", "DON'T MIND A LETTER! JUST SAY TEST!!!")
     return ret.json()
 
 
