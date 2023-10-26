@@ -27,7 +27,7 @@ export default function NavBar() {
 
 const NavContainer = styled.div`
   width: 100%;
-  height: 2.1rem;
+  height: 2.6rem;
   position: fixed;
   bottom: 0;
   left: 0;
@@ -60,6 +60,6 @@ const NavItem = styled(NavLink)`
 const NavName = styled.div`
   font-size: 0.75rem;
   font-style: normal;
-  font-weight: 600;
+  font-weight: 500;
   margin-top: 0.4rem;
 `;
