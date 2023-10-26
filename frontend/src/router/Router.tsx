@@ -32,7 +32,7 @@ const HeaderWrapper = () => {
     case '/mypage':
       return <Header page="tab" title="마이페이지" />;
     case '/':
-      return <Header page="none" />;
+      return <></>;
     default:
       return <Header page="default" />;
   }
