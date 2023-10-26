@@ -73,6 +73,6 @@ public class CookieController {
 
         FaceResponse faceResponse = cookieService.eyeAndMouthList();
 
-        return BaseResponse.okWithData(HttpStatus.OK, "cookie list OK", faceResponse);
+        return BaseResponse.okWithData(HttpStatus.OK, "cookie face list OK", faceResponse);
     }
 }
