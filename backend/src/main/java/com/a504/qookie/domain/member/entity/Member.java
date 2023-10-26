@@ -74,4 +74,8 @@ public class Member {
 	public void setNonActive() {
 		this.active = false;
 	}
+
+	public void setPoint(int point){
+		this.point += point;
+	}
 }
