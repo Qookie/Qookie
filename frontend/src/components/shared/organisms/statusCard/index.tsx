@@ -41,6 +41,7 @@ export default function StatusCard({ level, exp }: StatusCardProps) {
 const Container = styled.div`
   height: 3rem;
   width: 100%;
+  position: relative;
 `;
 
 const CardContainer = styled.div`
