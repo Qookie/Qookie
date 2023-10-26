@@ -24,7 +24,7 @@ export default function Header({ page, title }: HeaderProps) {
         return (
           <HomeContainer>
             <HeaderIcon>
-              <CoinLogo style={{ width: '100%', height: '100%' }} />
+              <CoinLogo />
             </HeaderIcon>
             <HeaderIcon>
               <BellIcon />

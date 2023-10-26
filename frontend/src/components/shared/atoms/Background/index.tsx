@@ -4,7 +4,7 @@ import { Bg1 } from '../../../../assets/svgs';
 export default function Background() {
   return (
     <BgContainer>
-      <Bg1 style={{ width: '430px' }} />
+      <Bg1 />
       <OverlayGradient />
     </BgContainer>
   );

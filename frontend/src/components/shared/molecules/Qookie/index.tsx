@@ -18,7 +18,6 @@ export default function Qookie() {
 }
 
 const QookieContainer = styled.div`
-  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
