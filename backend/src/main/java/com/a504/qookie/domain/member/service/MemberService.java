@@ -44,9 +44,7 @@ public class MemberService {
 
     public MemberResponse getInfo(Member member) {
 
-        MemberResponse memberResponse = memberRepository.findMemberIfoById(member.getId());
-
-        return memberResponse;
+        return memberRepository.findMemberIfoById(member.getId());
     }
 
     @Transactional
