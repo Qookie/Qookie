@@ -41,6 +41,17 @@ pipeline {
 				}
 			}
 		}
+		stage("Build GPT") {
+			steps {
+				dir ("./gpt") {
+					sh "docker stop gpt || true"
+					sh "docker rm gpt || true"
+
+					sh "docker build -t gpt ."
+					sh "docker run -p 5000:5000 -d --name gpt gpt"
+				}
+			}
+		}
 	}
 	post {
 		success {
