@@ -48,26 +48,6 @@ public class CookieService {
         return cookieResponse;
     }
 
-    @Transactional
-    public void modify(Long cookieId, String cookieName) {
-
-        Cookie cookie = cookieRepository.findById(cookieId)
-                .orElseThrow(() -> new IllegalArgumentException("쿠키가 없습니다"));
-
-        cookie.changeName(cookieName);
-    }
-
-    public boolean checkMember(Member member, Long cookieId) {
-        Cookie cookie = null;
-        cookie = cookieRepository.findByIdAndMember(cookieId, member);
-
-        if (cookie == null) {
-            return false;
-        }
-
-        return true;
-    }
-
     public String uploadBody(MultipartFile image, int stage) {
         String url = awsS3Service.uploadImageToS3(image);
 

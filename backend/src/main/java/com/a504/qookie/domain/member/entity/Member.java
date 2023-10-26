@@ -59,4 +59,12 @@ public class Member {
 		name = loginRequest.getDisplayName();
 		uid = loginRequest.getUid();
 	}
+
+	public void setTime(LocalTime wakeUp) {
+		this.wakeUp = wakeUp;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 }
