@@ -1,5 +1,6 @@
 package com.a504.qookie.domain.heart.entity;
 
+import com.a504.qookie.domain.heart.dto.HeartRequest;
 import java.time.LocalDateTime;
 
 import com.a504.qookie.domain.member.entity.Member;
@@ -44,4 +45,11 @@ public class Heart {
 
 	@Column(name = "reply")
 	private String reply;
+
+	public Heart(Member member, HeartRequest heartRequest) {
+		this.member = member;
+		this.createdAt = LocalDateTime.now();
+		this.category = heartRequest.category();
+		this.content = heartRequest.content();
+	}
 }
