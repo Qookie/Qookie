@@ -47,6 +47,10 @@ pipeline {
 					sh "docker stop gpt || true"
 					sh "docker rm gpt || true"
 
+					// copy .env file for docker compose to cloned repo
+					sh "rm ./.env.gpt || true"
+					sh "cp /var/jenkins_home/secrets/.env.gpt ./.env"
+
 					sh "docker build -t gpt ."
 					sh "docker run -p 127.0.0.1:5000:5000 -d --name gpt gpt"
 				}
