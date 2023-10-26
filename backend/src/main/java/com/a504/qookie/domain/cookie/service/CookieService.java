@@ -44,9 +44,7 @@ public class CookieService {
 
         cookieRepository.save(cookie);
 
-        CookieResponse cookieResponse = new CookieResponse(cookie);
-
-        return cookieResponse;
+        return new CookieResponse(cookie);
     }
 
     public String uploadBody(MultipartFile image, int stage) {

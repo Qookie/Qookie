@@ -9,8 +9,4 @@ public record FaceResponse(
     List<Mouth> mouths
 ) {
 
-    public FaceResponse(List<Eye> eyes, List<Mouth> mouths) {
-        this.eyes = eyes;
-        this.mouths = mouths;
-    }
 }
