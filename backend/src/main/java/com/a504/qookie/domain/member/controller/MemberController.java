@@ -61,4 +61,13 @@ public class MemberController {
 
         return BaseResponse.ok(HttpStatus.OK, "member modifyInfo OK");
     }
+
+    @PatchMapping("/delete")
+    public ResponseEntity<?> delete(
+            @AuthenticationPrincipal CustomMemberDetails customMemberDetails) {
+
+        memberService.delete(customMemberDetails.getMember().getId());
+
+        return BaseResponse.ok(HttpStatus.OK, "member delete OK");
+    }
 }

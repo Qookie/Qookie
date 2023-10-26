@@ -41,6 +41,9 @@ public class Member {
 	@Column(name = "point")
 	private int point;
 
+	@Column(name = "active", nullable = true, columnDefinition = "TINYINT(1)")
+	private Boolean active;
+
 	public Member(JwtObject token) {
 		email = token.getJwtPayload().getEmail();
 		name = token.getJwtPayload().getName();
@@ -66,5 +69,9 @@ public class Member {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public void setNonActive() {
+		this.active = false;
 	}
 }
