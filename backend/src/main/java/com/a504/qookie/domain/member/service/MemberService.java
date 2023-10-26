@@ -7,11 +7,12 @@ import com.a504.qookie.domain.member.dto.MemberRequest;
 import com.a504.qookie.domain.member.dto.MemberResponse;
 import com.a504.qookie.domain.member.entity.Member;
 import com.a504.qookie.domain.member.repository.MemberRepository;
+import jakarta.transaction.Transactional;
 import java.time.LocalTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.NoSuchElementException;
 
@@ -62,6 +63,15 @@ public class MemberService {
         if (!cookies.isEmpty()) {
             cookies.get(0).changeName(memberRequest.cookieName());
         }
+
+    }
+
+    @Transactional
+    public void delete(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("멤버가 없습니다"));
+
+        member.setNonActive();
 
     }
 }
