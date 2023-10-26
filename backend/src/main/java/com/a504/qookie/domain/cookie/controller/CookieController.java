@@ -2,6 +2,7 @@ package com.a504.qookie.domain.cookie.controller;
 
 import com.a504.qookie.domain.cookie.dto.CookieCreateRequest;
 import com.a504.qookie.domain.cookie.dto.CookieResponse;
+import com.a504.qookie.domain.cookie.dto.FaceResponse;
 import com.a504.qookie.domain.cookie.service.CookieService;
 import com.a504.qookie.global.response.BaseResponse;
 import com.a504.qookie.global.security.CustomMemberDetails;
@@ -65,5 +66,13 @@ public class CookieController {
         String url = cookieService.uploadMouth(image);
 
         return BaseResponse.okWithData(HttpStatus.OK, "cookie mouth upload OK", url);
+    }
+
+    @GetMapping("/face/list")
+    public ResponseEntity<?> eyeAndMouthList() {
+
+        FaceResponse faceResponse = cookieService.eyeAndMouthList();
+
+        return BaseResponse.okWithData(HttpStatus.OK, "cookie list OK", faceResponse);
     }
 }

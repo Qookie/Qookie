@@ -1,6 +1,7 @@
 package com.a504.qookie.domain.cookie.service;
 
 import com.a504.qookie.domain.cookie.dto.CookieResponse;
+import com.a504.qookie.domain.cookie.dto.FaceResponse;
 import com.a504.qookie.domain.cookie.entity.Body;
 import com.a504.qookie.domain.cookie.entity.Cookie;
 import com.a504.qookie.domain.cookie.entity.Eye;
@@ -92,5 +93,13 @@ public class CookieService {
         }
 
         return cookieResponses;
+    }
+
+    @Transactional
+    public FaceResponse eyeAndMouthList() {
+        List<Eye> eyes = eyeRepository.findAll();
+        List<Mouth> mouths = mouthRepository.findAll();
+
+        return new FaceResponse(eyes, mouths);
     }
 }
