@@ -10,9 +10,8 @@ export default function Mouth() {
 }
 
 const Container = styled.div`
-  z-index: 1;
   position: absolute;
-  top: 63%;
-  left: 60%;
-  transform: translate(-63%, -60%);
+  top: 64%;
+  left: 64%;
+  transform: translate(-64%, -64%);
 `;

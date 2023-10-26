@@ -10,9 +10,9 @@ export default function Qookie() {
       <Background />
       <DoughContainer>
         <Dough2 />
+        <Eye />
+        <Mouth />
       </DoughContainer>
-      <Eye />
-      <Mouth />
     </QookieContainer>
   );
 }
@@ -25,5 +25,5 @@ const QookieContainer = styled.div`
 `;
 
 const DoughContainer = styled.div`
-  z-index: 1;
+  position: relative;
 `;

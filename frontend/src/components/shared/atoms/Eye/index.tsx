@@ -10,9 +10,8 @@ export default function Eye() {
 }
 
 const Container = styled.div`
-  z-index: 1;
   position: absolute;
-  top: 56%;
-  left: 60%;
-  transform: translate(-56%, -60%);
+  top: 58%;
+  left: 64%;
+  transform: translate(-58%, -64%);
 `;
