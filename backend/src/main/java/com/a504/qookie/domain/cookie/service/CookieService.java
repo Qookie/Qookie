@@ -100,4 +100,12 @@ public class CookieService {
 
         return new FaceResponse(eyes, mouths);
     }
+
+    @Transactional
+    public CookieResponse getInfo(Member member) {
+
+        List<Cookie> cookies = cookieRepository.findAllByMemberAndActive(member, 1);
+
+        return new CookieResponse(cookies.get(0));
+    }
 }
