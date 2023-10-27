@@ -3,13 +3,20 @@ import styled from 'styled-components';
 import StatusCard from '../components/shared/organisms/StatusCard';
 import { useRecoilState } from 'recoil';
 import { QookieInfoState } from '../modules/qookie';
+import { useEffect } from 'react';
+import { qookieApi } from '../api';
 
 const Home = () => {
-  const [qookie, setqookie] = useRecoilState(QookieInfoState);
+  const [qookie, setQookie] = useRecoilState(QookieInfoState);
+
+  // qookie Api 수정 후 setQookie수정 필요
+  // useEffect(() => {
+  //   qookieApi.getQookieInfo().then((res) => setQookie({...qookie, ...res}));
+  // });
 
   return (
     <HomeContainer>
-      <Qookie />
+      <Qookie {...qookie} />
       <ContentsWrapper>
         <StatusCard level={qookie.level} exp={qookie.exp} />
       </ContentsWrapper>
@@ -19,10 +26,8 @@ const Home = () => {
 
 export default Home;
 
-const HomeContainer = styled.div`
-  padding-top: 4rem;
-`;
+const HomeContainer = styled.div``;
 
 const ContentsWrapper = styled.div`
-  padding: 3rem 1rem 0 1rem;
+  padding: 0 1rem;
 `;
