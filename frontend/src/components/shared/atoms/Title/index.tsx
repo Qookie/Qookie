@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Text from '../../../shared/atoms/Text';
+import Text from '../Text';
 
 const Title = styled(Text)`
   display: block;
