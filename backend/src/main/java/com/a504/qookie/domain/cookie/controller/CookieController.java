@@ -31,6 +31,15 @@ public class CookieController {
         return BaseResponse.okWithData(HttpStatus.OK, "cookie create OK", cookieResponse);
     }
 
+    @GetMapping("/getInfo")
+    public ResponseEntity<?> getInfo(
+            @AuthenticationPrincipal CustomMemberDetails customMemberDetails) {
+
+        CookieResponse cookieResponse = cookieService.getInfo(customMemberDetails.getMember());
+
+        return BaseResponse.okWithData(HttpStatus.OK, "cookie getInfo OK", cookieResponse);
+    }
+
     @GetMapping("/list")
     public ResponseEntity<?> cookieList(
             @AuthenticationPrincipal CustomMemberDetails customMemberDetails) {
