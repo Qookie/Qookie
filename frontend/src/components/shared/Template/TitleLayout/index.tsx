@@ -6,7 +6,7 @@ import Text from '../../atoms/Text';
 interface Props {
   title: React.ReactNode;
   desc?: React.ReactNode;
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 function TitleLayout({ title, desc, children }: Props) {
