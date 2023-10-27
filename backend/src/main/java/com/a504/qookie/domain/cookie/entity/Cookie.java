@@ -97,4 +97,12 @@ public class Cookie {
 		this.name = cookieName;
 	}
 
+	public void updateExp(int exp){
+		this.exp += exp;
+	}
+
+	public void updateLevel(int level){
+		this.level += level;
+	}
+
 }
