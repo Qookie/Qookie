@@ -5,9 +5,11 @@ import ProgressBar from '../../atoms/ProgressBar';
 export interface StatusCardProps {
   level: number;
   exp: number;
+  name: string;
+  createdAt: string;
 }
 
-export default function StatusCard({ level, exp }: StatusCardProps) {
+export default function StatusCard({ level, exp, name, createdAt }: StatusCardProps) {
   const getTotal = (level: number) => {
     if (level >= 5 && level <= 9) {
       return 12;
@@ -23,13 +25,22 @@ export default function StatusCard({ level, exp }: StatusCardProps) {
     return 10;
   };
 
+  const changeCreateToDate = (createdAt: string) => {
+    const createdDate = new Date(createdAt);
+    const currentDate = new Date();
+    const timeDiff = currentDate.getTime() - createdDate.getTime();
+    const date = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+    return `${date}일째`;
+  };
+
   return (
     <Container>
       <CardContainer>
         <Level level={level} />
         <RightContainer>
           <QookieInfo>
-            <QookieName>김쿠키</QookieName>6일째
+            <QookieName>{name}</QookieName>
+            {changeCreateToDate(createdAt)}일째
           </QookieInfo>
           <ProgressBar total={getTotal(level)} now={exp} level={level} />
         </RightContainer>
@@ -41,12 +52,12 @@ export default function StatusCard({ level, exp }: StatusCardProps) {
 const Container = styled.div`
   height: 3rem;
   width: 100%;
-  position: relative;
 `;
 
 const CardContainer = styled.div`
   height: 3rem;
   border-radius: 0.5rem;
+  margin: 0 1rem;
   background-color: var(--MR_WHITE);
   box-shadow: 2px 4px 12px 0px rgba(224, 224, 224, 0.3);
   padding: 0.75rem 1.4rem;
