@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import Level from '../../molecules/Level';
 import ProgressBar from '../../atoms/ProgressBar';
+import { calcDateDiff } from '../../../../utils/date';
 
 export interface StatusCardProps {
   level: number;
@@ -25,14 +26,6 @@ export default function StatusCard({ level, exp, name, createdAt }: StatusCardPr
     return 10;
   };
 
-  const changeCreateToDate = (createdAt: string) => {
-    const createdDate = new Date(createdAt);
-    const currentDate = new Date();
-    const timeDiff = currentDate.getTime() - createdDate.getTime();
-    const date = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-    return `${date}일째`;
-  };
-
   return (
     <Container>
       <CardContainer>
@@ -40,7 +33,7 @@ export default function StatusCard({ level, exp, name, createdAt }: StatusCardPr
         <RightContainer>
           <QookieInfo>
             <QookieName>{name}</QookieName>
-            {changeCreateToDate(createdAt)}일째
+            {calcDateDiff(createdAt)}일째
           </QookieInfo>
           <ProgressBar total={getTotal(level)} now={exp} level={level} />
         </RightContainer>

@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 import { QookieInfo } from '../../../../types';
-import StatusCard from '../../organisms/StatusCard';
+import StatusCard from '../StatusCard';
 import Qookie from '../../molecules/Qookie';
 
-export default function TotalQookie({ ...props }: QookieInfo) {
+export default function QookieStatus({ ...props }: QookieInfo) {
   return (
     <QookieContainer>
       <Qookie {...props} />

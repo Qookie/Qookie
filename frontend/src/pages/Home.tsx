@@ -3,7 +3,7 @@ import { useRecoilState } from 'recoil';
 import { QookieInfoState } from '../modules/qookie';
 import { useEffect } from 'react';
 import { qookieApi } from '../api';
-import TotalQookie from '../components/shared/organisms/TotalQookie';
+import QookieStatus from '../components/shared/organisms/QookieStatus';
 
 const Home = () => {
   const [qookie, setQookie] = useRecoilState(QookieInfoState);
@@ -15,7 +15,7 @@ const Home = () => {
 
   return (
     <HomeContainer>
-      <TotalQookie {...qookie} />
+      <QookieStatus {...qookie} />
     </HomeContainer>
   );
 };
