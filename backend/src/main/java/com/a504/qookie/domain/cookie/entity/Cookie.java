@@ -42,9 +42,6 @@ public class Cookie {
 	@Column(name = "style")
 	private Long style;
 
-	@Column(name = "active")
-	private int active;
-
 	@Column(name = "exp")
 	private int exp;
 
@@ -83,7 +80,6 @@ public class Cookie {
 				.member(member)
 				.name(name)
 				.createdAt(LocalDateTime.now())
-				.active(1)
 				.exp(0)
 				.level(1)
 				.body(body)

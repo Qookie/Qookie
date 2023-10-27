@@ -23,7 +23,6 @@ public class MemberRepositoryCustomImpl implements MemberRepositoryCustom{
                         Projections.constructor(MemberResponse.class, member.name, member.wakeUp, cookie.name))
                 .from(cookie)
                 .join(cookie.member, member).on(member.id.eq(memberId))
-                .where(cookie.active.eq(1))
                 .fetchOne();
     }
 }

@@ -1,5 +1,6 @@
 package com.a504.qookie.domain.cookie.controller;
 
+import com.a504.qookie.domain.cookie.dto.CookieCollectionResponse;
 import com.a504.qookie.domain.cookie.dto.CookieCreateRequest;
 import com.a504.qookie.domain.cookie.dto.CookieResponse;
 import com.a504.qookie.domain.cookie.dto.FaceResponse;
@@ -41,12 +42,12 @@ public class CookieController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<?> cookieList(
+    public ResponseEntity<?> cookieCollectionList(
             @AuthenticationPrincipal CustomMemberDetails customMemberDetails) {
 
-        List<CookieResponse> cookieResponses = cookieService.cookieList(customMemberDetails.getMember());
+        List<CookieCollectionResponse> cookieCollectionResponses = cookieService.cookieCollectionList(customMemberDetails.getMember());
 
-        return BaseResponse.okWithData(HttpStatus.OK, "cookie list OK", cookieResponses);
+        return BaseResponse.okWithData(HttpStatus.OK, "cookie list OK", cookieCollectionResponses);
     }
 
     @PostMapping("/uploadBody/{stage}")

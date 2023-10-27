@@ -1,12 +1,15 @@
 package com.a504.qookie.domain.cookie.service;
 
+import com.a504.qookie.domain.cookie.dto.CookieCollectionResponse;
 import com.a504.qookie.domain.cookie.dto.CookieResponse;
 import com.a504.qookie.domain.cookie.dto.FaceResponse;
 import com.a504.qookie.domain.cookie.entity.Body;
 import com.a504.qookie.domain.cookie.entity.Cookie;
+import com.a504.qookie.domain.cookie.entity.CookieCollection;
 import com.a504.qookie.domain.cookie.entity.Eye;
 import com.a504.qookie.domain.cookie.entity.Mouth;
 import com.a504.qookie.domain.cookie.repository.BodyRepository;
+import com.a504.qookie.domain.cookie.repository.CookieCollectionRepository;
 import com.a504.qookie.domain.cookie.repository.CookieRepository;
 import com.a504.qookie.domain.cookie.repository.EyeRepository;
 import com.a504.qookie.domain.cookie.repository.MouthRepository;
@@ -24,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class CookieService {
 
     private final CookieRepository cookieRepository;
+    private final CookieCollectionRepository cookieCollectionRepository;
     private final BodyRepository bodyRepository;
     private final EyeRepository eyeRepository;
     private final MouthRepository mouthRepository;
@@ -79,18 +83,18 @@ public class CookieService {
     }
 
     @Transactional
-    public List<CookieResponse> cookieList(Member member) {
+    public List<CookieCollectionResponse> cookieCollectionList(Member member) {
 
-        List<Cookie> cookies = cookieRepository.findAllByMemberAndActive(member, 0);
+        List<CookieCollection> cookieCollections = cookieCollectionRepository.findAllByMember(member);
 
-        List<CookieResponse> cookieResponses = new ArrayList<>();
-        for (Cookie cookie:cookies) {
-            System.out.println("3 " + cookie);
-            CookieResponse cookieResponse = new CookieResponse(cookie);
-            cookieResponses.add(cookieResponse);
+        List<CookieCollectionResponse> cookieCollectionResponses = new ArrayList<>();
+        for (CookieCollection cookieCollection:cookieCollections) {
+            System.out.println("cookieCollection :  " + cookieCollection);
+            CookieCollectionResponse cookieCollectionResponse = new CookieCollectionResponse(cookieCollection);
+            cookieCollectionResponses.add(cookieCollectionResponse);
         }
 
-        return cookieResponses;
+        return cookieCollectionResponses;
     }
 
     @Transactional
@@ -104,8 +108,8 @@ public class CookieService {
     @Transactional
     public CookieResponse getInfo(Member member) {
 
-        List<Cookie> cookies = cookieRepository.findAllByMemberAndActive(member, 1);
+        Cookie cookie = cookieRepository.findByMember(member);
 
-        return new CookieResponse(cookies.get(0));
+        return new CookieResponse(cookie);
     }
 }
