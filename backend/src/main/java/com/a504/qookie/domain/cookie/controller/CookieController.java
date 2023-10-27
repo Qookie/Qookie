@@ -85,4 +85,14 @@ public class CookieController {
 
         return BaseResponse.okWithData(HttpStatus.OK, "cookie face list OK", faceResponse);
     }
+
+    @PostMapping("/bake")
+    public ResponseEntity<?> bake(
+            @AuthenticationPrincipal CustomMemberDetails customMemberDetails,
+            @RequestPart(value = "image") MultipartFile image) {
+
+        cookieService.bake(image, customMemberDetails.getMember());
+
+        return BaseResponse.ok(HttpStatus.OK, "cookie bake OK");
+    }
 }

@@ -112,4 +112,16 @@ public class CookieService {
 
         return new CookieResponse(cookie);
     }
+
+    @Transactional
+    public void bake(MultipartFile image, Member member) {
+
+        String url = awsS3Service.uploadImageToS3(image);
+
+        Cookie cookie = cookieRepository.findByMember(member);
+
+        cookieCollectionRepository.save(new CookieCollection(member, cookie, url));
+
+        cookieRepository.delete(cookie);
+    }
 }

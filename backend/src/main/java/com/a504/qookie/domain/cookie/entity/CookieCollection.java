@@ -42,4 +42,12 @@ public class CookieCollection {
 
     @Column(name = "ended_at")
     private LocalDateTime ended_at;
+
+    public CookieCollection(Member member, Cookie cookie, String url) {
+        this.member = member;
+        this.name = cookie.getName();
+        this.image = url;
+        this.started_at = cookie.getCreatedAt();
+        this.ended_at = LocalDateTime.now();
+    }
 }
