@@ -1,4 +1,4 @@
-import Axios from 'axios';
+import Axios, { InternalAxiosRequestConfig } from 'axios';
 
 // Todo: 서버 세팅후 .env 파일로 분리
 export const BASE_URL = 'http://localhost:8000';
@@ -8,6 +8,13 @@ const axios = Axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+});
+
+axios.interceptors.request.use(async (config: InternalAxiosRequestConfig) => {
+  const accessToken = localStorage.getItem('accessToken');
+  config.headers.Authorization = `Bearer ${accessToken}`;
+
+  return config;
 });
 
 export const http = {
