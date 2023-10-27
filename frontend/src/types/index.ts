@@ -1,8 +1,16 @@
 export interface QookieInfo {
   name: string;
-  eyeId: number;
-  mouthId: number;
-  level: number;
+  createdAt: string;
+  style: any;
+  active: number;
   exp: number;
-  background: number;
+  level: number;
+  body: string;
+  eye: string;
+  mouth: string;
+  hat: string;
+  top: string;
+  bottom: string;
+  shoe: string;
+  background: string;
 }
