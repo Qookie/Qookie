@@ -1,13 +1,16 @@
 import styled from 'styled-components';
 import Level from '../../molecules/Level';
 import ProgressBar from '../../atoms/ProgressBar';
+import { calcDateDiff } from '../../../../utils/date';
 
 export interface StatusCardProps {
   level: number;
   exp: number;
+  name: string;
+  createdAt: string;
 }
 
-export default function StatusCard({ level, exp }: StatusCardProps) {
+export default function StatusCard({ level, exp, name, createdAt }: StatusCardProps) {
   const getTotal = (level: number) => {
     if (level >= 5 && level <= 9) {
       return 12;
@@ -29,7 +32,8 @@ export default function StatusCard({ level, exp }: StatusCardProps) {
         <Level level={level} />
         <RightContainer>
           <QookieInfo>
-            <QookieName>김쿠키</QookieName>6일째
+            <QookieName>{name}</QookieName>
+            {calcDateDiff(createdAt)}일째
           </QookieInfo>
           <ProgressBar total={getTotal(level)} now={exp} level={level} />
         </RightContainer>
@@ -46,6 +50,7 @@ const Container = styled.div`
 const CardContainer = styled.div`
   height: 3rem;
   border-radius: 0.5rem;
+  margin: 0 1rem;
   background-color: var(--MR_WHITE);
   box-shadow: 2px 4px 12px 0px rgba(224, 224, 224, 0.3);
   padding: 0.75rem 1.4rem;

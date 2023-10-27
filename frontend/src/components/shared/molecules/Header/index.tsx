@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import { ChevronLeftIcon, BellIcon } from '@heroicons/react/24/outline';
-import { ReactComponent as LogoCoin } from '../../../../assets/coin.svg';
 import { useNavigate } from 'react-router-dom';
 import Text from '../../atoms/Text';
+import { CoinLogo } from '../../../../assets/svgs';
 
 export interface HeaderProps {
   page: string;
@@ -24,7 +24,7 @@ export default function Header({ page, title }: HeaderProps) {
         return (
           <HomeContainer>
             <HeaderIcon>
-              <LogoCoin style={{ width: '100%', height: '100%' }} />
+              <CoinLogo />
             </HeaderIcon>
             <HeaderIcon>
               <BellIcon />
