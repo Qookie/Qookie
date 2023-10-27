@@ -42,9 +42,6 @@ public class Cookie {
 	@Column(name = "style")
 	private Long style;
 
-	@Column(name = "active")
-	private int active;
-
 	@Column(name = "exp")
 	private int exp;
 
@@ -79,18 +76,16 @@ public class Cookie {
 	private Long background;
 
 	public static Cookie createCookie(Member member, String name, Body body, Eye eye, Mouth mouth) {
-		Cookie cookie = Cookie.builder()
+		return Cookie.builder()
 				.member(member)
 				.name(name)
 				.createdAt(LocalDateTime.now())
-				.active(1)
 				.exp(0)
 				.level(1)
 				.body(body)
 				.eye(eye)
 				.mouth(mouth)
 				.build();
-		return cookie;
 	}
 
 	public void changeName(String cookieName) {
