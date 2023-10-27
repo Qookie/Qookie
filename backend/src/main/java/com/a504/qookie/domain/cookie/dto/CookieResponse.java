@@ -1,9 +1,6 @@
 package com.a504.qookie.domain.cookie.dto;
 
-import com.a504.qookie.domain.cookie.entity.Body;
 import com.a504.qookie.domain.cookie.entity.Cookie;
-import com.a504.qookie.domain.cookie.entity.Eye;
-import com.a504.qookie.domain.cookie.entity.Mouth;
 import java.time.LocalDateTime;
 
 public record CookieResponse(

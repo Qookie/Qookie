@@ -76,7 +76,7 @@ public class Cookie {
 	private Long background;
 
 	public static Cookie createCookie(Member member, String name, Body body, Eye eye, Mouth mouth) {
-		Cookie cookie = Cookie.builder()
+		return Cookie.builder()
 				.member(member)
 				.name(name)
 				.createdAt(LocalDateTime.now())
@@ -86,7 +86,6 @@ public class Cookie {
 				.eye(eye)
 				.mouth(mouth)
 				.build();
-		return cookie;
 	}
 
 	public void changeName(String cookieName) {
