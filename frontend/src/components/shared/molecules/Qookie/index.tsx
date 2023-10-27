@@ -3,61 +3,49 @@ import { QookieInfo } from '../../../../types';
 
 export default function Qookie({ ...props }: QookieInfo) {
   return (
-    <QookieContainer>
-      <BackgroundContainer>
-        <Image src={props.background} alt="bg" />
-        <OverlayGradient />
-        <DoughContainer>
-          <Image src={props.body} alt="dough" />
-          <EyeContainer>
-            <Image src={props.eye} alt="eye" />
-            <MouthContainer>
-              <Image src={props.mouth} alt="mouth" />
-            </MouthContainer>
-          </EyeContainer>
-        </DoughContainer>
-      </BackgroundContainer>
-    </QookieContainer>
+    <BackgroundContainer background={props.background}>
+      <DoughContainer body={props.body}>
+        <EyeContainer eye={props.eye} />
+        <MouthContainer mouth={props.mouth} />
+      </DoughContainer>
+    </BackgroundContainer>
   );
 }
 
-const QookieContainer = styled.div`
+const BackgroundContainer = styled.div<{ background: string }>`
+  background:
+    linear-gradient(0deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 20%),
+    center/cover no-repeat url(${(props) => props.background});
+  width: 100%;
+  height: 460px;
   display: flex;
+  justify-content: center;
+  align-items: center;
 `;
-const BackgroundContainer = styled.div`
+
+const DoughContainer = styled.div<{ body: string }>`
+  background: center/contain no-repeat url(${(props) => props.body});
+  height: 90px;
+  width: 120px;
   position: relative;
 `;
 
-const Image = styled.img`
-  width: 100%;
-`;
-
-const OverlayGradient = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(0deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 20%);
-`;
-
-const DoughContainer = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-`;
-
-const EyeContainer = styled.div`
+const EyeContainer = styled.div<{ eye: string }>`
   position: absolute;
   top: 38%;
-  left: 68%;
+  left: 70%;
   transform: translate(-50%, -50%);
+  background: center/auto no-repeat url(${(props) => props.eye});
+  width: 100%;
+  height: 100%;
 `;
 
-const MouthContainer = styled.div`
+const MouthContainer = styled.div<{ mouth: string }>`
   position: absolute;
-  top: 120%;
-  left: 54%;
+  top: 50%;
+  left: 70%;
   transform: translate(-50%, -50%);
+  background: center/auto no-repeat url(${(props) => props.mouth});
+  width: 100%;
+  height: 100%;
 `;
