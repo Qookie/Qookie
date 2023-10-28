@@ -5,7 +5,7 @@ import Text from '../../atoms/Text';
 import { CoinLogo } from '../../../../assets/svgs';
 
 export interface HeaderProps {
-  page: string;
+  page: 'home' | 'tab' | 'default';
   title?: string;
 }
 
@@ -18,8 +18,6 @@ export default function Header({ page, title }: HeaderProps) {
 
   const headerType = (page: string) => {
     switch (page) {
-      case 'none':
-        return;
       case 'home':
         return (
           <HomeContainer>
@@ -54,7 +52,7 @@ export default function Header({ page, title }: HeaderProps) {
 }
 
 const HeaderContainer = styled.div<HeaderProps>`
-  width: 100%;
+  width: min(100%, 430px);
   height: 4rem;
   position: fixed;
   background-color: ${({ page }) => (page != 'home' ? 'var(--MR_WHITE)' : 'transparent')};

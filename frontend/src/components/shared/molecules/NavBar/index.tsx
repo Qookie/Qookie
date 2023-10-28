@@ -26,12 +26,10 @@ export default function NavBar() {
 }
 
 const NavContainer = styled.div`
-  width: 100%;
+  width: min(100%, 430px);
   height: 2.6rem;
   position: fixed;
   bottom: 0;
-  left: 0;
-  right: 0;
   display: flex;
   justify-content: center;
   background-color: var(--MR_WHITE);
