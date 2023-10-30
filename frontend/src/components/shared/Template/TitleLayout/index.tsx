@@ -14,7 +14,7 @@ function TitleLayout({ title, desc, children }: Props) {
     <>
       <Top>
         <Title typography="title">{title}</Title>
-        {desc && <Text>{desc}</Text>}
+        {desc && <Text color="var(--MR_GRAY2)">{desc}</Text>}
       </Top>
 
       <div>{children}</div>
@@ -23,6 +23,7 @@ function TitleLayout({ title, desc, children }: Props) {
 }
 
 const Top = styled.div`
+  box-sizing: border-box;
   margin-top: 7vh;
   padding: 0 1rem;
   margin-bottom: 8vh;
