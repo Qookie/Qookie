@@ -10,5 +10,10 @@ export default meta;
 type Story = StoryObj<typeof ChallengeCard>;
 
 export const Default: Story = {
-  render: (args) => <ChallengeCard title="15일 기상 챌린지" condition="15일 / 15일" coin={100} />,
+  args: {
+    title: '15일 기상 챌린지',
+    condition: '15일 / 15일',
+    coin: 100,
+  },
+  render: (args) => <ChallengeCard {...args} />,
 };
