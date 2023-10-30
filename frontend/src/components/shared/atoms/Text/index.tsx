@@ -11,7 +11,8 @@ function Text({ typography = 'main', color, ...props }: Props) {
 }
 
 const StyledSpan = styled.span<Pick<Props, 'typography' | 'color'>>`
-  display: inline-block;
+  display: block;
+  white-space: pre-wrap;
   color: ${({ color }) => (color ? color : '')};
   ${({ typography }) => (typography ? TYPOGRAPHY_VARIANT[typography] : '')};
 `;

@@ -28,6 +28,7 @@ const Label = styled.label`
 `;
 
 const StyledInput = styled.input`
+  box-sizing: border-box;
   width: 100%;
   background-color: #f7f7f7;
   outline: none;
