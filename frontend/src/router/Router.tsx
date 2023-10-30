@@ -4,6 +4,7 @@ import Home from '../pages/Home';
 import NavBar from '../components/shared/molecules/NavBar';
 import Header from '../components/shared/molecules/Header';
 import InitQookie from '../pages/InitQookie';
+import Challenge from '../pages/Challenge';
 
 const Router = () => {
   return (
@@ -16,6 +17,7 @@ const Router = () => {
         <Route path="/calendar" element={<Login />} />
         <Route path="/mind" element={<Login />} />
         <Route path="/mypage" element={<Login />} />
+        <Route path="/challenge" element={<Challenge />} />
       </Routes>
       <NavBarWrapper />
     </BrowserRouter>
