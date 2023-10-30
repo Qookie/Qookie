@@ -38,7 +38,7 @@ public class ItemService {
         // 0:배경, 1:신상, 2:모자, 3:신발, 4:하의, 5:상의, 6:액세서리
 
         for (int i = 0; i < 7; i++) {
-            lists[i] = new ArrayList<ItemResponse>();
+            lists[i] = new ArrayList<>();
         }
         List<Item> itemList = itemRepository.findAll();
 
