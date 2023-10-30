@@ -3,62 +3,105 @@ import {
   GoogleAuthProvider,
   OAuthProvider,
   getRedirectResult,
+  getIdToken,
 } from 'firebase/auth';
 import { auth } from '../firebase/firebaseConfig';
 import { useEffect } from 'react';
-import axios from 'axios';
+import styled, { keyframes } from 'styled-components';
+
+import CookieGrow from '../assets/pngs/CookieGrow.png';
+import SocialLoginButton, {
+  Social,
+  socialLogin,
+} from '../components/login/atoms/SocialLoginButton';
+import { http } from '../api/instance';
+import TitleLayout from '../components/shared/Template/TitleLayout';
+import { useNavigate } from 'react-router-dom';
+
+const provider = {
+  kakao: new OAuthProvider('oidc.kakao'),
+  google: new GoogleAuthProvider(),
+};
 
 const Login = () => {
-  const googleLogin = () => {
-    signInWithRedirect(auth, new GoogleAuthProvider());
-    console.log('googlelogin');
-  };
-  const kakaoLogin = () => {
-    const provider = new OAuthProvider('oidc.kakao');
+  const navigate = useNavigate();
+
+  const onClickSocialLogin = (provider: OAuthProvider | GoogleAuthProvider) => {
     signInWithRedirect(auth, provider);
-    console.log('kakaologin');
+  };
+
+  const socialLoginCallback = async () => {
+    const res = await getRedirectResult(auth);
+
+    if (!res) {
+      return;
+    }
+
+    const { user } = res;
+    const accessToken = await getIdToken(user);
+    localStorage.setItem('accessToken', accessToken);
+    const { displayName, email, uid } = user;
+
+    try {
+      http.post('/api/member/login', {
+        displayName,
+        email,
+        uid,
+      });
+
+      navigate('/init');
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
-    getRedirectResult(auth)
-      .then((res) => {
-        if (res === null) {
-          return;
-        }
-        console.log('RES', res);
-        // save user information from firebase into localstorage
-        localStorage.setItem('userInfo', JSON.stringify(res.user));
-        // send accessToken & userInfo to backend
-        axios
-          .post(
-            'http://localhost:8000/api/member/login',
-            {
-              displayName: res.user.providerData[0].displayName,
-              email: res.user.providerData[0].email,
-              uid: res.user.uid,
-            },
-            {
-              headers: {
-                Authorization: 'Bearer ' + res.user.accessToken,
-              },
-            },
-          )
-          .then((res) => {
-            console.log('loginres: ', res);
-          })
-          .catch((err) => console.log(err));
-      })
-      .catch((err) => {
-        console.log('ERR', err);
-      });
+    socialLoginCallback();
   });
 
   return (
-    <>
-      <img src="/google.png" alt="googleLogin" onClick={googleLogin} />
-      <img src="/kakao.png" alt="kakaoLogin" onClick={kakaoLogin} />
-    </>
+    <TitleLayout
+      title={'Qookie처럼\n단단해지는 내 마음'}
+      desc={'구레잇한 당신의 삶을 위해\nQookie를 시작해보세요'}
+    >
+      <CookieSlide />
+      <ButtonContainer>
+        {socialLogin.map((social: Social) => (
+          <SocialLoginButton
+            key={social}
+            social={social}
+            onClick={() => onClickSocialLogin(provider[social])}
+          />
+        ))}
+      </ButtonContainer>
+    </TitleLayout>
   );
 };
+
+const move = keyframes`
+  0% {
+    background-position: 0 center;
+  }
+
+  100% {
+    background-position: 200% center;
+  }
+`;
+
+const CookieSlide = styled.div`
+  width: 100%;
+  height: min(28vh, 332px);
+  margin-bottom: 9vh;
+  background: url(${CookieGrow}) 0 center / 200% repeat-x;
+  animation: ${move} 15s linear infinite;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0 1rem;
+  margin-bottom: 10vh;
+`;
 
 export default Login;

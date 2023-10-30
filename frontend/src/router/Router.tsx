@@ -1,8 +1,9 @@
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Login from '../pages/Login';
-import NavBar from '../components/shared/molecules/NavBar';
 import Home from '../pages/Home';
+import NavBar from '../components/shared/molecules/NavBar';
 import Header from '../components/shared/molecules/Header';
+import InitQookie from '../pages/InitQookie';
 
 const Router = () => {
   return (
@@ -10,6 +11,7 @@ const Router = () => {
       <HeaderWrapper />
       <Routes>
         <Route path="/" element={<Login />} />
+        <Route path="/init" element={<InitQookie />} />
         <Route path="/home" element={<Home />} />
         <Route path="/calendar" element={<Login />} />
         <Route path="/mind" element={<Login />} />
@@ -32,7 +34,9 @@ const HeaderWrapper = () => {
     case '/mypage':
       return <Header page="tab" title="마이페이지" />;
     case '/':
-      return <Header page="none" />;
+      return <></>;
+    case '/init':
+      return <></>;
     default:
       return <Header page="default" />;
   }

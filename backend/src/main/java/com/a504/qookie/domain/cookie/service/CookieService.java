@@ -1,11 +1,15 @@
 package com.a504.qookie.domain.cookie.service;
 
+import com.a504.qookie.domain.cookie.dto.CookieCollectionResponse;
 import com.a504.qookie.domain.cookie.dto.CookieResponse;
+import com.a504.qookie.domain.cookie.dto.FaceResponse;
 import com.a504.qookie.domain.cookie.entity.Body;
 import com.a504.qookie.domain.cookie.entity.Cookie;
+import com.a504.qookie.domain.cookie.entity.CookieCollection;
 import com.a504.qookie.domain.cookie.entity.Eye;
 import com.a504.qookie.domain.cookie.entity.Mouth;
 import com.a504.qookie.domain.cookie.repository.BodyRepository;
+import com.a504.qookie.domain.cookie.repository.CookieCollectionRepository;
 import com.a504.qookie.domain.cookie.repository.CookieRepository;
 import com.a504.qookie.domain.cookie.repository.EyeRepository;
 import com.a504.qookie.domain.cookie.repository.MouthRepository;
@@ -23,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class CookieService {
 
     private final CookieRepository cookieRepository;
+    private final CookieCollectionRepository cookieCollectionRepository;
     private final BodyRepository bodyRepository;
     private final EyeRepository eyeRepository;
     private final MouthRepository mouthRepository;
@@ -43,29 +48,7 @@ public class CookieService {
 
         cookieRepository.save(cookie);
 
-        CookieResponse cookieResponse = new CookieResponse(cookie);
-
-        return cookieResponse;
-    }
-
-    @Transactional
-    public void modify(Long cookieId, String cookieName) {
-
-        Cookie cookie = cookieRepository.findById(cookieId)
-                .orElseThrow(() -> new IllegalArgumentException("쿠키가 없습니다"));
-
-        cookie.changeName(cookieName);
-    }
-
-    public boolean checkMember(Member member, Long cookieId) {
-        Cookie cookie = null;
-        cookie = cookieRepository.findByIdAndMember(cookieId, member);
-
-        if (cookie == null) {
-            return false;
-        }
-
-        return true;
+        return new CookieResponse(cookie);
     }
 
     public String uploadBody(MultipartFile image, int stage) {
@@ -100,17 +83,45 @@ public class CookieService {
     }
 
     @Transactional
-    public List<CookieResponse> cookieList(Member member) {
+    public List<CookieCollectionResponse> cookieCollectionList(Member member) {
 
-        List<Cookie> cookies = cookieRepository.findAllByMemberAndActive(member, 0);
+        List<CookieCollection> cookieCollections = cookieCollectionRepository.findAllByMember(member);
 
-        List<CookieResponse> cookieResponses = new ArrayList<>();
-        for (Cookie cookie:cookies) {
-            System.out.println("3 " + cookie);
-            CookieResponse cookieResponse = new CookieResponse(cookie);
-            cookieResponses.add(cookieResponse);
+        List<CookieCollectionResponse> cookieCollectionResponses = new ArrayList<>();
+        for (CookieCollection cookieCollection:cookieCollections) {
+            System.out.println("cookieCollection :  " + cookieCollection);
+            CookieCollectionResponse cookieCollectionResponse = new CookieCollectionResponse(cookieCollection);
+            cookieCollectionResponses.add(cookieCollectionResponse);
         }
 
-        return cookieResponses;
+        return cookieCollectionResponses;
+    }
+
+    @Transactional
+    public FaceResponse eyeAndMouthList() {
+        List<Eye> eyes = eyeRepository.findAll();
+        List<Mouth> mouths = mouthRepository.findAll();
+
+        return new FaceResponse(eyes, mouths);
+    }
+
+    @Transactional
+    public CookieResponse getInfo(Member member) {
+
+        Cookie cookie = cookieRepository.findByMember(member);
+
+        return new CookieResponse(cookie);
+    }
+
+    @Transactional
+    public void bake(MultipartFile image, Member member) {
+
+        String url = awsS3Service.uploadImageToS3(image);
+
+        Cookie cookie = cookieRepository.findByMember(member);
+
+        cookieCollectionRepository.save(new CookieCollection(member, cookie, url));
+
+        cookieRepository.delete(cookie);
     }
 }

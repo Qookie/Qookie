@@ -41,6 +41,9 @@ public class Member {
 	@Column(name = "point")
 	private int point;
 
+	@Column(name = "active", nullable = true, columnDefinition = "TINYINT(1)")
+	private Boolean active;
+
 	public Member(JwtObject token) {
 		email = token.getJwtPayload().getEmail();
 		name = token.getJwtPayload().getName();
@@ -58,5 +61,21 @@ public class Member {
 		email = loginRequest.getEmail();
 		name = loginRequest.getDisplayName();
 		uid = loginRequest.getUid();
+	}
+
+	public void setTime(LocalTime wakeUp) {
+		this.wakeUp = wakeUp;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setNonActive() {
+		this.active = false;
+	}
+
+	public void setPoint(int point){
+		this.point += point;
 	}
 }

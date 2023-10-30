@@ -1,9 +1,9 @@
 package com.a504.qookie.domain.cookie.controller;
 
+import com.a504.qookie.domain.cookie.dto.CookieCollectionResponse;
 import com.a504.qookie.domain.cookie.dto.CookieCreateRequest;
-import com.a504.qookie.domain.cookie.dto.CookieModifyRequest;
 import com.a504.qookie.domain.cookie.dto.CookieResponse;
-import com.a504.qookie.domain.cookie.entity.Cookie;
+import com.a504.qookie.domain.cookie.dto.FaceResponse;
 import com.a504.qookie.domain.cookie.service.CookieService;
 import com.a504.qookie.global.response.BaseResponse;
 import com.a504.qookie.global.security.CustomMemberDetails;
@@ -32,27 +32,22 @@ public class CookieController {
         return BaseResponse.okWithData(HttpStatus.OK, "cookie create OK", cookieResponse);
     }
 
-    @GetMapping("/list")
-    public ResponseEntity<?> cookieList(
+    @GetMapping("/getInfo")
+    public ResponseEntity<?> getInfo(
             @AuthenticationPrincipal CustomMemberDetails customMemberDetails) {
 
-        List<CookieResponse> cookieResponses = cookieService.cookieList(customMemberDetails.getMember());
+        CookieResponse cookieResponse = cookieService.getInfo(customMemberDetails.getMember());
 
-        return BaseResponse.okWithData(HttpStatus.OK, "cookie list OK", cookieResponses);
+        return BaseResponse.okWithData(HttpStatus.OK, "cookie getInfo OK", cookieResponse);
     }
 
-    @PatchMapping("/modify")
-    public ResponseEntity<?> modify(
-            @AuthenticationPrincipal CustomMemberDetails customMemberDetails,
-            @RequestBody CookieModifyRequest cookieModifyRequest) {
+    @GetMapping("/list")
+    public ResponseEntity<?> cookieCollectionList(
+            @AuthenticationPrincipal CustomMemberDetails customMemberDetails) {
 
-        if (!cookieService.checkMember(customMemberDetails.getMember(), cookieModifyRequest.cookieId())) {
-            return BaseResponse.fail(HttpStatus.BAD_REQUEST, "허용되지 않은 접근입니다");
-        }
+        List<CookieCollectionResponse> cookieCollectionResponses = cookieService.cookieCollectionList(customMemberDetails.getMember());
 
-        cookieService.modify(cookieModifyRequest.cookieId(), cookieModifyRequest.cookieName());
-
-        return BaseResponse.ok(HttpStatus.OK, "cookie modify OK");
+        return BaseResponse.okWithData(HttpStatus.OK, "cookie list OK", cookieCollectionResponses);
     }
 
     @PostMapping("/uploadBody/{stage}")
@@ -81,5 +76,23 @@ public class CookieController {
         String url = cookieService.uploadMouth(image);
 
         return BaseResponse.okWithData(HttpStatus.OK, "cookie mouth upload OK", url);
+    }
+
+    @GetMapping("/face/list")
+    public ResponseEntity<?> eyeAndMouthList() {
+
+        FaceResponse faceResponse = cookieService.eyeAndMouthList();
+
+        return BaseResponse.okWithData(HttpStatus.OK, "cookie face list OK", faceResponse);
+    }
+
+    @PostMapping("/bake")
+    public ResponseEntity<?> bake(
+            @AuthenticationPrincipal CustomMemberDetails customMemberDetails,
+            @RequestPart(value = "image") MultipartFile image) {
+
+        cookieService.bake(image, customMemberDetails.getMember());
+
+        return BaseResponse.ok(HttpStatus.OK, "cookie bake OK");
     }
 }

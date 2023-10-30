@@ -1,6 +1,6 @@
 package com.a504.qookie.global.jwt;
 
-import com.a504.qookie.domain.member.MemberRepositoryImpl;
+import com.a504.qookie.domain.member.repository.MemberRepository;
 import com.a504.qookie.domain.member.entity.Member;
 import com.a504.qookie.global.jwt.dto.JwtObject;
 import com.a504.qookie.global.security.CustomMemberDetails;
@@ -20,7 +20,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
 
-    private final MemberRepositoryImpl memberRepository;
+    private final MemberRepository memberRepository;
 
     @Override
     protected void doFilterInternal(
