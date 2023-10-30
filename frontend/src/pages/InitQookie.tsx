@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import TitleLayout from '../components/shared/Template/TitleLayout';
 import TempDough from '../assets/pngs/TempDough.png';
-import Text from '../components/shared/atoms/Text';
 import { http } from '../api/instance';
 import styled from 'styled-components';
 
@@ -102,15 +101,18 @@ function InitQookie() {
         <img style={{ display: 'block', margin: '0 auto 3rem auto' }} src={TempDough} alt="반죽" />
         {step === Step.Custom ? (
           <>
-            <Text typography="main" color="var(--MR_GRAY2)">
-              눈
-            </Text>
-            <FaceOptionSelctor optionData={eyes} selected={eye} onSelectItem={onSelectEye} />
-
-            <Text typography="main" color="var(--MR_GRAY2)">
-              입
-            </Text>
-            <FaceOptionSelctor optionData={mouths} selected={mouth} onSelectItem={onSelectMouth} />
+            <FaceOptionSelctor
+              label={'눈'}
+              optionData={eyes}
+              selected={eye}
+              onSelectItem={onSelectEye}
+            />
+            <FaceOptionSelctor
+              label={'입'}
+              optionData={mouths}
+              selected={mouth}
+              onSelectItem={onSelectMouth}
+            />
           </>
         ) : (
           <Input placeholder="이름을 지어주세요" onChange={onChangeQookieName} />
