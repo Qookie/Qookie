@@ -103,8 +103,8 @@ function InitQookie() {
       title="반죽을 꾸며주세요!"
       desc={'첫 번째 성장을 함께 할 반죽이 도착했어요!\n어울리는 눈과 입을 만들어주세요.'}
     >
-      <div style={{ padding: '0 1rem' }}>
-        <img style={{ display: 'block', margin: '0 auto 3rem auto' }} src={TempDough} alt="반죽" />
+      <MainContainer>
+        <QookieImage src={TempDough} alt="반죽" />
         {step === Step.Custom ? (
           <>
             <FaceOptionSelctor
@@ -123,7 +123,7 @@ function InitQookie() {
         ) : (
           <Input placeholder="이름을 지어주세요" onChange={onChangeQookieName} />
         )}
-      </div>
+      </MainContainer>
       <ButtonCotainer>
         <Button theme={canMoveNext() ? 'default' : 'disabled'} onClick={onClickNext}>
           다음
@@ -132,6 +132,15 @@ function InitQookie() {
     </TitleLayout>
   );
 }
+
+const MainContainer = styled.div`
+  padding: 0 1rem;
+`;
+
+const QookieImage = styled.img`
+  display: block;
+  margin: 0 auto 3rem auto;
+`;
 
 const ButtonCotainer = styled.div`
   position: absolute;
