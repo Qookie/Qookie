@@ -32,6 +32,10 @@ public class Item {
 	@Column(name = "price")
 	private int price;
 
+	@Column(name = "category")
+	private String category;
 
+	@Column(name = "is_new", nullable = false, columnDefinition = "TINYINT(1)")
+	private Boolean isNew;
 }
 

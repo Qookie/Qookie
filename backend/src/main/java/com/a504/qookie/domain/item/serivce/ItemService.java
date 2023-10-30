@@ -22,6 +22,8 @@ public class ItemService {
                 .media(url)
                 .name(itemUploadRequest.name())
                 .price(itemUploadRequest.price())
+                .isNew(true)
+                .category(itemUploadRequest.category())
                 .build());
 
         return url;
