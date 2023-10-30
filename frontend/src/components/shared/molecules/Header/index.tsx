@@ -12,7 +12,7 @@ export interface HeaderProps {
 
 export default function Header({ page, title }: HeaderProps) {
   const navigate = useNavigate();
-  const [homeHeaderColor, setHomeHeaderColor] = useState<string>('transparent');
+  const [homeHeaderColor, setHomeHeaderColor] = useState<boolean>(false);
 
   const movePrevPage = () => {
     navigate(-1);
@@ -21,9 +21,9 @@ export default function Header({ page, title }: HeaderProps) {
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 0) {
-        setHomeHeaderColor('var(--MR_WHITE)');
+        setHomeHeaderColor(true);
       } else {
-        setHomeHeaderColor('transparent');
+        setHomeHeaderColor(false);
       }
     };
     window.addEventListener('scroll', handleScroll);
@@ -71,12 +71,12 @@ export default function Header({ page, title }: HeaderProps) {
   );
 }
 
-const HeaderContainer = styled.div<{ page: string; backgroundColor: string }>`
+const HeaderContainer = styled.div<{ page: string; backgroundColor: boolean }>`
   width: min(100%, 430px);
   height: 4rem;
   position: fixed;
   background-color: ${({ page, backgroundColor }) =>
-    page != 'home' ? 'var(--MR_WHITE)' : backgroundColor};
+    page != 'home' ? 'var(--MR_WHITE)' : backgroundColor ? 'var(--MR_WHITE)' : 'transparent'};
   z-index: 5;
 `;
 
