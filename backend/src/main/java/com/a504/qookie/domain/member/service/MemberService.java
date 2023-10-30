@@ -9,7 +9,6 @@ import com.a504.qookie.domain.member.entity.Member;
 import com.a504.qookie.domain.member.repository.MemberRepository;
 import jakarta.transaction.Transactional;
 import java.time.LocalTime;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -56,11 +55,9 @@ public class MemberService {
         member.setName(memberRequest.memberName());
         member.setTime(LocalTime.parse(memberRequest.wakeTime()));
 
-        List<Cookie> cookies = cookieRepository.findAllByMemberAndActive(member, 1);
+        Cookie cookie = cookieRepository.findByMember(member);
 
-        if (!cookies.isEmpty()) {
-            cookies.get(0).changeName(memberRequest.cookieName());
-        }
+        cookie.changeName(memberRequest.cookieName());
 
     }
 

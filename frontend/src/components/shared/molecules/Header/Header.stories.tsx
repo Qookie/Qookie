@@ -22,13 +22,12 @@ const Template: Story = {
     page: {
       type: 'string',
       control: 'select',
-      options: ['tab', 'home', 'none', 'other'],
+      options: ['tab', 'home', 'other'],
       description: '페이지',
     },
   },
   render: (args) => <Header {...args} />,
 };
-
 
 export const Default: Story = {
   ...Template,

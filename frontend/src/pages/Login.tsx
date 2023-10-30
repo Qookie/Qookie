@@ -40,7 +40,6 @@ const Login = () => {
     const { user } = res;
     const accessToken = await getIdToken(user);
     localStorage.setItem('accessToken', accessToken);
-
     const { displayName, email, uid } = user;
 
     try {

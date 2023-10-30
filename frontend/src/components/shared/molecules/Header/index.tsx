@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 import { ChevronLeftIcon, BellIcon } from '@heroicons/react/24/outline';
-import { ReactComponent as LogoCoin } from '../../../../assets/coin.svg';
 import { useNavigate } from 'react-router-dom';
 import Text from '../../atoms/Text';
+import { CoinLogo } from '../../../../assets/svgs';
 
 export interface HeaderProps {
-  page: string;
+  page: 'home' | 'tab' | 'default';
   title?: string;
 }
 
@@ -18,13 +18,11 @@ export default function Header({ page, title }: HeaderProps) {
 
   const headerType = (page: string) => {
     switch (page) {
-      case 'none':
-        return;
       case 'home':
         return (
           <HomeContainer>
             <HeaderIcon>
-              <LogoCoin style={{ width: '100%', height: '100%' }} />
+              <CoinLogo />
             </HeaderIcon>
             <HeaderIcon>
               <BellIcon />
@@ -54,7 +52,7 @@ export default function Header({ page, title }: HeaderProps) {
 }
 
 const HeaderContainer = styled.div<HeaderProps>`
-  width: 100%;
+  width: min(100%, 430px);
   height: 4rem;
   position: fixed;
   background-color: ${({ page }) => (page != 'home' ? 'var(--MR_WHITE)' : 'transparent')};
