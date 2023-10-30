@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { ReactComponent as Coin } from '../../../../assets/coin.svg';
+import { ReactComponent as Coin } from '../../../../assets/svgs/coin.svg';
 import Button from '../../../shared/atoms/Button';
 import Text from '../../../shared/atoms/Text';
 
@@ -18,12 +18,15 @@ export default function ChallengeCard({ title, condition, coin }: ChallengeProps
           <AmountCoin>{coin}</AmountCoin>
         </EarnCoin>
         <TextContainer>
-          <Text typography="button">{title}</Text>
-          <Text typography="main" color="var(--MR_GRAY2)">
+          <ChallengeTitle typography="title">{title}</ChallengeTitle>
+          <ChallengeCondition typography="main" color="var(--MR_GRAY2)">
             {condition}
-          </Text>
+          </ChallengeCondition>
         </TextContainer>
-        <Button size="small">확인</Button>
+        {/* 버튼 상태 변화 조건 추가하기 */}
+        <Button size="small">받기</Button>
+        {/* <Button size="small" theme='finished'>완료</Button> */}
+        {/* <Button size="small" theme='disabled'>받기</Button> */}
       </CardContainer>
     </Container>
   );
@@ -32,10 +35,10 @@ export default function ChallengeCard({ title, condition, coin }: ChallengeProps
 const Container = styled.div`
   width: 100%;
   position: relative;
+  margin-bottom: 8px;
 `;
 
 const CardContainer = styled.div`
-  height: 3rem;
   border-radius: 0.5rem;
   border-style: solid;
   border-color: #e0e0e0;
@@ -57,15 +60,26 @@ const EarnCoin = styled.div`
 `;
 
 const AmountCoin = styled.div`
-  font-size: 0.75rem;
-  font-style: normal;
-  font-weight: 700;
+  font-size: 16px;
+  font-weight: 600;
   text-align: center;
+  color: var(--MR_GRAY2);
 `;
 
 const TextContainer = styled.div`
   width: 55%;
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: 1.8rem;
+`;
+
+const ChallengeTitle = styled(Text)`
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 0;
+  `;
+
+const ChallengeCondition = styled(Text)`
+  font-size: 14px;
+  line-height: 0;
 `;
