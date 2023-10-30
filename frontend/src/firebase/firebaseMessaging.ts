@@ -12,6 +12,7 @@ const initiateFirebaseMessaging = () => {
       })
         .then((currentToken) => {
           if (currentToken) {
+            localStorage.setItem('messageToken', currentToken);
             console.log('CurrentToken: ', currentToken);
           } else {
             console.log('No registration token available. Request permission to generate one.');

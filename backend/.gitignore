@@ -38,3 +38,6 @@ out/
 
 ### generate ###
 /src/main/generated/
+
+### secrets ###
+/src/main/resources/a504*

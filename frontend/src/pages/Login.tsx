@@ -47,6 +47,7 @@ const Login = () => {
         displayName,
         email,
         uid,
+        messageToken: localStorage.getItem('messageToken'),
       });
 
       navigate('/init');
