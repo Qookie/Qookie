@@ -6,7 +6,12 @@ import { qookieApi } from '../api';
 import QookieStatus from '../components/shared/organisms/QookieStatus';
 import QuestList from '../components/home/organisms/QuestList';
 import HomeButton from '../components/home/molecules/HomeButton';
-import { useNavigate } from 'react-router-dom';
+import { QookieInfo } from '../types';
+
+export interface QookieInfoResponse {
+  msg: string;
+  payload: QookieInfo;
+}
 
 const Home = () => {
   const [qookie, setQookie] = useRecoilState(QookieInfoState);
