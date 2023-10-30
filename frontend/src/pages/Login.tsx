@@ -16,6 +16,7 @@ import SocialLoginButton, {
 } from '../components/login/atoms/SocialLoginButton';
 import { http } from '../api/instance';
 import TitleLayout from '../components/shared/Template/TitleLayout';
+import { useNavigate } from 'react-router-dom';
 
 const provider = {
   kakao: new OAuthProvider('oidc.kakao'),
@@ -23,6 +24,8 @@ const provider = {
 };
 
 const Login = () => {
+  const navigate = useNavigate();
+
   const onClickSocialLogin = (provider: OAuthProvider | GoogleAuthProvider) => {
     signInWithRedirect(auth, provider);
   };
@@ -46,6 +49,8 @@ const Login = () => {
         email,
         uid,
       });
+
+      navigate('/init');
     } catch (error) {
       console.log(error);
     }
