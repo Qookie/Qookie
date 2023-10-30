@@ -1,9 +1,12 @@
 package com.a504.qookie.domain.item.serivce;
 
+import com.a504.qookie.domain.item.dto.ItemResponse;
 import com.a504.qookie.domain.item.dto.ItemUploadRequest;
 import com.a504.qookie.domain.item.entity.Item;
 import com.a504.qookie.domain.item.repository.ItemRepository;
 import com.a504.qookie.domain.quest.service.AwsS3Service;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,5 +30,41 @@ public class ItemService {
                 .build());
 
         return url;
+    }
+
+    public List<ItemResponse>[] list() {
+
+        List<ItemResponse>[] lists = new ArrayList[7];
+        // 0:배경, 1:신상, 2:모자, 3:신발, 4:하의, 5:상의, 6:액세서리
+
+        for (int i = 0; i < 7; i++) {
+            lists[i] = new ArrayList<ItemResponse>();
+        }
+        List<Item> itemList = itemRepository.findAll();
+
+        for (Item item:itemList) {
+            ItemResponse itemResponse = new ItemResponse(item);
+
+            // 신상 넣기
+            if (item.getIsNew()) {
+                lists[1].add(itemResponse);
+            }
+
+            if (item.getCategory().equals("배경")) {
+                lists[0].add(itemResponse);
+            } else if (item.getCategory().equals("모자")) {
+                lists[2].add(itemResponse);
+            } else if (item.getCategory().equals("신발")) {
+                lists[3].add(itemResponse);
+            } else if (item.getCategory().equals("하의")) {
+                lists[4].add(itemResponse);
+            } else if (item.getCategory().equals("상의")) {
+                lists[5].add(itemResponse);
+            } else if (item.getCategory().equals("액세서리")) {
+                lists[6].add(itemResponse);
+            }
+        }
+
+        return lists;
     }
 }
