@@ -7,6 +7,9 @@ import QookieStatus from '../components/shared/organisms/QookieStatus';
 import QuestList from '../components/home/organisms/QuestList';
 import HomeButton from '../components/home/molecules/HomeButton';
 import { QookieInfo } from '../types';
+import { useNavigate } from 'react-router-dom';
+import attendance from '../assets/pngs/calendar.png';
+import challenge from '../assets/pngs/challenge.png';
 
 export interface QookieInfoResponse {
   msg: string;
@@ -15,6 +18,7 @@ export interface QookieInfoResponse {
 
 const Home = () => {
   const [qookie, setQookie] = useRecoilState(QookieInfoState);
+  const navigate = useNavigate();
 
   // 로그인 후 setQookie 확인 필요
   useEffect(() => {
@@ -26,8 +30,18 @@ const Home = () => {
       <QookieStatus {...qookie} />
       <QuestContainer>
         <ButtonContainer>
-          <HomeButton title="출석체크" />
-          <HomeButton title="챌린지" />
+          <HomeButton
+            title="출석체크"
+            icon={attendance}
+            style={styleAttendance}
+            onClick={() => navigate('/attendance')}
+          />
+          <HomeButton
+            title="챌린지"
+            icon={challenge}
+            style={styleChallenge}
+            onClick={() => navigate('/challenge')}
+          />
         </ButtonContainer>
         <QuestList title="일일 퀘스트" />
         <QuestList title="추가 퀘스트" />
@@ -37,6 +51,17 @@ const Home = () => {
 };
 
 export default Home;
+
+const styleAttendance = {
+  color: 'var(--MR_WHITE)',
+  backgroundColor: 'var(--MR_RED)',
+};
+
+const styleChallenge = {
+  color: 'var(--MR_BLACK)',
+  backgroundColor: 'transparent',
+  border: '1px solid var(--MR_GRAY1)',
+};
 
 const HomeContainer = styled.div``;
 
