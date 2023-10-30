@@ -1,5 +1,6 @@
 package com.a504.qookie.domain.order.entity;
 
+import com.a504.qookie.domain.item.entity.Item;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +44,7 @@ public class Order {
 	@Column(name = "created_at")
 	private LocalDateTime createdAt;
 
-	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-	private List<OrderItem> orderItems = new ArrayList<>();
+	@JoinColumn(name = "item_id")
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Item item;
 }
