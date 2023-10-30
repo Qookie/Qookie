@@ -1,3 +1,4 @@
+import './index.css';
 import Router from './router/Router';
 import GlobalStyle from './styles/GlobalStyle';
 import styled from 'styled-components';
