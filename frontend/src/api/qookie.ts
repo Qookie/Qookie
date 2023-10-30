@@ -1,13 +1,15 @@
-// qookie API client 수정시 수정 필요
+import { QookieInfo } from '../types';
 import { http } from './instance';
 
 const getQookieInfo = async () => {
-  // try {
-  //   const res = await http.get('/api/cookie/getInfo');
-  //   return res.data.payload;
-  // } catch (e) {
-  //   console.log('getQookieInfo', e);
-  // }
+  try {
+    const res: QookieInfo = await http.get('/api/cookie/getInfo');
+    console.log('qookieRes', res);
+    // res.payload 로 data 확인 후 변경 필요
+    return res;
+  } catch (e) {
+    console.log('getQookieInfo', e);
+  }
 };
 
 const qookie = { getQookieInfo };
