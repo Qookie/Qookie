@@ -39,7 +39,6 @@ const Login = () => {
     const accessToken = await getIdToken(user);
     localStorage.setItem('accessToken', accessToken);
     console.log('accessToken', accessToken);
-    
     const { displayName, email, uid } = user;
 
     try {
