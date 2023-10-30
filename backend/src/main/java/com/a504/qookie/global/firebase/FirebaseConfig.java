@@ -23,7 +23,11 @@ public class FirebaseConfig {
             FirebaseOptions options = new FirebaseOptions.Builder()
                     .setCredentials(GoogleCredentials.fromStream(resource.getInputStream()))
                     .build();
-            return FirebaseApp.initializeApp(options);
+            if (FirebaseApp.getApps().isEmpty()) {
+                return FirebaseApp.initializeApp(options);
+            } else {
+                return FirebaseApp.getInstance();
+            }
         } catch (IOException e) {
             e.printStackTrace();
             return null;
