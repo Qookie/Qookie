@@ -46,6 +46,7 @@ const Login = () => {
         displayName,
         email,
         uid,
+        messageToken: localStorage.getItem('messageToken'),
       });
     } catch (error) {
       console.log(error);

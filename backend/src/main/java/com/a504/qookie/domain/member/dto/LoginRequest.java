@@ -11,4 +11,5 @@ public class LoginRequest {
     private String displayName;
     private String email;
     private String uid;
+    private String messageToken;
 }

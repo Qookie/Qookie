@@ -44,6 +44,9 @@ public class Member {
 	@Column(name = "active", nullable = true, columnDefinition = "TINYINT(1)")
 	private Boolean active;
 
+	@Column(name = "message_token")
+	private String messageToken;
+
 	public Member(JwtObject token) {
 		email = token.getJwtPayload().getEmail();
 		name = token.getJwtPayload().getName();
@@ -61,6 +64,12 @@ public class Member {
 		email = loginRequest.getEmail();
 		name = loginRequest.getDisplayName();
 		uid = loginRequest.getUid();
+		messageToken = loginRequest.getMessageToken();
+	}
+
+	public Member updateMessageToken(String mt) {
+		messageToken = mt;
+		return this;
 	}
 
 	public void setTime(LocalTime wakeUp) {
