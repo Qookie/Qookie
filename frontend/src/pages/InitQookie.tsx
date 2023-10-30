@@ -86,6 +86,12 @@ function InitQookie() {
       setStep(Step.Name);
       return;
     }
+
+    http.post('/api/cookie/create', {
+      cookieName: name,
+      eyeId: eye,
+      mouthId: mouth,
+    });
   };
 
   useEffect(() => {
