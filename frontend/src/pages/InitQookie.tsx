@@ -8,24 +8,59 @@ import styled from 'styled-components';
 import Button from '../components/shared/atoms/Button';
 import FaceOptionSelctor from '../components/initQookie/molecules/FaceOptionSelector/inde';
 import { FaceOptions, QookieFaceOptionResponse } from '../components/initQookie/types';
+import Input from '../components/shared/atoms/Input';
+
+enum Step {
+  Custom,
+  Name,
+}
+
+interface Select {
+  eye: number;
+  mouth: number;
+  name: string;
+}
 
 function InitQookie() {
+  const [step, setStep] = useState<Step>(Step.Custom);
+
   const [faceptionList, setFaceOptionList] = useState<FaceOptions>({
     eyes: [],
     mouths: [],
   });
 
-  const [selectedOption, setSelectedOption] = useState<{ eye: number; mouth: number }>({
+  const [selectedOption, setSelectedOption] = useState<Select>({
     eye: -1,
     mouth: -1,
+    name: '',
   });
 
+  const { eyes, mouths } = faceptionList;
+  const { eye, mouth, name } = selectedOption;
+
   const onSelectEye = (id: number) => {
-    setSelectedOption((prev: { eye: number; mouth: number }) => ({ ...prev, eye: id }));
+    setSelectedOption((prev: Select) => ({
+      ...prev,
+      eye: id,
+    }));
   };
 
   const onSelectMouth = (id: number) => {
-    setSelectedOption((prev: { eye: number; mouth: number }) => ({ ...prev, mouth: id }));
+    setSelectedOption((prev: Select) => ({
+      ...prev,
+      mouth: id,
+    }));
+  };
+
+  const onChangeQookieName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const {
+      target: { value },
+    } = e;
+
+    setSelectedOption((prev: Select) => ({
+      ...prev,
+      name: value,
+    }));
   };
 
   const getQookieDesign = async () => {
@@ -40,15 +75,23 @@ function InitQookie() {
   };
 
   const canMoveNext = () => {
-    return eye !== -1 && mouth !== -1;
+    if (step === Step.Custom) {
+      return eye !== -1 && mouth !== -1;
+    }
+
+    return !!name;
+  };
+
+  const onClickNext = () => {
+    if (step === Step.Custom) {
+      setStep(Step.Name);
+      return;
+    }
   };
 
   useEffect(() => {
     getQookieDesign();
   }, []);
-
-  const { eyes, mouths } = faceptionList;
-  const { eye, mouth } = selectedOption;
 
   return (
     <TitleLayout
@@ -56,19 +99,27 @@ function InitQookie() {
       desc={'첫 번째 성장을 함께 할 반죽이 도착했어요!\n어울리는 눈과 입을 만들어주세요.'}
     >
       <div style={{ padding: '0 1rem' }}>
-        <img style={{ display: 'block', margin: '0 auto' }} src={TempDough} alt="반죽" />
-        <Text typography="main" color="var(--MR_GRAY2)">
-          눈
-        </Text>
-        <FaceOptionSelctor optionData={eyes} selected={eye} onSelectItem={onSelectEye} />
+        <img style={{ display: 'block', margin: '0 auto 3rem auto' }} src={TempDough} alt="반죽" />
+        {step === Step.Custom ? (
+          <>
+            <Text typography="main" color="var(--MR_GRAY2)">
+              눈
+            </Text>
+            <FaceOptionSelctor optionData={eyes} selected={eye} onSelectItem={onSelectEye} />
 
-        <Text typography="main" color="var(--MR_GRAY2)">
-          입
-        </Text>
-        <FaceOptionSelctor optionData={mouths} selected={mouth} onSelectItem={onSelectMouth} />
+            <Text typography="main" color="var(--MR_GRAY2)">
+              입
+            </Text>
+            <FaceOptionSelctor optionData={mouths} selected={mouth} onSelectItem={onSelectMouth} />
+          </>
+        ) : (
+          <Input placeholder="이름을 지어주세요" onChange={onChangeQookieName} />
+        )}
       </div>
       <ButtonCotainer>
-        <Button theme={canMoveNext() ? 'default' : 'disabled'}>다음</Button>
+        <Button theme={canMoveNext() ? 'default' : 'disabled'} onClick={onClickNext}>
+          다음
+        </Button>
       </ButtonCotainer>
     </TitleLayout>
   );
