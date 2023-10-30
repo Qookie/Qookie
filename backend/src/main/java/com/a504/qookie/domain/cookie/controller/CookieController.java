@@ -1,5 +1,6 @@
 package com.a504.qookie.domain.cookie.controller;
 
+import com.a504.qookie.domain.cookie.dto.CookieCollectionResponse;
 import com.a504.qookie.domain.cookie.dto.CookieCreateRequest;
 import com.a504.qookie.domain.cookie.dto.CookieResponse;
 import com.a504.qookie.domain.cookie.dto.FaceResponse;
@@ -31,13 +32,22 @@ public class CookieController {
         return BaseResponse.okWithData(HttpStatus.OK, "cookie create OK", cookieResponse);
     }
 
-    @GetMapping("/list")
-    public ResponseEntity<?> cookieList(
+    @GetMapping("/getInfo")
+    public ResponseEntity<?> getInfo(
             @AuthenticationPrincipal CustomMemberDetails customMemberDetails) {
 
-        List<CookieResponse> cookieResponses = cookieService.cookieList(customMemberDetails.getMember());
+        CookieResponse cookieResponse = cookieService.getInfo(customMemberDetails.getMember());
 
-        return BaseResponse.okWithData(HttpStatus.OK, "cookie list OK", cookieResponses);
+        return BaseResponse.okWithData(HttpStatus.OK, "cookie getInfo OK", cookieResponse);
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<?> cookieCollectionList(
+            @AuthenticationPrincipal CustomMemberDetails customMemberDetails) {
+
+        List<CookieCollectionResponse> cookieCollectionResponses = cookieService.cookieCollectionList(customMemberDetails.getMember());
+
+        return BaseResponse.okWithData(HttpStatus.OK, "cookie list OK", cookieCollectionResponses);
     }
 
     @PostMapping("/uploadBody/{stage}")
@@ -74,5 +84,15 @@ public class CookieController {
         FaceResponse faceResponse = cookieService.eyeAndMouthList();
 
         return BaseResponse.okWithData(HttpStatus.OK, "cookie face list OK", faceResponse);
+    }
+
+    @PostMapping("/bake")
+    public ResponseEntity<?> bake(
+            @AuthenticationPrincipal CustomMemberDetails customMemberDetails,
+            @RequestPart(value = "image") MultipartFile image) {
+
+        cookieService.bake(image, customMemberDetails.getMember());
+
+        return BaseResponse.ok(HttpStatus.OK, "cookie bake OK");
     }
 }

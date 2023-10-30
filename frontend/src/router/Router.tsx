@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Login from '../pages/Login';
-import NavBar from '../components/shared/molecules/NavBar';
 import Home from '../pages/Home';
+import NavBar from '../components/shared/molecules/NavBar';
 import Header from '../components/shared/molecules/Header';
 
 const Router = () => {
