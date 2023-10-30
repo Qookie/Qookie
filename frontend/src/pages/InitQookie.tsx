@@ -5,7 +5,7 @@ import { http } from '../api/instance';
 import styled from 'styled-components';
 
 import Button from '../components/shared/atoms/Button';
-import FaceOptionSelctor from '../components/initQookie/molecules/FaceOptionSelector/inde';
+import FaceOptionSelctor from '../components/initQookie/molecules/FaceOptionSelector';
 import { FaceOptions, QookieFaceOptionResponse } from '../components/initQookie/types';
 import Input from '../components/shared/atoms/Input';
 
