@@ -467,13 +467,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /api/member/login HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Authorization: Bearer accessTokenHere
-Content-Length: 94
+Content-Length: 136
 Host: localhost:8080
 
 {
   "displayName" : "user name",
   "email" : "useremail@email.com",
-  "uid" : "user uid"
+  "uid" : "user uid",
+  "messageToken" : "user message token"
 }</code></pre>
 </div>
 </div>
@@ -509,6 +510,11 @@ Host: localhost:8080
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">사용자 uid</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>messageToken</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">사용자 message token</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -516,10 +522,26 @@ Host: localhost:8080
 <h4 id="_response"><a class="link" href="#_response">RESPONSE</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="json" class="language-json hljs">{
-  "displayName" : "user name",
-  "email" : "useremail@email.com",
-  "uid" : "user uid"
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 0
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Length: 121
+
+{
+  "msg" : "LOGIN OK",
+  "payload" : {
+    "email" : "userName",
+    "name" : "userEmail",
+    "new" : true
+  }
 }</code></pre>
 </div>
 </div>
@@ -531,7 +553,7 @@ Host: localhost:8080
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-10-25 14:27:26 +0900
+Last updated 2023-10-26 13:57:09 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

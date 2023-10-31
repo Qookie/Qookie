@@ -49,7 +49,7 @@ class MemberControllerTest {
     @Test
     void oidcLogin() throws Exception {
         LoginRequest loginRequest = new LoginRequest(
-                "user name", "useremail@email.com", "user uid"
+                "user name", "useremail@email.com", "user uid", "user message token"
         );
 
         Gson gson = new Gson();
@@ -70,7 +70,9 @@ class MemberControllerTest {
                                 fieldWithPath("email").type(JsonFieldType.STRING)
                                         .description("사용자 이메일"),
                                 fieldWithPath("uid").type(JsonFieldType.STRING)
-                                        .description("사용자 uid")
+                                        .description("사용자 uid"),
+                                fieldWithPath("messageToken").type(JsonFieldType.STRING)
+                                        .description("사용자 message token")
                             )
                         )
                 );

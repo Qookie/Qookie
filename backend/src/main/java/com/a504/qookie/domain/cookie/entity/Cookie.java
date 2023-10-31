@@ -96,8 +96,10 @@ public class Cookie {
 		this.exp += exp;
 	}
 
-	public void updateLevel(int level){
-		this.level += level;
+	public void updateExp() {this.exp = 0;}
+
+	public void updateLevel(){
+		this.level += 1;
 	}
 
 }

@@ -1,9 +1,12 @@
 package com.a504.qookie.domain.member.entity;
 
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalTime;
+import java.util.Arrays;
 
 import com.a504.qookie.domain.member.dto.LoginRequest;
 import com.a504.qookie.global.jwt.dto.JwtObject;
+import com.a504.qookie.global.util.CryptoUtil;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -41,8 +44,19 @@ public class Member {
 	@Column(name = "point")
 	private int point;
 
-	@Column(name = "active", nullable = true, columnDefinition = "TINYINT(1)")
+	@Column(name = "active", nullable = false, columnDefinition = "TINYINT(1)")
 	private Boolean active;
+
+	@PrePersist
+	@PreUpdate
+	private void setActiveDefault() {
+		if (this.active == null) {
+			this.active = true;
+		}
+	}
+
+	@Column(name = "message_token")
+	private String messageToken;
 
 	public Member(JwtObject token) {
 		email = token.getJwtPayload().getEmail();
@@ -61,6 +75,12 @@ public class Member {
 		email = loginRequest.getEmail();
 		name = loginRequest.getDisplayName();
 		uid = loginRequest.getUid();
+		messageToken = loginRequest.getMessageToken();
+	}
+
+	public Member updateMessageToken(String mt) {
+		messageToken = mt;
+		return this;
 	}
 
 	public void setTime(LocalTime wakeUp) {
@@ -71,8 +91,10 @@ public class Member {
 		this.name = name;
 	}
 
-	public void setNonActive() {
+	public boolean deleteMember() throws NoSuchAlgorithmException {
 		this.active = false;
+		this.uid = "del" + CryptoUtil.hashString(this.uid);
+		return true;
 	}
 
 	public void setPoint(int point){

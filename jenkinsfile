@@ -25,6 +25,10 @@ pipeline {
 					sh "rm ./.env || true"
 					sh "cp /var/jenkins_home/secrets/.env ./"
 
+					// copy a504-qookie-firebase-adminsdk-key.json to cloned repo
+					sh "rm ./src/main/resources/a504-qookie-firebase-adminsdk-key.json || true"
+					sh "cp /var/jenkins_home/secrets/a504-qookie-firebase-adminsdk-key.json ./src/main/resources/"
+
 					sh "docker compose up --build -d"
 				}
 			}
