@@ -24,7 +24,9 @@ function FaceOptionSelctor({ label, optionData, onSelectItem, selected }: Props)
             ? optionData.map(({ image, id }) => (
                 <SwiperSlide key={id}>
                   <FaceOptionItem onClick={() => onSelectItem(id)} selected={id === selected}>
-                    <img src={image} alt={`${id}`} />
+                    <FaceItemImg>
+                      <img src={image} alt={`${id}`} />
+                    </FaceItemImg>
                   </FaceOptionItem>
                 </SwiperSlide>
               ))
@@ -43,6 +45,13 @@ const SwiperContainer = styled.div`
   .swiper-slide {
     width: fit-content;
   }
+`;
+
+const FaceItemImg = styled.div`
+  position: absolute;
+  bottom: -55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `;
 
 export default FaceOptionSelctor;
