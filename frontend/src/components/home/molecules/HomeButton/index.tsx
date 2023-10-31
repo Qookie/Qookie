@@ -16,13 +16,15 @@ export default function HomeButton({ title, icon, ...props }: HomeBtnProps) {
   );
 }
 
-const ItemContainer = styled.div<Omit<HomeBtnProps, 'title' | 'icon'>>`
+const ItemContainer = styled.button<Omit<HomeBtnProps, 'title' | 'icon'>>`
   padding: 1rem 0.5rem 0.5rem 1rem;
   width: 100%;
   height: 4.75rem;
   border-radius: 0.5rem;
   box-sizing: border-box;
   position: relative;
+  border: none;
+  display: inline-flex;
 `;
 
 const IconContainer = styled.img`
