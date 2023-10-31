@@ -6,8 +6,12 @@ import com.a504.qookie.domain.member.entity.Member;
 import com.a504.qookie.domain.member.entity.MemberItem;
 import com.a504.qookie.domain.member.repository.MemberItemRepository;
 import com.a504.qookie.domain.order.dto.OrderItemRequest;
+import com.a504.qookie.domain.order.dto.OrderListRequest;
 import com.a504.qookie.domain.order.dto.OrderRequest;
+import com.a504.qookie.domain.order.dto.OrderResponse;
+import com.a504.qookie.domain.order.repository.OrderRepository;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +21,7 @@ public class OrderService {
 
     private final ItemRepository itemRepository;
     private final MemberItemRepository memberItemRepository;
+    private final OrderRepository orderRepository;
 
     public boolean buy(OrderRequest orderRequest, Member member) {
 
@@ -39,11 +44,17 @@ public class OrderService {
             memberItemRepository.save(MemberItem.builder()
                     .member(member)
                     .item(item)
-                    .price(item.getPrice())
                     .createdAt(LocalDateTime.now())
                     .build());
         }
 
         return true;
+    }
+
+    public List<OrderResponse> list(OrderListRequest orderListRequest, Member member) {
+
+        List<OrderResponse> list = orderRepository.findMemberItemByMonthAndMember(orderListRequest.time(), member);
+
+        return list;
     }
 }
