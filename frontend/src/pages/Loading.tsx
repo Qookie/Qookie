@@ -55,7 +55,9 @@ const Loading = () => {
     socialLoginCallback();
   });
 
-  return <>엄청 멋진 로딩 페이지</>;
+  return <>
+		<img src="loading.gif" alt="loading" />
+	</>;
 };
 
 export default Loading;
