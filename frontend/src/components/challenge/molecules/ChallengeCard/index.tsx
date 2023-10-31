@@ -23,10 +23,7 @@ export default function ChallengeCard({ title, condition, coin }: ChallengeProps
             {condition}
           </ChallengeCondition>
         </TextContainer>
-        {/* 버튼 상태 변화 조건 추가하기 */}
         <Button size="small">받기</Button>
-        {/* <Button size="small" theme='finished'>완료</Button> */}
-        {/* <Button size="small" theme='disabled'>받기</Button> */}
       </CardContainer>
     </Container>
   );
@@ -51,8 +48,6 @@ const CardContainer = styled.div`
 `;
 
 const EarnCoin = styled.div`
-  width: 3rem;
-  height: 3rem;
   display: inline-flex;
   flex-direction: column;
   align-items: center;
@@ -67,7 +62,7 @@ const AmountCoin = styled.div`
 `;
 
 const TextContainer = styled.div`
-  width: 55%;
+  width: 61%;
   display: flex;
   flex-direction: column;
   gap: 1.8rem;
@@ -77,7 +72,7 @@ const ChallengeTitle = styled(Text)`
   font-size: 20px;
   font-weight: 600;
   line-height: 0;
-  `;
+`;
 
 const ChallengeCondition = styled(Text)`
   font-size: 14px;
