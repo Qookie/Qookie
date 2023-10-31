@@ -29,19 +29,20 @@ export default function Dialog({
 
   return (
     <>
-      <Backdrop onClick={onCloseRequest} />
-      <DialogContainer>
-        <Text typography="button">{title}</Text>
-        <Text typography="main">{content}</Text>
-        <ButtonContainer>
-          <Button size="medium" theme="transparent" onClick={onPositiveClick}>
-            {positive}
-          </Button>
-          <Button size="medium" onClick={onNegativeClick}>
-            {negative}
-          </Button>
-        </ButtonContainer>
-      </DialogContainer>
+      <Backdrop onClick={onCloseRequest}>
+        <DialogContainer>
+          <Text typography="button">{title}</Text>
+          <Text typography="main">{content}</Text>
+          <ButtonContainer>
+            <Button size="medium" theme="transparent" onClick={onPositiveClick}>
+              {positive}
+            </Button>
+            <Button size="medium" onClick={onNegativeClick}>
+              {negative}
+            </Button>
+          </ButtonContainer>
+        </DialogContainer>
+      </Backdrop>
     </>
   );
 }
@@ -65,11 +66,15 @@ const DialogContainer = styled.div`
   background-color: var(--MR_WHITE);
   display: grid;
   gap: 0.7rem;
-  position: relative;
+  width: calc(100% - 2rem);
+  min-height: 12rem;
+  box-sizing: border-box;
+  position: absolute;
+  top: 30%;
   z-index: 11;
 `;
 
 const ButtonContainer = styled.div`
   display: flex;
-  margin-top: 0.3rem;
+  align-items: flex-end;
 `;
