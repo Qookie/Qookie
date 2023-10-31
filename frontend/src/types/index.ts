@@ -1,7 +1,7 @@
 export interface QookieInfo {
   name: string;
   createdAt: string;
-  style: any;
+  style: string[];
   active: number;
   exp: number;
   level: number;
