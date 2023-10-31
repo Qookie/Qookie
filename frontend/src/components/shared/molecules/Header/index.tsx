@@ -12,7 +12,7 @@ export interface HeaderProps {
 
 export default function Header({ page, title }: HeaderProps) {
   const navigate = useNavigate();
-  const [homeHeaderColor, setHomeHeaderColor] = useState<boolean>(false);
+  const [isOverlay, setIsOverlay] = useState<boolean>(false);
 
   const movePrevPage = () => {
     navigate(-1);
@@ -21,9 +21,9 @@ export default function Header({ page, title }: HeaderProps) {
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 0) {
-        setHomeHeaderColor(true);
+        setIsOverlay(true);
       } else {
-        setHomeHeaderColor(false);
+        setIsOverlay(false);
       }
     };
     window.addEventListener('scroll', handleScroll);
@@ -65,18 +65,18 @@ export default function Header({ page, title }: HeaderProps) {
   };
 
   return (
-    <HeaderContainer page={page} backgroundColor={homeHeaderColor}>
+    <HeaderContainer page={page} isOverlay={isOverlay}>
       {headerType(page)}
     </HeaderContainer>
   );
 }
 
-const HeaderContainer = styled.div<{ page: string; backgroundColor: boolean }>`
+const HeaderContainer = styled.div<{ page: string; isOverlay: boolean }>`
   width: min(100%, 430px);
   height: 4rem;
   position: fixed;
-  background-color: ${({ page, backgroundColor }) =>
-    page != 'home' ? 'var(--MR_WHITE)' : backgroundColor ? 'var(--MR_WHITE)' : 'transparent'};
+  background-color: ${({ page, isOverlay }) =>
+    page != 'home' ? 'var(--MR_WHITE)' : isOverlay ? 'var(--MR_WHITE)' : 'transparent'};
   z-index: 5;
 `;
 
