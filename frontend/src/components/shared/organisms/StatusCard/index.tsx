@@ -58,11 +58,11 @@ export default function StatusCard({ level, exp, name, createdAt }: StatusCardPr
       </CardContainer>
       <Dialog
         title="쿠키를 구울까요?"
-        content="쿠키를 구우면 더이상 쿠키를 꾸밀 수 없어요. 이 의상 그대로 쿠키를 구울까요?"
-        negative="쿠키 꾸미기"
-        onNegativeClick={() => navigate('/store')}
-        positive="굽기"
-        onPositiveClick={() => navigate('/bake')}
+        content={`쿠키를 구우면 더이상 쿠키를 꾸밀 수 없어요. \n이 의상 그대로 쿠키를 구울까요?`}
+        negative="굽기"
+        onNegativeClick={() => navigate('/bake')}
+        positive="쿠키 꾸미기"
+        onPositiveClick={() => navigate('/store')}
         isOpen={isOpen}
         onCloseRequest={openHandler}
       />
