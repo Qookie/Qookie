@@ -39,6 +39,7 @@ public class OrderService {
             memberItemRepository.save(MemberItem.builder()
                     .member(member)
                     .item(item)
+                    .price(item.getPrice())
                     .createdAt(LocalDateTime.now())
                     .build());
         }

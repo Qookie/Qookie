@@ -36,6 +36,9 @@ public class MemberItem {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Item item;
 
+	@Column(name = "price")
+	private int price;
+
 	@Column(name = "created_at")
 	private LocalDateTime createdAt;
 }
