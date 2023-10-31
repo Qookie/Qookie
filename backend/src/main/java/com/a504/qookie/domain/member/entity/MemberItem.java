@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,4 +35,7 @@ public class MemberItem {
 	@JoinColumn(name = "item_id")
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Item item;
+
+	@Column(name = "created_at")
+	private LocalDateTime createdAt;
 }
