@@ -54,7 +54,6 @@ const SIZE_VARIANT = {
     gap: 8px;
   `,
   medium: `
-    width: 140px;
   `,
   large: `
   `,
