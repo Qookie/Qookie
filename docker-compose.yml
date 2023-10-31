@@ -1,0 +1,63 @@
+services:
+  # spring backend server
+  backend_server:
+    container_name: backend_server
+    depends_on:
+      - backend_redis
+      - backend_rabbitMQ
+    restart: on-failure
+    build:
+      context: ./backend/
+      dockerfile: dockerfile
+    ports:
+      - "127.0.0.1:8000:8000"
+    environment:
+      REDIS_HOST: backend_redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      RABBITMQ_HOST: backend_rabbitMQ
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USER: ${RABBITMQ_USER}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+
+
+  # flask gpt server
+  backend_flask:
+    container_name: backend_flask
+    depends_on:
+      - backend_rabbitMQ
+    restart: on-failure
+    build:
+      context: ./gpt/
+      dockerfile: dockerfile
+    ports:
+      - "127.0.0.1:5000:5000"
+    environment:
+      RABBITMQ_HOST: backend_rabbitMQ
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USER: ${RABBITMQ_USER}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+
+  # redis
+  backend_redis:
+    container_name: backend_redis
+    image: redis
+    ports:
+      - "0.0.0.0:6379:6379"
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - redis_config:/usr/local/etc/redis
+  
+  # rabbitMQ
+  backend_rabbitMQ:
+    container_name: backend_rabbitMQ
+    image: rabbitmq
+    ports:
+    - "127.0.0.1:5672:5672"
+    - "127.0.0.1:15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+
+volumes:
+  redis_config:
