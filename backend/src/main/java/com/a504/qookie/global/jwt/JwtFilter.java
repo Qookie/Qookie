@@ -56,9 +56,7 @@ public class JwtFilter extends OncePerRequestFilter {
                     .orElse(new Member(token));
 
             // add memeber to custommemberdetail and pass to usernamepasswordauthenticationtoken
-            CustomMemberDetails customMemberDetails = new CustomMemberDetails(
-                    memberRepository.findByUid(token.getJwtPayload().getUid()).orElse(member)
-            );
+            CustomMemberDetails customMemberDetails = new CustomMemberDetails(member);
             UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
                     customMemberDetails, null, customMemberDetails.getAuthorities()
             );

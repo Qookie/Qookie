@@ -2,11 +2,8 @@ import {
   signInWithRedirect,
   GoogleAuthProvider,
   OAuthProvider,
-  getRedirectResult,
-  getIdToken,
 } from 'firebase/auth';
 import { auth } from '../firebase/firebaseConfig';
-import { useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 
 import CookieGrow from '../assets/pngs/CookieGrow.png';
@@ -14,7 +11,6 @@ import SocialLoginButton, {
   Social,
   socialLogin,
 } from '../components/login/atoms/SocialLoginButton';
-import { http } from '../api/instance';
 import TitleLayout from '../components/shared/Template/TitleLayout';
 import { useNavigate } from 'react-router-dom';
 
@@ -27,38 +23,9 @@ const Login = () => {
   const navigate = useNavigate();
 
   const onClickSocialLogin = (provider: OAuthProvider | GoogleAuthProvider) => {
+    navigate('/loading');
     signInWithRedirect(auth, provider);
   };
-
-  const socialLoginCallback = async () => {
-    const res = await getRedirectResult(auth);
-
-    if (!res) {
-      return;
-    }
-
-    const { user } = res;
-    const accessToken = await getIdToken(user);
-    localStorage.setItem('accessToken', accessToken);
-    const { displayName, email, uid } = user;
-
-    try {
-      http.post('/api/member/login', {
-        displayName,
-        email,
-        uid,
-        messageToken: localStorage.getItem('messageToken'),
-      });
-
-      navigate('/init');
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    socialLoginCallback();
-  });
 
   return (
     <TitleLayout
