@@ -53,8 +53,6 @@ public class OrderService {
 
     public List<OrderResponse> list(OrderListRequest orderListRequest, Member member) {
 
-        List<OrderResponse> list = orderRepository.findMemberItemByMonthAndMember(orderListRequest.time(), member);
-
-        return list;
+        return orderRepository.findMemberItemByMonthAndMember(orderListRequest.time(), member);
     }
 }
