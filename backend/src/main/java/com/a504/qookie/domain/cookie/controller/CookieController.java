@@ -36,9 +36,15 @@ public class CookieController {
     public ResponseEntity<?> getInfo(
             @AuthenticationPrincipal CustomMemberDetails customMemberDetails) {
 
-        CookieResponse cookieResponse = cookieService.getInfo(customMemberDetails.getMember());
+        try {
+            CookieResponse cookieResponse = cookieService.getInfo(customMemberDetails.getMember());
 
-        return BaseResponse.okWithData(HttpStatus.OK, "cookie getInfo OK", cookieResponse);
+            return BaseResponse.okWithData(HttpStatus.OK, "cookie getInfo OK", cookieResponse);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            return BaseResponse.ok(HttpStatus.BAD_REQUEST, "cookie create first!!");
+        }
+
     }
 
     @GetMapping("/list")

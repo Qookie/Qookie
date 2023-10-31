@@ -55,7 +55,8 @@ public class MemberService {
         member.setName(memberRequest.memberName());
         member.setTime(LocalTime.parse(memberRequest.wakeTime()));
 
-        Cookie cookie = cookieRepository.findByMember(member);
+        Cookie cookie = cookieRepository.findByMember(member)
+                .orElseThrow(() -> new IllegalArgumentException("쿠키가 없습니다"));
 
         cookie.changeName(memberRequest.cookieName());
 

@@ -106,9 +106,10 @@ public class CookieService {
     }
 
     @Transactional
-    public CookieResponse getInfo(Member member) {
+    public CookieResponse getInfo(Member member) throws IllegalArgumentException{
 
-        Cookie cookie = cookieRepository.findByMember(member);
+        Cookie cookie = cookieRepository.findByMember(member)
+                .orElseThrow(() -> new IllegalArgumentException("쿠키가 없습니다"));
 
         return new CookieResponse(cookie);
     }
@@ -118,7 +119,8 @@ public class CookieService {
 
         String url = awsS3Service.uploadImageToS3(image);
 
-        Cookie cookie = cookieRepository.findByMember(member);
+        Cookie cookie = cookieRepository.findByMember(member)
+                .orElseThrow(() -> new IllegalArgumentException("쿠키가 없습니다"));
 
         cookieCollectionRepository.save(new CookieCollection(member, cookie, url));
 
