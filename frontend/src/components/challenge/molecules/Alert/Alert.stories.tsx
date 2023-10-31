@@ -10,10 +10,5 @@ export default meta;
 type Story = StoryObj<typeof Toast>;
 
 export const Default: Story = {
-  args: {
-    type: 'default',
-    content: 'default or levelup or earn or achieve',
-  },
-
-  render: (args) => <Toast {...args} />,
+  render: (args) => <Toast />,
 };
