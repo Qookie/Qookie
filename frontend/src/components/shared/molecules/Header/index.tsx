@@ -3,6 +3,7 @@ import { ChevronLeftIcon, BellIcon } from '@heroicons/react/24/outline';
 import { useNavigate } from 'react-router-dom';
 import Text from '../../atoms/Text';
 import { CoinLogo } from '../../../../assets/svgs';
+import { useEffect, useState } from 'react';
 
 export interface HeaderProps {
   page: 'home' | 'tab' | 'default';
@@ -11,10 +12,25 @@ export interface HeaderProps {
 
 export default function Header({ page, title }: HeaderProps) {
   const navigate = useNavigate();
+  const [isOverlay, setIsOverlay] = useState<boolean>(false);
 
   const movePrevPage = () => {
     navigate(-1);
   };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 0) {
+        setIsOverlay(true);
+      } else {
+        setIsOverlay(false);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   const headerType = (page: string) => {
     switch (page) {
@@ -48,14 +64,19 @@ export default function Header({ page, title }: HeaderProps) {
     }
   };
 
-  return <HeaderContainer page={page}>{headerType(page)}</HeaderContainer>;
+  return (
+    <HeaderContainer page={page} isOverlay={isOverlay}>
+      {headerType(page)}
+    </HeaderContainer>
+  );
 }
 
-const HeaderContainer = styled.div<HeaderProps>`
+const HeaderContainer = styled.div<{ page: string; isOverlay: boolean }>`
   width: min(100%, 430px);
   height: 4rem;
   position: fixed;
-  background-color: ${({ page }) => (page != 'home' ? 'var(--MR_WHITE)' : 'transparent')};
+  background-color: ${({ page, isOverlay }) =>
+    page != 'home' ? 'var(--MR_WHITE)' : isOverlay ? 'var(--MR_WHITE)' : 'transparent'};
   z-index: 5;
 `;
 

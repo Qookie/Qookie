@@ -34,7 +34,7 @@ public class QuestController {
 	public ResponseEntity<?> completeQuest(@AuthenticationPrincipal CustomMemberDetails member
 		, @PathVariable String questName){
 		QuestType questType = QuestType.valueOf(questName.toUpperCase());
-		questService.completeQuest(member.getMember(), questName);
+		questService.completeQuest(member.getMember(), questName.toUpperCase());
 		return BaseResponse.ok(HttpStatus.OK, questType.getMessage() + " 퀘스트 완료");
 	}
 
@@ -45,7 +45,7 @@ public class QuestController {
 		, @RequestPart MultipartFile image){
 		QuestType questType = QuestType.valueOf(questName.toUpperCase());
 		String imageName = awsS3Service.uploadImageToS3(image);
-		questService.completeQuest(member.getMember(), questName, imageName);
+		questService.completeQuest(member.getMember(), questName.toUpperCase(), imageName);
 		return BaseResponse.okWithData(HttpStatus.OK, questType.getMessage() + " 퀘스트 완료", imageName);
 	}
 }

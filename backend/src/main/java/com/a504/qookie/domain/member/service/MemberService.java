@@ -8,6 +8,8 @@ import com.a504.qookie.domain.member.dto.MemberResponse;
 import com.a504.qookie.domain.member.entity.Member;
 import com.a504.qookie.domain.member.repository.MemberRepository;
 import jakarta.transaction.Transactional;
+
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -65,11 +67,9 @@ public class MemberService {
     }
 
     @Transactional
-    public void delete(Long memberId) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("멤버가 없습니다"));
-
-        member.setNonActive();
-
+    public void delete(String uid) throws IllegalArgumentException, NoSuchAlgorithmException {
+        memberRepository.findByUid(uid)
+                .orElseThrow(() -> new IllegalArgumentException("멤버가 없습니다"))
+                .deleteMember();
     }
 }

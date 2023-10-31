@@ -5,11 +5,14 @@ import com.a504.qookie.domain.member.entity.Member;
 import com.a504.qookie.domain.member.service.MemberService;
 import com.a504.qookie.global.response.BaseResponse;
 import com.a504.qookie.global.security.CustomMemberDetails;
+import com.google.api.Http;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.NoSuchAlgorithmException;
 
 @RestController
 @RequiredArgsConstructor
@@ -60,8 +63,12 @@ public class MemberController {
     public ResponseEntity<?> delete(
             @AuthenticationPrincipal CustomMemberDetails customMemberDetails) {
 
-        memberService.delete(customMemberDetails.getMember().getId());
-
-        return BaseResponse.ok(HttpStatus.OK, "member delete OK");
+        try {
+            memberService.delete(customMemberDetails.getMember().getUid());
+            return BaseResponse.ok(HttpStatus.OK, "member delete OK");
+        } catch (NoSuchAlgorithmException | IllegalArgumentException e) {
+            e.printStackTrace();
+            return BaseResponse.fail(HttpStatus.INTERNAL_SERVER_ERROR, "member delete FAILURE " + e.getMessage());
+        }
     }
 }
