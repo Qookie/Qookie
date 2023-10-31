@@ -4,6 +4,8 @@ import com.a504.qookie.domain.item.dto.ItemResponse;
 import com.a504.qookie.domain.item.dto.ItemUploadRequest;
 import com.a504.qookie.domain.item.entity.Item;
 import com.a504.qookie.domain.item.repository.ItemRepository;
+import com.a504.qookie.domain.member.entity.Member;
+import com.a504.qookie.domain.member.repository.MemberItemRepository;
 import com.a504.qookie.domain.quest.service.AwsS3Service;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +19,7 @@ public class ItemService {
 
     private final AwsS3Service awsS3Service;
     private final ItemRepository itemRepository;
+    private final MemberItemRepository memberItemRepository;
 
     public String upload(ItemUploadRequest itemUploadRequest, MultipartFile image) {
         String url = awsS3Service.uploadImageToS3(image);
@@ -32,7 +35,7 @@ public class ItemService {
         return url;
     }
 
-    public List<ItemResponse>[] list() {
+    public List<ItemResponse>[] list(Member member) {
 
         List<ItemResponse>[] lists = new ArrayList[7];
         // 0:배경, 1:신상, 2:모자, 3:신발, 4:하의, 5:상의, 6:액세서리
@@ -43,6 +46,11 @@ public class ItemService {
         List<Item> itemList = itemRepository.findAll();
 
         for (Item item:itemList) {
+
+            if (memberItemRepository.existsByMemberAndItem(member, item)) {
+                continue;
+            }
+
             ItemResponse itemResponse = new ItemResponse(item);
 
             // 신상 넣기
