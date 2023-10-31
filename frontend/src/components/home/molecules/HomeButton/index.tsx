@@ -1,22 +1,24 @@
 import styled from 'styled-components';
-import { ButtonHTMLAttributes } from 'react';
 import Text from '../../../shared/atoms/Text';
+import { CSSProperties } from 'react';
 
-interface HomeBtnProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface HomeBtnProps {
   title: string;
   icon: string;
+  customStyle: CSSProperties;
+  onClick: () => void;
 }
 
-export default function HomeButton({ title, icon, ...props }: HomeBtnProps) {
+export default function HomeButton({ title, icon, customStyle, onClick }: HomeBtnProps) {
   return (
-    <ItemContainer {...props}>
+    <ItemContainer style={customStyle} onClick={onClick}>
       <Text typography="button">{title}</Text>
       <IconContainer src={icon} alt={icon} />
     </ItemContainer>
   );
 }
 
-const ItemContainer = styled.button<Omit<HomeBtnProps, 'title' | 'icon'>>`
+const ItemContainer = styled.button`
   padding: 1rem 0.5rem 0.5rem 1rem;
   width: 100%;
   height: 4.75rem;

@@ -33,13 +33,13 @@ const Home = () => {
           <HomeButton
             title="출석체크"
             icon={attendance}
-            style={styleAttendance}
+            customStyle={styleAttendance}
             onClick={() => navigate('/attendance')}
           />
           <HomeButton
             title="챌린지"
             icon={challenge}
-            style={styleChallenge}
+            customStyle={styleChallenge}
             onClick={() => navigate('/challenge')}
           />
         </ButtonContainer>
