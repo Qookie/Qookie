@@ -7,7 +7,7 @@ interface BtnProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 export default function Button({ theme = 'default', size = 'large', color, ...props }: BtnProps) {
-  return <DefaultBtn theme={theme} size={size} {...props} />
+  return <DefaultBtn theme={theme} size={size} {...props} />;
 }
 
 const DefaultBtn = styled.button<BtnProps>`
@@ -47,7 +47,8 @@ const SIZE_VARIANT = {
   small: `
     width: 60px;
     height: 28px;
-    font-size: 16px
+    font-size: 16px;
+    border-radius: 1rem;
   `,
   icon: `
     width: 114px;
