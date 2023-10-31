@@ -43,7 +43,7 @@ public class MemberService {
 
     public MemberResponse getInfo(Member member) {
 
-        return memberRepository.findMemberIfoById(member.getId());
+        return memberRepository.findMemberInfoById(member.getId());
     }
 
     @Transactional
