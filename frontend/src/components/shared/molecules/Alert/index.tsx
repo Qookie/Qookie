@@ -4,13 +4,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ReactComponent as Qookie } from '../../../../assets/svgs/qookie.svg';
 
 export default function Toast() {
-  toast.info(
-    <>
-      <MessageTitle>제목</MessageTitle>
-      <MessageContent>내용</MessageContent>
-    </>,
-  );
-
   return (
     <>
       <StyledToast
