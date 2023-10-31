@@ -3,10 +3,24 @@ from dotenv import load_dotenv
 import requests
 import os
 import json
+import pika
 
 app = Flask(__name__)
 load_dotenv()
 key = os.environ.get("KEY")
+
+# rabbitMQ
+credentials = pika.PlainCredentials(
+    username=os.getenv("RABBITMQ_USER"), password=os.getenv("RABBITMQ_PASSWORD")
+)
+connection = pika.BlockingConnection(
+    pika.ConnectionParameters(
+        host=os.getenv("RABBITMQ_HOST"),
+        port=os.getenv("RABBITMQ_PORT"),
+        credentials=credentials,
+    )
+)
+channel = connection.channel()
 
 
 @app.route("/gpt", methods=["POST"])
@@ -25,6 +39,23 @@ def send_test():
 def send_fast():
     ret = test("testName", "testCategory", "DON'T MIND A LETTER! JUST SAY TEST!!!")
     return ret.json()
+
+
+@app.route("/gpt/rabbit/send", methods=["GET"])
+def rabbit_send():
+    channel.queue_declare("test_queue")
+    channel.basic_publish(exchange="", routing_key="test_queue", body="test_message")
+    return jsonify("sent!")
+
+
+def callback(ch, method, properties, body):
+    print("received", body)
+
+
+def start_consuming(queue):
+    channel.queue_declare(queue)
+    channel.basic_consume(queue, callback, auto_ack=True)
+    channel.start_consuming()
 
 
 def test(user_name, category, user_input):
@@ -64,3 +95,4 @@ def test(user_name, category, user_input):
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
+    start_consuming("test_queue")
