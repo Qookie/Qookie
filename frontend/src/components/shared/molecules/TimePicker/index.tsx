@@ -15,9 +15,9 @@ const hours = Array(12)
   .fill(0)
   .map((v, i) => (v = String(i + 1).padStart(2, '0')));
 
-const minutes = Array(60)
+const minutes = Array(6)
   .fill(0)
-  .map((v, i) => (v = String(i).padStart(2, '0')));
+  .map((v, i) => (v = String(i * 10).padStart(2, '0')));
 
 const meridiem = ['AM', 'PM'];
 
