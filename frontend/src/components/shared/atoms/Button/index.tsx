@@ -6,7 +6,7 @@ interface BtnProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   size?: 'small' | 'icon' | 'medium' | 'large';
 }
 
-export default function Button({ theme = 'default', size = 'large', color, ...props }: BtnProps) {
+export default function Button({ theme = 'default', size = 'large', ...props }: BtnProps) {
   return <DefaultBtn theme={theme} size={size} {...props} />;
 }
 
