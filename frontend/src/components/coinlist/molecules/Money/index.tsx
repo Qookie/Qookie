@@ -41,6 +41,7 @@ const MoneyCard = styled.div<MoneyProps>`
   flex-flow: column;
   justify-content: space-between;
   padding: 1rem 0rem;
+  margin: 40px 0;
 
   ${({ MoneyTheme }) =>
     MoneyTheme === 'disabled' ? 'background: var(--MR_GRAY2)' : 'background: var(--MR_RED)'}
