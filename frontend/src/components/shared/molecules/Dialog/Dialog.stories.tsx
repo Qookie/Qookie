@@ -18,7 +18,7 @@ export default meta;
 type Story = StoryObj<typeof Dialog>;
 
 export const Default: Story = {
-  name: 'Default',
+  name: 'confirm',
   args: {
     title: '테스트 타이틀',
     content: '콘텐츠 테스트 테스트 콘텐츠 콘텐츠 테스트 테스트 콘텐츠',

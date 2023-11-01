@@ -18,7 +18,7 @@ export default meta;
 type Story = StoryObj<typeof HomeButton>;
 
 export const Default: Story = {
-  name: 'Default',
+  name: 'attendance',
   args: {
     title: '출석체크'
   }

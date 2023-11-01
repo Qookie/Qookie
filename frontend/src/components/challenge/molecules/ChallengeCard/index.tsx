@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import { ReactComponent as Coin } from '../../../../assets/svgs/coin.svg';
 import Button from '../../../shared/atoms/Button';
 import Text from '../../../shared/atoms/Text';
+import { Qoin } from '../../../../assets/svgs';
 
 interface ChallengeProps {
   title?: string;
@@ -13,16 +13,18 @@ export default function ChallengeCard({ title, condition, coin }: ChallengeProps
   return (
     <Container>
       <CardContainer>
-        <EarnCoin>
-          <Coin />
-          <AmountCoin>{coin}</AmountCoin>
-        </EarnCoin>
-        <TextContainer>
-          <ChallengeTitle typography="title">{title}</ChallengeTitle>
-          <ChallengeCondition typography="main" color="var(--MR_GRAY2)">
-            {condition}
-          </ChallengeCondition>
-        </TextContainer>
+        <LeftContainer>
+          <EarnCoin>
+            <Qoin width={'24px'} height={'24px'} />
+            <AmountCoin>{coin}</AmountCoin>
+          </EarnCoin>
+          <TextContainer>
+            <ChallengeTitle typography="title">{title}</ChallengeTitle>
+            <ChallengeCondition typography="main" color="var(--MR_GRAY2)">
+              {condition}
+            </ChallengeCondition>
+          </TextContainer>
+        </LeftContainer>
         <Button size="small">받기</Button>
       </CardContainer>
     </Container>
@@ -45,13 +47,20 @@ const CardContainer = styled.div`
   display: flex;
   gap: 1rem;
   align-items: center;
+  justify-content: space-between;
+`;
+
+const LeftContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 `;
 
 const EarnCoin = styled.div`
   display: inline-flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.3rem;
 `;
 
 const AmountCoin = styled.div`
@@ -62,7 +71,6 @@ const AmountCoin = styled.div`
 `;
 
 const TextContainer = styled.div`
-  width: 61%;
   display: flex;
   flex-direction: column;
   gap: 1.8rem;
