@@ -6,6 +6,10 @@ import Button from '../../atoms/Button';
 import Dialog from '../../molecules/Dialog';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
+import BottomPageLayout from '../../Template/BottomPageLayout';
+import TitleLayout from '../../Template/TitleLayout';
+import Qookie from '../../molecules/Qookie';
+import { QookieInfo } from '../../../../types';
 
 export interface StatusCardProps {
   level: number;
@@ -14,10 +18,16 @@ export interface StatusCardProps {
   createdAt: string;
 }
 
-export default function StatusCard({ level, exp, name, createdAt }: StatusCardProps) {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const openHandler = () => {
-    setIsOpen((pre) => !pre);
+export default function StatusCard({ ...props }: QookieInfo) {
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+  const [isBottomOpen, setIsBottomOpen] = useState<boolean>(false);
+
+  const openDialogHandler = () => {
+    setIsDialogOpen((pre) => !pre);
+  };
+
+  const openBottomHandler = () => {
+    setIsBottomOpen((pre) => !pre);
   };
   const navigate = useNavigate();
 
@@ -41,7 +51,7 @@ export default function StatusCard({ level, exp, name, createdAt }: StatusCardPr
       case 0:
         return (
           <ButtonContainer>
-            <Button size="small" onClick={openHandler}>
+            <Button size="small" onClick={() => navigate('/init')}>
               반죽 만들기
             </Button>
           </ButtonContainer>
@@ -49,44 +59,63 @@ export default function StatusCard({ level, exp, name, createdAt }: StatusCardPr
       case 50:
         return (
           <ButtonContainer>
-            <Button size="small" onClick={openHandler}>
+            <Button size="small" onClick={openDialogHandler}>
               굽기
             </Button>
           </ButtonContainer>
         );
 
       default:
-        return <ProgressBar total={getTotal(level)} now={exp} level={level} />;
+        return <ProgressBar total={getTotal(level)} now={props.exp} level={props.level} />;
     }
   };
 
   return (
-    <Container>
-      <CardContainer>
-        <Level level={level} />
-        <RightContainer>
-          {level == 0 ? (
-            <QookieName>쿠키 반죽이 없어요ㅠ</QookieName>
-          ) : (
-            <QookieInfo>
-              <QookieName>{name}</QookieName>
-              {calcDateDiff(createdAt)}일째
-            </QookieInfo>
-          )}
-          {showLevelState(level)}
-        </RightContainer>
-      </CardContainer>
-      <Dialog
-        title="쿠키를 구울까요?"
-        content={`쿠키를 구우면 더이상 쿠키를 꾸밀 수 없어요. \n이 의상 그대로 쿠키를 구울까요?`}
-        negative="굽기"
-        onNegativeClick={() => navigate('/bake')}
-        positive="쿠키 꾸미기"
-        onPositiveClick={() => navigate('/store')}
-        isOpen={isOpen}
-        onCloseRequest={openHandler}
-      />
-    </Container>
+    <>
+      <Container>
+        <CardContainer>
+          <Level level={props.level} />
+          <RightContainer>
+            {props.level == 0 ? (
+              <QookieName>쿠키 반죽이 없어요ㅠ</QookieName>
+            ) : (
+              <QookieInfoDiv>
+                <QookieName>{props.name}</QookieName>
+                {calcDateDiff(props.createdAt)}일째
+              </QookieInfoDiv>
+            )}
+            {showLevelState(props.level)}
+          </RightContainer>
+        </CardContainer>
+
+        <Dialog
+          title="쿠키를 구울까요?"
+          content={`쿠키를 구우면 더이상 쿠키를 꾸밀 수 없어요. \n이 의상 그대로 쿠키를 구울까요?`}
+          negative="굽기"
+          onNegativeClick={openBottomHandler}
+          positive="쿠키 꾸미기"
+          onPositiveClick={() => navigate('/store')}
+          isOpen={isDialogOpen}
+          onCloseRequest={openDialogHandler}
+        />
+        <BottomPageLayout
+          isOpen={isBottomOpen}
+          onCloseRequest={openBottomHandler}
+          children={
+            <TitleLayout
+              title={'쿠키 만들기가 완료되었습니다.'}
+              desc={`저를 멋진 쿠키로 만들어주셔서 감사해요! \n직접 만든 쿠키를 확인해보세요.`}
+            >
+              <BottomInner>
+                <Qookie {...props} />
+                <TextBtn onClick={() => navigate('/myqookie')}>쿠키 보러 가기</TextBtn>
+                <Button onClick={openBottomHandler}>완료</Button>
+              </BottomInner>
+            </TitleLayout>
+          }
+        />
+      </Container>
+    </>
   );
 }
 
@@ -106,7 +135,7 @@ const CardContainer = styled.div`
   gap: 1rem;
 `;
 
-const QookieInfo = styled.div`
+const QookieInfoDiv = styled.div`
   display: flex;
   gap: 0.4rem;
   font-size: 1rem;
@@ -128,4 +157,22 @@ const RightContainer = styled.div`
 
 const ButtonContainer = styled.div`
   margin-left: auto;
+`;
+
+const BottomInner = styled.div`
+  padding: 0 1rem;
+`;
+
+const TextBtn = styled.button`
+  width: 100%;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  font-weight: 600;
+  font-size: 20px;
+  color: var(--MR_RED);
+  background-color: transparent;
 `;
