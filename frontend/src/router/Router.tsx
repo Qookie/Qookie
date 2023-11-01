@@ -6,6 +6,7 @@ import Header from '../components/shared/molecules/Header';
 import InitQookie from '../pages/InitQookie';
 import Challenge from '../pages/Challenge';
 import Loading from '../pages/Loading';
+import SetWakeupTime from '../pages/SetWakeupTime';
 
 const Router = () => {
   return (
@@ -14,6 +15,7 @@ const Router = () => {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/init" element={<InitQookie />} />
+        <Route path="/set-wakeup" element={<SetWakeupTime />} />
         <Route path="/home" element={<Home />} />
         <Route path="/calendar" element={<Login />} />
         <Route path="/mind" element={<Login />} />
@@ -37,12 +39,12 @@ const HeaderWrapper = () => {
       return <Header page="tab" title="캘린더" />;
     case '/mypage':
       return <Header page="tab" title="마이페이지" />;
+    case '/set-wakeup':
     case '/':
-      return <></>;
     case '/init':
       return <></>;
-      case '/loading':
-        return <></>;
+    case '/loading':
+      return <></>;
     default:
       return <Header page="default" />;
   }
