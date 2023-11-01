@@ -23,7 +23,6 @@ public class ItemService {
     private final AwsS3Service awsS3Service;
     private final ItemRepository itemRepository;
     private final MemberItemRepository memberItemRepository;
-    private final OrderRepository orderRepository;
 
     public String upload(ItemUploadRequest itemUploadRequest, MultipartFile image) {
         String url = awsS3Service.uploadImageToS3(image);
