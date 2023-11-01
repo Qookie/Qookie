@@ -16,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.List;
 
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
@@ -33,9 +34,8 @@ public class JwtFilter extends OncePerRequestFilter {
 
             // Todo: delete before deploying to master
             if (tokenString.equals("accessTokenHere")) {
-                CustomMemberDetails customMemberDetails = new CustomMemberDetails(
-                        new Member("userName", "userEmail", "userUid")
-                );
+                Member testMember = memberRepository.findByUid("testUserUid").get();
+                CustomMemberDetails customMemberDetails = new CustomMemberDetails(testMember);
                 UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
                         customMemberDetails, null, customMemberDetails.getAuthorities()
                 );

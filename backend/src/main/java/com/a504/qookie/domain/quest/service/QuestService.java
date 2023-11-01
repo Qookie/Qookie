@@ -53,6 +53,11 @@ public class QuestService {
 	}
 
 	public void pointUpdate(Member member, int point){
+		System.out.println("===========================================");
+		System.out.println(member.getUid());
+		System.out.println(member.getName());
+		System.out.println(member.getEmail());
+		System.out.println(member.getId());
 		member = memberRepository.findById(member.getId())
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
 		member.setPoint(point);
