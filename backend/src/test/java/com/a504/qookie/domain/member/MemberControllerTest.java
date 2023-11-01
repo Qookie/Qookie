@@ -1,7 +1,10 @@
 package com.a504.qookie.domain.member;
 
 import com.a504.qookie.domain.member.dto.LoginRequest;
+import com.a504.qookie.domain.member.entity.Member;
+import com.a504.qookie.domain.member.repository.MemberRepository;
 import com.nimbusds.jose.shaded.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
@@ -46,6 +49,15 @@ class MemberControllerTest {
     private MockMvc mockMvc;
     @Autowired
     private WebApplicationContext context;
+    @Autowired
+    private MemberRepository memberRepository;
+
+
+//    @BeforeEach
+//    public void setTestMember() {
+//        memberRepository.save(new Member("testUserEmail", "testUserName", "testUserUid"));
+//    }
+
     @Test
     void oidcLogin() throws Exception {
         LoginRequest loginRequest = new LoginRequest(

@@ -34,7 +34,9 @@ public class JwtFilter extends OncePerRequestFilter {
 
             // Todo: delete before deploying to master
             if (tokenString.equals("accessTokenHere")) {
-                Member testMember = memberRepository.findByUid("testUserUid").get();
+                Member testMember = memberRepository.findByUid("testUserUid").orElse(
+                        new Member("testUserEmail", "testUserName", "testUserUid")
+                );
                 CustomMemberDetails customMemberDetails = new CustomMemberDetails(testMember);
                 UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
                         customMemberDetails, null, customMemberDetails.getAuthorities()
