@@ -18,7 +18,7 @@ export default meta;
 type Story = StoryObj<typeof QuestListItem>;
 
 export const Default: Story = {
-  name: 'Default',
+  name: 'wake',
   args: {
     quest: 'wake',
   }

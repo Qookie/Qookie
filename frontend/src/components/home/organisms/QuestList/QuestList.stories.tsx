@@ -18,7 +18,7 @@ export default meta;
 type Story = StoryObj<typeof QuestList>;
 
 export const Default: Story = {
-  name: 'Default',
+  name: 'today',
   args: {
     title: '일일 퀘스트',
   }

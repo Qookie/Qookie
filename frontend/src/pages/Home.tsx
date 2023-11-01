@@ -13,7 +13,7 @@ import challenge from '../assets/pngs/challenge.png';
 
 export interface QookieInfoResponse {
   msg: string;
-  payload: QookieInfo;
+  payload: QookieInfo | null;
 }
 
 const Home = () => {
@@ -22,7 +22,7 @@ const Home = () => {
 
   // 로그인 후 setQookie 확인 필요
   useEffect(() => {
-    qookieApi.getQookieInfo().then((res) => setQookie({ ...qookie, ...res }));
+    qookieApi.getQookieInfo().then((res) => res !== null && setQookie({ ...qookie, ...res }));
   }, []);
 
   return (

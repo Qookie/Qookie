@@ -29,21 +29,18 @@ const Loading = () => {
     const { displayName, email, uid } = user;
 
     try {
-      http
-        .post<LoginResponse>('/api/member/login', {
-          displayName,
-          email,
-          uid,
-          messageToken: localStorage.getItem('messageToken'),
-        })
-        .then((res) => {
-          console.log(res);
-          if (res.payload.new) {
-            navigate('/init');
-          } else {
-            navigate('/home');
-          }
-        });
+      const res = await http.post<LoginResponse>('/api/member/login', {
+        displayName,
+        email,
+        uid,
+        messageToken: localStorage.getItem('messageToken'),
+      });
+
+      if (res.payload.new) {
+        navigate('/init');
+      } else {
+        navigate('/home');
+      }
     } catch (error) {
       console.log(error);
     }
