@@ -47,6 +47,8 @@ dependencies {
 	implementation 'com.auth0:java-jwt:3.10.3'
 	// firebase
 	implementation 'com.google.firebase:firebase-admin:9.2.0'
+    // rabbitMQ
+    implementation 'org.springframework.boot:spring-boot-starter-amqp'
 }
 
 // Querydsl Q Class 생성 위치

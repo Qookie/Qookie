@@ -57,7 +57,7 @@ pipeline {
 		stage("Build Backend") {
 			steps {
 				dir ("./") {
-					sh "docker compose up --build -d --no-cache"
+					sh "docker compose up --build -d"
 				}
 			}
 		}
