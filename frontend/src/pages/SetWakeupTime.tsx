@@ -21,7 +21,7 @@ function SetWakeupTime() {
     meridiem: cur.getHours() >= 12 ? 'AM' : 'PM',
   });
 
-  const hourOf24 =
+  const hourOf24HourFormat =
     time.meridiem === 'AM'
       ? String(parseInt(time.hour) % 12).padStart(2, '0')
       : String((parseInt(time.hour) % 12) + 12);
@@ -37,8 +37,8 @@ function SetWakeupTime() {
   return (
     <TitleLayout title="기상 시간을 설정해주세요">
       <ClockContainer>
-        <Clock>{hourOf24[0]}</Clock>
-        <Clock>{hourOf24[1]}</Clock>
+        <Clock>{hourOf24HourFormat[0]}</Clock>
+        <Clock>{hourOf24HourFormat[1]}</Clock>
         <ClockSplit>:</ClockSplit>
         <Clock>{time.minute[0]}</Clock>
         <Clock>{time.minute[1]}</Clock>
