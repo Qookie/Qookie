@@ -36,6 +36,30 @@ export default function StatusCard({ level, exp, name, createdAt }: StatusCardPr
     return 10;
   };
 
+  const showLevelState = (level: number) => {
+    switch (level) {
+      case 0:
+        return (
+          <ButtonContainer>
+            <Button size="small" onClick={openHandler}>
+              반죽 만들기
+            </Button>
+          </ButtonContainer>
+        );
+      case 50:
+        return (
+          <ButtonContainer>
+            <Button size="small" onClick={openHandler}>
+              굽기
+            </Button>
+          </ButtonContainer>
+        );
+
+      default:
+        return <ProgressBar total={getTotal(level)} now={exp} level={level} />;
+    }
+  };
+
   return (
     <Container>
       <CardContainer>
@@ -45,15 +69,7 @@ export default function StatusCard({ level, exp, name, createdAt }: StatusCardPr
             <QookieName>{name}</QookieName>
             {calcDateDiff(createdAt)}일째
           </QookieInfo>
-          {level < 50 ? (
-            <ProgressBar total={getTotal(level)} now={exp} level={level} />
-          ) : (
-            <ButtonContainer>
-              <Button size="small" onClick={openHandler}>
-                굽기
-              </Button>
-            </ButtonContainer>
-          )}
+          {showLevelState(level)}
         </RightContainer>
       </CardContainer>
       <Dialog
