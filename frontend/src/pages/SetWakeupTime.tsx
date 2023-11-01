@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import TitleLayout from '../components/shared/Template/TitleLayout';
 import TimePicker from '../components/shared/molecules/TimePicker';
 import styled from 'styled-components';
@@ -15,12 +14,12 @@ export interface Time {
 
 function SetWakeupTime() {
   const navigate = useNavigate();
-  const cur = new Date();
+  const curDate = new Date();
 
   const { time, setHour, setMeridiem, setMinute } = useTimePick({
-    hour: String(cur.getHours()).padStart(2, '0'),
-    minute: String(cur.getMinutes()).padStart(2, '0'),
-    meridiem: cur.getHours() >= 12 ? 'AM' : 'PM',
+    hour: String(curDate.getHours()).padStart(2, '0'),
+    minute: String(curDate.getMinutes()).padStart(2, '0'),
+    meridiem: curDate.getHours() >= 12 ? 'AM' : 'PM',
   });
 
   const hourOf24HourFormat =
