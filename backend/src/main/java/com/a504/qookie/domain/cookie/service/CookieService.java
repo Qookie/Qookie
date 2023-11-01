@@ -13,6 +13,8 @@ import com.a504.qookie.domain.cookie.repository.CookieCollectionRepository;
 import com.a504.qookie.domain.cookie.repository.CookieRepository;
 import com.a504.qookie.domain.cookie.repository.EyeRepository;
 import com.a504.qookie.domain.cookie.repository.MouthRepository;
+import com.a504.qookie.domain.item.entity.Item;
+import com.a504.qookie.domain.item.repository.ItemRepository;
 import com.a504.qookie.domain.member.entity.Member;
 import com.a504.qookie.domain.quest.service.AwsS3Service;
 import jakarta.transaction.Transactional;
@@ -32,6 +34,9 @@ public class CookieService {
     private final EyeRepository eyeRepository;
     private final MouthRepository mouthRepository;
     private final AwsS3Service awsS3Service;
+    private final ItemRepository itemRepository;
+
+    private static final Long BASE_BACKGROUND_ID = 2L;
 
     public CookieResponse create(Member member, String cookieName, Long eyeId, Long mouthId) {
 
@@ -42,9 +47,12 @@ public class CookieService {
                 .orElseThrow(() -> new IllegalArgumentException("일치하는 눈이 없습니다"));
 
         Mouth mouth = mouthRepository.findById(mouthId)
-                        .orElseThrow(() -> new IllegalArgumentException("일치하는 입이 없습니다"));
+                .orElseThrow(() -> new IllegalArgumentException("일치하는 입이 없습니다"));
 
-        Cookie cookie = Cookie.createCookie(member, cookieName, body, eye, mouth);
+        Item background = itemRepository.findById(BASE_BACKGROUND_ID)
+                .orElseThrow(() -> new IllegalArgumentException("기본 배경이 없습니다"));
+
+        Cookie cookie = Cookie.createCookie(member, cookieName, body, eye, mouth, background);
 
         cookieRepository.save(cookie);
 
@@ -110,6 +118,10 @@ public class CookieService {
 
         Cookie cookie = cookieRepository.findByMember(member)
                 .orElseThrow(() -> new IllegalArgumentException("쿠키가 없습니다"));
+
+        if (cookie.getBackground().getId() == 1L)
+            cookie.setBackground(itemRepository.findById(BASE_BACKGROUND_ID)
+                    .orElseThrow(() -> new IllegalArgumentException("기본 배경이 없습니다")));
 
         return new CookieResponse(cookie);
     }
