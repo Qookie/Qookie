@@ -4,10 +4,12 @@ import { QookieInfo } from '../../../../types';
 export default function Qookie({ ...props }: QookieInfo) {
   return (
     <BackgroundContainer background={props.background}>
-      <DoughContainer body={props.body}>
-        <EyeContainer eye={props.eye} />
-        <MouthContainer mouth={props.mouth} />
-      </DoughContainer>
+      {props.level > 0 && (
+        <DoughContainer body={props.body}>
+          <EyeContainer eye={props.eye} />
+          <MouthContainer mouth={props.mouth} />
+        </DoughContainer>
+      )}
     </BackgroundContainer>
   );
 }
