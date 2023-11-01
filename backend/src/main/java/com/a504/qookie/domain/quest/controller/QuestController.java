@@ -1,6 +1,5 @@
 package com.a504.qookie.domain.quest.controller;
 
-import java.util.Locale;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +16,6 @@ import com.a504.qookie.domain.quest.service.AwsS3Service;
 import com.a504.qookie.domain.quest.service.QuestService;
 import com.a504.qookie.global.response.BaseResponse;
 import com.a504.qookie.global.security.CustomMemberDetails;
-import com.amazonaws.Response;
 
 import lombok.RequiredArgsConstructor;
 
