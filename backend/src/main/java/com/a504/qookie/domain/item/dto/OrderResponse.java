@@ -1,4 +1,4 @@
-package com.a504.qookie.domain.order.dto;
+package com.a504.qookie.domain.item.dto;
 
 import java.time.LocalDateTime;
 

@@ -1,9 +1,9 @@
-package com.a504.qookie.domain.order.repository;
+package com.a504.qookie.domain.item.repository;
 
+import com.a504.qookie.domain.item.dto.OrderResponse;
 import com.a504.qookie.domain.item.entity.QItem;
 import com.a504.qookie.domain.member.entity.Member;
 import com.a504.qookie.domain.member.entity.QMemberItem;
-import com.a504.qookie.domain.order.dto.OrderResponse;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
-public class OrderRepositoryCustomImpl implements OrderRepositoryCustom {
+public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
 

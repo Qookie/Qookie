@@ -3,13 +3,19 @@ package com.a504.qookie.domain.item.serivce;
 import com.a504.qookie.domain.item.dto.ItemResponse;
 import com.a504.qookie.domain.item.dto.ItemUploadRequest;
 import com.a504.qookie.domain.item.dto.MyItemResponse;
+import com.a504.qookie.domain.item.dto.OrderItemRequest;
+import com.a504.qookie.domain.item.dto.OrderListRequest;
+import com.a504.qookie.domain.item.dto.OrderRequest;
+import com.a504.qookie.domain.item.dto.OrderResponse;
 import com.a504.qookie.domain.item.entity.Item;
 import com.a504.qookie.domain.item.repository.ItemRepository;
 import com.a504.qookie.domain.member.entity.Member;
 import com.a504.qookie.domain.member.entity.MemberItem;
 import com.a504.qookie.domain.member.repository.MemberItemRepository;
-import com.a504.qookie.domain.order.repository.OrderRepository;
+import com.a504.qookie.domain.member.repository.MemberRepository;
 import com.a504.qookie.domain.quest.service.AwsS3Service;
+import jakarta.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +29,7 @@ public class ItemService {
     private final AwsS3Service awsS3Service;
     private final ItemRepository itemRepository;
     private final MemberItemRepository memberItemRepository;
+    private final MemberRepository memberRepository;
 
     public String upload(ItemUploadRequest itemUploadRequest, MultipartFile image) {
         String url = awsS3Service.uploadImageToS3(image);
@@ -111,5 +118,42 @@ public class ItemService {
         }
 
         return lists;
+    }
+
+    @Transactional
+    public boolean buy(OrderRequest orderRequest, Member member) {
+
+        // 가격 검증
+        int total = 0;
+        for (OrderItemRequest orderItemRequest:orderRequest.items()) {
+            Item item = itemRepository.findById(orderItemRequest.itemId())
+                    .orElseThrow(() -> new IllegalArgumentException("상품이 없습니다"));
+            total += item.getPrice();
+        }
+
+        if (member.getPoint() < total) {
+            return false;
+        }
+
+        for (OrderItemRequest orderItemRequest:orderRequest.items()) {
+            Item item = itemRepository.findById(orderItemRequest.itemId())
+                    .orElseThrow(() -> new IllegalArgumentException("상품이 없습니다"));
+
+            memberItemRepository.save(MemberItem.builder()
+                    .member(member)
+                    .item(item)
+                    .createdAt(LocalDateTime.now())
+                    .build());
+        }
+
+        member.buy(total);
+        memberRepository.save(member);
+
+        return true;
+    }
+
+    public List<OrderResponse> orderList(OrderListRequest orderListRequest, Member member) {
+
+        return itemRepository.findMemberItemByMonthAndMember(orderListRequest.time(), member);
     }
 }

@@ -3,6 +3,9 @@ package com.a504.qookie.domain.item.controller;
 import com.a504.qookie.domain.item.dto.ItemResponse;
 import com.a504.qookie.domain.item.dto.ItemUploadRequest;
 import com.a504.qookie.domain.item.dto.MyItemResponse;
+import com.a504.qookie.domain.item.dto.OrderListRequest;
+import com.a504.qookie.domain.item.dto.OrderRequest;
+import com.a504.qookie.domain.item.dto.OrderResponse;
 import com.a504.qookie.domain.item.serivce.ItemService;
 import com.a504.qookie.global.response.BaseResponse;
 import com.a504.qookie.global.security.CustomMemberDetails;
@@ -13,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -53,5 +57,27 @@ public class ItemController {
         List<MyItemResponse>[] list = itemService.myItem(customMemberDetails.getMember());
 
         return BaseResponse.okWithData(HttpStatus.OK, "my item list OK", list);
+    }
+
+    @PostMapping("/order")
+    public ResponseEntity<?> buy(
+            @RequestBody OrderRequest orderRequest,
+            @AuthenticationPrincipal CustomMemberDetails customMemberDetails) {
+
+        if (!itemService.buy(orderRequest, customMemberDetails.getMember())) {
+            return BaseResponse.fail(HttpStatus.BAD_REQUEST, "no money");
+        }
+
+        return BaseResponse.ok(HttpStatus.OK, "item order OK");
+    }
+
+    @GetMapping("/order/list")
+    public ResponseEntity<?> orderList(
+            @RequestBody OrderListRequest orderListRequest,
+            @AuthenticationPrincipal CustomMemberDetails customMemberDetails) {
+
+        List<OrderResponse> orderResponses = itemService.orderList(orderListRequest, customMemberDetails.getMember());
+
+        return BaseResponse.okWithData(HttpStatus.OK, "item order list OK", orderResponses);
     }
 }
