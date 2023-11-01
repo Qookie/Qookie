@@ -65,10 +65,14 @@ export default function StatusCard({ level, exp, name, createdAt }: StatusCardPr
       <CardContainer>
         <Level level={level} />
         <RightContainer>
-          <QookieInfo>
-            <QookieName>{name}</QookieName>
-            {calcDateDiff(createdAt)}일째
-          </QookieInfo>
+          {level == 0 ? (
+            <QookieName>쿠키 반죽이 없어요ㅠ</QookieName>
+          ) : (
+            <QookieInfo>
+              <QookieName>{name}</QookieName>
+              {calcDateDiff(createdAt)}일째
+            </QookieInfo>
+          )}
           {showLevelState(level)}
         </RightContainer>
       </CardContainer>
