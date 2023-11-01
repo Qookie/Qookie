@@ -2,6 +2,7 @@ package com.a504.qookie.domain.item.controller;
 
 import com.a504.qookie.domain.item.dto.ItemResponse;
 import com.a504.qookie.domain.item.dto.ItemUploadRequest;
+import com.a504.qookie.domain.item.dto.MyItemResponse;
 import com.a504.qookie.domain.item.serivce.ItemService;
 import com.a504.qookie.global.response.BaseResponse;
 import com.a504.qookie.global.security.CustomMemberDetails;
@@ -42,5 +43,15 @@ public class ItemController {
         List<ItemResponse>[] list = itemService.list(customMemberDetails.getMember());
 
         return BaseResponse.okWithData(HttpStatus.OK, "item list OK", list);
+    }
+
+    @GetMapping("/myItem")
+    public ResponseEntity<?> myItem(
+            @AuthenticationPrincipal CustomMemberDetails customMemberDetails
+    ) {
+
+        List<MyItemResponse>[] list = itemService.myItem(customMemberDetails.getMember());
+
+        return BaseResponse.okWithData(HttpStatus.OK, "my item list OK", list);
     }
 }

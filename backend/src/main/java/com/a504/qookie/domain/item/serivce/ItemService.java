@@ -2,10 +2,13 @@ package com.a504.qookie.domain.item.serivce;
 
 import com.a504.qookie.domain.item.dto.ItemResponse;
 import com.a504.qookie.domain.item.dto.ItemUploadRequest;
+import com.a504.qookie.domain.item.dto.MyItemResponse;
 import com.a504.qookie.domain.item.entity.Item;
 import com.a504.qookie.domain.item.repository.ItemRepository;
 import com.a504.qookie.domain.member.entity.Member;
+import com.a504.qookie.domain.member.entity.MemberItem;
 import com.a504.qookie.domain.member.repository.MemberItemRepository;
+import com.a504.qookie.domain.order.repository.OrderRepository;
 import com.a504.qookie.domain.quest.service.AwsS3Service;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +23,7 @@ public class ItemService {
     private final AwsS3Service awsS3Service;
     private final ItemRepository itemRepository;
     private final MemberItemRepository memberItemRepository;
+    private final OrderRepository orderRepository;
 
     public String upload(ItemUploadRequest itemUploadRequest, MultipartFile image) {
         String url = awsS3Service.uploadImageToS3(image);
@@ -47,6 +51,7 @@ public class ItemService {
 
         for (Item item:itemList) {
 
+            // 이미 구매한 상품이라면 리스트에서 빼기
             if (memberItemRepository.existsByMemberAndItem(member, item)) {
                 continue;
             }
@@ -70,6 +75,39 @@ public class ItemService {
                 lists[5].add(itemResponse);
             } else if (item.getCategory().equals("액세서리")) {
                 lists[6].add(itemResponse);
+            }
+        }
+
+        return lists;
+    }
+
+    public List<MyItemResponse>[] myItem(Member member) {
+
+        List<MyItemResponse>[] lists = new ArrayList[6];
+        // 0:배경, 1:모자, 2:신발, 3:하의, 4:상의, 5:액세서리
+
+        for (int i = 0; i < 6; i++) {
+            lists[i] = new ArrayList<>();
+        }
+
+        List<MemberItem> memberItemList = memberItemRepository.findByMember(member);
+
+        for (MemberItem memberItem:memberItemList) {
+            Item item = itemRepository.findById(memberItem.getItem().getId())
+                    .orElseThrow(() -> new IllegalArgumentException("상품이 없습니다"));
+
+            if (item.getCategory().equals("배경")) {
+                lists[0].add(new MyItemResponse(item));
+            } else if (item.getCategory().equals("모자")) {
+                lists[1].add(new MyItemResponse(item));
+            } else if (item.getCategory().equals("신발")) {
+                lists[2].add(new MyItemResponse(item));
+            } else if (item.getCategory().equals("하의")) {
+                lists[3].add(new MyItemResponse(item));
+            } else if (item.getCategory().equals("상의")) {
+                lists[4].add(new MyItemResponse(item));
+            } else if (item.getCategory().equals("액세서리")) {
+                lists[5].add(new MyItemResponse(item));
             }
         }
 
