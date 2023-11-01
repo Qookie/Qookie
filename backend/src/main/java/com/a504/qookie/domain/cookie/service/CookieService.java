@@ -13,6 +13,8 @@ import com.a504.qookie.domain.cookie.repository.CookieCollectionRepository;
 import com.a504.qookie.domain.cookie.repository.CookieRepository;
 import com.a504.qookie.domain.cookie.repository.EyeRepository;
 import com.a504.qookie.domain.cookie.repository.MouthRepository;
+import com.a504.qookie.domain.item.entity.Item;
+import com.a504.qookie.domain.item.repository.ItemRepository;
 import com.a504.qookie.domain.member.entity.Member;
 import com.a504.qookie.domain.quest.service.AwsS3Service;
 import jakarta.transaction.Transactional;
@@ -32,8 +34,16 @@ public class CookieService {
     private final EyeRepository eyeRepository;
     private final MouthRepository mouthRepository;
     private final AwsS3Service awsS3Service;
+    private final ItemRepository itemRepository;
 
-    public CookieResponse create(Member member, String cookieName, Long eyeId, Long mouthId) {
+    private static final Long BASE_BACKGROUND_ID = 2L;
+
+    @Transactional
+    public CookieResponse create(Member member, String cookieName, Long eyeId, Long mouthId) throws IllegalArgumentException {
+
+        if (cookieRepository.existsByMember(member)) {
+            throw new IllegalArgumentException("쿠키가 이미 있습니다");
+        }
 
         Body body = bodyRepository.findByStage(1)
                 .orElseThrow(() -> new IllegalArgumentException("일치하는 몸이 없습니다"));
@@ -42,9 +52,15 @@ public class CookieService {
                 .orElseThrow(() -> new IllegalArgumentException("일치하는 눈이 없습니다"));
 
         Mouth mouth = mouthRepository.findById(mouthId)
-                        .orElseThrow(() -> new IllegalArgumentException("일치하는 입이 없습니다"));
+                .orElseThrow(() -> new IllegalArgumentException("일치하는 입이 없습니다"));
 
-        Cookie cookie = Cookie.createCookie(member, cookieName, body, eye, mouth);
+        Item background = itemRepository.findById(BASE_BACKGROUND_ID)
+                .orElseThrow(() -> new IllegalArgumentException("기본 배경이 없습니다"));
+
+        Item noItem = itemRepository.findById(1L)
+                .orElseThrow(() -> new IllegalArgumentException("\"착용하지 않음\" 아이템이 없습니다"));
+
+        Cookie cookie = Cookie.createCookie(member, cookieName, body, eye, mouth, background, noItem);
 
         cookieRepository.save(cookie);
 
@@ -106,9 +122,14 @@ public class CookieService {
     }
 
     @Transactional
-    public CookieResponse getInfo(Member member) {
+    public CookieResponse getInfo(Member member) throws IllegalArgumentException{
 
-        Cookie cookie = cookieRepository.findByMember(member);
+        Cookie cookie = cookieRepository.findByMember(member)
+                .orElseThrow(() -> new IllegalArgumentException("쿠키가 없습니다"));
+
+        if (cookie.getBackground().getId() == 1L)
+            cookie.setBackground(itemRepository.findById(BASE_BACKGROUND_ID)
+                    .orElseThrow(() -> new IllegalArgumentException("기본 배경이 없습니다")));
 
         return new CookieResponse(cookie);
     }
@@ -118,7 +139,8 @@ public class CookieService {
 
         String url = awsS3Service.uploadImageToS3(image);
 
-        Cookie cookie = cookieRepository.findByMember(member);
+        Cookie cookie = cookieRepository.findByMember(member)
+                .orElseThrow(() -> new IllegalArgumentException("쿠키가 없습니다"));
 
         cookieCollectionRepository.save(new CookieCollection(member, cookie, url));
 

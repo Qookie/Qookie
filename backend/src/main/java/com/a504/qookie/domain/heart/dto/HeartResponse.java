@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 
 public record HeartResponse(
     LocalDateTime createdAt,
-    int category,
+    String category,
     String content,
     String reply
 ) {
