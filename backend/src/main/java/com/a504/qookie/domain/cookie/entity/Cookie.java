@@ -81,7 +81,7 @@ public class Cookie {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Item background;
 
-	public static Cookie createCookie(Member member, String name, Body body, Eye eye, Mouth mouth, Item background) {
+	public static Cookie createCookie(Member member, String name, Body body, Eye eye, Mouth mouth, Item background, Item noItem) {
 		return Cookie.builder()
 				.member(member)
 				.name(name)
@@ -92,6 +92,10 @@ public class Cookie {
 				.eye(eye)
 				.mouth(mouth)
 				.background(background)
+				.hat(noItem)
+				.top(noItem)
+				.bottom(noItem)
+				.shoe(noItem)
 				.build();
 	}
 

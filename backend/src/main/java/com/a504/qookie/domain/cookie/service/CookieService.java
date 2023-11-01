@@ -38,7 +38,12 @@ public class CookieService {
 
     private static final Long BASE_BACKGROUND_ID = 2L;
 
-    public CookieResponse create(Member member, String cookieName, Long eyeId, Long mouthId) {
+    @Transactional
+    public CookieResponse create(Member member, String cookieName, Long eyeId, Long mouthId) throws IllegalArgumentException {
+
+        if (cookieRepository.existsByMember(member)) {
+            throw new IllegalArgumentException("쿠키가 이미 있습니다");
+        }
 
         Body body = bodyRepository.findByStage(1)
                 .orElseThrow(() -> new IllegalArgumentException("일치하는 몸이 없습니다"));
@@ -52,7 +57,10 @@ public class CookieService {
         Item background = itemRepository.findById(BASE_BACKGROUND_ID)
                 .orElseThrow(() -> new IllegalArgumentException("기본 배경이 없습니다"));
 
-        Cookie cookie = Cookie.createCookie(member, cookieName, body, eye, mouth, background);
+        Item noItem = itemRepository.findById(1L)
+                .orElseThrow(() -> new IllegalArgumentException("\"착용하지 않음\" 아이템이 없습니다"));
+
+        Cookie cookie = Cookie.createCookie(member, cookieName, body, eye, mouth, background, noItem);
 
         cookieRepository.save(cookie);
 

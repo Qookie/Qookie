@@ -27,9 +27,16 @@ public class CookieController {
             @AuthenticationPrincipal CustomMemberDetails customMemberDetails,
             @RequestBody CookieCreateRequest cookieCreateRequest) {
 
-        CookieResponse cookieResponse = cookieService.create(customMemberDetails.getMember(), cookieCreateRequest.cookieName(), cookieCreateRequest.eyeId(), cookieCreateRequest.mouthId());
+        try {
+            CookieResponse cookieResponse = cookieService.create(customMemberDetails.getMember(),
+                    cookieCreateRequest.cookieName(), cookieCreateRequest.eyeId(),
+                    cookieCreateRequest.mouthId());
 
-        return BaseResponse.okWithData(HttpStatus.OK, "cookie create OK", cookieResponse);
+            return BaseResponse.okWithData(HttpStatus.OK, "cookie create OK", cookieResponse);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            return BaseResponse.okWithData(HttpStatus.OK, "cookie already EXIST!!!", null);
+        }
     }
 
     @GetMapping("/getInfo")
