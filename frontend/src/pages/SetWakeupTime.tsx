@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { useTimePick } from '../hooks/useTimePick';
 import Button from '../components/shared/atoms/Button';
 import { http } from '../api/instance';
+import { useNavigate } from 'react-router';
 
 export interface Time {
   hour: string;
@@ -13,6 +14,7 @@ export interface Time {
 }
 
 function SetWakeupTime() {
+  const navigate = useNavigate();
   const cur = new Date();
 
   const { time, setHour, setMeridiem, setMinute } = useTimePick({
@@ -29,9 +31,15 @@ function SetWakeupTime() {
   const onClickComplete = async () => {
     const { hour, minute } = time;
 
-    await http.post('/api/member/time', {
-      wakeTime: `${hour}:${minute}:00`,
-    });
+    try {
+      await http.post('/api/member/time', {
+        wakeTime: `${hour}:${minute}:00`,
+      });
+
+      navigate('/home');
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
