@@ -9,7 +9,7 @@ export interface DialogProps {
   onNegativeClick: () => void;
   positive: string;
   onPositiveClick: () => void;
-  isOpen: boolean;
+  isopen: boolean;
   onCloseRequest: () => void;
 }
 
@@ -20,10 +20,10 @@ export default function Dialog({
   onNegativeClick,
   positive,
   onPositiveClick,
-  isOpen,
+  isopen,
   onCloseRequest,
 }: DialogProps) {
-  if (!isOpen) {
+  if (!isopen) {
     return null;
   }
 

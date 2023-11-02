@@ -3,17 +3,17 @@ import React, { useEffect, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 
 interface BottomPageProps {
-  isOpen: boolean;
+  isopen: boolean;
   onCloseRequest: () => void;
   children?: React.ReactNode;
 }
 
-function BottomPageLayout({ isOpen, onCloseRequest, children }: BottomPageProps) {
+function BottomPageLayout({ isopen, onCloseRequest, children }: BottomPageProps) {
   const [visible, setVisible] = useState<boolean>(false);
 
   useEffect(() => {
     let timeoutId: NodeJS.Timeout;
-    if (isOpen) {
+    if (isopen) {
       setVisible(() => true);
     } else {
       timeoutId = setTimeout(() => setVisible(() => false), 350);
@@ -23,14 +23,14 @@ function BottomPageLayout({ isOpen, onCloseRequest, children }: BottomPageProps)
         clearTimeout(timeoutId);
       }
     };
-  }, [isOpen]);
+  }, [isopen]);
 
   if (!visible) {
     return null;
   }
 
   return (
-    <PageContainer isOpen={isOpen}>
+    <PageContainer isopen={isopen}>
       <Top>
         <XMarkIcon onClick={onCloseRequest} />
       </Top>
@@ -57,14 +57,14 @@ const SlideDown = keyframes`
   }
 `;
 
-const PageContainer = styled.div<{ isOpen: boolean }>`
+const PageContainer = styled.div<{ isopen: boolean }>`
   position: fixed;
   top: 0;
   bottom: 0;
   background: var(--MR_WHITE);
   z-index: 20;
   width: min(100%, 430px);
-  animation: ${({ isOpen }) => (isOpen ? SlideUp : SlideDown)} 0.35s ease-in-out forwards;
+  animation: ${({ isopen }) => (isopen ? SlideUp : SlideDown)} 0.35s ease-in-out forwards;
 `;
 
 const Top = styled.div`
