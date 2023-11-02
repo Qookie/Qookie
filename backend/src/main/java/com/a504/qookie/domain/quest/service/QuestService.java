@@ -27,12 +27,18 @@ public class QuestService {
 	private final CookieRepository cookieRepository;
 	private final RedisTemplate<String, String> template;
 
+
+	public Boolean checkQuest(Member member, String questName){
+		return null;
+	}
+
 	public void completeQuest(Member member, String questName){
 		memberQuestRepository.save(
 			MemberQuest.builder()
 				.member(member)
 				.quest(questRepository.findByName(questName)
 					.orElseThrow(() -> new IllegalArgumentException("존재하지 앟는 퀘스트 입니다.")))
+				.challenge(false)
 				.build());
 		pointUpdate(member, 10);
 		updateExp(member);
@@ -46,6 +52,7 @@ public class QuestService {
 				.quest(questRepository.findByName(questName)
 					.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 퀘스트입니다.")))
 				.image(imageName)
+				.challenge(false)
 				.build());
 		pointUpdate(member, 10);
 		updateExp(member);
@@ -131,24 +138,34 @@ public class QuestService {
 		if (questName.equals("WAKE") || questName.equals("EAT") || questName.equals("WALK")){ // 기상, 식사, 산책은 월간도 있어서
 			// 월간 챌린지 업데이트 및 알림 해주는 부분
 			 String cur_month = LocalDateTime.now().getMonth().toString();
-			 String monthly_challenge_key = member.getId() + ":" + cur_month + ":" +questName; // (유저PK):(이번달):(퀘스트이름)
-			 String monthly_challenge_value = template.opsForValue().get(monthly_challenge_key); // 클리어 횟수
-			 if (monthly_challenge_value == null){
-				template.opsForValue().set(monthly_challenge_key, "1");
-			 }else{
-				template.opsForValue().set(monthly_challenge_key, Long.parseLong(monthly_challenge_value) + 1L + "");
-			 }
+			 int cur_year = LocalDateTime.now().getYear();
+			 int cur_day = LocalDateTime.now().getDayOfMonth();
+			 String monthly_challenge_key = member.getId() + ":"+ cur_year +":" + cur_month + ":" +questName; // (유저PK):(년도):(이번달):(퀘스트이름)
+			template.opsForSet().add(monthly_challenge_key, cur_day + ""); // 날짜
 			 if (questName.equals("WAKE") || questName.equals("EAT")){
-				 if (Long.parseLong(template.opsForValue().get(monthly_challenge_key)) == 15){
+				 if (template.opsForSet().size(monthly_challenge_key) == 15){
+					 memberQuestRepository.save(
+						 MemberQuest.builder()
+							 .member(member)
+							 .quest(questRepository.findByName(questName)
+								 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 퀘스트입니다.")))
+							 .challenge(true)
+							 .build());
 					 /* TODO : 알림 해주기 */
 				 }
 			 }else{
-				 if (Long.parseLong(template.opsForValue().get(monthly_challenge_key)) == 10){
+				 if (template.opsForSet().size(monthly_challenge_key) == 10){
+					 memberQuestRepository.save(
+						 MemberQuest.builder()
+							 .member(member)
+							 .quest(questRepository.findByName(questName)
+								 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 퀘스트입니다.")))
+							 .challenge(true)
+							 .build());
 					 /* TODO : 알림 해주기 */
 				 }
 			 }
 		}
-
 		// 뱃지 챌린지 업데이트 및 알림해주는 기능
 		String badge_challenge_key = member.getId() + ":" + questName; // (유저PK):(퀘스트이름)
 		String badge_challenge_value = template.opsForValue().get(badge_challenge_key);
@@ -157,7 +174,6 @@ public class QuestService {
 		}else{
 			template.opsForValue().set(badge_challenge_key, Long.parseLong(badge_challenge_value) + 1L + "");
 		}
-
 		if (questName.equals("PHOTO")){ // 하늘사진 찍기라면
 			// 위에서 업데이트 했기 때문에 null이 될 수 없음이 보장됨
 			Long cnt = Long.parseLong(template.opsForValue().get(badge_challenge_key));
