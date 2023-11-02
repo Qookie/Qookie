@@ -1,8 +1,9 @@
 from flask import Flask, request, jsonify
-import logging
 import pika
+from threading import Thread
 from rabbitmq_connection import connection
 from gpt_client import send_to_gpt
+import json
 
 app = Flask(__name__)
 
@@ -16,14 +17,15 @@ def send_letter():
 
 @app.route("/gpt/rabbit/send", methods=["GET"])
 def rabbit_send():
+    body = {"content": "testContent", "heartId": 7}
+
     channel = connection.channel()
-    channel.queue_declare(queue="from_spring")
-    channel.exchange_declare(exchange="from_spring", exchange_type="direct")
+    channel.queue_declare(queue="queue_from_flask", durable=True)
     channel.queue_bind(
-        queue="from_spring", exchange="from_spring", routing_key="from_spring"
+        queue="queue_from_flask", exchange="test_exchange2", routing_key="to_spring"
     )
     channel.basic_publish(
-        exchange="from_spring", routing_key="from_spring", body="test_message"
+        exchange="test_exchange2", routing_key="to_spring", body=json.dumps(body)
     )
     return jsonify("sent!")
 
@@ -35,24 +37,28 @@ def callback(ch, method, properties, body):
 
 def listen_spring(connection_: pika.BlockingConnection):
     print("listening")
-    channel = connection_.channel()
-    channel.queue_declare(queue="from_spring", durable=True)
-    channel.basic_consume("from_spring", callback, auto_ack=True)
+    channel = connection.channel()
+
+    # channel.exchange_declare(
+    #     exchange="test_exchange2", exchange_type="direct", durable=False
+    # )
+
+    channel.queue_declare(queue="from_spring")
+    channel.queue_bind(
+        queue="from_spring", exchange="test_exchange2", routing_key="to_flask"
+    )
+
+    channel.basic_consume(
+        queue="from_spring", on_message_callback=callback, auto_ack=True
+    )
     channel.start_consuming()
 
 
 if __name__ == "__main__":
-    app.logger.setLevel(level=logging.INFO)
-    app.logger.info("INFO LOGING INFO LOGING INFO LOGING INFO LOGING INFO LOGING ")
-    app.logger.warning(
-        "warning LOGING warning LOGING warning LOGING warning LOGING warning LOGING "
-    )
-    app.logger.error(
-        "error LOGING error LOGING error LOGING error LOGING error LOGING "
-    )
-    print("running1")
-    app.run(debug=True, port=5000)
-    print("running2")
-
     # rabbitMQ
-    listen_spring(connection)
+    listener_thread = Thread(target=listen_spring(connection))
+    listener_thread.daemon = True
+    listener_thread.start()
+
+    # flask
+    app.run(debug=True, port=5000)

@@ -1,6 +1,7 @@
-package com.a504.qookie.global.config;
+package com.a504.qookie.global.rabbitMQ;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
@@ -24,6 +25,42 @@ public class RabbitMqConfig {
 
     @Value("${rabbitmq.password}")
     private String rabbitPassword;
+
+    @Bean
+    Queue queueFromSpring() {
+        return new Queue(RabbitMqEnum.QUEUE_FROM_SPRING.getValue());
+    }
+    @Bean
+    Queue queueFromFlask() {
+        return new Queue(RabbitMqEnum.QUEUE_FROM_FLASK.getValue());
+    }
+
+    @Bean
+    DirectExchange exchange() {
+        return new DirectExchange(RabbitMqEnum.GPT_EXCHANGE.getValue());
+    }
+
+    @Bean
+    Binding bindingFromSpring(
+            Queue queueFromSpring,
+            DirectExchange exchange
+    ) {
+        return BindingBuilder
+                .bind(queueFromSpring)
+                .to(exchange)
+                .with(RabbitMqEnum.ROUTING_KEY_TO_FLASK);
+    }
+
+    @Bean
+    Binding bindingFromFlask(
+            Queue queueFromFlask,
+            DirectExchange exchange
+    ) {
+        return BindingBuilder
+                .bind(queueFromFlask)
+                .to(exchange)
+                .with(RabbitMqEnum.ROUTING_KEY_TO_SPRING);
+    }
 
     @Bean
     public CachingConnectionFactory connectionFactory() {

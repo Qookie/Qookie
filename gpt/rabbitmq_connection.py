@@ -17,10 +17,13 @@ class SingletonConnection:
     def connect(self, credentials, max_retries=5):
         try:
             self.connection = pika.BlockingConnection(
+                # pika.ConnectionParameters(
+                #     host=os.getenv("RABBITMQ_HOST"),
+                #     port=os.getenv("RABBITMQ_PORT"),
+                #     credentials=credentials,
+                # )
                 pika.ConnectionParameters(
-                    host=os.getenv("RABBITMQ_HOST"),
-                    port=os.getenv("RABBITMQ_PORT"),
-                    credentials=credentials,
+                    host="localhost", port=5672, credentials=credentials
                 )
             )
         except pika.exceptions.AMQPConnectionError:
@@ -41,7 +44,9 @@ class SingletonConnection:
 
 # rabbitMQ
 cred = pika.PlainCredentials(
-    username=os.getenv("RABBITMQ_USER"), password=os.getenv("RABBITMQ_PASSWORD")
+    username="newjeans",
+    password="ss501ss501"
+    # username=os.getenv("RABBITMQ_USER"), password=os.getenv("RABBITMQ_PASSWORD")
 )
 instance = SingletonConnection()
 instance.connect(cred)

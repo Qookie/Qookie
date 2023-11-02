@@ -36,11 +36,4 @@ public class HeartService {
                 .map(HeartResponse::new)
                 .toList();
     }
-
-    @Transactional
-    public Heart saveReply(MessageResponse messageResponse) throws NoSuchElementException {
-        Optional<Heart> optionalHeart = heartRepository.findById(messageResponse.getHeartId());
-        Heart heart = optionalHeart.orElseThrow(NoSuchElementException::new);
-        return heart.saveReply(messageResponse.getContent());
-    }
 }
