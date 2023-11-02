@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import { Qoin } from '../../../../assets/svgs';
-import { Exp } from '../../../../assets/svgs';
 import Text from '../../../shared/atoms/Text';
 
 interface MoneyProps {
@@ -8,18 +7,12 @@ interface MoneyProps {
 }
 
 export default function Money({ MoneyTheme = 'default' }: MoneyProps) {
-  const coin = 4200;
-  const exp = 15200;
+  const coin = 14200;
 
   return (
     <MoneyCard MoneyTheme={MoneyTheme}>
-      <StyledText>적립된 보상</StyledText>
+      <StyledText>보유 코인</StyledText>
       <Container>
-        <ExpContainer>
-          <Exp width={20} height={20} />
-          {exp}
-        </ExpContainer>
-        |
         <CoinContainer>
           <Qoin width={20} height={20} />
           {coin}
@@ -50,15 +43,7 @@ const MoneyCard = styled.div<MoneyProps>`
 const Container = styled.div`
   width: 100%;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1.75rem;
-`;
-
-const ExpContainer = styled.div`
-  width: 7rem;
-  display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
 `;
 
@@ -67,6 +52,7 @@ const CoinContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-right: 20px;
 `;
 
 const StyledText = styled(Text)`

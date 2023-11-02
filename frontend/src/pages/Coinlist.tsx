@@ -2,8 +2,6 @@ import styled from 'styled-components';
 import Money from '../components/coinlist/molecules/Money';
 import Text from '../components/shared/atoms/Text';
 import MonthSelector from '../components/coinlist/molecules/MonthSelector';
-import { MonthState } from '../components/coinlist/molecules/MonthSelector';
-import { useRecoilState } from 'recoil';
 import RewardData from '../components/coinlist/molecules/RewardData';
 
 export default function Coinlist() {
@@ -18,14 +16,11 @@ export default function Coinlist() {
       <Divider />
       <BottomContainer>
         <MonthSelector />
-        <RewardData date={'10.12'} title={'기상 퀘스트 달성 보상'} exp={10} />
         <RewardData date={'10.12'} title={'기상 퀘스트 달성 보상'} qoin={10} />
-        <RewardData date={'10.12'} title={'식사 퀘스트 달성 보상'} exp={10} />
         <RewardData date={'10.12'} title={'식사 퀘스트 달성 보상'} qoin={10} />
+        <RewardData date={'10.12'} title={'토끼귀 구매'} qoin={-10} />
         <RewardData date={'10.11'} title={'10월 기상 챌린지 달성 보상'} qoin={100} />
-        <RewardData date={'10.11'} title={'기상 퀘스트 달성 보상'} exp={10} />
         <RewardData date={'10.11'} title={'기상 퀘스트 달성 보상'} qoin={10} />
-        <RewardData date={'10.11'} title={'식사 퀘스트 달성 보상'} exp={10} />
       </BottomContainer>
     </Container>
   );

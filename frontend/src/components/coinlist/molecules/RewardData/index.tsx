@@ -1,15 +1,14 @@
 import styled from 'styled-components';
-import { Qoin, Exp } from '../../../../assets/svgs';
+import { Qoin } from '../../../../assets/svgs';
 import Text from '../../../shared/atoms/Text';
 
 interface RewardProps {
   date?: string;
   title?: string;
   qoin?: number;
-  exp?: number;
 }
 
-export default function RewardData({ date, title, qoin, exp }: RewardProps) {
+export default function RewardData({ date, title, qoin }: RewardProps) {
   return (
     <Container>
       <LeftContainer>
@@ -17,8 +16,8 @@ export default function RewardData({ date, title, qoin, exp }: RewardProps) {
         <Quest>{title}</Quest>
       </LeftContainer>
       <RewardContainer>
-        {qoin ? <Qoin width={15} height={15} /> : <Exp width={15} height={15} />}
-        <Reward>{qoin || exp}</Reward>
+        <Qoin width={15} height={15} />
+        <Reward>{qoin}</Reward>
       </RewardContainer>
     </Container>
   );

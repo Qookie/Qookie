@@ -18,13 +18,4 @@ export const Qoin: Story = {
   render: (args) => <RewardData {...args} />,
 };
 
-export const Exp: Story = {
-  args: {
-    date: '10.12',
-    title: '기상 퀘스트 달성 보상',
-    exp: 10,
-  },
-  render: (args) => <RewardData {...args} />,
-};
-
 
