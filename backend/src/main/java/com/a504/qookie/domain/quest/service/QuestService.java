@@ -44,7 +44,6 @@ public class QuestService {
 				.quest(questRepository.findByName(questName)
 					.orElseThrow(() -> new IllegalArgumentException("존재하지 앟는 퀘스트 입니다.")))
 				.build());
-		member.setExp(10);
 		pointUpdate(member, 10);
 		updateExp(member);
 		checkChallenge(member, questName);
@@ -59,7 +58,6 @@ public class QuestService {
 					.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 퀘스트입니다.")))
 				.image(imageName)
 				.build());
-		member.setExp(10);
 		pointUpdate(member, 10);
 		updateExp(member);
 		checkChallenge(member, questName);

@@ -47,9 +47,6 @@ public class Member {
 	@Column(name = "active", nullable = false, columnDefinition = "TINYINT(1)")
 	private Boolean active;
 
-	@Column(name="total_exp")
-	private Long exp;
-
 	@PrePersist
 	@PreUpdate
 	private void setActiveDefault() {
@@ -105,6 +102,4 @@ public class Member {
 	}
 
 	public void buy(int point) { this.point -= point; }
-
-	public void setExp(int exp) {this.exp += exp;}
 }
