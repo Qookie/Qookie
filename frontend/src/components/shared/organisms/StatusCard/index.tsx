@@ -8,8 +8,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import BottomPageLayout from '../../Template/BottomPageLayout';
 import TitleLayout from '../../Template/TitleLayout';
-import Qookie from '../../molecules/Qookie';
 import { QookieInfo } from '../../../../types';
+import BakeQookie from '../BakeQookie';
 
 export interface StatusCardProps {
   level: number;
@@ -100,26 +100,18 @@ export default function StatusCard({ ...props }: QookieInfo) {
           onNegativeClick={openBottomHandler}
           positive="쿠키 꾸미기"
           onPositiveClick={() => navigate('/store')}
-          isOpen={isDialogOpen}
+          isopen={isDialogOpen}
           onCloseRequest={openDialogHandler}
         />
         <BottomPageLayout
-          isOpen={isBottomOpen}
+          isopen={isBottomOpen}
           onCloseRequest={openBottomHandler}
           children={
             <TitleLayout
               title={'쿠키 만들기가 완료되었습니다.'}
               desc={`저를 멋진 쿠키로 만들어주셔서 감사해요! \n직접 만든 쿠키를 확인해보세요.`}
             >
-              <BottomInner>
-                <QookieContainer>
-                  <Qookie {...bakeProps} />
-                </QookieContainer>
-                <BottomBtnContainer>
-                  <TextBtn onClick={() => navigate('/myqookie')}>쿠키 보러 가기</TextBtn>
-                  <Button onClick={openBottomHandler}>완료</Button>
-                </BottomBtnContainer>
-              </BottomInner>
+              <BakeQookie {...bakeProps} />
             </TitleLayout>
           }
         />
@@ -166,39 +158,4 @@ const RightContainer = styled.div`
 
 const ButtonContainer = styled.div`
   margin-left: auto;
-`;
-
-const BottomInner = styled.div`
-  padding: 0 1rem;
-`;
-
-const TextBtn = styled.button`
-  width: 100%;
-  height: 44px;
-  border-radius: 12px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: none;
-  font-weight: 600;
-  font-size: 20px;
-  color: var(--MR_RED);
-  background-color: transparent;
-`;
-
-const QookieContainer = styled.div`
-  height: 300px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-`;
-
-const BottomBtnContainer = styled.div`
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  padding: 0.75rem 1rem;
-  box-sizing: border-box;
 `;
