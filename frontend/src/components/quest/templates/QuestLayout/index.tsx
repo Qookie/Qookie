@@ -1,17 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import TitleLayout from '../../../shared/Template/TitleLayout';
 import Button from '../../../shared/atoms/Button';
 import styled from 'styled-components';
 import Toast from '../../../shared/molecules/Alert';
 
-type QuestStatus = 'DEFAULT' | 'COMPLETE' | 'SUCCESS';
+export type QuestStatus = 'DEFAULT' | 'COMPLETE' | 'SUCCESS';
 
 interface Props {
+  questStatus: QuestStatus;
   title: React.ReactNode;
   desc: React.ReactNode;
   completeButtonText: string;
   completeQuest: () => void;
-  fetchQuestStatus: () => QuestStatus;
+  setQuestStatus: (status: QuestStatus) => void;
   Subcomponent?: React.ReactNode;
   children?: React.ReactNode;
 }
@@ -30,16 +31,10 @@ function QuestLayout({
   children,
   completeButtonText,
   Subcomponent,
-  fetchQuestStatus,
   completeQuest,
+  setQuestStatus,
+  questStatus,
 }: Props) {
-  const [questStatus, setQuestStatus] = useState<QuestStatus>('DEFAULT');
-
-  useEffect(() => {
-    const ret = fetchQuestStatus();
-    setQuestStatus(ret);
-  }, []);
-
   const onClickComplete = async () => {
     await completeQuest();
     setQuestStatus('SUCCESS');
