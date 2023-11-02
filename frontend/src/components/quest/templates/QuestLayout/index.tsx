@@ -8,11 +8,11 @@ type QuestStatus = 'DEFAULT' | 'COMPLETE' | 'SUCCESS';
 interface Props {
   title: React.ReactNode;
   desc: React.ReactNode;
-  Subcomponent: React.ReactNode;
   completeButtonText: string;
   completeQuest: () => void;
-  children?: React.ReactNode;
   fetchQuestStatus: () => QuestStatus;
+  Subcomponent?: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 const ButtomThemeMap: {
