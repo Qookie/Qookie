@@ -73,4 +73,10 @@ public class MemberService {
                 .orElseThrow(() -> new IllegalArgumentException("멤버가 없습니다"))
                 .deleteMember();
     }
+
+    public void getCoinList(Member member){
+        Long totalExp = member.getExp();
+        int totalPoint = member.getPoint();
+
+    }
 }

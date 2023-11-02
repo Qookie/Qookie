@@ -37,18 +37,21 @@ public class QuestService {
 	}
 
 	public void completeQuest(Member member, String questName) {
+		member = memberRepository.findById(member.getId()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자 입니다."));
 		memberQuestRepository.save(
 			MemberQuest.builder()
 				.member(member)
 				.quest(questRepository.findByName(questName)
 					.orElseThrow(() -> new IllegalArgumentException("존재하지 앟는 퀘스트 입니다.")))
 				.build());
+		member.setExp(10);
 		pointUpdate(member, 10);
 		updateExp(member);
 		checkChallenge(member, questName);
 	}
 
 	public void completeQuest(Member member, String questName, String imageName) {
+		member = memberRepository.findById(member.getId()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자 입니다."));
 		memberQuestRepository.save(
 			MemberQuest.builder()
 				.member(member)
@@ -56,6 +59,7 @@ public class QuestService {
 					.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 퀘스트입니다.")))
 				.image(imageName)
 				.build());
+		member.setExp(10);
 		pointUpdate(member, 10);
 		updateExp(member);
 		checkChallenge(member, questName);
@@ -137,6 +141,7 @@ public class QuestService {
 	}
 
 	public void checkChallenge(Member member, String questName) {
+		member = memberRepository.findById(member.getId()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
 		String cur_month = LocalDateTime.now().getMonth().toString();
 		int cur_year = LocalDateTime.now().getYear();
 		int cur_day = LocalDateTime.now().getDayOfMonth();
@@ -147,10 +152,12 @@ public class QuestService {
 			template.opsForSet().add(monthly_challenge_key, cur_day + ""); // 날짜
 			if (questName.equals("WAKE") || questName.equals("EAT")) {
 				if (template.opsForSet().size(monthly_challenge_key) == 15) {
+					member.setPoint(100);
 					/* TODO : 알림 해주기 */
 				}
 			} else {
 				if (template.opsForSet().size(monthly_challenge_key) == 10) {
+					member.setPoint(100);
 					/* TODO : 알림 해주기 */
 				}
 			}
@@ -163,23 +170,29 @@ public class QuestService {
 			// 위에서 업데이트 했기 때문에 null이 될 수 없음이 보장됨
 			Long size = template.opsForSet().size(badge_challenge_key);
 			if (size == 5) {
+				member.setPoint(30);
 				/* TODO : 알림 해주기 */
 			}
 			if (size == 10) {
+				member.setPoint(50);
 				/* TODO : 알림 해주기 */
 			}
 			if (size == 15) {
+				member.setPoint(100);
 				/* TODO : 알림 해주기 */
 			}
 		} else {
 			Long size = template.opsForSet().size(badge_challenge_key);
 			if (size == 10) {
+				member.setPoint(30);
 				/* TODO : 알림 해주기 */
 			}
 			if (size == 50) {
+				member.setPoint(50);
 				/* TODO : 알림 해주기 */
 			}
 			if (size == 100) {
+				member.setPoint(30);
 				/* TODO : 알림 해주기 */
 			}
 		}
