@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import Toast from '.';
+import 'react-toastify/dist/ReactToastify.css';
 
 const meta: Meta<typeof Toast> = {
   component: Toast,

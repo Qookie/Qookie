@@ -18,7 +18,7 @@ public class MemberRepositoryCustomImpl implements MemberRepositoryCustom{
     QCookie cookie = QCookie.cookie;
 
     @Override
-    public MemberResponse findMemberIfoById(Long memberId) {
+    public MemberResponse findMemberInfoById(Long memberId) {
         return jpaQueryFactory.select(
                         Projections.constructor(MemberResponse.class, member.name, member.wakeUp, cookie.name))
                 .from(cookie)

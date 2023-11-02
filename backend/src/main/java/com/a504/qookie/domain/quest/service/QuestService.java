@@ -59,7 +59,8 @@ public class QuestService {
 	}
 
 	public void updateExp(Member member){
-		Cookie cookie = cookieRepository.findByMember(member);
+		Cookie cookie = cookieRepository.findByMember(member)
+				.orElseThrow(() -> new IllegalArgumentException("쿠키가 없습니다"));
 		int cur_level = cookie.getLevel();
 		int cur_exp = cookie.getExp();
 		if (cur_level < 5){ // 그냥 경험치 받을때마다 레벨업함
