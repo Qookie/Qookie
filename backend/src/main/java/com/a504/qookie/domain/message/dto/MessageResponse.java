@@ -12,4 +12,5 @@ import java.time.LocalDateTime;
 public class MessageResponse {
     private String content;
     private LocalDateTime createdAt;
+    private Long heartId;
 }

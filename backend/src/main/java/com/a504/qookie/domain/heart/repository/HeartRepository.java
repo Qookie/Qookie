@@ -6,5 +6,5 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface HeartRepository extends JpaRepository<Heart, Long> {
-    List<Heart> findByMember(Member member);
+    List<Heart> findAllByMember(Member member);
 }

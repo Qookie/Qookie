@@ -18,23 +18,18 @@ public class HeartService {
     private final HeartRepository heartRepository;
 
     @Transactional
-    public void create(Member member, HeartRequest heartRequest) {
+    public Heart create(Member member, HeartRequest heartRequest) {
 
         Heart heart = new Heart(member, heartRequest);
 
-        heartRepository.save(heart);
+        return heartRepository.save(heart);
     }
 
     @Transactional
     public List<HeartResponse> list(Member member) {
-
-        List<Heart> hearts = heartRepository.findByMember(member);
-
-        List<HeartResponse> heartResponses = new ArrayList<>();
-        for (Heart heart:hearts) {
-            heartResponses.add(new HeartResponse(heart));
-        }
-
-        return heartResponses;
+        return heartRepository.findAllByMember(member)
+                .stream()
+                .map(HeartResponse::new)
+                .toList();
     }
 }

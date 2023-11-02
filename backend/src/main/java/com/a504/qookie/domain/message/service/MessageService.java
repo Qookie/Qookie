@@ -18,6 +18,9 @@ public class MessageService {
 
     @RabbitListener
     public MessageResponse receiveMessage(MessageResponse messageResponse) {
+        // get message from flask
+        // send firebase notification
+        // save reply to db
         return messageResponse;
     }
 }
