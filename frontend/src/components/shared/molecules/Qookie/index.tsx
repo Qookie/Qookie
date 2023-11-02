@@ -4,13 +4,20 @@ import { QookieInfo } from '../../../../types';
 export default function Qookie({ ...props }: QookieInfo) {
   return (
     <BackgroundContainer background={props.background}>
-      {props.level > 0 && (
-        <DoughContainer>
-          <DoughImg src={props.body} alt="dough" />
-          <EyeContainer eye={props.eye} />
-          <MouthContainer mouth={props.mouth} />
-        </DoughContainer>
-      )}
+      <Container>
+        {props.level > 0 && (
+          <DoughContainer>
+            <DoughImg src={props.body} alt="dough" />
+            <EyeContainer eye={props.eye} />
+            <MouthContainer mouth={props.mouth} />
+          </DoughContainer>
+        )}
+        {props.level >= 5 && props.level < 10 && (
+          <BagContainer>
+            <BagImg src={props.extraBody} alt="bag" />
+          </BagContainer>
+        )}
+      </Container>
     </BackgroundContainer>
   );
 }
@@ -26,20 +33,28 @@ const BackgroundContainer = styled.div<{ background: string }>`
   align-items: center;
 `;
 
-// const DoughContainer = styled.div<{ body: string }>`
-//   background: center/contain no-repeat url(${(props) => props.body});
-//   height: 319px;
-//   width: 415px;
-//   position: relative;
-// `;
+const Container = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
 
 const DoughContainer = styled.div`
   transform: scale(0.4);
-`
-
-const DoughImg = styled.img`
-  position: relative;
 `;
+
+const BagContainer = styled.div`
+  position: absolute;
+  top: 44%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.4);
+`;
+
+const DoughImg = styled.img``;
+
+const BagImg = styled.img``;
 
 const EyeContainer = styled.div<{ eye: string }>`
   position: absolute;
