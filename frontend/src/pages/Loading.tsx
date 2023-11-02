@@ -4,6 +4,7 @@ import { http } from '../api/instance';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import Spinner from '../components/shared/atoms/Spinner';
+import initiateFirebaseMessaging from '../firebase/firebaseMessaging';
 
 type LoginResponse = {
   msg: string;
@@ -18,8 +19,9 @@ const Loading = () => {
   const navigate = useNavigate();
   const socialLoginCallback = async () => {
     const res = await getRedirectResult(auth);
+    const messageToken = await initiateFirebaseMessaging()
 
-    if (!res) {
+    if (!res || messageToken === "") {
       return;
     }
 
@@ -33,7 +35,7 @@ const Loading = () => {
         displayName,
         email,
         uid,
-        messageToken: localStorage.getItem('messageToken'),
+        messageToken: messageToken,
       });
 
       if (res.payload.new) {

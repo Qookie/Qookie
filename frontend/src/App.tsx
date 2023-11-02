@@ -3,12 +3,8 @@ import Router from './router/Router';
 import GlobalStyle from './styles/GlobalStyle';
 import styled from 'styled-components';
 import { RecoilRoot } from 'recoil';
-// firebase cloud messaging
-import initiateFirebaseMessaging from './firebase/firebaseMessaging';
 
 function App() {
-  // TODO: move this to when new user register or login
-  initiateFirebaseMessaging();
   return (
     <RecoilRoot>
       <Layout>
