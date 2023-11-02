@@ -70,6 +70,11 @@ export default function StatusCard({ ...props }: QookieInfo) {
     }
   };
 
+  const bakeProps = {
+    ...props,
+    background: '',
+  };
+
   return (
     <>
       <Container>
@@ -107,9 +112,13 @@ export default function StatusCard({ ...props }: QookieInfo) {
               desc={`저를 멋진 쿠키로 만들어주셔서 감사해요! \n직접 만든 쿠키를 확인해보세요.`}
             >
               <BottomInner>
-                <Qookie {...props} />
-                <TextBtn onClick={() => navigate('/myqookie')}>쿠키 보러 가기</TextBtn>
-                <Button onClick={openBottomHandler}>완료</Button>
+                <QookieContainer>
+                  <Qookie {...bakeProps} />
+                </QookieContainer>
+                <BottomBtnContainer>
+                  <TextBtn onClick={() => navigate('/myqookie')}>쿠키 보러 가기</TextBtn>
+                  <Button onClick={openBottomHandler}>완료</Button>
+                </BottomBtnContainer>
               </BottomInner>
             </TitleLayout>
           }
@@ -175,4 +184,21 @@ const TextBtn = styled.button`
   font-size: 20px;
   color: var(--MR_RED);
   background-color: transparent;
+`;
+
+const QookieContainer = styled.div`
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+`;
+
+const BottomBtnContainer = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  box-sizing: border-box;
 `;
