@@ -2,9 +2,7 @@ package com.a504.qookie.domain.heart.repository;
 
 import com.a504.qookie.domain.heart.dto.HeartResponse;
 import com.a504.qookie.domain.heart.entity.QHeart;
-import com.a504.qookie.domain.item.entity.QItem;
 import com.a504.qookie.domain.member.entity.Member;
-import com.a504.qookie.domain.member.entity.QMemberItem;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;

@@ -7,7 +7,6 @@ import com.a504.qookie.domain.heart.entity.Heart;
 import com.a504.qookie.domain.heart.repository.HeartRepository;
 import com.a504.qookie.domain.member.entity.Member;
 import jakarta.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
