@@ -1,5 +1,6 @@
 package com.a504.qookie.domain.heart.service;
 
+import com.a504.qookie.domain.heart.dto.HeartListRequest;
 import com.a504.qookie.domain.heart.dto.HeartRequest;
 import com.a504.qookie.domain.heart.dto.HeartResponse;
 import com.a504.qookie.domain.heart.entity.Heart;
@@ -26,15 +27,9 @@ public class HeartService {
     }
 
     @Transactional
-    public List<HeartResponse> list(Member member) {
+    public List<HeartResponse> list(HeartListRequest heartListRequest, Member member) {
 
-        List<Heart> hearts = heartRepository.findByMember(member);
+        return  heartRepository.findHeartByMonthAndMember(heartListRequest.time(), member);
 
-        List<HeartResponse> heartResponses = new ArrayList<>();
-        for (Heart heart:hearts) {
-            heartResponses.add(new HeartResponse(heart));
-        }
-
-        return heartResponses;
     }
 }

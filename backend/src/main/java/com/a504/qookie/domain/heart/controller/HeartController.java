@@ -1,5 +1,6 @@
 package com.a504.qookie.domain.heart.controller;
 
+import com.a504.qookie.domain.heart.dto.HeartListRequest;
 import com.a504.qookie.domain.heart.dto.HeartRequest;
 import com.a504.qookie.domain.heart.dto.HeartResponse;
 import com.a504.qookie.domain.heart.service.HeartService;
@@ -35,9 +36,10 @@ public class HeartController {
 
     @GetMapping("/list")
     public ResponseEntity<?> list(
+            @RequestBody HeartListRequest heartListRequest,
             @AuthenticationPrincipal CustomMemberDetails customMemberDetails) {
 
-        List<HeartResponse> heartResponses = heartService.list(customMemberDetails.getMember());
+        List<HeartResponse> heartResponses = heartService.list(heartListRequest, customMemberDetails.getMember());
 
         return BaseResponse.okWithData(HttpStatus.OK, "heart list OK", heartResponses);
     }
