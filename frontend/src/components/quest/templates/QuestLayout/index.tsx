@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import TitleLayout from '../../../shared/Template/TitleLayout';
 import Button from '../../../shared/atoms/Button';
 import styled from 'styled-components';
+import Toast from '../../../shared/molecules/Alert';
 
 type QuestStatus = 'DEFAULT' | 'COMPLETE' | 'SUCCESS';
 
@@ -53,6 +54,7 @@ function QuestLayout({
           {completeButtonText}
         </Button>
       </ButtonConatainer>
+      <Toast />
     </TitleLayout>
   );
 }
