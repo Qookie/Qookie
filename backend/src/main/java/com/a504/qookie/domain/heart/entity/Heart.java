@@ -41,7 +41,7 @@ public class Heart {
 	private LocalDateTime createdAt;
 
 	@Column(name = "category")
-	private int category;
+	private String category;
 
 	@Column(name = "reply")
 	private String reply;

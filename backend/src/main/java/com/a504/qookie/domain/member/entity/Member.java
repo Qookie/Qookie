@@ -100,4 +100,6 @@ public class Member {
 	public void setPoint(int point){
 		this.point += point;
 	}
+
+	public void buy(int point) { this.point -= point; }
 }

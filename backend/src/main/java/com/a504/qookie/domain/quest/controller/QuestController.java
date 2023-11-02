@@ -1,10 +1,10 @@
 package com.a504.qookie.domain.quest.controller;
 
-import java.util.Locale;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +17,6 @@ import com.a504.qookie.domain.quest.service.AwsS3Service;
 import com.a504.qookie.domain.quest.service.QuestService;
 import com.a504.qookie.global.response.BaseResponse;
 import com.a504.qookie.global.security.CustomMemberDetails;
-import com.amazonaws.Response;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,6 +27,16 @@ public class QuestController {
 
 	private final QuestService questService;
 	private final AwsS3Service awsS3Service;
+
+	// 완료 했는지 안했는지만
+	@GetMapping("/{questName}")
+	public ResponseEntity<?> checkQuest(@AuthenticationPrincipal CustomMemberDetails member,
+		@PathVariable String questName){
+		Boolean isComplete = questService.checkQuest(member.getMember(), questName.toUpperCase());
+		return BaseResponse.okWithData(HttpStatus.OK, "쿼스트 완료 여부 확인", isComplete);
+	}
+
+
 
 	// 사진 안쓰는 퀘스트
 	@PostMapping("/{questName}")
