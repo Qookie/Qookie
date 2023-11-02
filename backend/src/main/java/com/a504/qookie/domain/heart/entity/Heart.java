@@ -47,4 +47,9 @@ public class Heart {
 		this.category = heartRequest.category();
 		this.content = heartRequest.content();
 	}
+
+	public Heart saveReply(String r) {
+		reply = r;
+		return this;
+	}
 }

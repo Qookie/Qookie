@@ -5,9 +5,13 @@ import com.a504.qookie.domain.heart.dto.HeartResponse;
 import com.a504.qookie.domain.heart.entity.Heart;
 import com.a504.qookie.domain.heart.repository.HeartRepository;
 import com.a504.qookie.domain.member.entity.Member;
+import com.a504.qookie.domain.message.dto.MessageResponse;
 import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -31,5 +35,12 @@ public class HeartService {
                 .stream()
                 .map(HeartResponse::new)
                 .toList();
+    }
+
+    @Transactional
+    public Heart saveReply(MessageResponse messageResponse) throws NoSuchElementException {
+        Optional<Heart> optionalHeart = heartRepository.findById(messageResponse.getHeartId());
+        Heart heart = optionalHeart.orElseThrow(NoSuchElementException::new);
+        return heart.saveReply(messageResponse.getContent());
     }
 }
