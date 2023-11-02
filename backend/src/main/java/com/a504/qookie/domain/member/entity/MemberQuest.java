@@ -49,6 +49,4 @@ public class MemberQuest {
 	@Column(name = "created_at")
 	private LocalDateTime createdAt;
 
-	@Column(name = "challenge")
-	private Boolean challenge;
 }
