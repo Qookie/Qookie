@@ -8,8 +8,8 @@ interface MoneyProps {
 }
 
 export default function Money({ MoneyTheme = 'default' }: MoneyProps) {
-  const coin = 200;
-  const exp = 200;
+  const coin = 4200;
+  const exp = 15200;
 
   return (
     <MoneyCard MoneyTheme={MoneyTheme}>
@@ -56,14 +56,14 @@ const Container = styled.div`
 `;
 
 const ExpContainer = styled.div`
-  width: 22.5%;
+  width: 7rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
 `;
 
 const CoinContainer = styled.div`
-  width: 22.5%;
+  width: 7rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
