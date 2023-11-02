@@ -17,16 +17,17 @@ class SingletonConnection:
     def connect(self, credentials, max_retries=5):
         try:
             self.connection = pika.BlockingConnection(
-                # pika.ConnectionParameters(
-                #     host=os.getenv("RABBITMQ_HOST"),
-                #     port=os.getenv("RABBITMQ_PORT"),
-                #     credentials=credentials,
-                # )
                 pika.ConnectionParameters(
-                    host="localhost", port=5672, credentials=credentials
+                    host=os.getenv("RABBITMQ_HOST"),
+                    port=int(os.getenv("RABBITMQ_PORT")),
+                    credentials=credentials,
                 )
+                # pika.ConnectionParameters(
+                #     host="localhost", port=5672, credentials=credentials
+                # )
             )
-        except pika.exceptions.AMQPConnectionError:
+        except pika.exceptions.AMQPConnectionError as e:
+            print(e)
             retry_count = 0
             while retry_count < max_retries:
                 retry_count += 1
@@ -42,13 +43,20 @@ class SingletonConnection:
             self.connection.close()
 
 
-# rabbitMQ
-cred = pika.PlainCredentials(
-    username="newjeans",
-    password="ss501ss501"
-    # username=os.getenv("RABBITMQ_USER"), password=os.getenv("RABBITMQ_PASSWORD")
-)
-instance = SingletonConnection()
-instance.connect(cred)
-connection = instance.connection
-atexit.register(connection.close)
+def make_connection():
+    # rabbitMQ
+    cred = pika.PlainCredentials(
+        # username="newjeans",
+        # password="ss501ss501"
+        username=os.getenv("RABBITMQ_USER"),
+        password=os.getenv("RABBITMQ_PASSWORD"),
+    )
+    print(os.getenv("RABBITMQ_USER"))
+    print(os.getenv("RABBITMQ_PASSWORD"))
+    print(os.getenv("RABBITMQ_HOST"))
+    print(os.getenv("RABBITMQ_PORT"))
+    instance = SingletonConnection()
+    instance.connect(cred)
+    connection = instance.connection
+    atexit.register(connection.close)
+    return connection
