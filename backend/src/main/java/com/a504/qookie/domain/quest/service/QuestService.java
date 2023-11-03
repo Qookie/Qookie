@@ -21,7 +21,7 @@ import com.a504.qookie.domain.member.repository.HistoryRepository;
 import com.a504.qookie.domain.member.repository.MemberQuestRepository;
 import com.a504.qookie.domain.member.repository.MemberRepository;
 import com.a504.qookie.domain.quest.dto.CheckQuestResponse;
-import com.a504.qookie.domain.quest.dto.QuestStatus;
+// import com.a504.qookie.domain.quest.dto.QuestStatus;
 import com.a504.qookie.domain.quest.dto.QuestType;
 import com.a504.qookie.domain.quest.repository.QuestRepository;
 
@@ -303,17 +303,17 @@ public class QuestService {
 		return new AttendanceCalendarResponse(todayComplete, list);
 	}
 
-	public Map<Integer, QuestStatus> getMonthlyQuest(Member member, Integer year, Month month){
-		Map<Integer, QuestStatus> map = new HashMap<>();
-		LocalDateTime start = LocalDateTime.of(year, month, 1, 0, 0);
-		LocalDateTime end = LocalDateTime.of(year, month, month.maxLength(),23, 59, 59);
-		List<MemberQuest> list = memberQuestRepository.findAllByCreatedAtBetween(start, end);
-		for (MemberQuest memberQuest: list){
-			if (Objects.equals(memberQuest.getMember().getId(), member.getId())){
-
-			}
-		}
-
-		return map;
-	}
+	// public Map<Integer, QuestStatus> getMonthlyQuest(Member member, Integer year, Month month){
+	// 	Map<Integer, QuestStatus> map = new HashMap<>();
+	// 	LocalDateTime start = LocalDateTime.of(year, month, 1, 0, 0);
+	// 	LocalDateTime end = LocalDateTime.of(year, month, month.maxLength(),23, 59, 59);
+	// 	List<MemberQuest> list = memberQuestRepository.findAllByCreatedAtBetween(start, end);
+	// 	for (MemberQuest memberQuest: list){
+	// 		if (Objects.equals(memberQuest.getMember().getId(), member.getId())){
+	//
+	// 		}
+	// 	}
+	//
+	// 	return map;
+	// }
 }
