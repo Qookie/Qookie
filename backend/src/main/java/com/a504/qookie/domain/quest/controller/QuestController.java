@@ -56,4 +56,12 @@ public class QuestController {
 		questService.completeQuest(member.getMember(), questName.toUpperCase(), imageName);
 		return BaseResponse.okWithData(HttpStatus.OK, questType.getMessage() + " 퀘스트 완료", imageName);
 	}
+
+	// 월별 완료퀘스트 캘린더
+	@GetMapping("/monthly/{year}/{month}")
+	public ResponseEntity<?> getMonthlyQuest(@AuthenticationPrincipal CustomMemberDetails member,
+		@PathVariable Integer year,
+		@PathVariable Integer month){
+		return null;
+	}
 }
