@@ -22,11 +22,12 @@ services:
 
 
   # flask gpt server
-  backend_flask:
-    container_name: backend_flask
+  backend_python:
+    container_name: backend_python
     depends_on:
       - backend_rabbitMQ
-    restart: on-failure
+      - backend_server
+    restart: unless-stopped
     build:
       context: ./gpt/
       dockerfile: dockerfile
