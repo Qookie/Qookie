@@ -64,7 +64,7 @@ public class CookieService {
 
         cookieRepository.save(cookie);
 
-        return new CookieResponse(cookie);
+        return new CookieResponse(cookie, cookie.getBody().getImage(), null);
     }
 
     public String uploadBody(MultipartFile image, int stage) {
@@ -131,7 +131,15 @@ public class CookieService {
             cookie.setBackground(itemRepository.findById(BASE_BACKGROUND_ID)
                     .orElseThrow(() -> new IllegalArgumentException("기본 배경이 없습니다")));
 
-        return new CookieResponse(cookie);
+        if (5 <= cookie.getLevel() && cookie.getLevel() <= 9) {
+            String stage1BodyImage = bodyRepository.findByStage(1)
+                    .orElseThrow(() -> new IllegalArgumentException("몸통이 없습니다"))
+                    .getImage();
+
+            return new CookieResponse(cookie, stage1BodyImage, cookie.getBody().getImage());
+
+        }
+        return new CookieResponse(cookie, cookie.getBody().getImage(), null);
     }
 
     @Transactional

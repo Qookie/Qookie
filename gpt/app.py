@@ -1,66 +1,82 @@
 from flask import Flask, request, jsonify
-from dotenv import load_dotenv
-import requests
-import os
+import pika
+from threading import Thread
+from rabbitmq_connection import make_connection
+from gpt_client import send_to_gpt
 import json
+import variables
 
 app = Flask(__name__)
-load_dotenv()
-key = os.environ.get("KEY")
 
 
 @app.route("/gpt", methods=["POST"])
 def send_letter():
     data = request.json
-    ret = test(data["name"], data["category"], data["letter"])
+    ret = send_to_gpt(data["name"], data["category"], data["letter"])
     return ret.json()
 
 
-@app.route("/gpt", methods=["GET"])
-def send_test():
-    return jsonify("server working!")
+@app.route("/gpt/rabbit/send", methods=["GET"])
+def rabbit_send():
+    body = {"content": "testContent", "heartId": 7}
+    global sending_connection
 
-
-@app.route("/gpt/fast", methods=["POST"])
-def send_fast():
-    ret = test("testName", "testCategory", "DON'T MIND A LETTER! JUST SAY TEST!!!")
-    return ret.json()
-
-
-def test(user_name, category, user_input):
-    data = json.dumps(
-        {
-            "model": "gpt-4",
-            "messages": [
-                {
-                    "role": "system",
-                    "content": f"""
-                    You are going to offer appropriate feedback to {user_name}'s letter feeling {category}
-                    Because you are a psychology doctor, you use psychology theories to analyze the letter.
-                    Pick appropriate one among Albert Ellis' ABC model, Beck's Cognitive Triad, 
-                    and Cognitive Behavior Therapy. But do not expose the theory on the surface.
-                    If the letter is not about your domain, just say that it's not in your expertise.
-                    Please have warm, empathic, and especially friend-like tone, despite of your position.
-                    Also, when suggesting feedbacks, be suggestive, never be imperative.
-                    Write yours with Korean if {user_name}'s letter is written on Korean.
-                    When using Korean speak in plain language. You don't need to be too much polite.
-                    Lastly, keep it mind to make letter not to be too long.
-                    Make it under ten to twelve sentences long.
-                """,
-                },
-                {"role": "user", "content": user_input},
-            ],
-            "temperature": 0.8,
-        }
+    channel = sending_connection.channel()
+    channel.basic_publish(
+        exchange=variables.gpt_exchange,
+        routing_key=variables.routing_key_to_spring,
+        body=json.dumps(body),
     )
-    response = requests.post(
-        "https://api.openai.com/v1/chat/completions",
-        headers={"Content-Type": "application/json", "Authorization": "Bearer " + key},
-        data=data,
+    # channel.close()
+    return jsonify("sent!")
+
+
+def callback(ch, method, properties, body):
+    print("body: " + str(body))
+    data = json.load(body)
+    print(data)
+    print(data.username)
+    print(data["username"])
+    gpt_reply = send_to_gpt(data["username"], data["category"], data["content"])
+    # send back to spring
+    ret = {"heartId": data["heartId"], "content": gpt_reply}
+
+    channel = sending_connection.channel()
+    channel.basic_publish(
+        exchange=variables.gpt_exchange,
+        routing_key=variables.routing_key_to_spring,
+        body=json.dumps(ret),
     )
-    print(response)
-    return response
+    # channel.close()
+
+    print("send: " + str(json.dumps(ret)))
 
 
-if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+def listen_spring(connection_: pika.BlockingConnection):
+    try:
+        print("listening")
+        channel = connection_.channel()
+
+        channel.queue_declare(queue=variables.queue_from_spring, durable=True)
+        channel.queue_bind(
+            queue=variables.queue_from_spring,
+            exchange=variables.gpt_exchange,
+            routing_key=variables.routing_key_to_flask,
+        )
+        channel.basic_consume(
+            queue=variables.queue_from_spring,
+            on_message_callback=callback,
+            auto_ack=True,
+        )
+        channel.start_consuming()
+    except Exception as e:
+        print(f"ERROR: {e}")
+
+
+# rabbitMQ
+listening_connection = make_connection("listen")
+listener_thread = Thread(target=listen_spring, args=(listening_connection,))
+listener_thread.daemon = True
+listener_thread.start()
+
+sending_connection = make_connection("send")

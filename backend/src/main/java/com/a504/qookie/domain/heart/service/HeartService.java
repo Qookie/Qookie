@@ -1,13 +1,17 @@
 package com.a504.qookie.domain.heart.service;
 
+import com.a504.qookie.domain.heart.dto.HeartListRequest;
 import com.a504.qookie.domain.heart.dto.HeartRequest;
 import com.a504.qookie.domain.heart.dto.HeartResponse;
 import com.a504.qookie.domain.heart.entity.Heart;
 import com.a504.qookie.domain.heart.repository.HeartRepository;
 import com.a504.qookie.domain.member.entity.Member;
+import com.a504.qookie.domain.message.dto.MessageResponse;
 import jakarta.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,23 +22,17 @@ public class HeartService {
     private final HeartRepository heartRepository;
 
     @Transactional
-    public void create(Member member, HeartRequest heartRequest) {
+    public Heart create(Member member, HeartRequest heartRequest) {
 
         Heart heart = new Heart(member, heartRequest);
 
-        heartRepository.save(heart);
+        return heartRepository.save(heart);
     }
 
     @Transactional
-    public List<HeartResponse> list(Member member) {
+    public List<HeartResponse> list(HeartListRequest heartListRequest, Member member) {
 
-        List<Heart> hearts = heartRepository.findByMember(member);
+        return  heartRepository.findHeartByMonthAndMember(heartListRequest.time(), member);
 
-        List<HeartResponse> heartResponses = new ArrayList<>();
-        for (Heart heart:hearts) {
-            heartResponses.add(new HeartResponse(heart));
-        }
-
-        return heartResponses;
     }
 }

@@ -48,4 +48,5 @@ public class MemberQuest {
 	@CreatedDate
 	@Column(name = "created_at")
 	private LocalDateTime createdAt;
+
 }

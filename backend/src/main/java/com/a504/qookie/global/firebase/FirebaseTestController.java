@@ -17,7 +17,15 @@ public class FirebaseTestController {
     private final FirebaseService firebaseService;
     @GetMapping("/test")
     public ResponseEntity<?> firebaseTest(@AuthenticationPrincipal CustomMemberDetails customMemberDetails) {
-        String ret = firebaseService.sendMessage("test title", "test body", customMemberDetails.getMember());
-        return BaseResponse.okWithData(HttpStatus.OK, "good", ret);
+        try {
+            String ret = firebaseService.sendMessage(
+                    "test title",
+                    "test body",
+                    customMemberDetails.getMember().getMessageToken());
+            return BaseResponse.okWithData(HttpStatus.OK, "good", ret);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return BaseResponse.fail(HttpStatus.BAD_REQUEST, "");
+        }
     }
 }

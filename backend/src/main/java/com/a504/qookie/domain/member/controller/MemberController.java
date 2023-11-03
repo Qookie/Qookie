@@ -5,6 +5,7 @@ import com.a504.qookie.domain.member.entity.Member;
 import com.a504.qookie.domain.member.service.MemberService;
 import com.a504.qookie.global.response.BaseResponse;
 import com.a504.qookie.global.security.CustomMemberDetails;
+import com.amazonaws.Response;
 import com.google.api.Http;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDateTime;
+import java.time.Month;
 
 @RestController
 @RequiredArgsConstructor
@@ -70,5 +73,17 @@ public class MemberController {
             e.printStackTrace();
             return BaseResponse.fail(HttpStatus.INTERNAL_SERVER_ERROR, "member delete FAILURE " + e.getMessage());
         }
+    }
+
+    @GetMapping("/history/{year}/{month}")
+    public ResponseEntity<?> getCoinList(
+        @AuthenticationPrincipal CustomMemberDetails member,
+        @PathVariable
+        Integer year,
+        @PathVariable
+        Integer month){
+        return BaseResponse.okWithData(HttpStatus.OK,
+            "코인 사용 히스토리 갖고오기 완료",
+            memberService.getHistory(member.getMember(), year, Month.of(month)));
     }
 }

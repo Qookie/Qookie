@@ -31,6 +31,9 @@ public class ItemService {
     private final MemberItemRepository memberItemRepository;
     private final MemberRepository memberRepository;
 
+    private static final Long BASE_BACKGROUND_ID = 2L;
+    private static final Long NO_WEAR_ITEM_ID = 1L;
+
     public String upload(ItemUploadRequest itemUploadRequest, MultipartFile image) {
         String url = awsS3Service.uploadImageToS3(image);
 
@@ -94,6 +97,18 @@ public class ItemService {
 
         for (int i = 0; i < 6; i++) {
             lists[i] = new ArrayList<>();
+        }
+
+        Item background = itemRepository.findById(BASE_BACKGROUND_ID)
+                .orElseThrow(() -> new IllegalArgumentException("기본 배경이 없습니다"));
+
+        lists[0].add(new MyItemResponse(background));
+
+        Item noWearItem = itemRepository.findById(NO_WEAR_ITEM_ID)
+                .orElseThrow(() -> new IllegalArgumentException("기본 배경이 없습니다"));
+
+        for (int i = 1; i < 6; i++) {
+            lists[i].add(new MyItemResponse(noWearItem));
         }
 
         List<MemberItem> memberItemList = memberItemRepository.findByMember(member);

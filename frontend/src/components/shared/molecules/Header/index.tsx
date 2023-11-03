@@ -64,19 +64,14 @@ export default function Header({ page, title }: HeaderProps) {
     }
   };
 
-  return (
-    <HeaderContainer page={page} isOverlay={isOverlay}>
-      {headerType(page)}
-    </HeaderContainer>
-  );
+  return <HeaderContainer isOverlay={isOverlay}>{headerType(page)}</HeaderContainer>;
 }
 
-const HeaderContainer = styled.div<{ page: string; isOverlay: boolean }>`
+const HeaderContainer = styled.div<{ isOverlay: boolean }>`
   width: min(100%, 430px);
   height: 4rem;
   position: fixed;
-  background-color: ${({ page, isOverlay }) =>
-    page != 'home' ? 'var(--MR_WHITE)' : isOverlay ? 'var(--MR_WHITE)' : 'transparent'};
+  background-color: ${({ isOverlay }) => (isOverlay ? 'var(--MR_WHITE)' : 'transparent')};
   z-index: 5;
 `;
 
