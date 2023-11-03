@@ -6,6 +6,7 @@ import com.a504.qookie.domain.heart.service.HeartService;
 import com.a504.qookie.domain.message.dto.MessageRequest;
 import com.a504.qookie.domain.message.dto.MessageResponse;
 import com.a504.qookie.global.firebase.FirebaseService;
+import com.a504.qookie.global.rabbitMQ.RabbitMqConfig;
 import com.a504.qookie.global.rabbitMQ.RabbitMqEnum;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import jakarta.transaction.Transactional;
@@ -25,11 +26,16 @@ public class MessageService {
     private final HeartRepository heartRepository;
     private final FirebaseService firebaseService;
 
+
+
     public void sendMessage(MessageRequest messageRequest) {
-        rabbitTemplate.convertAndSend("test_exchange2", "to_flask", messageRequest);
+        rabbitTemplate.convertAndSend(
+                RabbitMqConfig.gptExchange,
+                RabbitMqConfig.routingKeyToFlask,
+                messageRequest);
     }
 
-    @RabbitListener(queues = "queue_from_flask")
+    @RabbitListener(queues = RabbitMqConfig.queueFromFlask)
     @Transactional
     public void receiveMessage(MessageResponse messageResponse) {
 

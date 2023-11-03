@@ -26,30 +26,39 @@ public class RabbitMqConfig {
     @Value("${rabbitmq.password}")
     private String rabbitPassword;
 
+    public static final String queueFromSpring = "QUEUE_FROM_SPRING";
+    public static final String queueFromFlask = "QUEUE_FROM_FLASK";
+
+    public static final String gptExchange = "GPT_EXCHANGE";
+
+    public static final String routingKeyToSpring = "TO_SPRING";
+
+    public static final String routingKeyToFlask = "TO_FLASK";
+
     @Bean
     Queue queueFromSpring() {
-        return new Queue(RabbitMqEnum.QUEUE_FROM_SPRING.getValue());
+        return new Queue(queueFromSpring);
     }
     @Bean
     Queue queueFromFlask() {
-        return new Queue(RabbitMqEnum.QUEUE_FROM_FLASK.getValue());
+        return new Queue(queueFromFlask);
     }
 
     @Bean
     DirectExchange exchange() {
-        return new DirectExchange(RabbitMqEnum.GPT_EXCHANGE.getValue());
+        return new DirectExchange(gptExchange);
     }
 
-    @Bean
-    Binding bindingFromSpring(
-            Queue queueFromSpring,
-            DirectExchange exchange
-    ) {
-        return BindingBuilder
-                .bind(queueFromSpring)
-                .to(exchange)
-                .with(RabbitMqEnum.ROUTING_KEY_TO_FLASK);
-    }
+//    @Bean
+//    Binding bindingFromSpring(
+//            Queue queueFromSpring,
+//            DirectExchange exchange
+//    ) {
+//        return BindingBuilder
+//                .bind(queueFromSpring)
+//                .to(exchange)
+//                .with(routingKeyToFlask);
+//    }
 
     @Bean
     Binding bindingFromFlask(
@@ -59,7 +68,7 @@ public class RabbitMqConfig {
         return BindingBuilder
                 .bind(queueFromFlask)
                 .to(exchange)
-                .with(RabbitMqEnum.ROUTING_KEY_TO_SPRING);
+                .with(routingKeyToSpring);
     }
 
     @Bean

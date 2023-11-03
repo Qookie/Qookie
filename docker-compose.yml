@@ -58,6 +58,9 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+    volumes:
+      - rabbitmq_config:/etc/rabbitmq/conf.d
 
 volumes:
   redis_config:
+  rabbitmq_config:

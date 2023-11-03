@@ -2,6 +2,7 @@ import json
 import requests
 import os
 from dotenv import load_dotenv
+import logging
 
 load_dotenv()
 gpt_api_key = "Bearer " + os.getenv("GPT_API_KEY")
@@ -37,12 +38,14 @@ def send_to_gpt(user_name, category, user_input):
             "temperature": 0.8,
         }
     )
-    response = requests.post(
+    json_response = requests.post(
         "https://api.openai.com/v1/chat/completions",
         headers={
             "Content-Type": "application/json",
             "Authorization": gpt_api_key,
         },
         data=data,
-    )
-    return response
+    ).json()
+    logging.info(json_response)
+
+    return json_response["choices"][0]["message"]["content"]
