@@ -4,7 +4,7 @@ import Divider from '../../../shared/atoms/Divider';
 
 export default function MypageList() {
   const iconList: Mypage[] = [
-    'deco',
+    'store',
     'badge',
     'myQookie',
     'qoin',

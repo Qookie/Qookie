@@ -5,7 +5,7 @@ import { Badge, Deco, MyQookie, QoinList } from '../../../../assets/svgs';
 import { useNavigate } from 'react-router-dom';
 
 export const mypageList = [
-  'deco',
+  'store',
   'badge',
   'myQookie',
   'qoin',
@@ -40,7 +40,7 @@ export default function MypageListItem({ mypage }: Props) {
 }
 
 const MYPAGE_ITEM = {
-  deco: {
+  store: {
     icon: <Deco />,
     intro: '쿠키 꾸미기',
   },

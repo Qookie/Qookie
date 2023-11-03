@@ -8,6 +8,7 @@ import Challenge from '../pages/Challenge';
 import Loading from '../pages/Loading';
 import SetWakeupTime from '../pages/SetWakeupTime';
 import Mypage from '../pages/Mypage';
+import Store from '../pages/Store';
 
 const Router = () => {
   return (
@@ -17,11 +18,18 @@ const Router = () => {
         <Route path="/" element={<Login />} />
         <Route path="/init" element={<InitQookie />} />
         <Route path="/set-wakeup" element={<SetWakeupTime />} />
+
         <Route path="/home" element={<Home />} />
+
         <Route path="/calendar" element={<Login />} />
+
         <Route path="/mind" element={<Login />} />
+
         <Route path="/mypage" element={<Mypage />} />
+        <Route path="/store" element={<Store />} />
+
         <Route path="/challenge" element={<Challenge />} />
+
         <Route path="/loading" element={<Loading />} />
       </Routes>
       <NavBarWrapper />
