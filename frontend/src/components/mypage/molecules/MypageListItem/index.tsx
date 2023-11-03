@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 import Text from '../../../shared/atoms/Text';
-import Challenge from '../../../../assets/pngs/challenge.png';
-import { ArrowRightIcon } from '@heroicons/react/24/outline';
+import { ChevronRightIcon } from '@heroicons/react/24/outline';
+import { Badge, Deco, MyQookie, QoinList } from '../../../../assets/svgs';
+import { useNavigate } from 'react-router-dom';
 
 export const mypageList = [
   'deco',
@@ -22,55 +23,58 @@ interface Props {
 
 export default function MypageListItem({ mypage }: Props) {
   const { icon, intro } = MYPAGE_ITEM[mypage];
+  const navigate = useNavigate();
+  const navigateHandler = () => {
+    navigate(`/${mypage}`);
+  };
+
   return (
-    <ItemContainer>
+    <ItemContainer onClick={navigateHandler}>
       <LeftContainer>
-        <IconContainer>
-          <img src={icon} width={30} />
-        </IconContainer>
+        {icon && <IconContainer>{icon}</IconContainer>}
         <Text typography="button">{intro}</Text>
       </LeftContainer>
-      <ArrowRightIcon width={30} />
+      <ChevronRightIcon width={20} />
     </ItemContainer>
   );
 }
 
 const MYPAGE_ITEM = {
   deco: {
-    icon: Challenge,
+    icon: <Deco />,
     intro: '쿠키 꾸미기',
   },
   badge: {
-    icon: Challenge,
-    intro: '쿠키 꾸미기',
+    icon: <Badge />,
+    intro: '나의 배지',
   },
   myQookie: {
-    icon: Challenge,
-    intro: '쿠키 꾸미기',
+    icon: <MyQookie />,
+    intro: '내가 만든 쿠키',
   },
   qoin: {
-    icon: Challenge,
-    intro: '쿠키 꾸미기',
+    icon: <QoinList />,
+    intro: '코인 내역',
   },
   info: {
-    icon: Challenge,
-    intro: '쿠키 꾸미기',
+    icon: '',
+    intro: '회원 정보',
   },
   notice: {
-    icon: Challenge,
-    intro: '쿠키 꾸미기',
+    icon: '',
+    intro: '공지사항',
   },
   privacy: {
-    icon: Challenge,
-    intro: '쿠키 꾸미기',
+    icon: '',
+    intro: '개인정보처리방침',
   },
   logOut: {
-    icon: Challenge,
-    intro: '쿠키 꾸미기',
+    icon: '',
+    intro: '로그아웃',
   },
   withDraw: {
-    icon: Challenge,
-    intro: '쿠키 꾸미기',
+    icon: '',
+    intro: '회원 탈퇴',
   },
 };
 
@@ -87,5 +91,5 @@ const LeftContainer = styled.div`
 `;
 
 const IconContainer = styled.div`
-  padding: 1rem;
+  margin-right: 0.5rem;
 `;
