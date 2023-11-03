@@ -22,3 +22,9 @@ logging:
           descriptor:
             sql:
               BasicBinder: TRACE
+
+rabbitmq:
+  host: localhost
+  port: 5672
+  user: newjeans
+  password: ss501ss501

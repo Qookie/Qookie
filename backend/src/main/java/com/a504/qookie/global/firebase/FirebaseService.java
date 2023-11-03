@@ -13,11 +13,11 @@ import org.springframework.stereotype.Service;
 public class FirebaseService {
     private final FirebaseApp firebaseApp;
 
-    public String sendMessage(String title, String body, Member member) {
+    public String sendMessage(String title, String body, String messageToken) throws FirebaseMessagingException{
         Message firebaseMessage = Message.builder()
                 .putData("title", title)
                 .putData("body", body)
-                .setToken(member.getMessageToken())
+                .setToken(messageToken)
                 .build();
         try {
             return FirebaseMessaging.getInstance().send(firebaseMessage);

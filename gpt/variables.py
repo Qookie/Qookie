@@ -1,0 +1,5 @@
+queue_from_spring = "QUEUE_FROM_SPRING"
+queue_from_flask = "QUEUE_FROM_FLASK"
+gpt_exchange = "GPT_EXCHANGE"
+routing_key_to_spring = "TO_SPRING"
+routing_key_to_flask = "TO_FLASK"

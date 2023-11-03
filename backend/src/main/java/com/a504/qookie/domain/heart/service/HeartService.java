@@ -6,8 +6,12 @@ import com.a504.qookie.domain.heart.dto.HeartResponse;
 import com.a504.qookie.domain.heart.entity.Heart;
 import com.a504.qookie.domain.heart.repository.HeartRepository;
 import com.a504.qookie.domain.member.entity.Member;
+import com.a504.qookie.domain.message.dto.MessageResponse;
 import jakarta.transaction.Transactional;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +22,11 @@ public class HeartService {
     private final HeartRepository heartRepository;
 
     @Transactional
-    public void create(Member member, HeartRequest heartRequest) {
+    public Heart create(Member member, HeartRequest heartRequest) {
 
         Heart heart = new Heart(member, heartRequest);
 
-        heartRepository.save(heart);
+        return heartRepository.save(heart);
     }
 
     @Transactional
