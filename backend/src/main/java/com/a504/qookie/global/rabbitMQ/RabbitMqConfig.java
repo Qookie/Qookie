@@ -71,6 +71,7 @@ public class RabbitMqConfig {
         // TODO: delete this before deploying to master
         factory.setRecoveryInterval(2147483647L);
         factory.setConnectionFactory(connectionFactory);
+        factory.setMessageConverter(jackson2JsonMessageConverter());
         return factory;
     }
 
