@@ -41,10 +41,13 @@ public class QuestService {
 			MemberQuest.builder()
 				.member(member)
 				.quest(questRepository.findByName(questName)
-					.orElseThrow(() -> new IllegalArgumentException("존재하지 앟는 퀘스트 입니다.")))
+					.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 퀘스트 입니다.")))
 				.build());
 		pointUpdate(member, 10);
 		updateExp(member);
+		if (questName.equals("ATTENDANCE")) {
+			checkAttendance(member);
+		}
 		checkChallenge(member, questName);
 	}
 
@@ -59,6 +62,15 @@ public class QuestService {
 		pointUpdate(member, 10);
 		updateExp(member);
 		checkChallenge(member, questName);
+	}
+
+	public void checkAttendance(Member member) {
+		String cur_month = LocalDateTime.now().getMonth().toString();
+		int cur_year = LocalDateTime.now().getYear();
+		int cur_day = LocalDateTime.now().getDayOfMonth();
+		String checkAttendanceKey =
+				member.getId() + ":" + cur_year + ":" + cur_month + ":" + "ATTENDANCE"; // (유저PK):(년도):(이번달):(ATTENDANCE)
+		template.opsForSet().add(checkAttendanceKey, cur_day + "");
 	}
 
 	public void pointUpdate(Member member, int point) {
@@ -157,7 +169,7 @@ public class QuestService {
 		}
 		// 뱃지 챌린지 업데이트 및 알림해주는 기능
 		String badge_challenge_key = member.getId()+ ":" + cur_year + ":" + cur_month +":"+ questName + ":badge"; // (유저PK):(퀘스트이름)
-		String badge_challenge_value = template.opsForValue().get(badge_challenge_key);
+//		String badge_challenge_value = template.opsForValue().get(badge_challenge_key);
 		template.opsForSet().add(badge_challenge_key, cur_day + "");
 		if (questName.equals("PHOTO")) { // 하늘사진 찍기라면
 			// 위에서 업데이트 했기 때문에 null이 될 수 없음이 보장됨

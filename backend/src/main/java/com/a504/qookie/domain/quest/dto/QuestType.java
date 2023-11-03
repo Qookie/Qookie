@@ -9,7 +9,8 @@ public enum QuestType {
 	PHOTO("하늘 사진 찍기"),
 	MEDITATION("명상"),
 	WATER("물 마시기"),
-	STRETCH("스트레칭");
+	STRETCH("스트레칭"),
+	ATTENDANCE("출석체크");
 
 	private final String message;
 
