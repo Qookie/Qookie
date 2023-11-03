@@ -8,6 +8,7 @@ import Challenge from '../pages/Challenge';
 import Loading from '../pages/Loading';
 import SetWakeupTime from '../pages/SetWakeupTime';
 import Mypage from '../pages/Mypage';
+import Notification from '../pages/Notification'
 
 const Router = () => {
   return (
@@ -23,6 +24,7 @@ const Router = () => {
         <Route path="/mypage" element={<Mypage />} />
         <Route path="/challenge" element={<Challenge />} />
         <Route path="/loading" element={<Loading />} />
+        <Route path="/notification" element={<Notification />} />
       </Routes>
       <NavBarWrapper />
     </BrowserRouter>
