@@ -89,17 +89,17 @@ public class QuestService {
 				/* TODO : 여기 알림 해주는 로직 */
 			}
 			cookie.updateLevel(); // 레벨업시키고
-			cookie.updateExp(); // 경험치 초기화
+			cookie.updateExp(0); // 경험치 초기화
 		} else if (cur_level < 10) {
-			if (cur_exp == 10) { // 레벨업 시켜야함
+			if (cur_exp + 10 >= 12) { // 레벨업 시켜야함
 				if (cur_level == 9) {
 					/* TODO : 여기 알림 해주는 로직 */
 				}
 				cookie.updateLevel(); // 레벨업시키고
-				cookie.updateExp(); // 경험치 초기화
+				cookie.updateExp(cur_exp + 10 - 12); // 경험치 초기화
 			} else {
 				// 경험치만 증가
-				cookie.updateExp(10);
+				cookie.plusExp(10);
 			}
 		} else if (cur_level < 20) { // 업당 필요 경험치 : 20
 			if (cur_exp == 10) { // 레벨업 시켜야함
@@ -107,10 +107,10 @@ public class QuestService {
 					/* TODO : 여기 알림 해주는 로직 */
 				}
 				cookie.updateLevel(); // 레벨업시키고
-				cookie.updateExp(); // 경험치 초기화
+				cookie.updateExp(0); // 경험치 초기화
 			} else {
 				// 경험치만 증가
-				cookie.updateExp(10);
+				cookie.plusExp(10);
 			}
 		} else if (cur_level < 30) {
 			if (cur_exp == 20) {
@@ -118,10 +118,10 @@ public class QuestService {
 					/* TODO : 여기 알림 해주는 로직 */
 				}
 				cookie.updateLevel(); // 레벨업시키고
-				cookie.updateExp(); // 경험치 초기화
+				cookie.updateExp(0); // 경험치 초기화
 			} else {
 				// 경험치만 증가
-				cookie.updateExp(10);
+				cookie.plusExp(10);
 			}
 		} else if (cur_level < 40) {
 			if (cur_exp == 30) {
@@ -129,10 +129,10 @@ public class QuestService {
 					/* TODO : 여기 알림 해주는 로직 */
 				}
 				cookie.updateLevel(); // 레벨업시키고
-				cookie.updateExp(); // 경험치 초기화
+				cookie.updateExp(0); // 경험치 초기화
 			} else {
 				// 경험치만 증가
-				cookie.updateExp(10);
+				cookie.plusExp(10);
 			}
 		} else {
 			if (cur_exp == 40) {
@@ -140,10 +140,10 @@ public class QuestService {
 					/* TODO : 여기 알림 해주는 로직 */
 				}
 				cookie.updateLevel(); // 레벨업시키고
-				cookie.updateExp(); // 경험치 초기화
+				cookie.updateExp(0); // 경험치 초기화
 			} else {
 				// 경험치만 증가
-				cookie.updateExp(10);
+				cookie.plusExp(10);
 			}
 		}
 	}
