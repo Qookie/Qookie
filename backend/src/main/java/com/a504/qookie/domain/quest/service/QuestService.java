@@ -7,10 +7,13 @@ import org.springframework.stereotype.Service;
 
 import com.a504.qookie.domain.cookie.entity.Cookie;
 import com.a504.qookie.domain.cookie.repository.CookieRepository;
+import com.a504.qookie.domain.member.entity.History;
 import com.a504.qookie.domain.member.entity.Member;
 import com.a504.qookie.domain.member.entity.MemberQuest;
+import com.a504.qookie.domain.member.repository.HistoryRepository;
 import com.a504.qookie.domain.member.repository.MemberQuestRepository;
 import com.a504.qookie.domain.member.repository.MemberRepository;
+import com.a504.qookie.domain.quest.dto.QuestType;
 import com.a504.qookie.domain.quest.repository.QuestRepository;
 
 import jakarta.transaction.Transactional;
@@ -25,6 +28,7 @@ public class QuestService {
 	private final QuestRepository questRepository;
 	private final MemberRepository memberRepository;
 	private final CookieRepository cookieRepository;
+	private final HistoryRepository historyRepository;
 	private final RedisTemplate<String, String> template;
 
 	public Boolean checkQuest(Member member, String questName) { // 오늘 날짜의 questName 퀘스트를 완료했는지
@@ -37,6 +41,7 @@ public class QuestService {
 	}
 
 	public void completeQuest(Member member, String questName) {
+		QuestType questType = QuestType.valueOf(questName.toUpperCase());
 		member = memberRepository.findById(member.getId()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자 입니다."));
 		memberQuestRepository.save(
 			MemberQuest.builder()
@@ -44,12 +49,19 @@ public class QuestService {
 				.quest(questRepository.findByName(questName)
 					.orElseThrow(() -> new IllegalArgumentException("존재하지 앟는 퀘스트 입니다.")))
 				.build());
+		historyRepository.save(
+			History.builder()
+				.member(member)
+				.message(questType.getMessage() + " 퀘스트 달성 보상")
+				.cost(10)
+				.build());
 		pointUpdate(member, 10);
 		updateExp(member);
 		checkChallenge(member, questName);
 	}
 
 	public void completeQuest(Member member, String questName, String imageName) {
+		QuestType questType = QuestType.valueOf(questName.toUpperCase());
 		member = memberRepository.findById(member.getId()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자 입니다."));
 		memberQuestRepository.save(
 			MemberQuest.builder()
@@ -57,6 +69,12 @@ public class QuestService {
 				.quest(questRepository.findByName(questName)
 					.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 퀘스트입니다.")))
 				.image(imageName)
+				.build());
+		historyRepository.save(
+			History.builder()
+				.member(member)
+				.message(questType.getMessage() + " 퀘스트 달성 보상")
+				.cost(10)
 				.build());
 		pointUpdate(member, 10);
 		updateExp(member);
@@ -148,52 +166,100 @@ public class QuestService {
 			String monthly_challenge_key =
 				member.getId() + ":" + cur_year + ":" + cur_month + ":" + questName; // (유저PK):(년도):(이번달):(퀘스트이름)
 			template.opsForSet().add(monthly_challenge_key, cur_day + ""); // 날짜
+			QuestType questType = QuestType.valueOf(questName.toUpperCase());
 			if (questName.equals("WAKE") || questName.equals("EAT")) {
 				if (template.opsForSet().size(monthly_challenge_key) == 15) {
 					member.setPoint(100);
+					historyRepository.save(
+						History.builder()
+							.member(member)
+							.message(LocalDateTime.now().getMonthValue() + "월 " + questType.getMessage() + " 챌린지 달성 보상")
+							.cost(100)
+							.build());
 					/* TODO : 알림 해주기 */
 				}
 			} else {
 				if (template.opsForSet().size(monthly_challenge_key) == 10) {
 					member.setPoint(100);
+					historyRepository.save(
+						History.builder()
+							.member(member)
+							.message(LocalDateTime.now().getMonthValue() + "월 " + questType.getMessage() + " 챌린지 달성 보상")
+							.cost(100)
+							.build());
 					/* TODO : 알림 해주기 */
 				}
 			}
 		}
 		// 뱃지 챌린지 업데이트 및 알림해주는 기능
 		String badge_challenge_key = member.getId()+ ":" + cur_year + ":" + cur_month +":"+ questName + ":badge"; // (유저PK):(퀘스트이름)
-		String badge_challenge_value = template.opsForValue().get(badge_challenge_key);
+		// String badge_challenge_value = template.opsForValue().get(badge_challenge_key);
 		template.opsForSet().add(badge_challenge_key, cur_day + "");
 		if (questName.equals("PHOTO")) { // 하늘사진 찍기라면
 			// 위에서 업데이트 했기 때문에 null이 될 수 없음이 보장됨
 			Long size = template.opsForSet().size(badge_challenge_key);
 			if (size == 5) {
 				member.setPoint(30);
+				historyRepository.save(
+					History.builder()
+						.member(member)
+						.message("뱃지 챌린지 달성 보상")
+						.cost(30)
+						.build());
 				/* TODO : 알림 해주기 */
 			}
 			if (size == 10) {
 				member.setPoint(50);
+				historyRepository.save(
+					History.builder()
+						.member(member)
+						.message("뱃지 챌린지 달성 보상")
+						.cost(50)
+						.build());
 				/* TODO : 알림 해주기 */
 			}
 			if (size == 15) {
 				member.setPoint(100);
+				historyRepository.save(
+					History.builder()
+						.member(member)
+						.message("뱃지 챌린지 달성 보상")
+						.cost(100)
+						.build());
 				/* TODO : 알림 해주기 */
 			}
 		} else {
 			Long size = template.opsForSet().size(badge_challenge_key);
 			if (size == 10) {
 				member.setPoint(30);
+				historyRepository.save(
+					History.builder()
+						.member(member)
+						.message("뱃지 챌린지 달성 보상")
+						.cost(30)
+						.build());
 				/* TODO : 알림 해주기 */
 			}
 			if (size == 50) {
 				member.setPoint(50);
+				historyRepository.save(
+					History.builder()
+						.member(member)
+						.message("뱃지 챌린지 달성 보상")
+						.cost(50)
+						.build());
 				/* TODO : 알림 해주기 */
 			}
 			if (size == 100) {
 				member.setPoint(30);
+				historyRepository.save(
+					History.builder()
+						.member(member)
+						.message("뱃지 챌린지 달성 보상")
+						.cost(100)
+						.build());
 				/* TODO : 알림 해주기 */
 			}
 		}
-
 	}
 }

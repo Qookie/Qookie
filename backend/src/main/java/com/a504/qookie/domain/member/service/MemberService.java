@@ -2,19 +2,25 @@ package com.a504.qookie.domain.member.service;
 
 import com.a504.qookie.domain.cookie.entity.Cookie;
 import com.a504.qookie.domain.cookie.repository.CookieRepository;
+import com.a504.qookie.domain.member.dto.HistoryResponse;
 import com.a504.qookie.domain.member.dto.LoginRequest;
 import com.a504.qookie.domain.member.dto.MemberRequest;
 import com.a504.qookie.domain.member.dto.MemberResponse;
+import com.a504.qookie.domain.member.entity.History;
 import com.a504.qookie.domain.member.entity.Member;
+import com.a504.qookie.domain.member.repository.HistoryRepository;
 import com.a504.qookie.domain.member.repository.MemberRepository;
 import jakarta.transaction.Transactional;
 
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-
+import java.time.Month;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -23,6 +29,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final CookieRepository cookieRepository;
+    private final HistoryRepository historyRepository;
 
     public Member findByUid(String uid) throws NoSuchElementException{
         return memberRepository.findByUid(uid).orElseThrow(NoSuchElementException::new);
@@ -74,9 +81,15 @@ public class MemberService {
                 .deleteMember();
     }
 
-    public void getCoinList(Member member){
-        Long totalExp = member.getExp();
+    public List<HistoryResponse> getHistory(Member member, int year, Month month){
         int totalPoint = member.getPoint();
-
+        LocalDateTime start = LocalDateTime.of(year, month, 1, 0, 0);
+        LocalDateTime end = LocalDateTime.of(year, month, month.maxLength(), 23, 59, 59);
+        List<History> historyList = historyRepository.findAllByCreatedAtBetweenOrderByCreatedAtDesc(start, end);
+        List<HistoryResponse> list = new ArrayList<>();
+        for (History history: historyList){
+            list.add(new HistoryResponse(totalPoint, history.getMessage(), history.getCost(), history.getCreatedAt()));
+        }
+        return list;
     }
 }
