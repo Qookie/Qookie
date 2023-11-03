@@ -183,7 +183,7 @@ public class QuestService {
 			if (size == 15) {
 				/* TODO : 알림 해주기 */
 			}
-		} else {
+		} else if (questName.equals("SQUAT") || questName.equals("EAT") || questName.equals("WAKE") || questName.equals("MEDITATION")) {
 			Long size = template.opsForSet().size(badge_challenge_key);
 			if (size == 10) {
 				/* TODO : 알림 해주기 */
