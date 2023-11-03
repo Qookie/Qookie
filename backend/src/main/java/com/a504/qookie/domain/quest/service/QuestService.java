@@ -1,10 +1,10 @@
 package com.a504.qookie.domain.quest.service;
 
+import com.a504.qookie.domain.quest.dto.AttendanceCalendarResponse;
 import com.a504.qookie.domain.quest.dto.CalenderRequest;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import java.util.List;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -96,7 +96,7 @@ public class QuestService {
 	}
 
 	public void checkAttendance(Member member) {
-		String cur_month = LocalDateTime.now().getMonth().toString();
+		int cur_month = LocalDateTime.now().getMonth().getValue();
 		int cur_year = LocalDateTime.now().getYear();
 		int cur_day = LocalDateTime.now().getDayOfMonth();
 		String checkAttendanceKey =
@@ -181,7 +181,7 @@ public class QuestService {
 
 	public void checkChallenge(Member member, String questName) {
 		member = memberRepository.findById(member.getId()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
-		String cur_month = LocalDateTime.now().getMonth().toString();
+		int cur_month = LocalDateTime.now().getMonth().getValue();
 		int cur_year = LocalDateTime.now().getYear();
 		int cur_day = LocalDateTime.now().getDayOfMonth();
 		QuestType questType = QuestType.valueOf(questName.toUpperCase());
@@ -286,8 +286,10 @@ public class QuestService {
 
 	}
 
-	public List<Integer> getAttendanceCalendar(Member member, CalenderRequest calenderRequest) {
-
-		return null;
+	public AttendanceCalendarResponse getAttendanceInfo(Member member, CalenderRequest calenderRequest) {
+		String checkAttendanceKey = member.getId() + ":" + calenderRequest.year() + ":" + calenderRequest.month() + ":" + "ATTENDANCE";
+		Boolean todayComplete = template.opsForSet().isMember(checkAttendanceKey, LocalDateTime.now().getDayOfMonth() + "");
+		List<Integer> list = template.opsForSet().members(checkAttendanceKey).stream().map(Integer::valueOf).toList();
+		return new AttendanceCalendarResponse(todayComplete, list);
 	}
 }

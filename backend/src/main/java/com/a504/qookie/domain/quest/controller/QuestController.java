@@ -1,9 +1,8 @@
 package com.a504.qookie.domain.quest.controller;
 
 
-import com.a504.qookie.domain.member.entity.Member;
+import com.a504.qookie.domain.quest.dto.AttendanceCalendarResponse;
 import com.a504.qookie.domain.quest.dto.CalenderRequest;
-import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -62,10 +61,10 @@ public class QuestController {
 	}
 
 	@GetMapping("/calendar/attendance")
-	public ResponseEntity<?> getAttendanceCalendar(
+	public ResponseEntity<?> getAttendanceInfo(
 			@AuthenticationPrincipal CustomMemberDetails member,
 			@RequestBody CalenderRequest calenderRequest){
-		List<Integer> list = questService.getAttendanceCalendar(member.getMember(), calenderRequest);
-		return BaseResponse.okWithData(HttpStatus.OK, "Attendance Calendar OK", list);
+		AttendanceCalendarResponse attendanceCalendarResponse = questService.getAttendanceInfo(member.getMember(), calenderRequest);
+		return BaseResponse.okWithData(HttpStatus.OK, "Attendance Calendar OK", attendanceCalendarResponse);
 	}
 }
