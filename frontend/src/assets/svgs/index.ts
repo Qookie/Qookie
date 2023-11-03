@@ -8,3 +8,9 @@ export { ReactComponent as Lv6 } from './lv6.svg';
 
 // icon
 export { ReactComponent as CoinLogo } from './coin.svg';
+export { ReactComponent as Qoin } from './qoin.svg';
+export { ReactComponent as Exp } from './exp.svg';
+export { ReactComponent as Deco } from './deco.svg';
+export { ReactComponent as Badge } from './badge.svg';
+export { ReactComponent as MyQookie } from './myqookie.svg';
+export { ReactComponent as QoinList } from './qoinlist.svg';

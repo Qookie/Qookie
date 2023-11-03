@@ -31,7 +31,7 @@ const Template: Story = {
 
 export const Default: Story = {
   ...Template,
-  name: 'Default',
+  name: 'home',
   args: {
     ...Template.args,
     page: 'home',

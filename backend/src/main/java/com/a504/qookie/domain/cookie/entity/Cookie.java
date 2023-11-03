@@ -1,5 +1,6 @@
 package com.a504.qookie.domain.cookie.entity;
 
+import com.a504.qookie.domain.item.entity.Item;
 import java.time.LocalDateTime;
 
 import com.a504.qookie.domain.member.entity.Member;
@@ -60,22 +61,27 @@ public class Cookie {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Mouth mouth;
 
-	@Column(name = "hat")
-	private Long hat;
+	@JoinColumn(name = "hat")
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Item hat;
 
-	@Column(name = "top")
-	private Long top;
+	@JoinColumn(name = "top")
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Item top;
 
-	@Column(name = "bottom")
-	private Long bottom;
+	@JoinColumn(name = "bottom")
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Item bottom;
 
-	@Column(name = "shoe")
-	private Long shoe;
+	@JoinColumn(name = "shoe")
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Item shoe;
 
-	@Column(name = "background")
-	private Long background;
+	@JoinColumn(name = "background")
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Item background;
 
-	public static Cookie createCookie(Member member, String name, Body body, Eye eye, Mouth mouth) {
+	public static Cookie createCookie(Member member, String name, Body body, Eye eye, Mouth mouth, Item background, Item noItem) {
 		return Cookie.builder()
 				.member(member)
 				.name(name)
@@ -85,6 +91,11 @@ public class Cookie {
 				.body(body)
 				.eye(eye)
 				.mouth(mouth)
+				.background(background)
+				.hat(noItem)
+				.top(noItem)
+				.bottom(noItem)
+				.shoe(noItem)
 				.build();
 	}
 
@@ -101,5 +112,7 @@ public class Cookie {
 	public void updateLevel(){
 		this.level += 1;
 	}
+
+	public void setBackground(Item background) { this.background = background; }
 
 }

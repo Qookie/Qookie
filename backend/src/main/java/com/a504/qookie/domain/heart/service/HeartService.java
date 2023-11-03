@@ -1,5 +1,6 @@
 package com.a504.qookie.domain.heart.service;
 
+import com.a504.qookie.domain.heart.dto.HeartListRequest;
 import com.a504.qookie.domain.heart.dto.HeartRequest;
 import com.a504.qookie.domain.heart.dto.HeartResponse;
 import com.a504.qookie.domain.heart.entity.Heart;
@@ -7,7 +8,6 @@ import com.a504.qookie.domain.heart.repository.HeartRepository;
 import com.a504.qookie.domain.member.entity.Member;
 import com.a504.qookie.domain.message.dto.MessageResponse;
 import jakarta.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -30,10 +30,9 @@ public class HeartService {
     }
 
     @Transactional
-    public List<HeartResponse> list(Member member) {
-        return heartRepository.findAllByMember(member)
-                .stream()
-                .map(HeartResponse::new)
-                .toList();
+    public List<HeartResponse> list(HeartListRequest heartListRequest, Member member) {
+
+        return  heartRepository.findHeartByMonthAndMember(heartListRequest.time(), member);
+
     }
 }

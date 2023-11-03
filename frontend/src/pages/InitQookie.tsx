@@ -8,6 +8,7 @@ import Button from '../components/shared/atoms/Button';
 import FaceOptionSelctor from '../components/initQookie/molecules/FaceOptionSelector';
 import { FaceOptions, QookieFaceOptionResponse } from '../components/initQookie/types';
 import Input from '../components/shared/atoms/Input';
+import { useNavigate } from 'react-router-dom';
 
 enum Step {
   Custom,
@@ -22,6 +23,7 @@ interface Select {
 
 function InitQookie() {
   const [step, setStep] = useState<Step>(Step.Custom);
+  const navigate = useNavigate();
 
   const [faceptionList, setFaceOptionList] = useState<FaceOptions>({
     eyes: [],
@@ -92,6 +94,8 @@ function InitQookie() {
       eyeId: eye,
       mouthId: mouth,
     });
+
+    navigate('/set-wakeup');
   };
 
   useEffect(() => {

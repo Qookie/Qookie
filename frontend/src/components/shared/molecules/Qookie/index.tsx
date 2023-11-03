@@ -25,27 +25,28 @@ const BackgroundContainer = styled.div<{ background: string }>`
 
 const DoughContainer = styled.div<{ body: string }>`
   background: center/contain no-repeat url(${(props) => props.body});
-  height: 90px;
-  width: 120px;
+  height: 319px;
+  width: 415px;
+  transform: scale(0.5);
   position: relative;
 `;
 
 const EyeContainer = styled.div<{ eye: string }>`
   position: absolute;
-  top: 38%;
+  top: 0;
   left: 70%;
-  transform: translate(-50%, -50%);
-  background: center/auto no-repeat url(${(props) => props.eye});
-  width: 100%;
-  height: 100%;
+  transform: translateX(-50%);
+  background: center/contain no-repeat url(${(props) => props.eye});
+  width: 67px;
+  height: 142px;
 `;
 
 const MouthContainer = styled.div<{ mouth: string }>`
   position: absolute;
-  top: 50%;
+  top: 0;
   left: 70%;
-  transform: translate(-50%, -50%);
-  background: center/auto no-repeat url(${(props) => props.mouth});
-  width: 100%;
-  height: 100%;
+  transform: translateX(-50%);
+  background: center/contain no-repeat url(${(props) => props.mouth});
+  width: 67px;
+  height: 165px;
 `;

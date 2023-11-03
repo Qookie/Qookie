@@ -2,6 +2,10 @@ import styled from 'styled-components';
 import Level from '../../molecules/Level';
 import ProgressBar from '../../atoms/ProgressBar';
 import { calcDateDiff } from '../../../../utils/date';
+import Button from '../../atoms/Button';
+import Dialog from '../../molecules/Dialog';
+import { useState } from 'react';
+import { useNavigate } from 'react-router';
 
 export interface StatusCardProps {
   level: number;
@@ -11,6 +15,12 @@ export interface StatusCardProps {
 }
 
 export default function StatusCard({ level, exp, name, createdAt }: StatusCardProps) {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const openHandler = () => {
+    setIsOpen((pre) => !pre);
+  };
+  const navigate = useNavigate();
+
   const getTotal = (level: number) => {
     if (level >= 5 && level <= 9) {
       return 12;
@@ -26,6 +36,30 @@ export default function StatusCard({ level, exp, name, createdAt }: StatusCardPr
     return 10;
   };
 
+  const showLevelState = (level: number) => {
+    switch (level) {
+      case 0:
+        return (
+          <ButtonContainer>
+            <Button size="small" onClick={openHandler}>
+              반죽 만들기
+            </Button>
+          </ButtonContainer>
+        );
+      case 50:
+        return (
+          <ButtonContainer>
+            <Button size="small" onClick={openHandler}>
+              굽기
+            </Button>
+          </ButtonContainer>
+        );
+
+      default:
+        return <ProgressBar total={getTotal(level)} now={exp} level={level} />;
+    }
+  };
+
   return (
     <Container>
       <CardContainer>
@@ -35,9 +69,19 @@ export default function StatusCard({ level, exp, name, createdAt }: StatusCardPr
             <QookieName>{name}</QookieName>
             {calcDateDiff(createdAt)}일째
           </QookieInfo>
-          <ProgressBar total={getTotal(level)} now={exp} level={level} />
+          {showLevelState(level)}
         </RightContainer>
       </CardContainer>
+      <Dialog
+        title="쿠키를 구울까요?"
+        content={`쿠키를 구우면 더이상 쿠키를 꾸밀 수 없어요. \n이 의상 그대로 쿠키를 구울까요?`}
+        negative="굽기"
+        onNegativeClick={() => navigate('/bake')}
+        positive="쿠키 꾸미기"
+        onPositiveClick={() => navigate('/store')}
+        isOpen={isOpen}
+        onCloseRequest={openHandler}
+      />
     </Container>
   );
 }
@@ -76,4 +120,8 @@ const RightContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
+`;
+
+const ButtonContainer = styled.div`
+  margin-left: auto;
 `;
