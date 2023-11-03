@@ -4,7 +4,7 @@ services:
     container_name: backend_server
     depends_on:
       - backend_redis
-      - backend_rabbitMQ
+      - backend_rabbitmq
     restart: on-failure
     build:
       context: ./backend/
@@ -15,17 +15,17 @@ services:
       REDIS_HOST: backend_redis
       REDIS_PORT: 6379
       REDIS_PASSWORD: ${REDIS_PASSWORD}
-      RABBITMQ_HOST: backend_rabbitMQ
+      RABBITMQ_HOST: backend_rabbitmq
       RABBITMQ_PORT: 5672
       RABBITMQ_USER: ${RABBITMQ_USER}
       RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
 
 
-  # flask gpt server
+  # python for gpt server
   backend_python:
     container_name: backend_python
     depends_on:
-      - backend_rabbitMQ
+      - backend_rabbitmq
       - backend_server
     restart: unless-stopped
     build:
@@ -34,7 +34,7 @@ services:
     ports:
       - "127.0.0.1:5000:5000"
     environment:
-      RABBITMQ_HOST: backend_rabbitMQ
+      RABBITMQ_HOST: backend_rabbitmq
       RABBITMQ_PORT: 5672
       RABBITMQ_USER: ${RABBITMQ_USER}
       RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
@@ -50,8 +50,8 @@ services:
       - redis_config:/usr/local/etc/redis
   
   # rabbitMQ
-  backend_rabbitMQ:
-    container_name: backend_rabbitMQ
+  backend_rabbitmq:
+    container_name: backend_rabbitmq
     image: rabbitmq
     ports:
     - "127.0.0.1:5672:5672"

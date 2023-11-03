@@ -23,15 +23,15 @@ pipeline {
 		stage("Copy Secrets & Stop Containers") {
 			steps {
 				dir ("./") {
-					sh "docker stop backend-server || true"
-					sh "docker stop backend-python || true"
-					sh "docker stop backend-redis || true"
-					sh "docker stop backend-rabbitmq || true"
+					sh "docker stop backend_server || true"
+					sh "docker stop backend_python || true"
+					sh "docker stop backend_redis || true"
+					sh "docker stop backend_rabbitmq || true"
 
-					sh "docker rm backend-server || true"
-					sh "docker rm backend-python || true"
-					sh "docker rm backend-redis || true"
-					sh "docker rm backend-rabbitmq || true"
+					sh "docker rm backend_server || true"
+					sh "docker rm backend_python || true"
+					sh "docker rm backend_redis || true"
+					sh "docker rm backend_rabbitmq || true"
 
 					sh "docker ps -a"
 				}
