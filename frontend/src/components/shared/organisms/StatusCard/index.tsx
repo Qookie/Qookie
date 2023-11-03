@@ -1,15 +1,19 @@
 import styled from 'styled-components';
 import Level from '../../molecules/Level';
 import ProgressBar from '../../atoms/ProgressBar';
-import { calcDateDiff } from '../../../../utils/date';
+import { calcDateDiff, getToday } from '../../../../utils/date';
 import Button from '../../atoms/Button';
 import Dialog from '../../molecules/Dialog';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 import BottomPageLayout from '../../Template/BottomPageLayout';
 import TitleLayout from '../../Template/TitleLayout';
 import { QookieInfo } from '../../../../types';
-import BakeQookie from '../BakeQookie';
+import { bakePng } from '../../../../utils/bakePng';
+import { qookieApi } from '../../../../api';
+import Qookie from '../../molecules/Qookie';
+import QookieBag from '../../../../assets/pngs/QookieBag.png';
+import Text from '../../atoms/Text';
 
 export interface StatusCardProps {
   level: number;
@@ -21,6 +25,20 @@ export interface StatusCardProps {
 export default function StatusCard({ ...props }: QookieInfo) {
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [isBottomOpen, setIsBottomOpen] = useState<boolean>(false);
+  const divRef = useRef<HTMLDivElement>(null);
+
+  const handleDownloadClick = () => {
+    bakePng(divRef, { fileName: props.name });
+  };
+
+  const getS3UrlHandler = (url: string) => {
+    let newUrl = '';
+    qookieApi.getProxyUrl(url).then((res) => {
+      console.log(res);
+      newUrl = res;
+    });
+    return newUrl;
+  };
 
   const openDialogHandler = () => {
     setIsDialogOpen((pre) => !pre);
@@ -70,9 +88,16 @@ export default function StatusCard({ ...props }: QookieInfo) {
     }
   };
 
+  let img = new Image();
+  img.src = /^data:image/.test(props.body) ? props.body : props.body + '?' + new Date().getTime();
+
   const bakeProps = {
     ...props,
     background: '',
+    body: img.src,
+    // body: getS3UrlHandler(props.body),
+    // eye: getS3UrlHandler(props.eye),
+    // mouth: getS3UrlHandler(props.mouth),
   };
 
   return (
@@ -111,7 +136,21 @@ export default function StatusCard({ ...props }: QookieInfo) {
               title={'쿠키 만들기가 완료되었습니다.'}
               desc={`저를 멋진 쿠키로 만들어주셔서 감사해요! \n직접 만든 쿠키를 확인해보세요.`}
             >
-              <BakeQookie {...bakeProps} />
+              <BottomInner>
+                <BakedQookie>
+                  <QookieContainer ref={divRef}>
+                    <Qookie {...bakeProps} />
+                    <QookieBagImg src={QookieBag} alt="bag" />
+                  </QookieContainer>
+                  <NameTag>
+                    <Text typography="button">{props.name}</Text>({getToday()})
+                  </NameTag>
+                </BakedQookie>
+                <BottomBtnContainer>
+                  <TextBtn onClick={() => ''}>쿠키 보러 가기</TextBtn>
+                  <Button onClick={handleDownloadClick}>완료</Button>
+                </BottomBtnContainer>
+              </BottomInner>
             </TitleLayout>
           }
         />
@@ -158,4 +197,63 @@ const RightContainer = styled.div`
 
 const ButtonContainer = styled.div`
   margin-left: auto;
+`;
+
+const BottomInner = styled.div`
+  padding: 0 1rem;
+  margin-top: -4rem;
+`;
+
+const BakedQookie = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const NameTag = styled.div`
+  width: fit-content;
+  padding: 0.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  position: absolute;
+  bottom: 20%;
+  border-radius: 0.5rem;
+  background-color: var(--MR_YELLOW);
+`;
+
+const TextBtn = styled.button`
+  width: 100%;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  font-weight: 600;
+  font-size: 20px;
+  color: var(--MR_RED);
+  background-color: transparent;
+`;
+
+const QookieContainer = styled.div`
+  transform: scale(0.5);
+  position: relative;
+`;
+
+const QookieBagImg = styled.img`
+  position: absolute;
+  top: 32%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.4);
+`;
+
+const BottomBtnContainer = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  box-sizing: border-box;
 `;
