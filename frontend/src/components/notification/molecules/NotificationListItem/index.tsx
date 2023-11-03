@@ -1,19 +1,18 @@
 import styled from "styled-components";
 import NotificationImage from "../../atoms/NotificationImage";
 import NotificationContent from "../../atoms/NotificationContent";
+import { NotificationProp } from "../../../../types";
 
-interface Props {
-	category: String;
-	info: String;
-	date: String;
-}
-
-export default function NotificationListItem() {
+export default function NotificationListItem({prop}:{prop:NotificationProp}) {
 	return (
-		<>
-			<NotificationImage category={"alarm"}/>
-			<NotificationContent />
-		</>
+		<NotificationItemContainer>
+			<ImageContainer>
+				<NotificationImage category={prop.category}/>
+			</ImageContainer>
+			<ContentContainer>
+				<NotificationContent prop={prop}/>
+			</ContentContainer>
+		</NotificationItemContainer>
 	)
 
 	// 기능: 누르면 관련 페이지로 넘어가야함
@@ -23,3 +22,18 @@ export default function NotificationListItem() {
 
 	// date timestamp -> string 으로 바꿔주는 공통 atom 있으면 좋을듯
 }
+
+const NotificationItemContainer = styled.div`
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+`;
+
+const ImageContainer = styled.div`
+
+`;
+
+const ContentContainer = styled.div`
+	
+`;

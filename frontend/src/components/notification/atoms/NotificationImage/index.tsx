@@ -13,15 +13,15 @@ export default function NotificationImage({ category }: { category: string }) {
     switch (category) {
       case 'alarm':
         return <Alarm />;
-      case 'Challenge':
+      case 'challenge':
         return <Challenge />;
-      case 'Cookie':
+      case 'cookie':
         return <Cookie />;
-      case 'Favorite':
+      case 'favorite':
         return <Favorite />;
-      case 'Item':
+      case 'item':
         return <Item />;
-      case 'Quest':
+      case 'quest':
         return <Quest />;
       default:
         return <></>;

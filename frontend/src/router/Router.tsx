@@ -48,6 +48,8 @@ const HeaderWrapper = () => {
       return <></>;
     case '/loading':
       return <></>;
+    case '/notification':
+      return <Header page="tab" title="알림"/>
     default:
       return <Header page="default" />;
   }
@@ -66,6 +68,8 @@ const NavBarWrapper = () => {
         return true;
       case '/mypage':
         return true;
+      case '/notification':
+        return true
       default:
         return false;
     }
