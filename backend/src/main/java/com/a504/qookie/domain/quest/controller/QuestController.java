@@ -32,8 +32,7 @@ public class QuestController {
 	@GetMapping("/{questName}")
 	public ResponseEntity<?> checkQuest(@AuthenticationPrincipal CustomMemberDetails member,
 		@PathVariable String questName){
-		Boolean isComplete = questService.checkQuest(member.getMember(), questName.toUpperCase());
-		return BaseResponse.okWithData(HttpStatus.OK, "쿼스트 완료 여부 확인", isComplete);
+		return BaseResponse.okWithData(HttpStatus.OK, "쿼스트 완료 여부 확인", questService.checkQuest(member.getMember(), questName.toUpperCase()));
 	}
 
 
