@@ -14,6 +14,7 @@ import com.a504.qookie.domain.member.entity.MemberItem;
 import com.a504.qookie.domain.member.repository.MemberItemRepository;
 import com.a504.qookie.domain.member.repository.MemberRepository;
 import com.a504.qookie.domain.quest.service.AwsS3Service;
+import com.a504.qookie.domain.quest.service.QuestService;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ public class ItemService {
     private final ItemRepository itemRepository;
     private final MemberItemRepository memberItemRepository;
     private final MemberRepository memberRepository;
+    private final QuestService questService;
 
     private static final Long BASE_BACKGROUND_ID = 2L;
     private static final Long NO_WEAR_ITEM_ID = 1L;
@@ -153,6 +155,10 @@ public class ItemService {
         for (OrderItemRequest orderItemRequest:orderRequest.items()) {
             Item item = itemRepository.findById(orderItemRequest.itemId())
                     .orElseThrow(() -> new IllegalArgumentException("상품이 없습니다"));
+
+            if (item.getIsNew()) {
+                questService.checkChallenge(member, "BUY_NEW");
+            }
 
             memberItemRepository.save(MemberItem.builder()
                     .member(member)
