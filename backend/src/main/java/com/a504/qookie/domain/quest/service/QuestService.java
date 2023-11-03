@@ -1,7 +1,9 @@
 package com.a504.qookie.domain.quest.service;
 
+import com.a504.qookie.domain.quest.dto.CalenderRequest;
 import java.time.LocalDateTime;
 
+import java.util.List;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -196,5 +198,10 @@ public class QuestService {
 			}
 		}
 
+	}
+
+	public List<Integer> getAttendanceCalendar(Member member, CalenderRequest calenderRequest) {
+
+		return null;
 	}
 }

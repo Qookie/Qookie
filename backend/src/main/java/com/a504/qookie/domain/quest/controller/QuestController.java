@@ -1,12 +1,16 @@
 package com.a504.qookie.domain.quest.controller;
 
 
+import com.a504.qookie.domain.member.entity.Member;
+import com.a504.qookie.domain.quest.dto.CalenderRequest;
+import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -56,5 +60,13 @@ public class QuestController {
 		String imageName = awsS3Service.uploadImageToS3(image);
 		questService.completeQuest(member.getMember(), questName.toUpperCase(), imageName);
 		return BaseResponse.okWithData(HttpStatus.OK, questType.getMessage() + " 퀘스트 완료", imageName);
+	}
+
+	@GetMapping("/calendar/attendance")
+	public ResponseEntity<?> getAttendanceCalendar(
+			@AuthenticationPrincipal CustomMemberDetails member,
+			@RequestBody CalenderRequest calenderRequest){
+		List<Integer> list = questService.getAttendanceCalendar(member.getMember(), calenderRequest);
+		return BaseResponse.okWithData(HttpStatus.OK, "Attendance Calendar OK", list);
 	}
 }
