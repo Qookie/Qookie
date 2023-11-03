@@ -75,13 +75,15 @@ public class MemberController {
         }
     }
 
-    @GetMapping("/coinlist")
+    @GetMapping("/history/{year}/{month}")
     public ResponseEntity<?> getCoinList(
         @AuthenticationPrincipal CustomMemberDetails member,
-        LocalDateTime dateTime){
-        int year = dateTime.getYear();
-        Month month = dateTime.getMonth();
-
-        return null;
+        @PathVariable
+        Integer year,
+        @PathVariable
+        Integer month){
+        return BaseResponse.okWithData(HttpStatus.OK,
+            "코인 사용 히스토리 갖고오기 완료",
+            memberService.getHistory(member.getMember(), year, Month.of(month)));
     }
 }
