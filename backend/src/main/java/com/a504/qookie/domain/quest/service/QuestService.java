@@ -1,7 +1,11 @@
 package com.a504.qookie.domain.quest.service;
 
 import java.time.LocalDateTime;
+import java.time.Month;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -15,6 +19,7 @@ import com.a504.qookie.domain.member.repository.HistoryRepository;
 import com.a504.qookie.domain.member.repository.MemberQuestRepository;
 import com.a504.qookie.domain.member.repository.MemberRepository;
 import com.a504.qookie.domain.quest.dto.CheckQuestResponse;
+import com.a504.qookie.domain.quest.dto.QuestStatus;
 import com.a504.qookie.domain.quest.dto.QuestType;
 import com.a504.qookie.domain.quest.repository.QuestRepository;
 
@@ -40,8 +45,13 @@ public class QuestService {
 		QuestType questType = QuestType.valueOf(questName);
 		Long idx = questType.getIdx();
 		List<MemberQuest> list = memberQuestRepository.findAllByCreatedAtBetween(start, end);
+		System.out.println(" = " + idx);
+		System.out.println("questName = " + questName);
+
 		for (MemberQuest memberQuest : list){
-			if (memberQuest.getQuest().getId() == idx && memberQuest.getMember().getId() == member.getId()){
+			if (Objects.equals(memberQuest.getQuest().getId(), idx) && Objects.equals(memberQuest.getMember().getId(),
+				member.getId())){
+				System.out.println("memberQuest = " + memberQuest);
 				if (questName.equals("EAT") || questName.equals("PHOTO")) return new CheckQuestResponse(true, memberQuest.getImage());
 				return new CheckQuestResponse(true, null);
 			}
@@ -269,5 +279,19 @@ public class QuestService {
 				/* TODO : 알림 해주기 */
 			}
 		}
+	}
+
+	public Map<Integer, QuestStatus> getMonthlyQuest(Member member, Integer year, Month month){
+		Map<Integer, QuestStatus> map = new HashMap<>();
+		LocalDateTime start = LocalDateTime.of(year, month, 1, 0, 0);
+		LocalDateTime end = LocalDateTime.of(year, month, month.maxLength(),23, 59, 59);
+		List<MemberQuest> list = memberQuestRepository.findAllByCreatedAtBetween(start, end);
+		for (MemberQuest memberQuest: list){
+			if (Objects.equals(memberQuest.getMember().getId(), member.getId())){
+
+			}
+		}
+
+		return map;
 	}
 }
