@@ -22,30 +22,36 @@ pipeline {
 		}
 		stage("Copy Secrets & Stop Containers") {
 			steps {
-				dir ("./backend") {
-					// stop running containers and remove images
+				step {
 					sh "docker stop backend-server || true"
-					sh "docker rm backend-server || true"
+					sh "docker stop backend-python || true"
 					sh "docker stop backend-redis || true"
+					sh "docker stop backend-rabbitmq || true"
+
+					sh "docker rm backend-server || true"
+					sh "docker rm backend-python || true"
 					sh "docker rm backend-redis || true"
+					sh "docker rm backend-rabbitmq || true"
+
+					sh "docker ps -a"
+				}
+				dir ("./backend") {
 
 					// copy application-secret to cloned repo
 					sh "rm ./src/main/resources/application-secret.yml || true"
 					sh "cp /var/jenkins_home/secrets/application-secret.yml ./src/main/resources/"
 
-
 					// copy a504-qookie-firebase-adminsdk-key.json to cloned repo
 					sh "rm ./src/main/resources/a504-qookie-firebase-adminsdk-key.json || true"
 					sh "cp /var/jenkins_home/secrets/a504-qookie-firebase-adminsdk-key.json ./src/main/resources/"
 				}
-				dir ("./gpt") {
-					sh "docker stop gpt || true"
-					sh "docker rm gpt || true"
 
+				dir ("./gpt") {
 					// copy .env file for docker compose to cloned repo
 					sh "rm ./.env.gpt || true"
 					sh "cp /var/jenkins_home/secrets/.env.gpt ./.env"
 				}
+
 				dir ("./") {
 					// copy .env file for docker compose to cloned repo
 					sh "rm ./.env || true"
