@@ -22,7 +22,7 @@ pipeline {
 		}
 		stage("Copy Secrets & Stop Containers") {
 			steps {
-				step {
+				dir ("./") {
 					sh "docker stop backend-server || true"
 					sh "docker stop backend-python || true"
 					sh "docker stop backend-redis || true"
@@ -35,8 +35,8 @@ pipeline {
 
 					sh "docker ps -a"
 				}
-				dir ("./backend") {
 
+				dir ("./backend") {
 					// copy application-secret to cloned repo
 					sh "rm ./src/main/resources/application-secret.yml || true"
 					sh "cp /var/jenkins_home/secrets/application-secret.yml ./src/main/resources/"
