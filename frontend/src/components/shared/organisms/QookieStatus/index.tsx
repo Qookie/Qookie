@@ -6,7 +6,9 @@ import Qookie from '../../molecules/Qookie';
 export default function QookieStatus({ ...props }: QookieInfo) {
   return (
     <QookieContainer>
-      <Qookie {...props} />
+      <BackgroundContainer background={props.background}>
+        <Qookie {...props} />
+      </BackgroundContainer>
       <ContentsWrapper>
         <StatusCard
           level={props.level}
@@ -21,6 +23,17 @@ export default function QookieStatus({ ...props }: QookieInfo) {
 
 const QookieContainer = styled.div`
   position: relative;
+`;
+
+const BackgroundContainer = styled.div<{ background: string }>`
+  background:
+    linear-gradient(0deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 20%),
+    center/cover no-repeat url(${(props) => props.background});
+  width: 100%;
+  height: 460px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const ContentsWrapper = styled.div`

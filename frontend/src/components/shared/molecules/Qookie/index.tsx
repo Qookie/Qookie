@@ -3,25 +3,12 @@ import { QookieInfo } from '../../../../types';
 
 export default function Qookie({ ...props }: QookieInfo) {
   return (
-    <BackgroundContainer background={props.background}>
-      <DoughContainer body={props.body}>
-        <EyeContainer eye={props.eye} />
-        <MouthContainer mouth={props.mouth} />
-      </DoughContainer>
-    </BackgroundContainer>
+    <DoughContainer body={props.body}>
+      <EyeContainer eye={props.eye} />
+      <MouthContainer mouth={props.mouth} />
+    </DoughContainer>
   );
 }
-
-const BackgroundContainer = styled.div<{ background: string }>`
-  background:
-    linear-gradient(0deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 20%),
-    center/cover no-repeat url(${(props) => props.background});
-  width: 100%;
-  height: 460px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
 
 const DoughContainer = styled.div<{ body: string }>`
   background: center/contain no-repeat url(${(props) => props.body});
