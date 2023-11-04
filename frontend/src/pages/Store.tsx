@@ -5,7 +5,7 @@ import Qookie from '../components/shared/molecules/Qookie';
 import Button from '../components/shared/atoms/Button';
 import { ShoppingCartIcon } from '@heroicons/react/24/outline';
 import Title from '../components/shared/atoms/Title';
-import ItemTab from '../components/store/organisms/itemTab';
+import ItemTab from '../components/store/organisms/ItemTab';
 import { useState } from 'react';
 
 export default function Store() {
