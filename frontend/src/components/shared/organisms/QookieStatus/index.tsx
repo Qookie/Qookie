@@ -9,10 +9,7 @@ export default function QookieStatus({ ...props }: QookieInfo) {
       <Qookie {...props} />
       <ContentsWrapper>
         <StatusCard
-          level={props.level}
-          exp={props.exp}
-          name={props.name}
-          createdAt={props.createdAt}
+           {...props}
         />
       </ContentsWrapper>
     </QookieContainer>
