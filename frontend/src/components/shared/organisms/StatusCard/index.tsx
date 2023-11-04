@@ -140,8 +140,8 @@ export default function StatusCard({ ...props }: QookieInfo) {
                 <BakedQookie>
                   <QookieContainer ref={divRef}>
                     <Qookie {...bakeProps} />
-                    <QookieBagImg src={QookieBag} alt="bag" />
                   </QookieContainer>
+                  <QookieBagImg src={QookieBag} alt="bag" />
                   <NameTag>
                     <Text typography="button">{props.name}</Text>({getToday()})
                   </NameTag>
@@ -205,8 +205,10 @@ const BottomInner = styled.div`
 `;
 
 const BakedQookie = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
+  align-items: center;
 `;
 
 const NameTag = styled.div`
@@ -216,9 +218,9 @@ const NameTag = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  align-self: center;
   position: absolute;
-  bottom: 20%;
+  bottom: 22%;
+  transform: translateY(-50%);
   border-radius: 0.5rem;
   background-color: var(--MR_YELLOW);
 `;
@@ -238,15 +240,16 @@ const TextBtn = styled.button`
 `;
 
 const QookieContainer = styled.div`
-  transform: scale(0.5);
+  transform: scale(0.6);
+  margin-top: -3rem;
   position: relative;
 `;
 
 const QookieBagImg = styled.img`
   position: absolute;
-  top: 32%;
+  top: 34%;
   left: 50%;
-  transform: translate(-50%, -50%) scale(0.4);
+  transform: translate(-50%, -50%) scale(0.25);
 `;
 
 const BottomBtnContainer = styled.div`
