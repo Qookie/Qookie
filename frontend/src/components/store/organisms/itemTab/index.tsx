@@ -11,7 +11,7 @@ import {
 } from '../../../../assets/svgs';
 import mouseSwipe from '../../../../utils/mouseSwipe';
 
-export default function ItemTab() {
+export default function Item() {
   const [currentTab, setCurrentTab] = useState<number>(0);
   const tabSwipeRef = useRef<HTMLDivElement>(null);
 

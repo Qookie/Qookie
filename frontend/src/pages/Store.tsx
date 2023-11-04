@@ -6,11 +6,32 @@ import Button from '../components/shared/atoms/Button';
 import { ShoppingCartIcon } from '@heroicons/react/24/outline';
 import Title from '../components/shared/atoms/Title';
 import ItemTab from '../components/store/organisms/ItemTab';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import Item, { ItemProps } from '../components/store/molecules/Item';
+import { itemApi } from '../api';
 
 export default function Store() {
   const [qookie, setQookie] = useRecoilState(QookieInfoState);
   const [currentTab, setCurrentTab] = useState<number>(0);
+  const [itemList, setItemList] = useState<ItemProps[][] | null>(null);
+
+  useEffect(() => {
+    if (currentTab === 0) {
+      itemApi.getItemList().then((res) => {
+        if (res) {
+          const itemArray = res.map((item) => [item]);
+          setItemList(itemArray);
+        }
+      });
+    } else {
+      itemApi.getMyItemList().then((res) => {
+        if (res) {
+          const itemArray = res.map((item) => [item]);
+          setItemList(itemArray);
+        }
+      });
+    }
+  }, [currentTab]);
 
   const selectTabHandler = (now: number) => {
     setCurrentTab(now);
@@ -48,6 +69,9 @@ export default function Store() {
           </Title>
         </TitleTab>
         <ItemTab />
+        <ItemContainer>
+          {itemList && itemList[currentTab].map((item, idx) => <Item {...item} key={idx} />)}
+        </ItemContainer>
       </BottomContainer>
     </PageContainer>
   );
@@ -55,6 +79,7 @@ export default function Store() {
 
 const PageContainer = styled.div`
   width: 100%;
+  position: fixed;
 `;
 
 const TopContainer = styled.div`
@@ -98,4 +123,13 @@ const TitleTab = styled.div`
   display: flex;
   padding: 1.5rem 1rem 0rem 1rem;
   gap: 1.3rem;
+`;
+
+const ItemContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.7rem;
+  padding: 0 1rem;
+  overflow: auto;
+  max-height: 17rem;
 `;
