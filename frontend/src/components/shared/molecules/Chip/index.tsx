@@ -4,7 +4,7 @@ import { Qoin } from '../../../../assets/svgs';
 interface Props {
   type: 'category' | 'qoin';
   icon: string | React.ReactNode;
-  text: string;
+  text: string | number;
   setInput?: () => void;
   isClicked?: boolean;
 }
