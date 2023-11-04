@@ -9,7 +9,9 @@ public enum QuestType {
 	PHOTO("하늘 사진 찍기", 6L),
 	MEDITATION("명상", 7L),
 	WATER("물 마시기", 8L),
-	STRETCH("스트레칭", 9L);
+	STRETCH("스트레칭", 9L),
+    ATTENDANCE("출석체크", 10L),
+	BUY_NEW("신상구매", 11L);
 
 	private final String message;
 	private final Long idx;

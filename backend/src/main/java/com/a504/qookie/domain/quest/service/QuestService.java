@@ -1,7 +1,13 @@
 package com.a504.qookie.domain.quest.service;
 
+import com.a504.qookie.domain.quest.dto.AttendanceCalendarResponse;
+import com.a504.qookie.domain.quest.dto.CalenderRequest;
 import java.time.LocalDateTime;
+import java.time.Month;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -15,6 +21,7 @@ import com.a504.qookie.domain.member.repository.HistoryRepository;
 import com.a504.qookie.domain.member.repository.MemberQuestRepository;
 import com.a504.qookie.domain.member.repository.MemberRepository;
 import com.a504.qookie.domain.quest.dto.CheckQuestResponse;
+// import com.a504.qookie.domain.quest.dto.QuestStatus;
 import com.a504.qookie.domain.quest.dto.QuestType;
 import com.a504.qookie.domain.quest.repository.QuestRepository;
 
@@ -40,8 +47,13 @@ public class QuestService {
 		QuestType questType = QuestType.valueOf(questName);
 		Long idx = questType.getIdx();
 		List<MemberQuest> list = memberQuestRepository.findAllByCreatedAtBetween(start, end);
+		System.out.println(" = " + idx);
+		System.out.println("questName = " + questName);
+
 		for (MemberQuest memberQuest : list){
-			if (memberQuest.getQuest().getId() == idx && memberQuest.getMember().getId() == member.getId()){
+			if (Objects.equals(memberQuest.getQuest().getId(), idx) && Objects.equals(memberQuest.getMember().getId(),
+				member.getId())){
+				System.out.println("memberQuest = " + memberQuest);
 				if (questName.equals("EAT") || questName.equals("PHOTO")) return new CheckQuestResponse(true, memberQuest.getImage());
 				return new CheckQuestResponse(true, null);
 			}
@@ -52,20 +64,26 @@ public class QuestService {
 	public void completeQuest(Member member, String questName) {
 		QuestType questType = QuestType.valueOf(questName.toUpperCase());
 		member = memberRepository.findById(member.getId()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자 입니다."));
-		memberQuestRepository.save(
-			MemberQuest.builder()
-				.member(member)
-				.quest(questRepository.findByName(questName)
-					.orElseThrow(() -> new IllegalArgumentException("존재하지 앟는 퀘스트 입니다.")))
-				.build());
-		historyRepository.save(
-			History.builder()
-				.member(member)
-				.message(questType.getMessage() + " 퀘스트 달성 보상")
-				.cost(10)
-				.build());
+		if (!questName.equals("ATTENDANCE")) { // 출석체크는 멤버퀘스트나 히스토리에 저장하면 안됨
+			memberQuestRepository.save(
+					MemberQuest.builder()
+							.member(member)
+							.quest(questRepository.findByName(questName)
+									.orElseThrow(
+											() -> new IllegalArgumentException("존재하지 앟는 퀘스트 입니다.")))
+							.build());
+			historyRepository.save(
+					History.builder()
+							.member(member)
+							.message(questType.getMessage() + " 퀘스트 달성 보상")
+							.cost(10)
+							.build());
+		}
 		pointUpdate(member, 10);
 		updateExp(member);
+		if (questName.equals("ATTENDANCE")) {
+			checkAttendance(member);
+		}
 		checkChallenge(member, questName);
 	}
 
@@ -90,6 +108,15 @@ public class QuestService {
 		checkChallenge(member, questName);
 	}
 
+	public void checkAttendance(Member member) {
+		int cur_month = LocalDateTime.now().getMonth().getValue();
+		int cur_year = LocalDateTime.now().getYear();
+		int cur_day = LocalDateTime.now().getDayOfMonth();
+		String checkAttendanceKey =
+				member.getId() + ":" + cur_year + ":" + cur_month + ":" + "ATTENDANCE"; // (유저PK):(년도):(이번달):(ATTENDANCE)
+		template.opsForSet().add(checkAttendanceKey, cur_day + "");
+	}
+
 	public void pointUpdate(Member member, int point) {
 		member = memberRepository.findById(member.getId())
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
@@ -106,17 +133,17 @@ public class QuestService {
 				/* TODO : 여기 알림 해주는 로직 */
 			}
 			cookie.updateLevel(); // 레벨업시키고
-			cookie.updateExp(); // 경험치 초기화
+			cookie.updateExp(0); // 경험치 초기화
 		} else if (cur_level < 10) {
-			if (cur_exp == 10) { // 레벨업 시켜야함
+			if (cur_exp + 10 >= 12) { // 레벨업 시켜야함
 				if (cur_level == 9) {
 					/* TODO : 여기 알림 해주는 로직 */
 				}
 				cookie.updateLevel(); // 레벨업시키고
-				cookie.updateExp(); // 경험치 초기화
+				cookie.updateExp(cur_exp + 10 - 12); // 경험치 초기화
 			} else {
 				// 경험치만 증가
-				cookie.updateExp(10);
+				cookie.plusExp(10);
 			}
 		} else if (cur_level < 20) { // 업당 필요 경험치 : 20
 			if (cur_exp == 10) { // 레벨업 시켜야함
@@ -124,10 +151,10 @@ public class QuestService {
 					/* TODO : 여기 알림 해주는 로직 */
 				}
 				cookie.updateLevel(); // 레벨업시키고
-				cookie.updateExp(); // 경험치 초기화
+				cookie.updateExp(0); // 경험치 초기화
 			} else {
 				// 경험치만 증가
-				cookie.updateExp(10);
+				cookie.plusExp(10);
 			}
 		} else if (cur_level < 30) {
 			if (cur_exp == 20) {
@@ -135,10 +162,10 @@ public class QuestService {
 					/* TODO : 여기 알림 해주는 로직 */
 				}
 				cookie.updateLevel(); // 레벨업시키고
-				cookie.updateExp(); // 경험치 초기화
+				cookie.updateExp(0); // 경험치 초기화
 			} else {
 				// 경험치만 증가
-				cookie.updateExp(10);
+				cookie.plusExp(10);
 			}
 		} else if (cur_level < 40) {
 			if (cur_exp == 30) {
@@ -146,10 +173,10 @@ public class QuestService {
 					/* TODO : 여기 알림 해주는 로직 */
 				}
 				cookie.updateLevel(); // 레벨업시키고
-				cookie.updateExp(); // 경험치 초기화
+				cookie.updateExp(0); // 경험치 초기화
 			} else {
 				// 경험치만 증가
-				cookie.updateExp(10);
+				cookie.plusExp(10);
 			}
 		} else {
 			if (cur_exp == 40) {
@@ -157,17 +184,17 @@ public class QuestService {
 					/* TODO : 여기 알림 해주는 로직 */
 				}
 				cookie.updateLevel(); // 레벨업시키고
-				cookie.updateExp(); // 경험치 초기화
+				cookie.updateExp(0); // 경험치 초기화
 			} else {
 				// 경험치만 증가
-				cookie.updateExp(10);
+				cookie.plusExp(10);
 			}
 		}
 	}
 
 	public void checkChallenge(Member member, String questName) {
 		member = memberRepository.findById(member.getId()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
-		String cur_month = LocalDateTime.now().getMonth().toString();
+		int cur_month = LocalDateTime.now().getMonth().getValue();
 		int cur_year = LocalDateTime.now().getYear();
 		int cur_day = LocalDateTime.now().getDayOfMonth();
 		QuestType questType = QuestType.valueOf(questName.toUpperCase());
@@ -236,7 +263,7 @@ public class QuestService {
 						.build());
 				/* TODO : 알림 해주기 */
 			}
-		} else {
+		} else if (questName.equals("SQUAT") || questName.equals("EAT") || questName.equals("WAKE") || questName.equals("MEDITATION")) {
 			Long size = template.opsForSet().size(badge_challenge_key);
 			if (size == 10) {
 				member.setPoint(30);
@@ -269,5 +296,27 @@ public class QuestService {
 				/* TODO : 알림 해주기 */
 			}
 		}
+
 	}
+
+	public AttendanceCalendarResponse getAttendanceInfo(Member member, CalenderRequest calenderRequest) {
+		String checkAttendanceKey = member.getId() + ":" + calenderRequest.year() + ":" + calenderRequest.month() + ":" + "ATTENDANCE";
+		Boolean todayComplete = template.opsForSet().isMember(checkAttendanceKey, LocalDateTime.now().getDayOfMonth() + "");
+		List<Integer> list = template.opsForSet().members(checkAttendanceKey).stream().map(Integer::valueOf).toList();
+		return new AttendanceCalendarResponse(todayComplete, list);
+	}
+
+	// public Map<Integer, QuestStatus> getMonthlyQuest(Member member, Integer year, Month month){
+	// 	Map<Integer, QuestStatus> map = new HashMap<>();
+	// 	LocalDateTime start = LocalDateTime.of(year, month, 1, 0, 0);
+	// 	LocalDateTime end = LocalDateTime.of(year, month, month.maxLength(),23, 59, 59);
+	// 	List<MemberQuest> list = memberQuestRepository.findAllByCreatedAtBetween(start, end);
+	// 	for (MemberQuest memberQuest: list){
+	// 		if (Objects.equals(memberQuest.getMember().getId(), member.getId())){
+	//
+	// 		}
+	// 	}
+	//
+	// 	return map;
+	// }
 }
