@@ -9,8 +9,10 @@ import com.a504.qookie.domain.item.dto.OrderRequest;
 import com.a504.qookie.domain.item.dto.OrderResponse;
 import com.a504.qookie.domain.item.entity.Item;
 import com.a504.qookie.domain.item.repository.ItemRepository;
+import com.a504.qookie.domain.member.entity.History;
 import com.a504.qookie.domain.member.entity.Member;
 import com.a504.qookie.domain.member.entity.MemberItem;
+import com.a504.qookie.domain.member.repository.HistoryRepository;
 import com.a504.qookie.domain.member.repository.MemberItemRepository;
 import com.a504.qookie.domain.member.repository.MemberRepository;
 import com.a504.qookie.domain.quest.service.AwsS3Service;
@@ -32,6 +34,7 @@ public class ItemService {
     private final MemberItemRepository memberItemRepository;
     private final MemberRepository memberRepository;
     private final QuestService questService;
+    private final HistoryRepository historyRepository;
 
     private static final Long BASE_BACKGROUND_ID = 2L;
     private static final Long NO_WEAR_ITEM_ID = 1L;
@@ -164,6 +167,12 @@ public class ItemService {
                     .member(member)
                     .item(item)
                     .createdAt(LocalDateTime.now())
+                    .build());
+            historyRepository.save(
+                History.builder()
+                    .member(member)
+                    .message("아이템 구매")
+                    .cost(-item.getPrice())
                     .build());
         }
 
