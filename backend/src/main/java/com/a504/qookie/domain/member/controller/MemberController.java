@@ -86,4 +86,13 @@ public class MemberController {
             "코인 사용 히스토리 갖고오기 완료",
             memberService.getHistory(member.getMember(), year, Month.of(month)));
     }
+
+    @GetMapping("/calender/{year}/{month}")
+    public ResponseEntity<?> getCalender(
+        @AuthenticationPrincipal CustomMemberDetails member,
+        @PathVariable Integer year,
+        @PathVariable Integer month
+    ){
+        return BaseResponse.okWithData(HttpStatus.OK, "월간 퀘스트 목록 불러오기 완료", memberService.getCalender(member.getMember(), year, Month.of(month)));
+    }
 }
