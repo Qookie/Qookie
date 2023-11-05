@@ -39,6 +39,7 @@ const Container = styled.div<{ state: boolean }>`
   justify-content: center;
   position: relative;
   overflow: hidden;
+  border-radius: 0.75rem;
   box-shadow: ${({ state }) => state && '0 0 0 2px var(--MR_RED) inset'};
 `;
 

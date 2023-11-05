@@ -10,28 +10,40 @@ import { useEffect, useState } from 'react';
 import Item, { ItemProps } from '../components/store/molecules/Item';
 import { itemApi } from '../api';
 
+export interface AllItemProps {
+  0: ItemProps[];
+  1: ItemProps[];
+  2: ItemProps[];
+  3: ItemProps[];
+  4: ItemProps[];
+  5: ItemProps[];
+  6: ItemProps[];
+}
+
 export default function Store() {
   const [qookie, setQookie] = useRecoilState(QookieInfoState);
   const [currentTab, setCurrentTab] = useState<number>(0);
-  const [itemList, setItemList] = useState<ItemProps[][] | null>(null);
+  const [itemList, setItemList] = useState<AllItemProps>();
 
   useEffect(() => {
     if (currentTab === 0) {
       itemApi.getItemList().then((res) => {
         if (res) {
-          const itemArray = res.map((item) => [item]);
-          setItemList(itemArray);
+          setItemHandler(res);
         }
       });
     } else {
       itemApi.getMyItemList().then((res) => {
         if (res) {
-          const itemArray = res.map((item) => [item]);
-          setItemList(itemArray);
+          setItemHandler(res);
         }
       });
     }
   }, [currentTab]);
+
+  const setItemHandler = (res: AllItemProps) => {
+    setItemList(res);
+  };
 
   const selectTabHandler = (now: number) => {
     setCurrentTab(now);
@@ -70,7 +82,7 @@ export default function Store() {
         </TitleTab>
         <ItemTab />
         <ItemContainer>
-          {itemList && itemList[currentTab].map((item, idx) => <Item {...item} key={idx} />)}
+          {itemList && itemList[1].map((item, idx) => <Item {...item} key={idx} />)}
         </ItemContainer>
       </BottomContainer>
     </PageContainer>
@@ -114,7 +126,7 @@ const ButtonContainer = styled.div`
 `;
 
 const BottomContainer = styled.div`
-  width: 100%;
+  width: min(100%, 430px);
   height: 100%;
   box-sizing: border-box;
 `;
