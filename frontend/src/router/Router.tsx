@@ -9,6 +9,7 @@ import Loading from '../pages/Loading';
 import SetWakeupTime from '../pages/SetWakeupTime';
 import Mypage from '../pages/Mypage';
 import Store from '../pages/Store';
+import ItemUpload from '../pages/ItemUpload';
 
 const Router = () => {
   return (
@@ -30,6 +31,7 @@ const Router = () => {
 
         <Route path="/challenge" element={<Challenge />} />
 
+        <Route path="/admin" element={<ItemUpload />} />
         <Route path="/loading" element={<Loading />} />
       </Routes>
       <NavBarWrapper />
