@@ -11,7 +11,11 @@ import {
 } from '../../../../assets/svgs';
 import mouseSwipe from '../../../../utils/mouseSwipe';
 
-export default function Item() {
+interface TabProps {
+  isClicked: any;
+}
+
+export default function ItemTab({ isClicked }: TabProps) {
   const [currentTab, setCurrentTab] = useState<number>(0);
   const tabSwipeRef = useRef<HTMLDivElement>(null);
 
@@ -29,6 +33,7 @@ export default function Item() {
 
   const selectTabHandler = (idx: number) => {
     setCurrentTab(idx);
+    currentTab && isClicked(idx);
   };
 
   return (

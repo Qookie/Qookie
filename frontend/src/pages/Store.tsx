@@ -11,19 +11,15 @@ import Item, { ItemProps } from '../components/store/molecules/Item';
 import { itemApi } from '../api';
 
 export interface AllItemProps {
-  0: ItemProps[];
-  1: ItemProps[];
-  2: ItemProps[];
-  3: ItemProps[];
-  4: ItemProps[];
-  5: ItemProps[];
-  6: ItemProps[];
+  [index: number]: ItemProps[];
 }
 
 export default function Store() {
   const [qookie, setQookie] = useRecoilState(QookieInfoState);
   const [currentTab, setCurrentTab] = useState<number>(0);
+  const [curItemTab, setCurItemTab] = useState<number>(0);
   const [itemList, setItemList] = useState<AllItemProps>();
+  const [curItemList, setCurItemList] = useState<ItemProps[]>(itemList ? itemList[0] : []);
 
   useEffect(() => {
     if (currentTab === 0) {
@@ -41,12 +37,23 @@ export default function Store() {
     }
   }, [currentTab]);
 
+  useEffect(() => {
+    if (itemList) {
+      setCurItemList(itemList[curItemTab]);
+      console.log('now', curItemList);
+    }
+  }, [curItemTab]);
+
   const setItemHandler = (res: AllItemProps) => {
     setItemList(res);
   };
 
   const selectTabHandler = (now: number) => {
     setCurrentTab(now);
+  };
+
+  const selectCategoryHandler = (now: number) => {
+    setCurItemTab(now);
   };
 
   return (
@@ -80,9 +87,9 @@ export default function Store() {
             MY
           </Title>
         </TitleTab>
-        <ItemTab />
+        <ItemTab isClicked={selectCategoryHandler} />
         <ItemContainer>
-          {itemList && itemList[1].map((item, idx) => <Item {...item} key={idx} />)}
+          {curItemList && curItemList.map((item, idx) => <Item {...item} key={idx} />)}
         </ItemContainer>
       </BottomContainer>
     </PageContainer>
