@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
 import { QookieInfoState } from '../modules/qookie';
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { qookieApi } from '../api';
 import QookieStatus from '../components/shared/organisms/QookieStatus';
 import QuestList from '../components/home/organisms/QuestList';
@@ -10,6 +10,9 @@ import { QookieInfo } from '../types';
 import { useNavigate } from 'react-router-dom';
 import attendance from '../assets/pngs/calendar.png';
 import challenge from '../assets/pngs/challenge.png';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { auth } from '../firebase/firebaseConfig';
+import { UserContext } from '../firebase/firebaseAuth';
 
 export interface QookieInfoResponse {
   msg: string;
@@ -25,11 +28,23 @@ const Home = () => {
     qookieApi.getQookieInfo().then((res) => res !== null && setQookie({ ...qookie, ...res }));
   }, []);
 
+  // 테스트용
+  const signout = () => {
+    signOut(auth).then(() => {
+      auth.onAuthStateChanged((user) => {
+        if (!user) {
+          navigate('/')
+        }
+      })
+    })
+  }
+
   return (
     <HomeContainer>
       <QookieStatus {...qookie} />
       <QuestContainer>
         <ButtonContainer>
+          <div onClick={signout}>로그아웃!</div>
           <HomeButton
             title="출석체크"
             icon={attendance}

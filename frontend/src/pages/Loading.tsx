@@ -1,9 +1,10 @@
-import { getRedirectResult, getIdToken } from 'firebase/auth';
+import { getRedirectResult, getIdToken, signInWithRedirect } from 'firebase/auth';
 import { auth } from '../firebase/firebaseConfig';
 import { http } from '../api/instance';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import Spinner from '../components/shared/atoms/Spinner';
+import { OAuthProvider, GoogleAuthProvider } from 'firebase/auth';
 
 type LoginResponse = {
   msg: string;
@@ -14,9 +15,24 @@ type LoginResponse = {
   };
 };
 
+const providers = {
+  'oidc.kakao': new OAuthProvider('oidc.kakao'),
+  'google.com': new GoogleAuthProvider(),
+};
+
 const Loading = () => {
   const navigate = useNavigate();
+  const [searchParams, _] = useSearchParams();
+
   const socialLoginCallback = async () => {
+    const provider = searchParams.get('provider');
+
+    if (provider === 'oidc.kakao') {
+      signInWithRedirect(auth, providers[provider]);
+    } else if (provider === 'google.com') {
+      signInWithRedirect(auth, providers[provider]);
+    }
+
     const res = await getRedirectResult(auth);
 
     if (!res) {
@@ -46,8 +62,15 @@ const Loading = () => {
     }
   };
 
+  // redirect to home if user is signed-in
   useEffect(() => {
-    socialLoginCallback();
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        navigate('/home');
+      } else {
+        socialLoginCallback();
+      }
+    });
   });
 
   return <Spinner />;

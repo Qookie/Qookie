@@ -13,6 +13,8 @@ import SocialLoginButton, {
 } from '../components/login/atoms/SocialLoginButton';
 import TitleLayout from '../components/shared/Template/TitleLayout';
 import { useNavigate } from 'react-router-dom';
+import { useContext, useEffect } from 'react';
+import { UserContext } from '../firebase/firebaseAuth';
 
 const provider = {
   kakao: new OAuthProvider('oidc.kakao'),
@@ -21,10 +23,20 @@ const provider = {
 
 const Login = () => {
   const navigate = useNavigate();
+  const currentUser = useContext(UserContext);
+
+  // redirect to home if user is signed-in
+  useEffect(() => {
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        navigate('/home');
+      }
+    });
+  });
+
 
   const onClickSocialLogin = (provider: OAuthProvider | GoogleAuthProvider) => {
-    navigate('/loading');
-    signInWithRedirect(auth, provider);
+    navigate('/loading?provider=' + provider.providerId);
   };
 
   return (
