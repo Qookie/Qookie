@@ -61,10 +61,10 @@ public class ItemService {
 
     public List<ItemResponse>[] list(Member member) {
 
-        List<ItemResponse>[] lists = new ArrayList[7];
-        // 0:배경, 1:신상, 2:모자, 3:신발, 4:하의, 5:상의, 6:액세서리
+        List<ItemResponse>[] lists = new ArrayList[6];
+        // 0:배경, 1:모자, 2:신발, 3:하의, 4:상의, 5:액세서리
 
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 6; i++) {
             lists[i] = new ArrayList<>();
         }
         List<Item> itemList = itemRepository.findAll();
@@ -78,23 +78,18 @@ public class ItemService {
 
             ItemResponse itemResponse = new ItemResponse(item);
 
-            // 신상 넣기
-            if (item.getIsNew()) {
-                lists[1].add(itemResponse);
-            }
-
             if (item.getCategory().equals("배경")) {
                 lists[0].add(itemResponse);
             } else if (item.getCategory().equals("모자")) {
-                lists[2].add(itemResponse);
+                lists[1].add(itemResponse);
             } else if (item.getCategory().equals("신발")) {
-                lists[3].add(itemResponse);
+                lists[2].add(itemResponse);
             } else if (item.getCategory().equals("하의")) {
-                lists[4].add(itemResponse);
+                lists[3].add(itemResponse);
             } else if (item.getCategory().equals("상의")) {
-                lists[5].add(itemResponse);
+                lists[4].add(itemResponse);
             } else if (item.getCategory().equals("액세서리")) {
-                lists[6].add(itemResponse);
+                lists[5].add(itemResponse);
             }
         }
 
