@@ -127,7 +127,7 @@ public class ItemService {
         Item baseBackground = itemRepository.findById(BASE_BACKGROUND_ID)
                 .orElseThrow(() -> new IllegalArgumentException("기본 배경이 없습니다"));
 
-        Boolean isWear = false;
+        boolean isWear = false;
         if (baseBackground.getId().equals(cookie.getBackground().getId())) {
             System.out.println("기본배경과 같음");
             isWear = true;
@@ -210,8 +210,10 @@ public class ItemService {
             } else if (item.getCategory().equals("액세서리")) {
                 boolean find = false;
                 for (Long accId:accessoriesList) {
-                    if (item.getId().equals(accId))
+                    if (item.getId().equals(accId)) {
                         find = true;
+                        break;
+                    }
                 }
                 lists[5].add(new MyItemResponse(item, find));
             }
