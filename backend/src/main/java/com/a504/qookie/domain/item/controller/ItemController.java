@@ -2,6 +2,7 @@ package com.a504.qookie.domain.item.controller;
 
 import com.a504.qookie.domain.item.dto.ItemResponse;
 import com.a504.qookie.domain.item.dto.ItemUploadRequest;
+import com.a504.qookie.domain.item.dto.ItemWearRequest;
 import com.a504.qookie.domain.item.dto.MyItemResponse;
 import com.a504.qookie.domain.item.dto.OrderListRequest;
 import com.a504.qookie.domain.item.dto.OrderRequest;
@@ -15,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -79,5 +81,15 @@ public class ItemController {
         List<OrderResponse> orderResponses = itemService.orderList(orderListRequest, customMemberDetails.getMember());
 
         return BaseResponse.okWithData(HttpStatus.OK, "item order list OK", orderResponses);
+    }
+
+    @PatchMapping("/wear")
+    public ResponseEntity<?> wear(
+            @RequestBody ItemWearRequest itemWearRequest,
+            @AuthenticationPrincipal CustomMemberDetails customMemberDetails) {
+
+        itemService.wear(itemWearRequest, customMemberDetails.getMember());
+
+        return BaseResponse.ok(HttpStatus.OK, "item wear OK");
     }
 }

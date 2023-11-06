@@ -1,9 +1,12 @@
-import { getRedirectResult, getIdToken } from 'firebase/auth';
+import { getRedirectResult, getIdToken, signInWithRedirect } from 'firebase/auth';
 import { auth } from '../firebase/firebaseConfig';
 import { http } from '../api/instance';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import Spinner from '../components/shared/atoms/Spinner';
+import { OAuthProvider, GoogleAuthProvider } from 'firebase/auth';
+import { useSetRecoilState } from 'recoil';
+import { UserState } from '../recoil/UserState';
 
 type LoginResponse = {
   msg: string;
@@ -14,41 +17,64 @@ type LoginResponse = {
   };
 };
 
+const providers = {
+  'oidc.kakao': new OAuthProvider('oidc.kakao'),
+  'google.com': new GoogleAuthProvider(),
+};
+
 const Loading = () => {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const setUserState = useSetRecoilState(UserState);
+
+
   const socialLoginCallback = async () => {
-    const res = await getRedirectResult(auth);
-
-    if (!res) {
-      return;
-    }
-
-    const { user } = res;
-    const accessToken = await getIdToken(user);
-    localStorage.setItem('accessToken', accessToken);
-    const { displayName, email, uid } = user;
-
-    try {
-      const res = await http.post<LoginResponse>('/api/member/login', {
-        displayName,
-        email,
-        uid,
-        messageToken: localStorage.getItem('messageToken'),
-      });
-
-      if (res.payload.new) {
-        navigate('/init');
-      } else {
-        navigate('/home');
-      }
-    } catch (error) {
-      console.log(error);
+    const provider = searchParams.get('provider');
+    searchParams.delete('provider')
+    setSearchParams()
+    if (provider === 'oidc.kakao') {
+      signInWithRedirect(auth, providers[provider]);
+    } else if (provider === 'google.com') {
+      signInWithRedirect(auth, providers[provider]);
     }
   };
 
   useEffect(() => {
-    socialLoginCallback();
-  });
+    socialLoginCallback()
+    getRedirectResult(auth)
+      .then((res) => {
+        if (res === null) {
+          return
+        }
+        const { user } = res;
+
+        const copiedUser = JSON.parse(JSON.stringify(user))
+        setUserState(copiedUser);
+        
+        user.getIdToken()
+          .then((accessToken) => {
+            localStorage.setItem("accessToken", accessToken)
+            const { displayName, email, uid } = user;
+            http.post<LoginResponse>('/api/member/login', {
+              displayName,
+              email,
+              uid,
+              messageToken: localStorage.getItem('messageToken')
+            })
+              .then((res) => {
+                if (res.payload.new) {
+                  navigate('/init')
+                } else {
+                  navigate('/home')
+                }
+              })
+              .catch(err=>console.log(err))
+            
+          })
+          .catch(err=>console.log(err))
+      })
+  }, [])
+
 
   return <Spinner />;
 };

@@ -10,30 +10,40 @@ import SetWakeupTime from '../pages/SetWakeupTime';
 import Mypage from '../pages/Mypage';
 import Store from '../pages/Store';
 import ItemUpload from '../pages/ItemUpload';
+import { useRecoilState } from 'recoil';
+import { UserState } from '../recoil/UserState';
+import NotFound from '../pages/NotFound';
 
 const Router = () => {
+  const [userState, _] = useRecoilState(UserState);
   return (
     <BrowserRouter>
       <HeaderWrapper />
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/init" element={<InitQookie />} />
-        <Route path="/set-wakeup" element={<SetWakeupTime />} />
+      {userState ? (
+        <Routes>
+          <Route path="/*" element={<NotFound />} />
+          <Route path="/init" element={<InitQookie />} />
+          <Route path="/set-wakeup" element={<SetWakeupTime />} />
 
-        <Route path="/home" element={<Home />} />
+          <Route path="/home" element={<Home />} />
 
-        <Route path="/calendar" element={<Login />} />
+          <Route path="/calendar" element={<Login />} />
 
-        <Route path="/mind" element={<Login />} />
+          <Route path="/mind" element={<Login />} />
 
-        <Route path="/mypage" element={<Mypage />} />
-        <Route path="/store" element={<Store />} />
+          <Route path="/mypage" element={<Mypage />} />
+          <Route path="/store" element={<Store />} />
 
-        <Route path="/challenge" element={<Challenge />} />
-
-        <Route path="/admin" element={<ItemUpload />} />
-        <Route path="/loading" element={<Loading />} />
-      </Routes>
+          <Route path="/challenge" element={<Challenge />} />
+          
+          <Route path="/admin" element={<ItemUpload />} />
+        </Routes>
+      ) : (
+        <Routes>
+          <Route path="/*" element={<Login />} />
+          <Route path="/loading" element={<Loading />} />
+        </Routes>
+      )}
       <NavBarWrapper />
     </BrowserRouter>
   );

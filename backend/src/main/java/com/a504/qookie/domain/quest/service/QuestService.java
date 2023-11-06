@@ -1,9 +1,12 @@
 package com.a504.qookie.domain.quest.service;
 
+import com.a504.qookie.domain.cookie.entity.Body;
+import com.a504.qookie.domain.cookie.repository.BodyRepository;
 import com.a504.qookie.domain.quest.dto.AttendanceCalendarResponse;
 import com.a504.qookie.domain.quest.dto.CalenderRequest;
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +23,7 @@ import com.a504.qookie.domain.member.entity.MemberQuest;
 import com.a504.qookie.domain.member.repository.HistoryRepository;
 import com.a504.qookie.domain.member.repository.MemberQuestRepository;
 import com.a504.qookie.domain.member.repository.MemberRepository;
+import com.a504.qookie.domain.quest.dto.ChallengeStatus;
 import com.a504.qookie.domain.quest.dto.CheckQuestResponse;
 // import com.a504.qookie.domain.quest.dto.QuestStatus;
 import com.a504.qookie.domain.quest.dto.QuestType;
@@ -39,6 +43,7 @@ public class QuestService {
 	private final CookieRepository cookieRepository;
 	private final HistoryRepository historyRepository;
 	private final RedisTemplate<String, String> template;
+	private final BodyRepository bodyRepository;
 
 	public CheckQuestResponse checkQuest(Member member, String questName) { // 오늘 날짜의 questName 퀘스트를 완료했는지
 		LocalDateTime now = LocalDateTime.now();
@@ -53,7 +58,6 @@ public class QuestService {
 		for (MemberQuest memberQuest : list){
 			if (Objects.equals(memberQuest.getQuest().getId(), idx) && Objects.equals(memberQuest.getMember().getId(),
 				member.getId())){
-				System.out.println("memberQuest = " + memberQuest);
 				if (questName.equals("EAT") || questName.equals("PHOTO")) return new CheckQuestResponse(true, memberQuest.getImage());
 				return new CheckQuestResponse(true, null);
 			}
@@ -132,14 +136,14 @@ public class QuestService {
 			if (cur_level + 1 == 5) { // 외형 바뀌는 레벨업
 				/* TODO : 여기 알림 해주는 로직 */
 			}
-			cookie.updateLevel(); // 레벨업시키고
+			updateLevel(cookie); // 레벨업시키고
 			cookie.updateExp(0); // 경험치 초기화
 		} else if (cur_level < 10) {
 			if (cur_exp + 10 >= 12) { // 레벨업 시켜야함
 				if (cur_level == 9) {
 					/* TODO : 여기 알림 해주는 로직 */
 				}
-				cookie.updateLevel(); // 레벨업시키고
+				updateLevel(cookie); // 레벨업시키고
 				cookie.updateExp(cur_exp + 10 - 12); // 경험치 초기화
 			} else {
 				// 경험치만 증가
@@ -150,7 +154,7 @@ public class QuestService {
 				if (cur_level == 19) {
 					/* TODO : 여기 알림 해주는 로직 */
 				}
-				cookie.updateLevel(); // 레벨업시키고
+				updateLevel(cookie); // 레벨업시키고
 				cookie.updateExp(0); // 경험치 초기화
 			} else {
 				// 경험치만 증가
@@ -161,7 +165,7 @@ public class QuestService {
 				if (cur_level == 29) {
 					/* TODO : 여기 알림 해주는 로직 */
 				}
-				cookie.updateLevel(); // 레벨업시키고
+				updateLevel(cookie); // 레벨업시키고
 				cookie.updateExp(0); // 경험치 초기화
 			} else {
 				// 경험치만 증가
@@ -172,7 +176,7 @@ public class QuestService {
 				if (cur_level == 39) {
 					/* TODO : 여기 알림 해주는 로직 */
 				}
-				cookie.updateLevel(); // 레벨업시키고
+				updateLevel(cookie); // 레벨업시키고
 				cookie.updateExp(0); // 경험치 초기화
 			} else {
 				// 경험치만 증가
@@ -183,13 +187,50 @@ public class QuestService {
 				if (cur_level == 49) {
 					/* TODO : 여기 알림 해주는 로직 */
 				}
-				cookie.updateLevel(); // 레벨업시키고
+				updateLevel(cookie); // 레벨업시키고
 				cookie.updateExp(0); // 경험치 초기화
 			} else {
 				// 경험치만 증가
 				cookie.plusExp(10);
 			}
 		}
+	}
+
+	public void updateLevel(Cookie cookie) {
+
+		cookie.updateLevel();
+
+		int cur_level = cookie.getLevel();
+		Body body = null;
+
+		switch (cur_level) {
+			case 5:
+				body = bodyRepository.findByStage(2)
+						.orElseThrow(() -> new IllegalArgumentException("맞는 몸이 없습니다"));
+				break;
+			case 10:
+				body = bodyRepository.findByStage(3)
+						.orElseThrow(() -> new IllegalArgumentException("맞는 몸이 없습니다"));
+				break;
+			case 20:
+				body = bodyRepository.findByStage(4)
+						.orElseThrow(() -> new IllegalArgumentException("맞는 몸이 없습니다"));
+				break;
+			case 30:
+				body = bodyRepository.findByStage(5)
+						.orElseThrow(() -> new IllegalArgumentException("맞는 몸이 없습니다"));
+				break;
+			case 40:
+				body = bodyRepository.findByStage(6)
+						.orElseThrow(() -> new IllegalArgumentException("맞는 몸이 없습니다"));
+				break;
+		}
+
+		if (!body.equals(null)) {
+			cookie.changeBody(body);
+			cookieRepository.save(cookie);
+		}
+
 	}
 
 	public void checkChallenge(Member member, String questName) {
@@ -306,17 +347,48 @@ public class QuestService {
 		return new AttendanceCalendarResponse(todayComplete, list);
 	}
 
-	// public Map<Integer, QuestStatus> getMonthlyQuest(Member member, Integer year, Month month){
-	// 	Map<Integer, QuestStatus> map = new HashMap<>();
-	// 	LocalDateTime start = LocalDateTime.of(year, month, 1, 0, 0);
-	// 	LocalDateTime end = LocalDateTime.of(year, month, month.maxLength(),23, 59, 59);
-	// 	List<MemberQuest> list = memberQuestRepository.findAllByCreatedAtBetween(start, end);
-	// 	for (MemberQuest memberQuest: list){
-	// 		if (Objects.equals(memberQuest.getMember().getId(), member.getId())){
-	//
-	// 		}
-	// 	}
-	//
-	// 	return map;
-	// }
+	public ChallengeStatus[] getChallengeStatus(Member member){
+		ChallengeStatus[] list = new ChallengeStatus[12];
+		LocalDateTime now = LocalDateTime.now();
+		int year = now.getYear();
+		int month = now.getDayOfMonth();
+		int idx = 0;
+		for (QuestType questType: QuestType.values()){
+			String questName = questType.name();
+			Long id = questType.getIdx();
+			if (id > 9) break;
+			if (id <= 3){ // 월간 챌린지들
+				String key = member.getId() + ":" + year + ":" + month + ":" + questName;
+				Long size = template.opsForSet().size(key);
+				list[idx] = new ChallengeStatus("월간 " + questType.getMessage() + " 챌린지", size, id == 3 ? 10 : 15);
+			}
+			// 뱃지 챌린지
+			String badgeKey = member.getId() + ":" + questName + ":badge";
+			Long size = template.opsForSet().size(badgeKey);
+			/**
+			 * PHOTO만 5, 10, 15
+			 * 나머지 10 50 100
+			 */
+			if (questName.equals("PHOTO")){
+				if (size <= 5){
+					list[idx + 3] = new ChallengeStatus(questType.getMessage() + " 뱃지 챌린지 1단계", size, 5);
+				}else if (size <= 10){
+					list[idx + 3] = new ChallengeStatus(questType.getMessage() + " 뱃지 챌린지 2단계", size, 10);
+				}else{
+					list[idx + 3] = new ChallengeStatus(questType.getMessage() + " 뱃지 챌린지 3단계", size, (int)Long.min(size, 15));
+				}
+				idx++;
+				continue;
+			}
+			if (size <= 10){
+				list[idx + 3] = new ChallengeStatus(questType.getMessage() + " 뱃지 챌린지 1단계", size, 10);
+			}else if (size <= 50){
+				list[idx + 3] = new ChallengeStatus(questType.getMessage() + " 뱃지 챌린지 2단계", size, 50);
+			}else{
+				list[idx + 3] = new ChallengeStatus(questType.getMessage() + " 뱃지 챌린지 3단계", size, (int)Long.min(size, 100));
+			}
+			idx++;
+		}
+		return list;
+	}
 }
