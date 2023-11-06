@@ -9,11 +9,14 @@ import com.a504.qookie.domain.item.dto.OrderRequest;
 import com.a504.qookie.domain.item.dto.OrderResponse;
 import com.a504.qookie.domain.item.entity.Item;
 import com.a504.qookie.domain.item.repository.ItemRepository;
+import com.a504.qookie.domain.member.entity.History;
 import com.a504.qookie.domain.member.entity.Member;
 import com.a504.qookie.domain.member.entity.MemberItem;
+import com.a504.qookie.domain.member.repository.HistoryRepository;
 import com.a504.qookie.domain.member.repository.MemberItemRepository;
 import com.a504.qookie.domain.member.repository.MemberRepository;
 import com.a504.qookie.domain.quest.service.AwsS3Service;
+import com.a504.qookie.domain.quest.service.QuestService;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -30,6 +33,11 @@ public class ItemService {
     private final ItemRepository itemRepository;
     private final MemberItemRepository memberItemRepository;
     private final MemberRepository memberRepository;
+    private final QuestService questService;
+    private final HistoryRepository historyRepository;
+
+    private static final Long BASE_BACKGROUND_ID = 2L;
+    private static final Long NO_WEAR_ITEM_ID = 1L;
 
     public String upload(ItemUploadRequest itemUploadRequest, MultipartFile image) {
         String url = awsS3Service.uploadImageToS3(image);
@@ -96,6 +104,18 @@ public class ItemService {
             lists[i] = new ArrayList<>();
         }
 
+        Item background = itemRepository.findById(BASE_BACKGROUND_ID)
+                .orElseThrow(() -> new IllegalArgumentException("기본 배경이 없습니다"));
+
+        lists[0].add(new MyItemResponse(background));
+
+        Item noWearItem = itemRepository.findById(NO_WEAR_ITEM_ID)
+                .orElseThrow(() -> new IllegalArgumentException("기본 배경이 없습니다"));
+
+        for (int i = 1; i < 6; i++) {
+            lists[i].add(new MyItemResponse(noWearItem));
+        }
+
         List<MemberItem> memberItemList = memberItemRepository.findByMember(member);
 
         for (MemberItem memberItem:memberItemList) {
@@ -139,10 +159,20 @@ public class ItemService {
             Item item = itemRepository.findById(orderItemRequest.itemId())
                     .orElseThrow(() -> new IllegalArgumentException("상품이 없습니다"));
 
+            if (item.getIsNew()) {
+                questService.checkChallenge(member, "BUY_NEW");
+            }
+
             memberItemRepository.save(MemberItem.builder()
                     .member(member)
                     .item(item)
                     .createdAt(LocalDateTime.now())
+                    .build());
+            historyRepository.save(
+                History.builder()
+                    .member(member)
+                    .message("아이템 구매")
+                    .cost(-item.getPrice())
                     .build());
         }
 
