@@ -7,11 +7,11 @@ import { ShoppingCartIcon } from '@heroicons/react/24/outline';
 import Title from '../components/shared/atoms/Title';
 import ItemTab from '../components/store/organisms/ItemTab';
 import { useEffect, useState } from 'react';
-import Item, { ItemProps } from '../components/store/molecules/Item';
+import Item, { ItemProps, ItemTypeProps } from '../components/store/molecules/Item';
 import { itemApi } from '../api';
 
 export interface AllItemProps {
-  [index: number]: ItemProps[];
+  [index: number]: ItemTypeProps[];
 }
 
 export default function Store() {
