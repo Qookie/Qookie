@@ -11,5 +11,14 @@ const getQookieInfo = async () => {
   }
 };
 
-const qookie = { getQookieInfo };
+const getProxyUrl = async (url: string) => {
+  try {
+    const res = await http.get<any>(`/html2canvas/proxy.json?url=${url}`);
+    return res;
+  } catch (e) {
+    console.log('getProxyUrl', e);
+  }
+};
+
+const qookie = { getQookieInfo, getProxyUrl };
 export default qookie;

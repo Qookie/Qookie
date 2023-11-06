@@ -64,18 +64,21 @@ public class QuestService {
 	public void completeQuest(Member member, String questName) {
 		QuestType questType = QuestType.valueOf(questName.toUpperCase());
 		member = memberRepository.findById(member.getId()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자 입니다."));
-		memberQuestRepository.save(
-			MemberQuest.builder()
-				.member(member)
-				.quest(questRepository.findByName(questName)
-					.orElseThrow(() -> new IllegalArgumentException("존재하지 앟는 퀘스트 입니다.")))
-				.build());
-		historyRepository.save(
-			History.builder()
-				.member(member)
-				.message(questType.getMessage() + " 퀘스트 달성 보상")
-				.cost(10)
-				.build());
+		if (!questName.equals("ATTENDANCE")) { // 출석체크는 멤버퀘스트나 히스토리에 저장하면 안됨
+			memberQuestRepository.save(
+					MemberQuest.builder()
+							.member(member)
+							.quest(questRepository.findByName(questName)
+									.orElseThrow(
+											() -> new IllegalArgumentException("존재하지 앟는 퀘스트 입니다.")))
+							.build());
+			historyRepository.save(
+					History.builder()
+							.member(member)
+							.message(questType.getMessage() + " 퀘스트 달성 보상")
+							.cost(10)
+							.build());
+		}
 		pointUpdate(member, 10);
 		updateExp(member);
 		if (questName.equals("ATTENDANCE")) {
