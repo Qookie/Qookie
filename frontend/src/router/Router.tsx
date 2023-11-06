@@ -8,6 +8,8 @@ import Challenge from '../pages/Challenge';
 import Loading from '../pages/Loading';
 import SetWakeupTime from '../pages/SetWakeupTime';
 import Mypage from '../pages/Mypage';
+import WakeupQuest from '../pages/quest/WakeupQuest';
+import EatQuest from '../pages/quest/EatQuest';
 
 const Router = () => {
   return (
@@ -23,6 +25,10 @@ const Router = () => {
         <Route path="/mypage" element={<Mypage />} />
         <Route path="/challenge" element={<Challenge />} />
         <Route path="/loading" element={<Loading />} />
+        <Route path="/quest">
+          <Route path="wake" element={<WakeupQuest />} />
+          <Route path="eat" element={<EatQuest />} />
+        </Route>
       </Routes>
       <NavBarWrapper />
     </BrowserRouter>
