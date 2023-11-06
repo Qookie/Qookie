@@ -40,9 +40,6 @@ public class Cookie {
 	@Column(name = "created_at")
 	private LocalDateTime createdAt;
 
-	@Column(name = "style")
-	private Long style;
-
 	@Column(name = "exp")
 	private int exp;
 

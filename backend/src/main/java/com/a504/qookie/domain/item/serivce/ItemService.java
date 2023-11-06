@@ -285,7 +285,7 @@ public class ItemService {
 
         template.delete(accessories_key);
         template.opsForList().rightPushAll(accessories_key,
-                itemWearRequest.accessories().stream().map(String::valueOf).collect(Collectors.toList()));
+                itemWearRequest.accessories().stream().map(String::valueOf).toList());
 
     }
 }
