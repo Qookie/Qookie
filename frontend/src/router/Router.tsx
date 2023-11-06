@@ -15,6 +15,7 @@ import { UserState } from '../recoil/UserState';
 import NotFound from '../pages/NotFound';
 import WalkQuest from '../pages/quest/WalkQuest';
 import SquatQuest from '../pages/quest/SquatQuest';
+import PromiseQuest from '../pages/quest/PromiseQuest';
 
 const Router = () => {
   const [userState, _] = useRecoilState(UserState);
@@ -36,6 +37,7 @@ const Router = () => {
             <Route path="eat" element={<EatQuest />} />
             <Route path="walk" element={<WalkQuest />} />
             <Route path="squat" element={<SquatQuest />} />
+            <Route path="promise" element={<PromiseQuest />} />
           </Route>
         </Routes>
       ) : (
