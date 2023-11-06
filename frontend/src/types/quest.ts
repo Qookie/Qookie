@@ -13,6 +13,7 @@ export enum QuestId {
 export enum Quest {
   WAKE = 'wake',
   EAT = 'eat',
+  WALK = 'walk',
   SQUAT = 'squat',
   PROMISE = 'promise',
   PHOTO = 'photo',
