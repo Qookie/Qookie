@@ -18,6 +18,7 @@ import SquatQuest from '../pages/quest/SquatQuest';
 import PromiseQuest from '../pages/quest/PromiseQuest';
 import PhotoQuest from '../pages/quest/PhotoQuest';
 import StretchQuest from '../pages/quest/StretchQuest';
+import MeditaionQuest from '../pages/quest/MeditaionQuest';
 
 const Router = () => {
   const [userState, _] = useRecoilState(UserState);
@@ -42,6 +43,7 @@ const Router = () => {
             <Route path="promise" element={<PromiseQuest />} />
             <Route path="photo" element={<PhotoQuest />} />
             <Route path="stretch" element={<StretchQuest />} />
+            <Route path="meditation" element={<MeditaionQuest />} />
           </Route>
         </Routes>
       ) : (
