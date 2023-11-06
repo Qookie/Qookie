@@ -35,7 +35,7 @@ export default function QuestListItem({ quest }: Props) {
   const { icon, intro, text } = QUEST_CONTENT[quest];
 
   const handleClick = () => {
-    navigate(`/${quest}`);
+    navigate(`/quest/${quest}`);
   };
 
   return (
