@@ -20,7 +20,9 @@ function SquatQuest() {
     <QuestLayout
       quest={Quest.SQUAT}
       title="스쿼트"
-      desc={'test'}
+      desc={
+        '하루에 한 번 스쿼트를 실천하여 건강한 생활습관을 길러봐요.\n꾸준히 스쿼트를 하면, 건강과 체력에 큰 도움이 될 거예요!'
+      }
       completeButtonText="스쿼트 완료"
       onSuccessQuest={onSuccessQuest}
       questSubText={{
