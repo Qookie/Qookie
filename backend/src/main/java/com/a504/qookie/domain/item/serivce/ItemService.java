@@ -1,7 +1,10 @@
 package com.a504.qookie.domain.item.serivce;
 
+import com.a504.qookie.domain.cookie.entity.Cookie;
+import com.a504.qookie.domain.cookie.repository.CookieRepository;
 import com.a504.qookie.domain.item.dto.ItemResponse;
 import com.a504.qookie.domain.item.dto.ItemUploadRequest;
+import com.a504.qookie.domain.item.dto.ItemWearRequest;
 import com.a504.qookie.domain.item.dto.MyItemResponse;
 import com.a504.qookie.domain.item.dto.OrderItemRequest;
 import com.a504.qookie.domain.item.dto.OrderListRequest;
@@ -35,6 +38,7 @@ public class ItemService {
     private final MemberRepository memberRepository;
     private final QuestService questService;
     private final HistoryRepository historyRepository;
+    private final CookieRepository cookieRepository;
 
     private static final Long BASE_BACKGROUND_ID = 2L;
     private static final Long NO_WEAR_ITEM_ID = 1L;
@@ -185,5 +189,30 @@ public class ItemService {
     public List<OrderResponse> orderList(OrderListRequest orderListRequest, Member member) {
 
         return itemRepository.findMemberItemByMonthAndMember(orderListRequest.time(), member);
+    }
+
+    @Transactional
+    public void wear(ItemWearRequest itemWearRequest, Member member) {
+        
+        Cookie cookie = cookieRepository.findByMember(member)
+                .orElseThrow(() -> new IllegalArgumentException("쿠키가 없습니다"));
+
+        Item hat = itemRepository.findById(itemWearRequest.hatId())
+                .orElseThrow(() -> new IllegalArgumentException("맞는 모자가 없습니다"));
+
+        Item top = itemRepository.findById(itemWearRequest.topId())
+                .orElseThrow(() -> new IllegalArgumentException("맞는 상의가 없습니다"));
+
+        Item bottom = itemRepository.findById(itemWearRequest.bottomId())
+                .orElseThrow(() -> new IllegalArgumentException("맞는 하의가 없습니다"));
+
+        Item shoe = itemRepository.findById(itemWearRequest.shoeId())
+                .orElseThrow(() -> new IllegalArgumentException("맞는 신발이 없습니다"));
+
+        Item background = itemRepository.findById(itemWearRequest.backgroundId())
+                .orElseThrow(() -> new IllegalArgumentException("맞는 배경이 없습니다"));
+
+        cookie.setItem(hat, top, bottom, shoe, background);
+
     }
 }

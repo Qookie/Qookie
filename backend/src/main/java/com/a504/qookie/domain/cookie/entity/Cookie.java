@@ -115,4 +115,11 @@ public class Cookie {
 
 	public void setBackground(Item background) { this.background = background; }
 
+	public void setItem(Item hat, Item top, Item bottom, Item shoe, Item background) {
+		this.hat = hat;
+		this.top = top;
+		this.bottom = bottom;
+		this.shoe = shoe;
+		this.background = background;
+	}
 }
