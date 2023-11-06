@@ -3,7 +3,7 @@ import { http } from './instance';
 
 export interface ItemPropsResponse {
   msg: string;
-  payload: AllItemProps;
+  payload: AllItemProps | null;
 }
 
 const getItemList = async () => {
@@ -26,5 +26,18 @@ const getMyItemList = async () => {
   }
 };
 
-const item = { getItemList, getMyItemList };
+const orderItemReq = async (items: any) => {
+  try {
+    const orderReq = {
+      items: [items],
+    };
+    const res = await http.post<ItemPropsResponse>('/api/item/order', orderReq);
+    console.log('order res', res.payload);
+    return res;
+  } catch (e) {
+    console.log('orderItemReq', e);
+  }
+};
+
+const item = { getItemList, getMyItemList, orderItemReq };
 export default item;
