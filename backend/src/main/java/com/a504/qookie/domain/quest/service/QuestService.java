@@ -1,5 +1,7 @@
 package com.a504.qookie.domain.quest.service;
 
+import com.a504.qookie.domain.cookie.entity.Body;
+import com.a504.qookie.domain.cookie.repository.BodyRepository;
 import com.a504.qookie.domain.quest.dto.AttendanceCalendarResponse;
 import com.a504.qookie.domain.quest.dto.CalenderRequest;
 import java.time.LocalDateTime;
@@ -39,6 +41,7 @@ public class QuestService {
 	private final CookieRepository cookieRepository;
 	private final HistoryRepository historyRepository;
 	private final RedisTemplate<String, String> template;
+	private final BodyRepository bodyRepository;
 
 	public CheckQuestResponse checkQuest(Member member, String questName) { // 오늘 날짜의 questName 퀘스트를 완료했는지
 		LocalDateTime now = LocalDateTime.now();
@@ -132,14 +135,14 @@ public class QuestService {
 			if (cur_level + 1 == 5) { // 외형 바뀌는 레벨업
 				/* TODO : 여기 알림 해주는 로직 */
 			}
-			cookie.updateLevel(); // 레벨업시키고
+			updateLevel(cookie); // 레벨업시키고
 			cookie.updateExp(0); // 경험치 초기화
 		} else if (cur_level < 10) {
 			if (cur_exp + 10 >= 12) { // 레벨업 시켜야함
 				if (cur_level == 9) {
 					/* TODO : 여기 알림 해주는 로직 */
 				}
-				cookie.updateLevel(); // 레벨업시키고
+				updateLevel(cookie); // 레벨업시키고
 				cookie.updateExp(cur_exp + 10 - 12); // 경험치 초기화
 			} else {
 				// 경험치만 증가
@@ -150,7 +153,7 @@ public class QuestService {
 				if (cur_level == 19) {
 					/* TODO : 여기 알림 해주는 로직 */
 				}
-				cookie.updateLevel(); // 레벨업시키고
+				updateLevel(cookie); // 레벨업시키고
 				cookie.updateExp(0); // 경험치 초기화
 			} else {
 				// 경험치만 증가
@@ -161,7 +164,7 @@ public class QuestService {
 				if (cur_level == 29) {
 					/* TODO : 여기 알림 해주는 로직 */
 				}
-				cookie.updateLevel(); // 레벨업시키고
+				updateLevel(cookie); // 레벨업시키고
 				cookie.updateExp(0); // 경험치 초기화
 			} else {
 				// 경험치만 증가
@@ -172,7 +175,7 @@ public class QuestService {
 				if (cur_level == 39) {
 					/* TODO : 여기 알림 해주는 로직 */
 				}
-				cookie.updateLevel(); // 레벨업시키고
+				updateLevel(cookie); // 레벨업시키고
 				cookie.updateExp(0); // 경험치 초기화
 			} else {
 				// 경험치만 증가
@@ -183,13 +186,50 @@ public class QuestService {
 				if (cur_level == 49) {
 					/* TODO : 여기 알림 해주는 로직 */
 				}
-				cookie.updateLevel(); // 레벨업시키고
+				updateLevel(cookie); // 레벨업시키고
 				cookie.updateExp(0); // 경험치 초기화
 			} else {
 				// 경험치만 증가
 				cookie.plusExp(10);
 			}
 		}
+	}
+
+	public void updateLevel(Cookie cookie) {
+
+		cookie.updateLevel();
+
+		int cur_level = cookie.getLevel();
+		Body body = null;
+
+		switch (cur_level) {
+			case 5:
+				body = bodyRepository.findByStage(2)
+						.orElseThrow(() -> new IllegalArgumentException("맞는 몸이 없습니다"));
+				break;
+			case 10:
+				body = bodyRepository.findByStage(3)
+						.orElseThrow(() -> new IllegalArgumentException("맞는 몸이 없습니다"));
+				break;
+			case 20:
+				body = bodyRepository.findByStage(4)
+						.orElseThrow(() -> new IllegalArgumentException("맞는 몸이 없습니다"));
+				break;
+			case 30:
+				body = bodyRepository.findByStage(5)
+						.orElseThrow(() -> new IllegalArgumentException("맞는 몸이 없습니다"));
+				break;
+			case 40:
+				body = bodyRepository.findByStage(6)
+						.orElseThrow(() -> new IllegalArgumentException("맞는 몸이 없습니다"));
+				break;
+		}
+
+		if (!body.equals(null)) {
+			cookie.changeBody(body);
+			cookieRepository.save(cookie);
+		}
+
 	}
 
 	public void checkChallenge(Member member, String questName) {
