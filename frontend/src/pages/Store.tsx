@@ -17,9 +17,7 @@ export interface AllItemProps {
 export default function Store() {
   const [qookie, setQookie] = useRecoilState(QookieInfoState);
   const [currentTab, setCurrentTab] = useState<number>(0);
-  const [curItemTab, setCurItemTab] = useState<number>(0);
   const [itemList, setItemList] = useState<AllItemProps>();
-  const [curItemList, setCurItemList] = useState<ItemProps[]>(itemList ? itemList[0] : []);
 
   useEffect(() => {
     if (currentTab === 0) {
@@ -37,23 +35,12 @@ export default function Store() {
     }
   }, [currentTab]);
 
-  useEffect(() => {
-    if (itemList) {
-      setCurItemList(itemList[curItemTab]);
-      console.log('now', curItemList);
-    }
-  }, [curItemTab]);
-
   const setItemHandler = (res: AllItemProps) => {
     setItemList(res);
   };
 
   const selectTabHandler = (now: number) => {
     setCurrentTab(now);
-  };
-
-  const selectCategoryHandler = (now: number) => {
-    setCurItemTab(now);
   };
 
   return (
@@ -87,10 +74,7 @@ export default function Store() {
             MY
           </Title>
         </TitleTab>
-        <ItemTab isClicked={selectCategoryHandler} />
-        <ItemContainer>
-          {curItemList && curItemList.map((item, idx) => <Item {...item} key={idx} />)}
-        </ItemContainer>
+        <ItemTab list={itemList} />
       </BottomContainer>
     </PageContainer>
   );
@@ -142,13 +126,4 @@ const TitleTab = styled.div`
   display: flex;
   padding: 1.5rem 1rem 0rem 1rem;
   gap: 1.3rem;
-`;
-
-const ItemContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0.7rem;
-  padding: 0 1rem;
-  overflow: auto;
-  max-height: 17rem;
 `;

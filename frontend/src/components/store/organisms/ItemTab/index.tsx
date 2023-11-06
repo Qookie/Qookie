@@ -1,5 +1,5 @@
-import { useRef, useState } from 'react';
-import styled from 'styled-components';
+import { useEffect, useRef, useState } from 'react';
+import styled, { keyframes } from 'styled-components';
 import {
   ACCItem,
   BgItem,
@@ -10,12 +10,15 @@ import {
   TopItem,
 } from '../../../../assets/svgs';
 import mouseSwipe from '../../../../utils/mouseSwipe';
+import { AllItemProps } from '../../../../pages/Store';
+import Item from '../../molecules/Item';
+import { itemApi } from '../../../../api';
 
 interface TabProps {
-  isClicked: any;
+  list?: AllItemProps;
 }
 
-export default function ItemTab({ isClicked }: TabProps) {
+export default function ItemTab({ list }: TabProps) {
   const [currentTab, setCurrentTab] = useState<number>(0);
   const tabSwipeRef = useRef<HTMLDivElement>(null);
 
@@ -33,7 +36,6 @@ export default function ItemTab({ isClicked }: TabProps) {
 
   const selectTabHandler = (idx: number) => {
     setCurrentTab(idx);
-    currentTab && isClicked(idx);
   };
 
   return (
@@ -45,7 +47,12 @@ export default function ItemTab({ isClicked }: TabProps) {
           </IconContainer>
         ))}
       </TabContainer>
-      <Contents></Contents>
+      <ItemContainer>
+        {list &&
+          list[currentTab].map((item, idx) => (
+            <Item {...item} key={idx} />
+          ))}
+      </ItemContainer>
     </Container>
   );
 }
@@ -80,10 +87,11 @@ const IconContainer = styled.div<{ current: boolean }>`
     `}
 `;
 
-const Contents = styled.div`
-  width: 100%;
+const ItemContainer = styled.div`
   display: grid;
-  padding: 1rem;
-  box-sizing: border-box;
   grid-template-columns: repeat(4, 1fr);
+  gap: 0.7rem;
+  padding: 1rem;
+  overflow: auto;
+  max-height: 17rem;
 `;
