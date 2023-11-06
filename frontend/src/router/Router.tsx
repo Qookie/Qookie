@@ -8,22 +8,34 @@ import Challenge from '../pages/Challenge';
 import Loading from '../pages/Loading';
 import SetWakeupTime from '../pages/SetWakeupTime';
 import Mypage from '../pages/Mypage';
+import { useRecoilState } from 'recoil';
+import { UserState } from '../recoil/UserState';
+import NotFound from '../pages/NotFound';
 
 const Router = () => {
+  const [userState, _] = useRecoilState(UserState)
   return (
     <BrowserRouter>
       <HeaderWrapper />
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/init" element={<InitQookie />} />
-        <Route path="/set-wakeup" element={<SetWakeupTime />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/calendar" element={<Login />} />
-        <Route path="/mind" element={<Login />} />
-        <Route path="/mypage" element={<Mypage />} />
-        <Route path="/challenge" element={<Challenge />} />
-        <Route path="/loading" element={<Loading />} />
-      </Routes>
+        {
+          userState ? (
+            <Routes>
+              <Route path="/*" element={<NotFound />}/>
+              <Route path="/init" element={<InitQookie />} />
+              <Route path="/set-wakeup" element={<SetWakeupTime />} />
+              <Route path="/home" element={<Home />} />
+              <Route path="/calendar" element={<Login />} />
+              <Route path="/mind" element={<Login />} />
+              <Route path="/mypage" element={<Mypage />} />
+              <Route path="/challenge" element={<Challenge />} />
+            </Routes>
+          ) : (
+            <Routes>
+              <Route path="/*" element={<Login />} />
+              <Route path="/loading" element={<Loading />} />
+            </Routes>
+          )
+        }
       <NavBarWrapper />
     </BrowserRouter>
   );

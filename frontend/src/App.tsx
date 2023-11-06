@@ -5,16 +5,34 @@ import styled from 'styled-components';
 import { RecoilRoot } from 'recoil';
 // firebase cloud messaging
 import initiateFirebaseMessaging from './firebase/firebaseMessaging';
+// setUser
+import { auth } from './firebase/firebaseConfig';
+import { useEffect, useState } from 'react';
+import { User, onAuthStateChanged } from 'firebase/auth';
+import { UserContext } from './firebase/firebaseAuth';
 
 function App() {
-  // TODO: move this to when new user register or login
-  initiateFirebaseMessaging();
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      console.log('curUser: ', currentUser);
+      setUser(currentUser);
+    });
+
+    initiateFirebaseMessaging();
+
+    return () => unsubscribe();
+  }, []);
+
   return (
     <RecoilRoot>
-      <Layout>
-        <GlobalStyle />
-        <Router />
-      </Layout>
+      <UserContext.Provider value={user}>
+        <Layout>
+          <GlobalStyle />
+          <Router />
+        </Layout>
+      </UserContext.Provider>
     </RecoilRoot>
   );
 }
