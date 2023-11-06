@@ -1,13 +1,13 @@
 import styled from 'styled-components';
 import 'swiper/css';
 import { Swiper, SwiperClass, SwiperSlide } from 'swiper/react';
-import { Date } from '../../../../pages/Coinlist';
 
 interface Props {
-  date: Date;
   onSelectYear?: (year: string) => void;
   onSelectMonth?: (month: string) => void;
 }
+
+const nowDate = new Date();
 
 const years = ['2023', '2024'];
 
@@ -15,17 +15,17 @@ const months = Array(12)
   .fill(0)
   .map((v, i) => (v = String(i + 1)));
 
-export default function DatePicker({ date, onSelectYear, onSelectMonth }: Props) {
+export default function DatePicker({ onSelectYear, onSelectMonth }: Props) {
   return (
     <Container>
       <PickerContainer>
         <SwiperContainer>
           <Swiper
-            slidesPerView={4}
+            slidesPerView={3}
             loop={true}
             direction="vertical"
             centeredSlides={true}
-            initialSlide={parseInt(date.year) - 2023}
+            initialSlide={1}
             onTransitionEnd={(swiper: SwiperClass) => {
               onSelectYear?.(years[swiper.realIndex]);
             }}
@@ -42,11 +42,11 @@ export default function DatePicker({ date, onSelectYear, onSelectMonth }: Props)
         </SwiperContainer>
         <SwiperContainer>
           <Swiper
-            slidesPerView={4}
+            slidesPerView={3}
             loop={true}
             direction="vertical"
             centeredSlides={true}
-            initialSlide={parseInt(date.month)}
+            initialSlide={nowDate.getMonth() - 1}
             onTransitionEnd={(swiper: SwiperClass) => {
               onSelectMonth?.(months[swiper.realIndex]);
             }}
@@ -69,8 +69,6 @@ export default function DatePicker({ date, onSelectYear, onSelectMonth }: Props)
 
 const Container = styled.div`
   position: relative;
-  border-top: 2px solid var(--MR_GRAY1);
-  border-bottom: 2px solid var(--MR_GRAY1);
   padding: 1rem 0;
 `;
 
