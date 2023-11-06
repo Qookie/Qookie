@@ -1,6 +1,8 @@
 import NotificationList from "../components/notification/organisms/NotificationList";
 import { useState, useEffect } from "react";
 import { NotificationProp } from "../types";
+import Title from "../components/shared/atoms/Title";
+import Text from "../components/shared/atoms/Text";
 import styled from "styled-components";
 
 const testProp1 = {
@@ -32,6 +34,9 @@ export default function Notification() {
   // }, [notificationList]);
 	
   return (
+		<>
+			<Text typography="title">this is text</Text>
 			<NotificationList notificationList={notificationList}/>
+		</>
 	);
 }
