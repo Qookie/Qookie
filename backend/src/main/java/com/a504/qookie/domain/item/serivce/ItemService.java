@@ -24,7 +24,9 @@ import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -39,6 +41,7 @@ public class ItemService {
     private final QuestService questService;
     private final HistoryRepository historyRepository;
     private final CookieRepository cookieRepository;
+    private final RedisTemplate<String, String> template;
 
     private static final Long BASE_BACKGROUND_ID = 2L;
     private static final Long NO_WEAR_ITEM_ID = 1L;
@@ -276,6 +279,13 @@ public class ItemService {
                 .orElseThrow(() -> new IllegalArgumentException("맞는 배경이 없습니다"));
 
         cookie.setItem(hat, top, bottom, shoe, background);
+
+        String accessories_key =
+                member.getId() + ":accessories"; // (유저PK):accessories
+
+        template.delete(accessories_key);
+        template.opsForList().rightPushAll(accessories_key,
+                itemWearRequest.accessories().stream().map(String::valueOf).collect(Collectors.toList()));
 
     }
 }
