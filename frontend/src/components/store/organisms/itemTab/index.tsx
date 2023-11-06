@@ -23,9 +23,12 @@ interface SelectedProps {
 
 export default function ItemTab({ list }: TabProps) {
   const [currentTab, setCurrentTab] = useState<number>(0);
-  const [isSelected, setIsSelected] = useState<boolean>(false);
   const tabSwipeRef = useRef<HTMLDivElement>(null);
   const [selectedItem, setSelectedItem] = useState<SelectedProps>({});
+
+  useEffect(() => {
+    console.log('dhkldklskls', selectedItem);
+  }, [selectedItem]);
 
   mouseSwipe(tabSwipeRef);
 
@@ -42,39 +45,29 @@ export default function ItemTab({ list }: TabProps) {
     setCurrentTab(idx);
   };
 
+  const checkItemInList = (id: number) => {
+    // selectedItem 변경해도 여기 업데이트 안됨
+    if (selectedItem[currentTab]) {
+      return selectedItem[currentTab].some((item) => item.id === id);
+    }
+  };
+
   const selectItemHandler = (args: ItemTypeProps) => {
     setSelectedItem((prev) => {
-      const newSelectedItem = { ...prev };
+      const newItemList = { ...prev };
+      const allTabArrays = Object.values(newItemList);
 
-      // 모든 탭에 대한 선택 항목 배열 가져오기
-      const allTabArrays = Object.values(newSelectedItem);
-
-      // 아이템을 추가할 탭 배열 초기화
-      let tabArrayToAddItem = [];
-
-      // 모든 탭 배열을 순회하면서 args.id와 일치하는 아이템 찾고 제거
-      allTabArrays.forEach((currentTabArray, index) => {
-        const matchingItemIndex = currentTabArray.findIndex((item) => item.id === args.id);
-
-        if (matchingItemIndex !== -1) {
-          currentTabArray.splice(matchingItemIndex, 1);
-        }
-
-        // 현재 탭의 아이템이 args.id와 일치하지 않는 경우, 해당 탭을 추가할 배열로 설정
-        if (index === currentTab) {
-          tabArrayToAddItem = currentTabArray;
-        }
-      });
-
-      // args.id와 일치하는 아이템을 새로운 탭 배열에 추가
-      tabArrayToAddItem.push(args);
-
-      // 선택 항목 업데이트
-      newSelectedItem[currentTab] = tabArrayToAddItem;
-
-      return newSelectedItem;
+      if (
+        allTabArrays[currentTab] &&
+        allTabArrays[currentTab].find((item) => item.id === args.id)
+      ) {
+        console.log('delte arr');
+        allTabArrays[currentTab] = [];
+      } else {
+        allTabArrays[currentTab] = [args];
+      }
+      return allTabArrays;
     });
-    console.log('checkeddkdkdk', selectedItem);
   };
 
   return (
@@ -89,7 +82,12 @@ export default function ItemTab({ list }: TabProps) {
       <ItemContainer>
         {list &&
           list[currentTab].map((item, idx) => (
-            <Item item={item} key={idx} isChecked={selectItemHandler} check={isSelected} />
+            <Item
+              item={item}
+              key={idx}
+              isChecked={selectItemHandler}
+              check={checkItemInList(item.id)}
+            />
           ))}
       </ItemContainer>
     </Container>
