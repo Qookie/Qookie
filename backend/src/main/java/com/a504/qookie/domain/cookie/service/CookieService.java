@@ -38,6 +38,8 @@ public class CookieService {
     private final ItemRepository itemRepository;
     private final RedisTemplate<String, String> template;
 
+
+    private static final Long NO_WEAR_ITEM_ID = 1L;
     private static final Long BASE_BACKGROUND_ID = 2L;
 
     @Transactional
@@ -141,6 +143,9 @@ public class CookieService {
         List<String> accessoriesList = new ArrayList<>();
 
         for (Long itemId:list) {
+            if (itemId.equals(NO_WEAR_ITEM_ID))
+                continue;
+
             Item item = itemRepository.findById(itemId)
                     .orElseThrow(() -> new IllegalArgumentException("아이템이 없습니다"));
 
