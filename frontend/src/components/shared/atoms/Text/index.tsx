@@ -2,7 +2,7 @@ import React, { HTMLAttributes } from 'react';
 import styled from 'styled-components';
 
 interface Props extends HTMLAttributes<HTMLSpanElement> {
-  typography?: 'title' | 'main' | 'button';
+  typography?: 'title' | 'main' | 'button' | 'weak';
   color?: string;
 }
 
@@ -32,6 +32,11 @@ const TYPOGRAPHY_VARIANT = {
     font-weight: 500;
     line-height: 20px;
   `,
+  weak: `
+  font-size: 16px;
+  line-height: 28px;
+  color: gray;
+  `
 };
 
 export default Text;

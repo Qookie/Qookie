@@ -32,6 +32,10 @@ export default function Header({ page, title }: HeaderProps) {
     };
   }, []);
 
+  const toNotificationPage = () => {
+    navigate('/notification')
+  }
+
   const headerType = (page: string) => {
     switch (page) {
       case 'home':
@@ -41,7 +45,7 @@ export default function Header({ page, title }: HeaderProps) {
               <CoinLogo />
             </HeaderIcon>
             <HeaderIcon>
-              <BellIcon />
+              <BellIcon onClick={toNotificationPage}/>
             </HeaderIcon>
           </HomeContainer>
         );

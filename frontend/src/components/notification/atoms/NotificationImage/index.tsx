@@ -3,7 +3,7 @@ import {
   Alarm,
   Challenge,
   Cookie,
-  Favorite,
+  Heart,
   Item,
   Quest,
 } from '../../../../assets/svgs/notification';
@@ -17,8 +17,8 @@ export default function NotificationImage({ category }: { category: string }) {
         return <Challenge />;
       case 'cookie':
         return <Cookie />;
-      case 'favorite':
-        return <Favorite />;
+      case 'heart':
+        return <Heart />;
       case 'item':
         return <Item />;
       case 'quest':
@@ -27,5 +27,12 @@ export default function NotificationImage({ category }: { category: string }) {
         return <></>;
     }
   };
-  return <>{selected()}</>;
+  return <ImageSize>{selected()}</ImageSize>;
 }
+
+const ImageSize = styled.div`
+  & > svg {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+`;

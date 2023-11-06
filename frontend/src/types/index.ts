@@ -22,3 +22,4 @@ export interface NotificationProp {
 	info: string;
 	createdAt: string;
 }
+

@@ -24,6 +24,7 @@ export default function NotificationListItem({prop}:{prop:NotificationProp}) {
 }
 
 const NotificationItemContainer = styled.div`
+	height: 7vh;
 	width: 100%;
 	display: flex;
 	align-items: center;
@@ -31,9 +32,16 @@ const NotificationItemContainer = styled.div`
 `;
 
 const ImageContainer = styled.div`
-
+	height: 100%;
+	width: 15%;
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
 `;
 
 const ContentContainer = styled.div`
-	
+	width: 90%;
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
 `;
