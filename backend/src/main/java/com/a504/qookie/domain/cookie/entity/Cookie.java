@@ -119,4 +119,8 @@ public class Cookie {
 		this.shoe = shoe;
 		this.background = background;
 	}
+
+	public void changeBody(Body body) {
+		this.body = body;
+	}
 }
