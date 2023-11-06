@@ -10,6 +10,7 @@ import SetWakeupTime from '../pages/SetWakeupTime';
 import Mypage from '../pages/Mypage';
 import { useRecoilState } from 'recoil';
 import { UserState } from '../recoil/UserState';
+import NotFound from '../pages/NotFound';
 
 const Router = () => {
   const [userState, _] = useRecoilState(UserState)
@@ -19,7 +20,7 @@ const Router = () => {
         {
           userState ? (
             <Routes>
-              <Route path="/*" element={<Home />}/>
+              <Route path="/*" element={<NotFound />}/>
               <Route path="/init" element={<InitQookie />} />
               <Route path="/set-wakeup" element={<SetWakeupTime />} />
               <Route path="/home" element={<Home />} />
