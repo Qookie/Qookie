@@ -45,11 +45,6 @@ public class JwtFilter extends OncePerRequestFilter {
             }
 
             JwtObject token = JwtUtil.getTokenAndVerify(tokenString);
-            // if expired 401 to response and end process
-            if (JwtUtil.isTokenExpired(token)) {
-                response.sendError(401, "ACCESS TOKEN EXPIRED");
-                return;
-            }
 
             // get member
             Member member = memberRepository.findByUid(token.getJwtPayload().getUid())
@@ -70,7 +65,7 @@ public class JwtFilter extends OncePerRequestFilter {
         } catch (JWTVerificationException e) {
             System.out.println("case2");
             e.printStackTrace();
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Jwt verification error: " + e.getMessage());
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Jwt verification error: " + e.getMessage());
         } catch (NullPointerException e) {
             System.out.println("case3");
             e.printStackTrace();
