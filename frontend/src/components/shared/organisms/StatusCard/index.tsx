@@ -1,11 +1,19 @@
 import styled from 'styled-components';
 import Level from '../../molecules/Level';
 import ProgressBar from '../../atoms/ProgressBar';
-import { calcDateDiff } from '../../../../utils/date';
+import { calcDateDiff, getToday } from '../../../../utils/date';
 import Button from '../../atoms/Button';
 import Dialog from '../../molecules/Dialog';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
+import BottomPageLayout from '../../Template/BottomPageLayout';
+import TitleLayout from '../../Template/TitleLayout';
+import { QookieInfo } from '../../../../types';
+import { bakePng } from '../../../../utils/bakePng';
+import { qookieApi } from '../../../../api';
+import Qookie from '../../molecules/Qookie';
+import QookieBag from '../../../../assets/pngs/QookieBag.png';
+import Text from '../../atoms/Text';
 
 export interface StatusCardProps {
   level: number;
@@ -14,10 +22,30 @@ export interface StatusCardProps {
   createdAt: string;
 }
 
-export default function StatusCard({ level, exp, name, createdAt }: StatusCardProps) {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const openHandler = () => {
-    setIsOpen((pre) => !pre);
+export default function StatusCard({ ...props }: QookieInfo) {
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+  const [isBottomOpen, setIsBottomOpen] = useState<boolean>(false);
+  const divRef = useRef<HTMLDivElement>(null);
+
+  const handleDownloadClick = () => {
+    bakePng(divRef, { fileName: props.name });
+  };
+
+  const getS3UrlHandler = (url: string) => {
+    let newUrl = '';
+    qookieApi.getProxyUrl(url).then((res) => {
+      console.log(res);
+      newUrl = res;
+    });
+    return newUrl;
+  };
+
+  const openDialogHandler = () => {
+    setIsDialogOpen((pre) => !pre);
+  };
+
+  const openBottomHandler = () => {
+    setIsBottomOpen((pre) => !pre);
   };
   const navigate = useNavigate();
 
@@ -41,7 +69,7 @@ export default function StatusCard({ level, exp, name, createdAt }: StatusCardPr
       case 0:
         return (
           <ButtonContainer>
-            <Button size="small" onClick={openHandler}>
+            <Button size="small" onClick={() => navigate('/init')}>
               반죽 만들기
             </Button>
           </ButtonContainer>
@@ -49,40 +77,85 @@ export default function StatusCard({ level, exp, name, createdAt }: StatusCardPr
       case 50:
         return (
           <ButtonContainer>
-            <Button size="small" onClick={openHandler}>
+            <Button size="small" onClick={openDialogHandler}>
               굽기
             </Button>
           </ButtonContainer>
         );
 
       default:
-        return <ProgressBar total={getTotal(level)} now={exp} level={level} />;
+        return <ProgressBar total={getTotal(level)} now={props.exp} level={props.level} />;
     }
   };
 
+  let img = new Image();
+  img.src = /^data:image/.test(props.body) ? props.body : props.body + '?' + new Date().getTime();
+
+  const bakeProps = {
+    ...props,
+    background: '',
+    body: img.src,
+    // body: getS3UrlHandler(props.body),
+    // eye: getS3UrlHandler(props.eye),
+    // mouth: getS3UrlHandler(props.mouth),
+  };
+
   return (
-    <Container>
-      <CardContainer>
-        <Level level={level} />
-        <RightContainer>
-          <QookieInfo>
-            <QookieName>{name}</QookieName>
-            {calcDateDiff(createdAt)}일째
-          </QookieInfo>
-          {showLevelState(level)}
-        </RightContainer>
-      </CardContainer>
-      <Dialog
-        title="쿠키를 구울까요?"
-        content={`쿠키를 구우면 더이상 쿠키를 꾸밀 수 없어요. \n이 의상 그대로 쿠키를 구울까요?`}
-        negative="굽기"
-        onNegativeClick={() => navigate('/bake')}
-        positive="쿠키 꾸미기"
-        onPositiveClick={() => navigate('/store')}
-        isOpen={isOpen}
-        onCloseRequest={openHandler}
-      />
-    </Container>
+    <>
+      <Container>
+        <CardContainer>
+          <Level level={props.level} />
+          <RightContainer>
+            {props.level == 0 ? (
+              <QookieName>쿠키 반죽이 없어요ㅠ</QookieName>
+            ) : (
+              <QookieInfoDiv>
+                <QookieName>{props.name}</QookieName>
+                {calcDateDiff(props.createdAt)}일째
+              </QookieInfoDiv>
+            )}
+            {showLevelState(props.level)}
+          </RightContainer>
+        </CardContainer>
+
+        <Dialog
+          title="쿠키를 구울까요?"
+          content={`쿠키를 구우면 더이상 쿠키를 꾸밀 수 없어요. \n이 의상 그대로 쿠키를 구울까요?`}
+          negative="굽기"
+          onNegativeClick={openBottomHandler}
+          positive="쿠키 꾸미기"
+          onPositiveClick={() => navigate('/store')}
+          isopen={isDialogOpen}
+          onCloseRequest={openDialogHandler}
+        />
+        <BottomPageLayout
+          isopen={isBottomOpen}
+          onCloseRequest={openBottomHandler}
+          children={
+            <TitleLayout
+              title={'쿠키 만들기가 완료되었습니다.'}
+              desc={`저를 멋진 쿠키로 만들어주셔서 감사해요! \n직접 만든 쿠키를 확인해보세요.`}
+            >
+              <BottomInner>
+                <BakedQookie>
+                  <QookieContainer ref={divRef}>
+                    <Qookie {...bakeProps} />
+                    <QookieBagImg src={QookieBag} alt="bag" />
+                  </QookieContainer>
+                  <NameTag>
+                    <Text typography="button">{props.name}</Text>({getToday()})
+                  </NameTag>
+                </BakedQookie>
+                <BottomBtnContainer>
+                  <TextBtn onClick={() => ''}>쿠키 보러 가기</TextBtn>
+                  <Button onClick={handleDownloadClick}>완료</Button>
+                </BottomBtnContainer>
+              </BottomInner>
+            </TitleLayout>
+          }
+        />
+      </Container>
+    </>
   );
 }
 
@@ -102,7 +175,7 @@ const CardContainer = styled.div`
   gap: 1rem;
 `;
 
-const QookieInfo = styled.div`
+const QookieInfoDiv = styled.div`
   display: flex;
   gap: 0.4rem;
   font-size: 1rem;
@@ -124,4 +197,63 @@ const RightContainer = styled.div`
 
 const ButtonContainer = styled.div`
   margin-left: auto;
+`;
+
+const BottomInner = styled.div`
+  padding: 0 1rem;
+  margin-top: -4rem;
+`;
+
+const BakedQookie = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const NameTag = styled.div`
+  width: fit-content;
+  padding: 0.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  position: absolute;
+  bottom: 20%;
+  border-radius: 0.5rem;
+  background-color: var(--MR_YELLOW);
+`;
+
+const TextBtn = styled.button`
+  width: 100%;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  font-weight: 600;
+  font-size: 20px;
+  color: var(--MR_RED);
+  background-color: transparent;
+`;
+
+const QookieContainer = styled.div`
+  transform: scale(0.5);
+  position: relative;
+`;
+
+const QookieBagImg = styled.img`
+  position: absolute;
+  top: 32%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.4);
+`;
+
+const BottomBtnContainer = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  box-sizing: border-box;
 `;

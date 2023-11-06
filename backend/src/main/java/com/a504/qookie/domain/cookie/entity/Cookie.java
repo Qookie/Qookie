@@ -103,11 +103,11 @@ public class Cookie {
 		this.name = cookieName;
 	}
 
-	public void updateExp(int exp){
+	public void plusExp(int exp){
 		this.exp += exp;
 	}
 
-	public void updateExp() {this.exp = 0;}
+	public void updateExp(int exp) {this.exp = exp;}
 
 	public void updateLevel(){
 		this.level += 1;

@@ -6,6 +6,7 @@ export interface QookieInfo {
   exp: number;
   level: number;
   body: string;
+  extraBody: string;
   eye: string;
   mouth: string;
   hat: string;

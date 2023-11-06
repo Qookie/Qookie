@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
 import { QookieInfoState } from '../modules/qookie';
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { qookieApi } from '../api';
 import QookieStatus from '../components/shared/organisms/QookieStatus';
 import QuestList from '../components/home/organisms/QuestList';
@@ -10,6 +10,10 @@ import { QookieInfo } from '../types';
 import { useNavigate } from 'react-router-dom';
 import attendance from '../assets/pngs/calendar.png';
 import challenge from '../assets/pngs/challenge.png';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { auth } from '../firebase/firebaseConfig';
+import { UserContext } from '../firebase/firebaseAuth';
+import { UserState } from '../recoil/UserState';
 
 export interface QookieInfoResponse {
   msg: string;
@@ -19,9 +23,11 @@ export interface QookieInfoResponse {
 const Home = () => {
   const [qookie, setQookie] = useRecoilState(QookieInfoState);
   const navigate = useNavigate();
+  const [userState, setUserState] = useRecoilState(UserState)
 
   // 로그인 후 setQookie 확인 필요
   useEffect(() => {
+    console.log("USERSTATE:", userState)
     qookieApi.getQookieInfo().then((res) => res !== null && setQookie({ ...qookie, ...res }));
   }, []);
 
