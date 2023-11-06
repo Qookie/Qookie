@@ -13,6 +13,7 @@ import challenge from '../assets/pngs/challenge.png';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { auth } from '../firebase/firebaseConfig';
 import { UserContext } from '../firebase/firebaseAuth';
+import { UserState } from '../recoil/UserState';
 
 export interface QookieInfoResponse {
   msg: string;
@@ -22,29 +23,19 @@ export interface QookieInfoResponse {
 const Home = () => {
   const [qookie, setQookie] = useRecoilState(QookieInfoState);
   const navigate = useNavigate();
+  const [userState, setUserState] = useRecoilState(UserState)
 
   // 로그인 후 setQookie 확인 필요
   useEffect(() => {
+    console.log("USERSTATE:", userState)
     qookieApi.getQookieInfo().then((res) => res !== null && setQookie({ ...qookie, ...res }));
   }, []);
-
-  // 테스트용
-  const signout = () => {
-    signOut(auth).then(() => {
-      auth.onAuthStateChanged((user) => {
-        if (!user) {
-          navigate('/')
-        }
-      })
-    })
-  }
 
   return (
     <HomeContainer>
       <QookieStatus {...qookie} />
       <QuestContainer>
         <ButtonContainer>
-          <div onClick={signout}>로그아웃!</div>
           <HomeButton
             title="출석체크"
             icon={attendance}
