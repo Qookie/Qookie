@@ -1,65 +1,34 @@
-import React, { Suspense, useEffect, useState } from 'react';
-import TitleLayout from '../../../shared/Template/TitleLayout';
-import Button from '../../../shared/atoms/Button';
-import styled from 'styled-components';
-import Toast from '../../../shared/molecules/Alert';
+import React, { useEffect, useState } from 'react';
+import QuestInnerLayout from '../QuestInnerLayout';
+import { QuestStatus, QuestStatusResponse, QuestWrapperLayoutProps } from '../../types';
+import Text from '../../../shared/atoms/Text';
+import { http } from '../../../../api/instance';
 
-export type QuestStatus = 'DEFAULT' | 'COMPLETE' | 'SUCCESS';
+function QuestLayout({ children, quest, questSubText, ...props }: QuestWrapperLayoutProps) {
+  const [questStatus, setQuestStatus] = useState<QuestStatus>('DEFAULT');
 
-interface Props {
-  questStatus: QuestStatus;
-  title: React.ReactNode;
-  desc: React.ReactNode;
-  completeButtonText: string;
-  completeQuest: () => void;
-  setQuestStatus: (status: QuestStatus) => void;
-  Subcomponent?: React.ReactNode;
-  children?: React.ReactNode;
-}
+  const fetchQuestStatus = async () => {
+    const {
+      payload: { complete },
+    } = await http.get<QuestStatusResponse>(`/api/quest/${quest}`);
 
-const ButtomThemeMap: {
-  [key in QuestStatus]: 'default' | 'finished' | 'disabled';
-} = {
-  DEFAULT: 'default',
-  SUCCESS: 'finished',
-  COMPLETE: 'disabled',
-};
-
-function QuestLayout({
-  title,
-  desc,
-  children,
-  completeButtonText,
-  Subcomponent,
-  completeQuest,
-  setQuestStatus,
-  questStatus,
-}: Props) {
-  const onClickComplete = async () => {
-    await completeQuest();
-    setQuestStatus('SUCCESS');
+    if (complete) {
+      setQuestStatus('SUCCESS');
+    }
   };
 
+  useEffect(() => {
+    fetchQuestStatus();
+  }, []);
   return (
-    <TitleLayout title={title} desc={desc}>
+    <QuestInnerLayout
+      {...props}
+      Subcomponent={<Text color="var(--MR_GRAY2)">{questSubText[questStatus]}</Text>}
+      questStatus={questStatus}
+      setQuestStatus={setQuestStatus}
+    >
       {children}
-      <ButtonConatainer>
-        {Subcomponent}
-        <Button theme={ButtomThemeMap[questStatus]} onClick={onClickComplete}>
-          {completeButtonText}
-        </Button>
-      </ButtonConatainer>
-      <Toast />
-    </TitleLayout>
+    </QuestInnerLayout>
   );
 }
-
-const ButtonConatainer = styled.div`
-  padding: 1rem;
-  gap: 0.5rem;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-`;
-
 export default QuestLayout;
