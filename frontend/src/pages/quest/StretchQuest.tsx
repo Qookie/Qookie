@@ -19,9 +19,7 @@ function StretchQuest() {
     <QuestLayout
       quest={Quest.STRETCH}
       title={'스트레칭'}
-      desc={
-        '규칙적으로 일어나서 기분 좋은 하루를 시작해보세요!\n건강한 하루는 규칙적인 기상에서 시작됩니다.'
-      }
+      desc={'스트레칭으로 뭉친 몸을 풀어보아요!\n몸에 활력이 돌거에요.'}
       completeButtonText="스트레칭 완료"
       onSuccessQuest={onSuccessQuest}
       questSubText={{
