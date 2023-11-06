@@ -1,15 +1,18 @@
-import { useState } from 'react';
 import { atom, useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import Text from '../../../shared/atoms/Text';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
+
+interface MonthSelectorProps {
+  onClick: () => void;
+}
 
 export const MonthState = atom({
   key: 'month',
   default: new Date().getMonth(),
 });
 
-export default function MonthSelector() {
+export default function MonthSelector({ onClick }: MonthSelectorProps) {
   const [selectedMonth, setSelectedMonth] = useRecoilState(MonthState);
 
   const handlePreviousMonth = () => {
@@ -33,7 +36,7 @@ export default function MonthSelector() {
       <Chevrons>
         <ChevronLeftIcon onClick={handlePreviousMonth} strokeWidth={3} />
       </Chevrons>
-      <MonthText>{selectedMonth}월</MonthText>
+      <MonthText onClick={onClick}>{selectedMonth}월</MonthText>
       <Chevrons>
         <ChevronRightIcon onClick={handleNextMonth} strokeWidth={3} />
       </Chevrons>
