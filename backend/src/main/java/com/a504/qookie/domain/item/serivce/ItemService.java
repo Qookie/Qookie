@@ -101,6 +101,9 @@ public class ItemService {
 
     public List<MyItemResponse>[] myItem(Member member) {
 
+        Cookie cookie = cookieRepository.findByMember(member)
+                .orElseThrow(() -> new IllegalArgumentException("쿠키가 없습니다"));
+
         List<MyItemResponse>[] lists = new ArrayList[6];
         // 0:배경, 1:모자, 2:신발, 3:하의, 4:상의, 5:액세서리
 
@@ -108,16 +111,51 @@ public class ItemService {
             lists[i] = new ArrayList<>();
         }
 
-        Item background = itemRepository.findById(BASE_BACKGROUND_ID)
+        Item baseBackground = itemRepository.findById(BASE_BACKGROUND_ID)
                 .orElseThrow(() -> new IllegalArgumentException("기본 배경이 없습니다"));
 
-        lists[0].add(new MyItemResponse(background));
+        Boolean isWear = false;
+        if (baseBackground.getId().equals(cookie.getBackground().getId())) {
+            System.out.println("기본배경과 같음");
+            isWear = true;
+        }
+
+        lists[0].add(new MyItemResponse(baseBackground, isWear));
 
         Item noWearItem = itemRepository.findById(NO_WEAR_ITEM_ID)
                 .orElseThrow(() -> new IllegalArgumentException("기본 배경이 없습니다"));
 
         for (int i = 1; i < 6; i++) {
-            lists[i].add(new MyItemResponse(noWearItem));
+            isWear = false;
+            switch (i) {
+                case 1:
+                    if (noWearItem.getId().equals(cookie.getHat().getId())) {
+                        isWear = true;
+                    }
+                    break;
+                case 2:
+                    if (noWearItem.getId().equals(cookie.getShoe().getId())) {
+                        isWear = true;
+                    }
+                    break;
+                case 3:
+                    if (noWearItem.getId().equals(cookie.getBottom().getId())) {
+                        isWear = true;
+                    }
+                    break;
+                case 4:
+                    if (noWearItem.getId().equals(cookie.getTop().getId())) {
+                        isWear = true;
+                    }
+                    break;
+                case 5:
+//                    액세서리는 다음에
+//                    if (noWearItem.equals(cookie.getHat())) {
+//                        isWear = true;
+//                    }
+                    break;
+            }
+            lists[i].add(new MyItemResponse(noWearItem, isWear));
         }
 
         List<MemberItem> memberItemList = memberItemRepository.findByMember(member);
@@ -127,17 +165,42 @@ public class ItemService {
                     .orElseThrow(() -> new IllegalArgumentException("상품이 없습니다"));
 
             if (item.getCategory().equals("배경")) {
-                lists[0].add(new MyItemResponse(item));
+                if (item.getId().equals(cookie.getBackground().getId())) {
+                    lists[0].add(new MyItemResponse(item, true));
+                    continue;
+                }
+                lists[0].add(new MyItemResponse(item, false));
             } else if (item.getCategory().equals("모자")) {
-                lists[1].add(new MyItemResponse(item));
+                if (item.getId().equals(cookie.getHat().getId())) {
+                    lists[1].add(new MyItemResponse(item, true));
+                    continue;
+                }
+                lists[1].add(new MyItemResponse(item, false));
             } else if (item.getCategory().equals("신발")) {
-                lists[2].add(new MyItemResponse(item));
+                if (item.getId().equals(cookie.getShoe().getId())) {
+                    lists[2].add(new MyItemResponse(item, true));
+                    continue;
+                }
+                lists[2].add(new MyItemResponse(item, false));
             } else if (item.getCategory().equals("하의")) {
-                lists[3].add(new MyItemResponse(item));
+                if (item.getId().equals(cookie.getBottom().getId())) {
+                    lists[3].add(new MyItemResponse(item, true));
+                    continue;
+                }
+                lists[3].add(new MyItemResponse(item, false));
             } else if (item.getCategory().equals("상의")) {
-                lists[4].add(new MyItemResponse(item));
+                if (item.getId().equals(cookie.getTop().getId())) {
+                    lists[4].add(new MyItemResponse(item, true));
+                    continue;
+                }
+                lists[4].add(new MyItemResponse(item, false));
             } else if (item.getCategory().equals("액세서리")) {
-                lists[5].add(new MyItemResponse(item));
+//                액세서리는 나중에..
+//                if (item.equals(cookie.getS)) {
+//                    lists[5].add(new MyItemResponse(item, true));
+//                    continue;
+//                }
+                lists[5].add(new MyItemResponse(item, false));
             }
         }
 
