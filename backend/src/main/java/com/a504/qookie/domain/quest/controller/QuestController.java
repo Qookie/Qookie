@@ -20,6 +20,7 @@ import com.a504.qookie.domain.quest.service.AwsS3Service;
 import com.a504.qookie.domain.quest.service.QuestService;
 import com.a504.qookie.global.response.BaseResponse;
 import com.a504.qookie.global.security.CustomMemberDetails;
+import com.amazonaws.Response;
 
 import lombok.RequiredArgsConstructor;
 
@@ -66,5 +67,12 @@ public class QuestController {
 			@RequestBody CalenderRequest calenderRequest){
 		AttendanceCalendarResponse attendanceCalendarResponse = questService.getAttendanceInfo(member.getMember(), calenderRequest);
 		return BaseResponse.okWithData(HttpStatus.OK, "Attendance Calendar OK", attendanceCalendarResponse);
+	}
+
+	@GetMapping("/challenge")
+	public ResponseEntity<?> getChallengeStatus(
+		@AuthenticationPrincipal CustomMemberDetails member
+	){
+		return BaseResponse.okWithData(HttpStatus.OK, "챌린지 현황 조회 완료", questService.getChallengeStatus(member.getMember()));
 	}
 }

@@ -4,6 +4,7 @@ import com.a504.qookie.domain.quest.dto.AttendanceCalendarResponse;
 import com.a504.qookie.domain.quest.dto.CalenderRequest;
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,7 @@ import com.a504.qookie.domain.member.entity.MemberQuest;
 import com.a504.qookie.domain.member.repository.HistoryRepository;
 import com.a504.qookie.domain.member.repository.MemberQuestRepository;
 import com.a504.qookie.domain.member.repository.MemberRepository;
+import com.a504.qookie.domain.quest.dto.ChallengeStatus;
 import com.a504.qookie.domain.quest.dto.CheckQuestResponse;
 // import com.a504.qookie.domain.quest.dto.QuestStatus;
 import com.a504.qookie.domain.quest.dto.QuestType;
@@ -53,7 +55,6 @@ public class QuestService {
 		for (MemberQuest memberQuest : list){
 			if (Objects.equals(memberQuest.getQuest().getId(), idx) && Objects.equals(memberQuest.getMember().getId(),
 				member.getId())){
-				System.out.println("memberQuest = " + memberQuest);
 				if (questName.equals("EAT") || questName.equals("PHOTO")) return new CheckQuestResponse(true, memberQuest.getImage());
 				return new CheckQuestResponse(true, null);
 			}
@@ -306,17 +307,48 @@ public class QuestService {
 		return new AttendanceCalendarResponse(todayComplete, list);
 	}
 
-	// public Map<Integer, QuestStatus> getMonthlyQuest(Member member, Integer year, Month month){
-	// 	Map<Integer, QuestStatus> map = new HashMap<>();
-	// 	LocalDateTime start = LocalDateTime.of(year, month, 1, 0, 0);
-	// 	LocalDateTime end = LocalDateTime.of(year, month, month.maxLength(),23, 59, 59);
-	// 	List<MemberQuest> list = memberQuestRepository.findAllByCreatedAtBetween(start, end);
-	// 	for (MemberQuest memberQuest: list){
-	// 		if (Objects.equals(memberQuest.getMember().getId(), member.getId())){
-	//
-	// 		}
-	// 	}
-	//
-	// 	return map;
-	// }
+	public ChallengeStatus[] getChallengeStatus(Member member){
+		ChallengeStatus[] list = new ChallengeStatus[12];
+		LocalDateTime now = LocalDateTime.now();
+		int year = now.getYear();
+		int month = now.getDayOfMonth();
+		int idx = 0;
+		for (QuestType questType: QuestType.values()){
+			String questName = questType.name();
+			Long id = questType.getIdx();
+			if (id > 9) break;
+			if (id <= 3){ // 월간 챌린지들
+				String key = member.getId() + ":" + year + ":" + month + ":" + questName;
+				Long size = template.opsForSet().size(key);
+				list[idx] = new ChallengeStatus("월간 " + questType.getMessage() + " 챌린지", size, id == 3 ? 10 : 15);
+			}
+			// 뱃지 챌린지
+			String badgeKey = member.getId() + ":" + questName + ":badge";
+			Long size = template.opsForSet().size(badgeKey);
+			/**
+			 * PHOTO만 5, 10, 15
+			 * 나머지 10 50 100
+			 */
+			if (questName.equals("PHOTO")){
+				if (size <= 5){
+					list[idx + 3] = new ChallengeStatus(questType.getMessage() + " 뱃지 챌린지 1단계", size, 5);
+				}else if (size <= 10){
+					list[idx + 3] = new ChallengeStatus(questType.getMessage() + " 뱃지 챌린지 2단계", size, 10);
+				}else{
+					list[idx + 3] = new ChallengeStatus(questType.getMessage() + " 뱃지 챌린지 3단계", size, (int)Long.min(size, 15));
+				}
+				idx++;
+				continue;
+			}
+			if (size <= 10){
+				list[idx + 3] = new ChallengeStatus(questType.getMessage() + " 뱃지 챌린지 1단계", size, 10);
+			}else if (size <= 50){
+				list[idx + 3] = new ChallengeStatus(questType.getMessage() + " 뱃지 챌린지 2단계", size, 50);
+			}else{
+				list[idx + 3] = new ChallengeStatus(questType.getMessage() + " 뱃지 챌린지 3단계", size, (int)Long.min(size, 100));
+			}
+			idx++;
+		}
+		return list;
+	}
 }
