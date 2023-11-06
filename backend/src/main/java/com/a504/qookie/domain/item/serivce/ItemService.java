@@ -114,6 +114,16 @@ public class ItemService {
             lists[i] = new ArrayList<>();
         }
 
+        // 액세서리 List 찾아놓기
+        String accessories_key =
+                member.getId() + ":accessories"; // (유저PK):accessories
+        List<Long> accessoriesList = template.opsForList().range(accessories_key, 0, -1)
+                .stream().map(Long::valueOf).toList();
+
+        if (accessoriesList.isEmpty()) {
+            System.out.println("isEmpty");
+        }
+
         Item baseBackground = itemRepository.findById(BASE_BACKGROUND_ID)
                 .orElseThrow(() -> new IllegalArgumentException("기본 배경이 없습니다"));
 
@@ -125,6 +135,7 @@ public class ItemService {
 
         lists[0].add(new MyItemResponse(baseBackground, isWear));
 
+        // "착용하지 않음" 아이템을 착용했는지 알아보기
         Item noWearItem = itemRepository.findById(NO_WEAR_ITEM_ID)
                 .orElseThrow(() -> new IllegalArgumentException("기본 배경이 없습니다"));
 
@@ -152,10 +163,9 @@ public class ItemService {
                     }
                     break;
                 case 5:
-//                    액세서리는 다음에
-//                    if (noWearItem.equals(cookie.getHat())) {
-//                        isWear = true;
-//                    }
+                    if (accessoriesList.isEmpty()) {
+                        isWear = true;
+                    }
                     break;
             }
             lists[i].add(new MyItemResponse(noWearItem, isWear));
@@ -198,12 +208,12 @@ public class ItemService {
                 }
                 lists[4].add(new MyItemResponse(item, false));
             } else if (item.getCategory().equals("액세서리")) {
-//                액세서리는 나중에..
-//                if (item.equals(cookie.getS)) {
-//                    lists[5].add(new MyItemResponse(item, true));
-//                    continue;
-//                }
-                lists[5].add(new MyItemResponse(item, false));
+                boolean find = false;
+                for (Long accId:accessoriesList) {
+                    if (item.getId().equals(accId))
+                        find = true;
+                }
+                lists[5].add(new MyItemResponse(item, find));
             }
         }
 
