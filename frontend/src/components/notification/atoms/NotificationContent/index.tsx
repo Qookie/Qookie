@@ -25,7 +25,7 @@ export default function NotificationContent({ prop }: { prop: NotificationProp }
   }
   return (
     <ContentContainer>
-      <Text typography='main'>{selected()}</Text>
+      <Text typography='compact'>{selected()}</Text>
       <Text typography='weak' color='gray'>{toBeforeString(prop.createdAt)}</Text>
     </ContentContainer>
   );
@@ -33,6 +33,7 @@ export default function NotificationContent({ prop }: { prop: NotificationProp }
 
 const ContentContainer = styled.div`
   margin-top: 0.8vh;
+  padding-bottom: 0.8vh;
   display: flex;
   flex-direction: column;
 `;
