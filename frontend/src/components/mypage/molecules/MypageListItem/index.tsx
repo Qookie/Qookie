@@ -7,6 +7,8 @@ import { signOut } from '@firebase/auth';
 import { auth } from '../../../../firebase/firebaseConfig';
 import { useSetRecoilState } from 'recoil';
 import { UserState } from '../../../../modules/user';
+import Dialog from '../../../shared/molecules/Dialog';
+import { useState } from 'react';
 
 export const mypageList = [
   'deco',
@@ -29,27 +31,51 @@ export default function MypageListItem({ mypage }: Props) {
   const { icon, intro } = MYPAGE_ITEM[mypage];
   const navigate = useNavigate();
   const setUserState = useSetRecoilState(UserState);
+  const [dialogState, setDialogState] = useState(false);
 
   const navigateHandler = () => {
     // logout
     if (mypage === 'logOut') {
-      signOut(auth).then(() => {
-        setUserState(null);
-        navigate('/');
-      });
+      setDialogState(true);
     } else {
       navigate(`/${mypage}`);
     }
   };
 
+  const doSignOut = () => {
+    signOut(auth).then(() => {
+      setUserState(null);
+      navigate('/');
+    });
+  };
+
+  const dialogHandler = (e?: React.MouseEvent<HTMLElement>) => {
+    if (e) {
+      e.stopPropagation();
+      setDialogState((dialogState) => !dialogState);
+    }
+  };
+
   return (
-    <ItemContainer onClick={navigateHandler}>
-      <LeftContainer>
-        {icon && <IconContainer>{icon}</IconContainer>}
-        <Text typography="button">{intro}</Text>
-      </LeftContainer>
-      <ChevronRightIcon width={20} />
-    </ItemContainer>
+    <>
+      <ItemContainer onClick={navigateHandler}>
+        <LeftContainer>
+          {icon && <IconContainer>{icon}</IconContainer>}
+          <Text typography="button">{intro}</Text>
+        </LeftContainer>
+        <ChevronRightIcon width={20} />
+        <Dialog
+          title={'testTitle'}
+          content={'testContent'}
+          negative={'negative'}
+          onNegativeClick={dialogHandler}
+          positive={'positive'}
+          onPositiveClick={doSignOut}
+          isopen={dialogState}
+          onCloseRequest={dialogHandler}
+        />
+      </ItemContainer>
+    </>
   );
 }
 
