@@ -20,9 +20,13 @@ import PhotoQuest from '../pages/quest/PhotoQuest';
 import StretchQuest from '../pages/quest/StretchQuest';
 import MeditaionQuest from '../pages/quest/MeditaionQuest';
 import WaterQuest from '../pages/quest/WaterQuest';
+import KeyPage from '../pages/KeyPage';
 
 const Router = () => {
   const [userState, _] = useRecoilState(UserState);
+
+const reload = () => window.location.reload()
+
   return (
     <BrowserRouter>
       <HeaderWrapper />
@@ -54,6 +58,7 @@ const Router = () => {
         <Routes>
           <Route path="/*" element={<Login />} />
           <Route path="/loading" element={<Loading />} />
+          <Route path="/.well-known/assetlinks.json" element={<KeyPage/>}/>
         </Routes>
       )}
       <NavBarWrapper />
