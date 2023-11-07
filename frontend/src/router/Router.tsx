@@ -11,7 +11,7 @@ import Mypage from '../pages/Mypage';
 import WakeupQuest from '../pages/quest/WakeupQuest';
 import EatQuest from '../pages/quest/EatQuest';
 import { useRecoilState } from 'recoil';
-import { UserState } from '../recoil/UserState';
+import { UserState } from '../modules/user';
 import NotFound from '../pages/NotFound';
 import WalkQuest from '../pages/quest/WalkQuest';
 import SquatQuest from '../pages/quest/SquatQuest';
@@ -36,6 +36,8 @@ const Router = () => {
           <Route path="/mind" element={<Login />} />
           <Route path="/mypage" element={<Mypage />} />
           <Route path="/challenge" element={<Challenge />} />
+          <Route path="/loading" element={<Loading />} />
+
           <Route path="/quest">
             <Route path="wake" element={<WakeupQuest />} />
             <Route path="eat" element={<EatQuest />} />

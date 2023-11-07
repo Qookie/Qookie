@@ -46,8 +46,10 @@ public class MessageService {
             heart.saveReply(messageResponse.getContent());
             // send firebase notification
             firebaseService.sendMessage("답장왔어", "요", heart.getMember().getMessageToken());
-        } catch (FirebaseMessagingException | NoSuchElementException e) {
+        } catch (FirebaseMessagingException | NoSuchElementException | NullPointerException e) {
+            // delete message if error occured
             e.printStackTrace();
+            throw new ListenerExecutionFailedException("Error Handler converted exception to fatal", e);
         }
     }
 }

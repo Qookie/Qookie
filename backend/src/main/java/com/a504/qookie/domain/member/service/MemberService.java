@@ -41,16 +41,15 @@ public class MemberService {
         return memberRepository.findByUid(uid).orElseThrow(NoSuchElementException::new);
     }
 
-    @Transactional
     public Member createMember(LoginRequest loginRequest, Member member) {
         // check if member is new & loginRequest has valid uid
         if (member.getId() == null && loginRequest.getUid().equals(member.getUid())) {
             member.addInfo(loginRequest);
-            return memberRepository.save(member);
         } else {
             // if not new member, just update message token
-            return member.updateMessageToken(loginRequest.getMessageToken());
+            member.updateMessageToken(loginRequest.getMessageToken());
         }
+        return memberRepository.save(member);
     }
 
     public void setTime(Member member, String wakeTime) {
