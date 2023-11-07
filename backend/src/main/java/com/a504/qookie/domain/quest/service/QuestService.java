@@ -229,7 +229,7 @@ public class QuestService {
 				break;
 		}
 
-		if (!body.equals(null)) {
+		if (body != null) {
 			cookie.changeBody(body);
 			cookieRepository.save(cookie);
 		}
