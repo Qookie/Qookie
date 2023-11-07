@@ -8,7 +8,7 @@ import QuestList from '../components/home/organisms/QuestList';
 import HomeButton from '../components/home/molecules/HomeButton';
 import { QookieInfo } from '../types';
 import { useNavigate } from 'react-router-dom';
-import attendance from '../assets/pngs/calendar.png';
+import attendance from '../assets/pngs/calendar_small.png';
 import challenge from '../assets/pngs/challenge.png';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { auth } from '../firebase/firebaseConfig';
@@ -23,11 +23,10 @@ export interface QookieInfoResponse {
 const Home = () => {
   const [qookie, setQookie] = useRecoilState(QookieInfoState);
   const navigate = useNavigate();
-  const [userState, setUserState] = useRecoilState(UserState)
+  const [userState, setUserState] = useRecoilState(UserState);
 
   // 로그인 후 setQookie 확인 필요
   useEffect(() => {
-    console.log("USERSTATE:", userState)
     qookieApi.getQookieInfo().then((res) => res !== null && setQookie({ ...qookie, ...res }));
   }, []);
 
@@ -40,7 +39,7 @@ const Home = () => {
             title="출석체크"
             icon={attendance}
             customStyle={styleAttendance}
-            onClick={() => navigate('/attendance')}
+            onClick={() => navigate('/quest/attendance')}
           />
           <HomeButton
             title="챌린지"
