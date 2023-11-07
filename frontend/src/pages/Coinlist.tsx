@@ -8,7 +8,7 @@ import BottomSheet from '../components/shared/molecules/BottomSheet';
 import DatePicker from '../components/shared/molecules/DatePicker';
 
 export default function Coinlist() {
-  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
+  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState<boolean | null>(null);
 
   const onClose = () => {
     setIsBottomSheetOpen(false);
