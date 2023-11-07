@@ -1,55 +1,35 @@
 import styled, { keyframes } from 'styled-components';
 import Text from '../../atoms/Text';
 import Button from '../../atoms/Button';
-import { useState } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
-import { useEffect } from 'react';
 
 interface BottomModalProps {
-  isOpen: boolean;
+  isOpen: boolean | null;
   onClose: () => void;
   title: string;
   children: React.ReactNode;
 }
 
 export default function BottomSheet({ isOpen, onClose, title, children }: BottomModalProps) {
-  const [visible, setVisible] = useState<boolean>(false);
-
-  useEffect(() => {
-    let timeoutId: NodeJS.Timeout;
-    if (isOpen) {
-      setVisible(() => true);
-    } else {
-      timeoutId = setTimeout(() => setVisible(() => false), 350);
-    }
-    return () => {
-      if (timeoutId !== undefined) {
-        clearTimeout(timeoutId);
-      }
-    };
-  }, [isOpen]);
-
-  if (!visible) {
-    return null;
+  if (isOpen !== null) {
+    return (
+      <>
+        <Backdrop onClick={onClose} isOpen={isOpen}>
+          <Container isOpen={isOpen}>
+            <TopConatiner>
+              <Title>{title}</Title>
+              <XMarkIcon width={'1.4rem'} height={'1.4rem'} onClick={onClose} />
+            </TopConatiner>
+            <ChildrenContainer>{children}</ChildrenContainer>
+            <Button theme="default">완료</Button>
+          </Container>
+        </Backdrop>
+      </>
+    );
   }
-
-  return (
-    <>
-      <Backdrop onClick={onClose} isOpen={isOpen}>
-        <Container isOpen={isOpen}>
-          <TopConatiner>
-            <Title>{title}</Title>
-            <XMarkIcon width={'1.4rem'} height={'1.4rem'} onClick={onClose} />
-          </TopConatiner>
-          <ChildrenContainer>{children}</ChildrenContainer>
-          <Button theme="default">완료</Button>
-        </Container>
-      </Backdrop>
-    </>
-  );
 }
 
-const Backdrop = styled.div<{ isOpen: boolean }>`
+const Backdrop = styled.div<{ isOpen: boolean | null }>`
   position: fixed;
   top: 0;
   bottom: 0;
@@ -60,10 +40,10 @@ const Backdrop = styled.div<{ isOpen: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  animation: ${({ isOpen }) => (isOpen ? fadeOut : fadeIn)} 0.3s ease-in-out forwards;
+  animation: ${({ isOpen }) => (isOpen ? FadeIn : FadeOut)} 0.3s ease-in-out forwards;
 `;
 
-const Container = styled.div<{ isOpen: boolean }>`
+const Container = styled.div<{ isOpen: boolean | null }>`
   border-radius: 12px 12px 0px 0px;
   background: var(--MR_WHITE);
   position: fixed;
@@ -96,36 +76,44 @@ const Title = styled(Text)`
 
 const SlideUp = keyframes`
   from {
+    display: none;
     transform: translateY(180%);
   }
   to {
-    transform: none;
+    display: block;
+    transform: translateY(0%);
   }
 `;
 
 const SlideDown = keyframes`
   from {
-    transform: none;
+    display: block;
+    transform: translateY(0%);
   }
   to {
+    display: none;
     transform: translateY(180%);
   }
 `;
 
-const fadeIn = keyframes`
+const FadeIn = keyframes`
   from {
-    opacity: 1;
+    display: none;
+    opacity: 0;
   }
   to {
-    opacity: 0;
+    display: flex;
+    opacity: 1;
   }
 `;
 
-const fadeOut = keyframes`
+const FadeOut = keyframes`
   from {
-    opacity: 0;
+    display: flex;
+    opacity: 1;
   }
   to {
-    opacity: 1;
+    display: none;
+    opacity: 0;
   }
 `;
