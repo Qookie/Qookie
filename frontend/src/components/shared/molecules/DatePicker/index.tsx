@@ -22,10 +22,10 @@ export default function DatePicker({ onSelectYear, onSelectMonth }: Props) {
         <SwiperContainer>
           <Swiper
             slidesPerView={3}
-            loop={true}
+            loop={false}
             direction="vertical"
             centeredSlides={true}
-            initialSlide={1}
+            initialSlide={0}
             onTransitionEnd={(swiper: SwiperClass) => {
               onSelectYear?.(years[swiper.realIndex]);
             }}
