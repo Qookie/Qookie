@@ -72,6 +72,7 @@ public class RabbitMqConfig {
         factory.setRecoveryInterval(2147483647L);
         factory.setConnectionFactory(connectionFactory);
         factory.setMessageConverter(jackson2JsonMessageConverter());
+        factory.setAcknowledgeMode(AcknowledgeMode.MANUAL);
         return factory;
     }
 

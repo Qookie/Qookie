@@ -1,5 +1,6 @@
 package com.a504.qookie.domain.quest.service;
 
+import com.a504.qookie.domain.member.dto.QuestStatus;
 import com.a504.qookie.domain.cookie.entity.Body;
 import com.a504.qookie.domain.cookie.repository.BodyRepository;
 import com.a504.qookie.domain.quest.dto.AttendanceCalendarResponse;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import org.checkerframework.checker.units.qual.C;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,7 @@ import com.a504.qookie.domain.member.repository.HistoryRepository;
 import com.a504.qookie.domain.member.repository.MemberQuestRepository;
 import com.a504.qookie.domain.member.repository.MemberRepository;
 import com.a504.qookie.domain.quest.dto.ChallengeStatus;
+import com.a504.qookie.domain.quest.dto.ChallengeStatusList;
 import com.a504.qookie.domain.quest.dto.CheckQuestResponse;
 // import com.a504.qookie.domain.quest.dto.QuestStatus;
 import com.a504.qookie.domain.quest.dto.QuestType;
@@ -74,7 +77,7 @@ public class QuestService {
 							.member(member)
 							.quest(questRepository.findByName(questName)
 									.orElseThrow(
-											() -> new IllegalArgumentException("존재하지 앟는 퀘스트 입니다.")))
+											() -> new IllegalArgumentException("존재하지 않는 퀘스트 입니다.")))
 							.build());
 			historyRepository.save(
 					History.builder()
@@ -226,7 +229,7 @@ public class QuestService {
 				break;
 		}
 
-		if (!body.equals(null)) {
+		if (body != null) {
 			cookie.changeBody(body);
 			cookieRepository.save(cookie);
 		}
@@ -347,48 +350,76 @@ public class QuestService {
 		return new AttendanceCalendarResponse(todayComplete, list);
 	}
 
-	public ChallengeStatus[] getChallengeStatus(Member member){
-		ChallengeStatus[] list = new ChallengeStatus[12];
+	public ChallengeStatusList getChallengeStatus(Member member){
+		List<ChallengeStatus> monthlist = new ArrayList<>();
+		List<ChallengeStatus> badgelist = new ArrayList<>();
 		LocalDateTime now = LocalDateTime.now();
 		int year = now.getYear();
 		int month = now.getDayOfMonth();
-		int idx = 0;
-		for (QuestType questType: QuestType.values()){
-			String questName = questType.name();
-			Long id = questType.getIdx();
-			if (id > 9) break;
-			if (id <= 3){ // 월간 챌린지들
-				String key = member.getId() + ":" + year + ":" + month + ":" + questName;
-				Long size = template.opsForSet().size(key);
-				list[idx] = new ChallengeStatus("월간 " + questType.getMessage() + " 챌린지", size, id == 3 ? 10 : 15);
-			}
-			// 뱃지 챌린지
-			String badgeKey = member.getId() + ":" + questName + ":badge";
-			Long size = template.opsForSet().size(badgeKey);
-			/**
-			 * PHOTO만 5, 10, 15
-			 * 나머지 10 50 100
-			 */
-			if (questName.equals("PHOTO")){
-				if (size <= 5){
-					list[idx + 3] = new ChallengeStatus(questType.getMessage() + " 뱃지 챌린지 1단계", size, 5);
-				}else if (size <= 10){
-					list[idx + 3] = new ChallengeStatus(questType.getMessage() + " 뱃지 챌린지 2단계", size, 10);
+		// 월간 챌린지
+		checkMonthlyChallenge("WAKE", member, year, month, monthlist, "규칙적인 기상", 15);
+		checkMonthlyChallenge("EAT", member, year, month, monthlist, "규칙적인 식사", 15);
+		checkMonthlyChallenge("WALK", member, year, month, monthlist, "만보기", 10);
+		//한국인의 밥 상 10 - 50 - 100
+		checkBadgeChallenge(1L, member, badgelist, "한국인의 밥 상", 10, 50, 100, "EAT");
+		//시간맞춰 기 상 10 - 50- 100
+		checkBadgeChallenge(4L, member, badgelist, "시간맞춰 기 상", 10, 50, 100, "WAKE");
+		// 반가사유 상 10 - 50 - 100
+		checkBadgeChallenge(10L, member, badgelist, " 반가사유 상", 10, 50, 100, "MEDITATION");
+		// 사진 속 세 상 5 - 10 - 15
+		checkBadgeChallenge(7L, member, badgelist, "사진속 세 상", 5, 10, 15, "PHOTO");
+		// 내 사랑 신 상 3 - 5 - 10
+		checkBadgeChallenge(13L, member, badgelist, "내 사랑 신 상", 3, 5, 10, "BUY_NEW");
+		// 스쿼트 실력 향 상 3 - 5 - 10
+		checkBadgeChallenge(16L, member, badgelist, "스쿼트 실력 향 상", 10, 50, 100, "SQUAT");
+		return new ChallengeStatusList(monthlist, badgelist);
+	}
+
+	void checkBadgeChallenge(Long badgeId, Member member, List<ChallengeStatus> list, String sentence, int targetCnt1, int targetCnt2, int targetCnt3 , String questName){
+		Long memberId = member.getId();
+		String monthKey = getBadgeChallengeKey(memberId, questName);
+		Long cnt = template.opsForSet().size(monthKey);
+		int flag = 0;
+		for (int i = 0 ; i < 3; i++){  // 뱃지 아이디는 연속적으로 있으니까.
+			badgeId += i;
+			String key = badgeId + "";
+			if (!template.opsForSet().isMember(key, memberId + "")) {  // 이번 뱃지 획득못함
+				flag = 1;
+				if (i == 0){
+					list.add(new ChallengeStatus(30, sentence, cnt, targetCnt1, questName, "incomplete", badgeId));
+				}else if (i == 1){
+					list.add(new ChallengeStatus(50, sentence, cnt, targetCnt2, questName, "incomplete", badgeId));
 				}else{
-					list[idx + 3] = new ChallengeStatus(questType.getMessage() + " 뱃지 챌린지 3단계", size, (int)Long.min(size, 15));
+					list.add(new ChallengeStatus(100, sentence, cnt, targetCnt3, questName, "incomplete", badgeId));
 				}
-				idx++;
-				continue;
+				break;
 			}
-			if (size <= 10){
-				list[idx + 3] = new ChallengeStatus(questType.getMessage() + " 뱃지 챌린지 1단계", size, 10);
-			}else if (size <= 50){
-				list[idx + 3] = new ChallengeStatus(questType.getMessage() + " 뱃지 챌린지 2단계", size, 50);
-			}else{
-				list[idx + 3] = new ChallengeStatus(questType.getMessage() + " 뱃지 챌린지 3단계", size, (int)Long.min(size, 100));
-			}
-			idx++;
 		}
-		return list;
+		// 마지막 뱃지까지 획득한 상태
+		if (flag == 0) list.add(new ChallengeStatus(100, sentence, cnt, targetCnt3, questName, "complete", badgeId));
+	}
+
+	void checkMonthlyChallenge(String questName, Member member, int year, int month, List<ChallengeStatus> list, String sentence, int targetCnt){
+		String key = getMonthChallengeKey(member.getId(), year, month, questName);
+		Long cnt = getCount(key);
+		String monthlyChallengeKey =  questName + ":" + year + ":" + month;
+		// key가 있다 == 완료한 챌린지
+		if(template.opsForSet().isMember(monthlyChallengeKey, member.getId() + "")){
+			list.add(new ChallengeStatus(100, sentence, cnt, targetCnt, questName, "complete", 0L));
+		}else{ // key가 없다.
+			list.add(new ChallengeStatus(100, sentence, cnt, targetCnt, questName, "incomplete", 0L));
+		}
+	}
+
+	Long getCount(String key){
+		return template.opsForSet().size(key);
+	}
+
+	String getMonthChallengeKey(Long id, int year, int month, String questName){
+		return id + ":" + year + ":" + month + ":" + questName;
+	}
+
+	String getBadgeChallengeKey(Long id, String questName){
+		return id + ":" + questName + ":badge";
 	}
 }
