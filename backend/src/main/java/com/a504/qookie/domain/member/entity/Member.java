@@ -78,9 +78,8 @@ public class Member {
 		messageToken = loginRequest.getMessageToken();
 	}
 
-	public Member updateMessageToken(String mt) {
+	public void updateMessageToken(String mt) {
 		messageToken = mt;
-		return this;
 	}
 
 	public void setTime(LocalTime wakeUp) {
