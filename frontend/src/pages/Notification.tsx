@@ -42,7 +42,6 @@ const testProp5 = {
   createdAt: '어제',
 };
 
-
 const testProp6 = {
   notificationId: 6,
   category: 'quest',
@@ -50,40 +49,33 @@ const testProp6 = {
   createdAt: '어제',
 };
 
-
-const testest = [[testProp1, testProp2],[testProp3, testProp4], [testProp5, testProp6]];
+const testest = [
+  [testProp1, testProp2],
+  [testProp3, testProp4],
+  [testProp5, testProp6],
+];
 
 export default function Notification() {
   const [notificationListList, setNotificationListList] = useState<NotificationProp[][]>(testest);
   console.log('LIST: ', notificationListList);
 
   const getNotifications = async () => {
-		return http.get<ResponseType>('/api/notification')
-			.then((res)=>{
-				return res.payload
-			})
-			.catch((err)=>console.log(err))
+    return http
+      .get<ResponseType>('/api/notification')
+      .then((res) => {
+        return res.payload;
+      })
+      .catch((err) => console.log(err));
   };
 
-	useEffect(() => {
-		getNotifications()
-			.then((res) => {
-				if (res) {
-					console.log(res)
-					setNotificationListList(res as NotificationProp[][])
-				}
-			})
-	}, [])
-
-	const createdAtOrToday = (createdAt: string) => {
-		const mid = createdAt.split(' ').at(1)
-		if (mid !== undefined) {
-			if ("초분시간".includes(mid)) {
-				return "오늘"
-			}
-		}
-		return createdAt
-	}
+  useEffect(() => {
+    getNotifications().then((res) => {
+      if (res) {
+        console.log(res);
+        setNotificationListList(res as NotificationProp[][]);
+      }
+    });
+  }, []);
 
   return (
     <NotificationContainer>
@@ -91,19 +83,19 @@ export default function Notification() {
         <Text typography="title">알림</Text>
       </TitleContainer>
       <NotificationListContainer>
-				{
-					notificationListList.map((nl) => {
-						return (
-							<div key={nl[0].notificationId}>
-								<DateContainer>
-									<Text typography='button' color='gray'>{getMonthDate(nl[0].createdAt)}</Text>
-								</DateContainer>
-								
-								<NotificationList notificationList={nl} />
-							</div>
-						)
-					})
-				}
+        {notificationListList.map((nl) => {
+          return (
+            <div key={nl[0].notificationId}>
+              <DateContainer>
+                <Text typography="button" color="gray">
+                  {getMonthDate(nl[0].createdAt)}
+                </Text>
+              </DateContainer>
+
+              <NotificationList notificationList={nl} />
+            </div>
+          );
+        })}
       </NotificationListContainer>
     </NotificationContainer>
   );
@@ -117,9 +109,8 @@ const TitleContainer = styled.div`
   margin-bottom: 5vh;
 `;
 
-const NotificationListContainer = styled.div`
-`;
+const NotificationListContainer = styled.div``;
 
 const DateContainer = styled.div`
-	margin-top: 2vh;
-`
+  margin-top: 2vh;
+`;
