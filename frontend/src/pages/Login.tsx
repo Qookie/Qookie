@@ -3,7 +3,6 @@ import {
   GoogleAuthProvider,
   OAuthProvider,
 } from 'firebase/auth';
-import { auth } from '../firebase/firebaseConfig';
 import styled, { keyframes } from 'styled-components';
 
 import CookieGrow from '../assets/pngs/CookieGrow.png';
@@ -23,8 +22,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   const onClickSocialLogin = (provider: OAuthProvider | GoogleAuthProvider) => {
-    navigate('/loading');
-    signInWithRedirect(auth, provider);
+    navigate('/loading?provider=' + provider.providerId);
   };
 
   return (

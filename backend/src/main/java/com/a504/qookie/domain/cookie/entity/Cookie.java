@@ -40,9 +40,6 @@ public class Cookie {
 	@Column(name = "created_at")
 	private LocalDateTime createdAt;
 
-	@Column(name = "style")
-	private Long style;
-
 	@Column(name = "exp")
 	private int exp;
 
@@ -115,4 +112,15 @@ public class Cookie {
 
 	public void setBackground(Item background) { this.background = background; }
 
+	public void setItem(Item hat, Item top, Item bottom, Item shoe, Item background) {
+		this.hat = hat;
+		this.top = top;
+		this.bottom = bottom;
+		this.shoe = shoe;
+		this.background = background;
+	}
+
+	public void changeBody(Body body) {
+		this.body = body;
+	}
 }
