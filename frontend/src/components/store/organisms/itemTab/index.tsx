@@ -1,14 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
-import styled, { keyframes } from 'styled-components';
-import {
-  ACCItem,
-  BgItem,
-  HatItem,
-  NewItem,
-  PantsItem,
-  ShoeItem,
-  TopItem,
-} from '../../../../assets/svgs';
+import { useRef, useState } from 'react';
+import styled from 'styled-components';
+import { ACCItem, BgItem, HatItem, PantsItem, ShoeItem, TopItem } from '../../../../assets/svgs';
 import mouseSwipe from '../../../../utils/mouseSwipe';
 import { AllItemProps } from '../../../../pages/Store';
 import Item, { ItemTypeProps } from '../../molecules/Item';
@@ -17,7 +9,7 @@ interface TabProps {
   list?: AllItemProps;
 }
 
-interface SelectedProps {
+export interface SelectedProps {
   [index: number]: ItemTypeProps[];
 }
 
@@ -25,10 +17,6 @@ export default function ItemTab({ list }: TabProps) {
   const [currentTab, setCurrentTab] = useState<number>(0);
   const tabSwipeRef = useRef<HTMLDivElement>(null);
   const [selectedItem, setSelectedItem] = useState<SelectedProps>({});
-
-  useEffect(() => {
-    console.log('dhkldklskls', selectedItem);
-  }, [selectedItem]);
 
   mouseSwipe(tabSwipeRef);
 
@@ -45,29 +33,40 @@ export default function ItemTab({ list }: TabProps) {
     setCurrentTab(idx);
   };
 
-  const checkItemInList = (id: number) => {
-    // selectedItem 변경해도 여기 업데이트 안됨
-    if (selectedItem[currentTab]) {
-      return selectedItem[currentTab].some((item) => item.id === id);
-    }
-  };
-
   const selectItemHandler = (args: ItemTypeProps) => {
-    setSelectedItem((prev) => {
-      const newItemList = { ...prev };
-      const allTabArrays = Object.values(newItemList);
+    if (currentTab === 5) {
+      setSelectedItem((prev) => {
+        const newArr = { ...prev };
+        const currentTabArray = newArr[currentTab];
 
-      if (
-        allTabArrays[currentTab] &&
-        allTabArrays[currentTab].find((item) => item.id === args.id)
-      ) {
-        console.log('delte arr');
-        allTabArrays[currentTab] = [];
-      } else {
-        allTabArrays[currentTab] = [args];
-      }
-      return allTabArrays;
-    });
+        if (currentTabArray === undefined || currentTabArray[0] === undefined) {
+          newArr[currentTab] = [args];
+        } else {
+          if (currentTabArray[0].id === args.id) {
+            newArr[currentTab] = currentTabArray.filter((item) => item.id !== args.id);
+          } else {
+            newArr[currentTab] = [...currentTabArray, args];
+          }
+        }
+        return newArr;
+      });
+    } else {
+      setSelectedItem((prev) => {
+        const newArr = { ...prev };
+        const currentTabArray = newArr[currentTab];
+
+        if (currentTabArray === undefined || currentTabArray[0] === undefined) {
+          newArr[currentTab] = [args];
+        } else {
+          if (currentTabArray[0].id === args.id) {
+            newArr[currentTab] = [];
+          } else {
+            newArr[currentTab] = [args];
+          }
+        }
+        return newArr;
+      });
+    }
   };
 
   return (
@@ -81,12 +80,12 @@ export default function ItemTab({ list }: TabProps) {
       </TabContainer>
       <ItemContainer>
         {list &&
-          list[currentTab].map((item, idx) => (
+          list[currentTab].map((item, index) => (
             <Item
               item={item}
-              key={idx}
-              isChecked={selectItemHandler}
-              check={checkItemInList(item.id)}
+              key={index}
+              handleCheck={selectItemHandler}
+              select={selectedItem[currentTab]}
             />
           ))}
       </ItemContainer>

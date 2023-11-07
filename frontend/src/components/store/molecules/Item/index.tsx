@@ -15,32 +15,26 @@ export interface ItemTypeProps {
 export interface ItemProps {
   item: ItemTypeProps;
   chip?: boolean;
-  isChecked?: (...args: (boolean | ItemTypeProps | any)[]) => void;
-  check?: boolean;
+  handleCheck: (...args: (boolean | ItemTypeProps | any)[]) => void;
+  select: ItemTypeProps[];
 }
 
-export default function Item({ item, chip, isChecked, check }: ItemProps) {
-  const [isClicked, setIsClicked] = useState<boolean>(false);
+export default function Item({ item, chip, handleCheck, select }: ItemProps) {
+  const [isChecked, setIsChecked] = useState<boolean>(false);
 
   useEffect(() => {
-    if (check === false) {
-      setIsClicked(false);
+    if (select) {
+      const isItemChecked = select.some((value) => value.id === item.id);
+      setIsChecked(isItemChecked);
     }
-  }, [check]);
-
-  useEffect(() => {
-    console.log('step 1');
-    if (isChecked) {
-      isChecked(item);
-    }
-  }, [isClicked]);
+  });
 
   const selectHandler = () => {
-    setIsClicked((pre) => !pre);
+    handleCheck(item);
   };
 
   return (
-    <Container onClick={selectHandler} state={isClicked}>
+    <Container onClick={selectHandler} state={isChecked}>
       {item.media ? (
         <ItemImg src={item.media} alt={item.name} />
       ) : (
