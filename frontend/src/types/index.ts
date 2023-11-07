@@ -1,7 +1,6 @@
 export interface QookieInfo {
   name: string;
   createdAt: string;
-  style: string[];
   active: number;
   exp: number;
   level: number;
@@ -14,4 +13,5 @@ export interface QookieInfo {
   bottom: string;
   shoe: string;
   background: string;
+  accessories: string[];
 }

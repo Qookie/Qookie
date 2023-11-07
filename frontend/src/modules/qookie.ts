@@ -11,7 +11,6 @@ export const QookieInfoState = atom<QookieInfo>({
   default: {
     name: '',
     createdAt: '',
-    style: [],
     active: 1,
     exp: 0,
     level: 0,
@@ -24,6 +23,7 @@ export const QookieInfoState = atom<QookieInfo>({
     bottom: '',
     shoe: '',
     background: '',
+    accessories: [],
   },
   effects_UNSTABLE: [persistAtom],
 });
