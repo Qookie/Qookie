@@ -109,7 +109,7 @@ const Selected = styled.div`
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 100%;
+  width: 10rem;
   height: 50px;
   background-color: rgba(224, 224, 224, 0.25);
   border-radius: 8px;
