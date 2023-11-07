@@ -1,10 +1,23 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import Money from '../components/coinlist/molecules/Money';
 import Text from '../components/shared/atoms/Text';
 import MonthSelector from '../components/coinlist/molecules/MonthSelector';
 import RewardData from '../components/coinlist/molecules/RewardData';
+import BottomSheet from '../components/shared/molecules/BottomSheet';
+import DatePicker from '../components/coinlist/molecules/DatePicker';
 
 export default function Coinlist() {
+  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
+
+  const onClose = () => {
+    setIsBottomSheetOpen(false);
+  };
+
+  const onMonthSelectorClick = () => {
+    setIsBottomSheetOpen(true);
+  };
+
   return (
     <Container>
       <TopContainer>
@@ -15,13 +28,19 @@ export default function Coinlist() {
       </TopContainer>
       <Divider />
       <BottomContainer>
-        <MonthSelector />
+        <MonthSelector onClick={onMonthSelectorClick} />
         <RewardData date={'10.12'} title={'기상 퀘스트 달성 보상'} qoin={10} />
         <RewardData date={'10.12'} title={'식사 퀘스트 달성 보상'} qoin={10} />
         <RewardData date={'10.12'} title={'토끼귀 구매'} qoin={-10} />
         <RewardData date={'10.11'} title={'10월 기상 챌린지 달성 보상'} qoin={100} />
         <RewardData date={'10.11'} title={'기상 퀘스트 달성 보상'} qoin={10} />
       </BottomContainer>
+      <BottomSheet
+        isOpen={isBottomSheetOpen}
+        onClose={onClose}
+        children={<DatePicker />}
+        title={'조회 기간'}
+      />
     </Container>
   );
 }
