@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Chip from '../../../shared/molecules/Chip';
 import { Qoin } from '../../../../assets/svgs';
 import { NoSymbolIcon } from '@heroicons/react/24/outline';
+import NewItem from '../../../../assets/pngs/new.png';
 
 export interface ItemTypeProps {
   id: number;
@@ -36,7 +37,10 @@ export default function Item({ item, chip, handleCheck, select }: ItemProps) {
   return (
     <Container onClick={selectHandler} state={isChecked}>
       {item.media ? (
-        <ItemImg src={item.media} alt={item.name} />
+        <ItemContainer>
+          <ItemImg src={item.media} alt={item.name} />
+          {item.isNew && <NewIcon src={NewItem} alt={'new'} />}
+        </ItemContainer>
       ) : (
         <NoneItem>
           <NoSymbolIcon width={40} height={40} />
@@ -59,7 +63,13 @@ const Container = styled.div<{ state: boolean }>`
   position: relative;
   overflow: hidden;
   border-radius: 0.75rem;
-  box-shadow: ${({ state }) => state && '0 0 0 2px var(--MR_RED) inset'};
+  box-shadow: ${({ state }) => state ? '0 0 0 2px var(--MR_RED) inset' : '0 0 6px 1px #e0e0e070'};
+`;
+
+const ItemContainer = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
 `;
 
 const ItemImg = styled.img`
@@ -68,6 +78,14 @@ const ItemImg = styled.img`
   border-radius: 0.75rem;
   position: relative;
   z-index: -1;
+`;
+
+const NewIcon = styled.img`
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 0.5rem;
+  z-index: 1;
 `;
 
 const NoneItem = styled.div`

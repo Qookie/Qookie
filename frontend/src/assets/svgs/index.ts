@@ -17,7 +17,6 @@ export { ReactComponent as QoinList } from './qoinlist.svg';
 
 // store
 export { ReactComponent as BgItem } from './bg.svg';
-export { ReactComponent as NewItem } from './new.svg';
 export { ReactComponent as HatItem } from './hat.svg';
 export { ReactComponent as ShoeItem } from './shoe.svg';
 export { ReactComponent as PantsItem } from './pant.svg';

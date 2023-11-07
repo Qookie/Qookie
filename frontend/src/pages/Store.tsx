@@ -5,9 +5,9 @@ import Qookie from '../components/shared/molecules/Qookie';
 import Button from '../components/shared/atoms/Button';
 import { ShoppingCartIcon } from '@heroicons/react/24/outline';
 import Title from '../components/shared/atoms/Title';
-import ItemTab from '../components/store/organisms/ItemTab';
+import ItemTab, { SelectedProps } from '../components/store/organisms/ItemTab';
 import { useEffect, useState } from 'react';
-import Item, { ItemProps, ItemTypeProps } from '../components/store/molecules/Item';
+import { ItemTypeProps } from '../components/store/molecules/Item';
 import { itemApi } from '../api';
 
 export interface AllItemProps {
@@ -18,6 +18,7 @@ export default function Store() {
   const [qookie, setQookie] = useRecoilState(QookieInfoState);
   const [currentTab, setCurrentTab] = useState<number>(0);
   const [itemList, setItemList] = useState<AllItemProps>();
+  const [selectedItemList, setSelectedItemList] = useState<SelectedProps>({});
 
   useEffect(() => {
     if (currentTab === 0) {
