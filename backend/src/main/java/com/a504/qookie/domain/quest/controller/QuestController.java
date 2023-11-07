@@ -2,14 +2,12 @@ package com.a504.qookie.domain.quest.controller;
 
 
 import com.a504.qookie.domain.quest.dto.AttendanceCalendarResponse;
-import com.a504.qookie.domain.quest.dto.CalenderRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -61,11 +59,12 @@ public class QuestController {
 		return BaseResponse.okWithData(HttpStatus.OK, questType.getMessage() + " 퀘스트 완료", imageName);
 	}
 
-	@GetMapping("/calendar/attendance")
+	@GetMapping("/calendar/attendance/{year}/{month}")
 	public ResponseEntity<?> getAttendanceInfo(
 			@AuthenticationPrincipal CustomMemberDetails member,
-			@RequestBody CalenderRequest calenderRequest){
-		AttendanceCalendarResponse attendanceCalendarResponse = questService.getAttendanceInfo(member.getMember(), calenderRequest);
+			@PathVariable String year,
+			@PathVariable String month){
+		AttendanceCalendarResponse attendanceCalendarResponse = questService.getAttendanceInfo(member.getMember(), year, month);
 		return BaseResponse.okWithData(HttpStatus.OK, "Attendance Calendar OK", attendanceCalendarResponse);
 	}
 

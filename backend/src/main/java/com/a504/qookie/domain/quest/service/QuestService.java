@@ -1,19 +1,14 @@
 package com.a504.qookie.domain.quest.service;
 
-import com.a504.qookie.domain.member.dto.QuestStatus;
 import com.a504.qookie.domain.cookie.entity.Body;
 import com.a504.qookie.domain.cookie.repository.BodyRepository;
 import com.a504.qookie.domain.quest.dto.AttendanceCalendarResponse;
 import com.a504.qookie.domain.quest.dto.CalenderRequest;
 import java.time.LocalDateTime;
-import java.time.Month;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
-import org.checkerframework.checker.units.qual.C;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -343,8 +338,9 @@ public class QuestService {
 
 	}
 
-	public AttendanceCalendarResponse getAttendanceInfo(Member member, CalenderRequest calenderRequest) {
-		String checkAttendanceKey = member.getId() + ":" + calenderRequest.year() + ":" + calenderRequest.month() + ":" + "ATTENDANCE";
+	public AttendanceCalendarResponse getAttendanceInfo(Member member,
+			String year, String month) {
+		String checkAttendanceKey = member.getId() + ":" + year + ":" + month + ":" + "ATTENDANCE";
 		Boolean todayComplete = template.opsForSet().isMember(checkAttendanceKey, LocalDateTime.now().getDayOfMonth() + "");
 		List<Integer> list = template.opsForSet().members(checkAttendanceKey).stream().map(Integer::valueOf).toList();
 		return new AttendanceCalendarResponse(todayComplete, list);
