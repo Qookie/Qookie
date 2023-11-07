@@ -11,6 +11,7 @@ import Mypage from '../pages/Mypage';
 import { useRecoilState } from 'recoil';
 import { UserState } from '../modules/user';
 import NotFound from '../pages/NotFound';
+import Coinlist from '../pages/Coinlist';
 
 const Router = () => {
   const [userState, _] = useRecoilState(UserState)
@@ -29,6 +30,7 @@ const Router = () => {
               <Route path="/mypage" element={<Mypage />} />
               <Route path="/challenge" element={<Challenge />} />
               <Route path="/loading" element={<Loading />} />
+              <Route path="/coinlist" element={<Coinlist />} />
             </Routes>
           ) : (
             <Routes>
