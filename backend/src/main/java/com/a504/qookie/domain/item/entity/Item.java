@@ -26,6 +26,9 @@ public class Item {
 	@Column(name = "name")
 	private String name;
 
+	@Column(name = "thumbnail")
+	private String thumbnail;
+
 	@Column(name = "media")
 	private String media;
 

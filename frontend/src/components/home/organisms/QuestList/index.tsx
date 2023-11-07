@@ -10,7 +10,7 @@ export interface QuestListProps {
 export default function QuestList({ title }: QuestListProps) {
   const navigate = useNavigate();
   const everyQuestList: Quest[] = ['wake', 'eat', 'walk'];
-  const otherQuestList: Quest[] = ['squat', 'promise', 'photo', 'strech', 'meditation', 'water'];
+  const otherQuestList: Quest[] = ['squat', 'promise', 'photo', 'stretch', 'meditation', 'water'];
 
   const selectedList = (title: string) => {
     if (title == '일일 퀘스트') {

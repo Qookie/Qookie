@@ -3,6 +3,10 @@ import Text from '../../../shared/atoms/Text';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
 import { Badge, Deco, MyQookie, QoinList } from '../../../../assets/svgs';
 import { useNavigate } from 'react-router-dom';
+import { signOut } from '@firebase/auth';
+import { auth } from '../../../../firebase/firebaseConfig';
+import { useSetRecoilState } from 'recoil';
+import { UserState } from '../../../../modules/user';
 
 export const mypageList = [
   'deco',
@@ -24,8 +28,18 @@ interface Props {
 export default function MypageListItem({ mypage }: Props) {
   const { icon, intro } = MYPAGE_ITEM[mypage];
   const navigate = useNavigate();
+  const setUserState = useSetRecoilState(UserState);
+
   const navigateHandler = () => {
-    navigate(`/${mypage}`);
+    // logout
+    if (mypage === 'logOut') {
+      signOut(auth).then(() => {
+        setUserState(null);
+        navigate('/');
+      });
+    } else {
+      navigate(`/${mypage}`);
+    }
   };
 
   return (
