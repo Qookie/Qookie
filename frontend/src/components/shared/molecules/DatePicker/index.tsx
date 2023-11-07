@@ -29,7 +29,6 @@ export default function DatePicker({ onSelectYear, onSelectMonth }: Props) {
             onTransitionEnd={(swiper: SwiperClass) => {
               onSelectYear?.(years[swiper.realIndex]);
             }}
-            onSlideChange={(swiper) => console.log(swiper.realIndex + 2023)}
           >
             {years.map((no: string) => (
               <SwiperSlide key={no}>
@@ -50,7 +49,6 @@ export default function DatePicker({ onSelectYear, onSelectMonth }: Props) {
             onTransitionEnd={(swiper: SwiperClass) => {
               onSelectMonth?.(months[swiper.realIndex]);
             }}
-            onSlideChange={(swiper) => console.log(swiper.realIndex + 1)}
           >
             {months.map((no: string) => (
               <SwiperSlide key={no}>
