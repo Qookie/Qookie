@@ -38,7 +38,7 @@ public class Heart {
 	@Enumerated(value = EnumType.STRING)
 	private HeartCategory category;
 
-	@Column(name = "reply")
+	@Column(name = "reply", length = 2048)
 	private String reply;
 
 	public Heart(Member member, HeartRequest heartRequest) {

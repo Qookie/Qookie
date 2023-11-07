@@ -3,6 +3,20 @@ import { ToastContainer, toast, Zoom } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ReactComponent as Qookie } from '../../../../assets/svgs/qookie.svg';
 
+interface Message {
+  title: React.ReactNode;
+  content?: React.ReactNode;
+}
+
+export const showToast = ({ title, content }: Message) => {
+  toast.info(
+    <>
+      <MessageTitle>{title}</MessageTitle>
+      <MessageContent>{content}</MessageContent>
+    </>,
+  );
+};
+
 export default function Toast() {
   return (
     <>
