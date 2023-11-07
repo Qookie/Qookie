@@ -34,9 +34,10 @@ public class ItemController {
     @PostMapping("/upload")
     public ResponseEntity<?> upload(
             ItemUploadRequest itemUploadRequest,
-            @RequestPart(value = "image") MultipartFile image) {
+            @RequestPart(value = "image") MultipartFile image,
+            @RequestPart(value = "thumbnail", required = false) MultipartFile thumbnail) {
 
-        String url = itemService.upload(itemUploadRequest, image);
+        String url = itemService.upload(itemUploadRequest, image, thumbnail);
 
         return BaseResponse.okWithData(HttpStatus.OK, "item upload OK", url);
     }
