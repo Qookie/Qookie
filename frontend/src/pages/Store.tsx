@@ -9,6 +9,7 @@ import ItemTab, { SelectedProps } from '../components/store/organisms/ItemTab';
 import { useEffect, useState } from 'react';
 import { ItemTypeProps } from '../components/store/molecules/Item';
 import { itemApi } from '../api';
+import { QookieInfo } from '../types';
 
 export interface AllItemProps {
   [index: number]: ItemTypeProps[];
@@ -18,30 +19,64 @@ export default function Store() {
   const [qookie, setQookie] = useRecoilState(QookieInfoState);
   const [currentTab, setCurrentTab] = useState<number>(0);
   const [itemList, setItemList] = useState<AllItemProps>();
-  const [selectedItemList, setSelectedItemList] = useState<SelectedProps>({});
+  const [myItemList, setMyItemList] = useState<AllItemProps>();
+  const [wearItemList, setWearItemList] = useState<SelectedProps>({});
+  const [showQookie, setShowQookie] = useState<QookieInfo>(qookie);
+  const [itemOrder, setItemOrder] = useState<ItemTypeProps[]>([]);
 
   useEffect(() => {
-    if (currentTab === 0) {
-      itemApi.getItemList().then((res) => {
-        if (res) {
-          setItemHandler(res);
-        }
-      });
-    } else {
-      itemApi.getMyItemList().then((res) => {
-        if (res) {
-          setItemHandler(res);
-        }
-      });
-    }
-  }, [currentTab]);
+    itemApi.getItemList().then((res) => {
+      if (res) {
+        setItemList(res);
+      }
+    });
+    itemApi.getMyItemList().then((res) => {
+      if (res) {
+        setMyItemList(res);
+      }
+    });
+  }, []);
 
-  const setItemHandler = (res: AllItemProps) => {
-    setItemList(res);
+  useEffect(() => {
+    const newQookieWear = {
+      background: checkItemLength(0),
+      hat: checkItemLength(1),
+      shoe: checkItemLength(2),
+      bottom: checkItemLength(3),
+      top: checkItemLength(4),
+    };
+    const accessories = checkArrLength(5);
+
+    setShowQookie((pre) => {
+      return {
+        ...pre,
+        ...newQookieWear,
+        accessories: accessories,
+      };
+    });
+  }, [wearItemList]);
+
+  const checkItemLength = (index: number) => {
+    if (wearItemList && wearItemList[index] && wearItemList[index].length > 0) {
+      return wearItemList[index][0].media;
+    }
+    return '';
+  };
+
+  const checkArrLength = (index: number) => {
+    if (wearItemList && wearItemList[index] && wearItemList[index].length > 0) {
+      const urlList: string[] = wearItemList[index].map((item) => item.media);
+      return urlList;
+    }
+    return [];
   };
 
   const selectTabHandler = (now: number) => {
     setCurrentTab(now);
+  };
+
+  const wearItemSetHandler = (list: SelectedProps) => {
+    setWearItemList(list);
   };
 
   return (
@@ -49,10 +84,10 @@ export default function Store() {
       <TopContainer>
         <BackgroundImg src={qookie.background} alt="bg" />
         <QookieContainer>
-          <Qookie {...qookie} />
+          <Qookie {...showQookie} />
         </QookieContainer>
         <ButtonContainer>
-          <Button theme={'disabled'} size="icon">
+          <Button theme={itemOrder.length > 0 ? 'default' : 'disabled'} size="icon">
             <ShoppingCartIcon width={20} height={20} />
             구매
           </Button>
@@ -75,7 +110,7 @@ export default function Store() {
             MY
           </Title>
         </TitleTab>
-        <ItemTab list={itemList} />
+        <ItemTab list={currentTab === 0 ? itemList : myItemList} handleList={wearItemSetHandler} />
       </BottomContainer>
     </PageContainer>
   );

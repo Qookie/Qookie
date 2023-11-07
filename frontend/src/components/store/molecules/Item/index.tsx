@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Chip from '../../../shared/molecules/Chip';
 import { Qoin } from '../../../../assets/svgs';
@@ -63,7 +63,7 @@ const Container = styled.div<{ state: boolean }>`
   position: relative;
   overflow: hidden;
   border-radius: 0.75rem;
-  box-shadow: ${({ state }) => state ? '0 0 0 2px var(--MR_RED) inset' : '0 0 6px 1px #e0e0e070'};
+  box-shadow: ${({ state }) => (state ? '0 0 0 2px var(--MR_RED) inset' : '0 0 6px 1px #e0e0e070')};
 `;
 
 const ItemContainer = styled.div`

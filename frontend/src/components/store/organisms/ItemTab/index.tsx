@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { ACCItem, BgItem, HatItem, PantsItem, ShoeItem, TopItem } from '../../../../assets/svgs';
 import mouseSwipe from '../../../../utils/mouseSwipe';
@@ -7,16 +7,31 @@ import Item, { ItemTypeProps } from '../../molecules/Item';
 
 interface TabProps {
   list?: AllItemProps;
+  handleList: (list: SelectedProps) => void;
 }
 
 export interface SelectedProps {
   [index: number]: ItemTypeProps[];
 }
 
-export default function ItemTab({ list }: TabProps) {
+const SelectedDefault = {
+  0: [],
+  1: [],
+  2: [],
+  3: [],
+  4: [],
+  5: [],
+};
+
+export default function ItemTab({ list, handleList }: TabProps) {
   const [currentTab, setCurrentTab] = useState<number>(0);
   const tabSwipeRef = useRef<HTMLDivElement>(null);
-  const [selectedItem, setSelectedItem] = useState<SelectedProps>({});
+  const [selectedItem, setSelectedItem] = useState<SelectedProps>(SelectedDefault);
+
+  useEffect(() => {
+    handleList(selectedItem);
+    console.log(selectedItem);
+  }, [selectedItem]);
 
   mouseSwipe(tabSwipeRef);
 
@@ -39,14 +54,10 @@ export default function ItemTab({ list }: TabProps) {
         const newArr = { ...prev };
         const currentTabArray = newArr[currentTab];
 
-        if (currentTabArray === undefined || currentTabArray[0] === undefined) {
-          newArr[currentTab] = [args];
+        if (currentTabArray === undefined || !currentTabArray.some((item) => item.id === args.id)) {
+          newArr[currentTab] = [...currentTabArray, args];
         } else {
-          if (currentTabArray[0].id === args.id) {
-            newArr[currentTab] = currentTabArray.filter((item) => item.id !== args.id);
-          } else {
-            newArr[currentTab] = [...currentTabArray, args];
-          }
+          newArr[currentTab] = currentTabArray.filter((item) => item.id !== args.id);
         }
         return newArr;
       });
