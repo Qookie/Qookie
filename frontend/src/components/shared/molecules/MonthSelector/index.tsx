@@ -1,10 +1,10 @@
 import { atom, useRecoilState } from 'recoil';
 import styled from 'styled-components';
-import Text from '../../../shared/atoms/Text';
+import Text from '../../atoms/Text';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 
 interface MonthSelectorProps {
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 export const MonthState = atom({

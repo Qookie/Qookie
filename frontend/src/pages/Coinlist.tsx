@@ -2,10 +2,10 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import Money from '../components/coinlist/molecules/Money';
 import Text from '../components/shared/atoms/Text';
-import MonthSelector from '../components/coinlist/molecules/MonthSelector';
+import MonthSelector from '../components/shared/molecules/MonthSelector';
 import RewardData from '../components/coinlist/molecules/RewardData';
 import BottomSheet from '../components/shared/molecules/BottomSheet';
-import DatePicker from '../components/coinlist/molecules/DatePicker';
+import DatePicker from '../components/shared/molecules/DatePicker';
 
 export default function Coinlist() {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);

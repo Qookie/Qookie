@@ -11,8 +11,5 @@ export default meta;
 type Story = StoryObj<typeof DatePicker>;
 
 export const Default: Story = {
-  args: {
-    date: { year: '2023', month: '10' },
-  },
   render: (args) => <DatePicker {...args} />,
 };
