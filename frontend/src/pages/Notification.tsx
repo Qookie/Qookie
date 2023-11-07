@@ -4,6 +4,8 @@ import { NotificationProp } from '../types';
 import Title from '../components/shared/atoms/Title';
 import Text from '../components/shared/atoms/Text';
 import styled from 'styled-components';
+import { http } from '../api/instance';
+import { ResponseType } from '../types';
 
 const testProp1 = {
   notificationId: 1,
@@ -55,18 +57,33 @@ export default function Notification() {
   const [notificationListList, setNotificationListList] = useState<NotificationProp[][]>(testest);
   console.log('LIST: ', notificationListList);
 
-  // const getNotifications = async () => {
-  //   return [testProp, testProp];
-  // };
+  const getNotifications = async () => {
+		return http.get<ResponseType>('/api/notification')
+			.then((res)=>{
+				return res.payload
+			})
+			.catch((err)=>console.log(err))
+  };
 
-  // useEffect(() => {
-  //   getNotifications().then((res) => {
-  //     setNotificationList(res);
-  //   });
-  // }, [notificationList]);
+	useEffect(() => {
+		getNotifications()
+			.then((res) => {
+				if (res) {
+					console.log(res)
+					setNotificationListList(res as NotificationProp[][])
+				}
+			})
+	}, [])
 
-  // TODO:
-  // make on
+	const createdAtOrToday = (createdAt: string) => {
+		const mid = createdAt.split(' ').at(1)
+		if (mid !== undefined) {
+			if ("초분시간".includes(mid)) {
+				return "오늘"
+			}
+		}
+		return createdAt
+	}
 
   return (
     <NotificationContainer>
@@ -79,7 +96,7 @@ export default function Notification() {
 						return (
 							<div key={nl[0].notificationId}>
 								<DateContainer>
-									<Text typography='button'>{nl[0].createdAt}</Text>
+									<Text typography='button'>{createdAtOrToday(nl[0].createdAt)}</Text>
 								</DateContainer>
 								
 								<NotificationList notificationList={nl} />

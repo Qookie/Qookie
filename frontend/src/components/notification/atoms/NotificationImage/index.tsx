@@ -11,17 +11,17 @@ import {
 export default function NotificationImage({ category }: { category: string }) {
   const selected = () => {
     switch (category) {
-      case 'alarm':
+      case 'Alarm':
         return <Alarm />;
-      case 'challenge':
+      case 'Challenge':
         return <Challenge />;
-      case 'cookie':
+      case 'Cookie':
         return <Cookie />;
-      case 'heart':
+      case 'Heart':
         return <Heart />;
-      case 'item':
+      case 'Item':
         return <Item />;
-      case 'quest':
+      case 'Quest':
         return <Quest />;
       default:
         return <></>;

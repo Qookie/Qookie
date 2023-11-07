@@ -7,17 +7,17 @@ export default function NotificationContent({ prop }: { prop: NotificationProp }
 
   const selected = () => {
     switch (prop.category) {
-      case 'alarm':
+      case 'Alarm':
         return `기상 시간이에요!!!\n기상 체크 퀘스트를 완료해주세요.`;
-      case 'challenge':
+      case 'Challenge':
         return `${prop.info} 챌린지 완료!`;
-      case 'cookie':
+      case 'Cookie':
         return `${prop.info}가 당신을 기다리고 있어요!`;
-      case 'heart':
+      case 'Heart':
         return `${prop.info}의 마음 답장이 도착했어요!`;
-      case 'item':
+      case 'Item':
         return `따끈따끈하게 출시된 아이템: ${prop.info}!!!.`;
-      case 'quest':
+      case 'Quest':
         return `추가 퀘스트 도착!\n${prop.info}를 완료하면 추가 보상이 주어져요.`;
       default:
         return <></>;

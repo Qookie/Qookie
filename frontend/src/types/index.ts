@@ -23,3 +23,7 @@ export interface NotificationProp {
 	createdAt: string;
 }
 
+export interface ResponseType {
+  msg: string;
+  payload: object;
+}

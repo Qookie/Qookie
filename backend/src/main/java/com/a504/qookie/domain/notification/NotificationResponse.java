@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 
 @Getter
 @AllArgsConstructor
@@ -12,13 +14,14 @@ import lombok.NoArgsConstructor;
 public class NotificationResponse {
     private Long notificationId;
     private String info;
-    private String createdAt;
+    private LocalDateTime createdAt;
     private String category;
 
     public NotificationResponse(Notification notification) {
         notificationId = notification.getId();
         info = notification.getInfo();
-        createdAt = DateUtil.formatLocalDateTime(notification.getCreatedAt());
+        createdAt = notification.getCreatedAt();
+//        createdAt = DateUtil.formatLocalDateTime(notification.getCreatedAt());
         category = notification.getCategory().name();
     }
 }

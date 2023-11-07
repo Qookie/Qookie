@@ -1,3 +1,4 @@
+
 export const calcDateDiff = (createdAt: string) => {
   const createdDate = new Date(createdAt);
   const currentDate = new Date();
@@ -13,3 +14,7 @@ export const getToday = () => {
   const day = currentDate.getDate().toString().padStart(2, '0');
   return `${year}.${month}.${day}`;
 };
+
+export const toBeforeString = () => {
+  const now = new Date();
+}
