@@ -20,7 +20,7 @@ export const questList = [
   'squat',
   'promise',
   'photo',
-  'strech',
+  'stretch',
   'meditation',
   'water',
 ] as const;
@@ -35,7 +35,7 @@ export default function QuestListItem({ quest }: Props) {
   const { icon, intro, text } = QUEST_CONTENT[quest];
 
   const handleClick = () => {
-    navigate(`/${quest}`);
+    navigate(`/quest/${quest}`);
   };
 
   return (
@@ -80,7 +80,7 @@ const QUEST_CONTENT = {
     intro: '오늘 하늘 어때?,',
     text: '사진 찍기',
   },
-  strech: {
+  stretch: {
     icon: <SparklesIcon />,
     intro: '잠깐 시간내서,',
     text: '스트레칭',
