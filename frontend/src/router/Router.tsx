@@ -8,34 +8,54 @@ import Challenge from '../pages/Challenge';
 import Loading from '../pages/Loading';
 import SetWakeupTime from '../pages/SetWakeupTime';
 import Mypage from '../pages/Mypage';
+import WakeupQuest from '../pages/quest/WakeupQuest';
+import EatQuest from '../pages/quest/EatQuest';
 import { useRecoilState } from 'recoil';
-import { UserState } from '../recoil/UserState';
+import { UserState } from '../modules/user';
 import NotFound from '../pages/NotFound';
+import WalkQuest from '../pages/quest/WalkQuest';
+import SquatQuest from '../pages/quest/SquatQuest';
+import PromiseQuest from '../pages/quest/PromiseQuest';
+import PhotoQuest from '../pages/quest/PhotoQuest';
+import StretchQuest from '../pages/quest/StretchQuest';
+import MeditaionQuest from '../pages/quest/MeditaionQuest';
+import WaterQuest from '../pages/quest/WaterQuest';
 
 const Router = () => {
-  const [userState, _] = useRecoilState(UserState)
+  const [userState, _] = useRecoilState(UserState);
   return (
     <BrowserRouter>
       <HeaderWrapper />
-        {
-          userState ? (
-            <Routes>
-              <Route path="/*" element={<NotFound />}/>
-              <Route path="/init" element={<InitQookie />} />
-              <Route path="/set-wakeup" element={<SetWakeupTime />} />
-              <Route path="/home" element={<Home />} />
-              <Route path="/calendar" element={<Login />} />
-              <Route path="/mind" element={<Login />} />
-              <Route path="/mypage" element={<Mypage />} />
-              <Route path="/challenge" element={<Challenge />} />
-            </Routes>
-          ) : (
-            <Routes>
-              <Route path="/*" element={<Login />} />
-              <Route path="/loading" element={<Loading />} />
-            </Routes>
-          )
-        }
+      {userState ? (
+        <Routes>
+          <Route path="/*" element={<NotFound />} />
+          <Route path="/init" element={<InitQookie />} />
+          <Route path="/set-wakeup" element={<SetWakeupTime />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/calendar" element={<Login />} />
+          <Route path="/mind" element={<Login />} />
+          <Route path="/mypage" element={<Mypage />} />
+          <Route path="/challenge" element={<Challenge />} />
+          <Route path="/loading" element={<Loading />} />
+
+          <Route path="/quest">
+            <Route path="wake" element={<WakeupQuest />} />
+            <Route path="eat" element={<EatQuest />} />
+            <Route path="walk" element={<WalkQuest />} />
+            <Route path="squat" element={<SquatQuest />} />
+            <Route path="promise" element={<PromiseQuest />} />
+            <Route path="photo" element={<PhotoQuest />} />
+            <Route path="stretch" element={<StretchQuest />} />
+            <Route path="meditation" element={<MeditaionQuest />} />
+            <Route path="water" element={<WaterQuest />} />
+          </Route>
+        </Routes>
+      ) : (
+        <Routes>
+          <Route path="/*" element={<Login />} />
+          <Route path="/loading" element={<Loading />} />
+        </Routes>
+      )}
       <NavBarWrapper />
     </BrowserRouter>
   );

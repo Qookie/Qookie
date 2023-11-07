@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 import Spinner from '../components/shared/atoms/Spinner';
 import { OAuthProvider, GoogleAuthProvider } from 'firebase/auth';
 import { useSetRecoilState } from 'recoil';
-import { UserState } from '../recoil/UserState';
+import { UserState } from '../modules/user';
 
 type LoginResponse = {
   msg: string;
@@ -68,7 +68,10 @@ const Loading = () => {
                   navigate('/home')
                 }
               })
-              .catch(err=>console.log(err))
+              .catch((err)=>{
+                console.log(err)
+                console.log("ERROR AT BACKEND")
+              })
             
           })
           .catch(err=>console.log(err))

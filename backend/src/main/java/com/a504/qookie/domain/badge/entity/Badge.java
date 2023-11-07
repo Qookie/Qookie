@@ -1,5 +1,6 @@
 package com.a504.qookie.domain.badge.entity;
 
+import com.a504.qookie.domain.badge.dto.BadgeUploadRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,9 +23,18 @@ public class Badge {
 	@Column(name = "badge_id")
 	private Long id;
 
-	@Column(name = "name")
-	private String name;
+	@Column(name = "title")
+	private String title;
 
-	@Column(name = "icon")
-	private String icon;
+	@Column(name = "content")
+	private String content;
+
+	@Column(name = "image")
+	private String image;
+
+	public Badge(BadgeUploadRequest badgeUploadRequest, String url) {
+		this.title = badgeUploadRequest.title();
+		this.content = badgeUploadRequest.content();
+		this.image = url;
+	}
 }

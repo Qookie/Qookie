@@ -21,6 +21,7 @@ import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -35,7 +36,10 @@ public class CookieService {
     private final MouthRepository mouthRepository;
     private final AwsS3Service awsS3Service;
     private final ItemRepository itemRepository;
+    private final RedisTemplate<String, String> template;
 
+
+    private static final Long NO_WEAR_ITEM_ID = 1L;
     private static final Long BASE_BACKGROUND_ID = 2L;
 
     @Transactional
@@ -64,7 +68,7 @@ public class CookieService {
 
         cookieRepository.save(cookie);
 
-        return new CookieResponse(cookie, cookie.getBody().getImage(), null);
+        return new CookieResponse(cookie, cookie.getBody().getImage(), null, new ArrayList<>());
     }
 
     public String uploadBody(MultipartFile image, int stage) {
@@ -131,15 +135,32 @@ public class CookieService {
             cookie.setBackground(itemRepository.findById(BASE_BACKGROUND_ID)
                     .orElseThrow(() -> new IllegalArgumentException("기본 배경이 없습니다")));
 
+        String accessories_key =
+                member.getId() + ":accessories"; // (유저PK):accessories
+        List<Long> list = template.opsForList().range(accessories_key, 0, -1)
+                .stream().map(Long::valueOf).toList();
+
+        List<String> accessoriesList = new ArrayList<>();
+
+        for (Long itemId:list) {
+            if (itemId.equals(NO_WEAR_ITEM_ID))
+                continue;
+
+            Item item = itemRepository.findById(itemId)
+                    .orElseThrow(() -> new IllegalArgumentException("아이템이 없습니다"));
+
+            accessoriesList.add(item.getMedia());
+        }
+
         if (5 <= cookie.getLevel() && cookie.getLevel() <= 9) {
             String stage1BodyImage = bodyRepository.findByStage(1)
                     .orElseThrow(() -> new IllegalArgumentException("몸통이 없습니다"))
                     .getImage();
 
-            return new CookieResponse(cookie, stage1BodyImage, cookie.getBody().getImage());
+            return new CookieResponse(cookie, stage1BodyImage, cookie.getBody().getImage(), accessoriesList);
 
         }
-        return new CookieResponse(cookie, cookie.getBody().getImage(), null);
+        return new CookieResponse(cookie, cookie.getBody().getImage(), null, accessoriesList);
     }
 
     @Transactional
