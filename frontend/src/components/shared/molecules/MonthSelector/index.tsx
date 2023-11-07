@@ -16,19 +16,11 @@ export default function MonthSelector({ onClick }: MonthSelectorProps) {
   const [selectedMonth, setSelectedMonth] = useRecoilState(MonthState);
 
   const handlePreviousMonth = () => {
-    if (selectedMonth > 1) {
-      setSelectedMonth(selectedMonth - 1);
-    } else {
-      setSelectedMonth(12);
-    }
+    setSelectedMonth((selectedMonth + 11) % 12 || 12);
   };
-
+  
   const handleNextMonth = () => {
-    if (selectedMonth < 12) {
-      setSelectedMonth(selectedMonth + 1);
-    } else {
-      setSelectedMonth(1);
-    }
+    setSelectedMonth((selectedMonth % 12) + 1);
   };
 
   return (
