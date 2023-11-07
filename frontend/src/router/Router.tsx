@@ -9,7 +9,7 @@ import Loading from '../pages/Loading';
 import SetWakeupTime from '../pages/SetWakeupTime';
 import Mypage from '../pages/Mypage';
 import { useRecoilState } from 'recoil';
-import { UserState } from '../recoil/UserState';
+import { UserState } from '../modules/user';
 import NotFound from '../pages/NotFound';
 
 const Router = () => {

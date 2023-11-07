@@ -13,7 +13,7 @@ import challenge from '../assets/pngs/challenge.png';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { auth } from '../firebase/firebaseConfig';
 import { UserContext } from '../firebase/firebaseAuth';
-import { UserState } from '../recoil/UserState';
+import { UserState } from '../modules/user';
 
 export interface QookieInfoResponse {
   msg: string;
