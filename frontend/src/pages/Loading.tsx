@@ -68,7 +68,10 @@ const Loading = () => {
                   navigate('/home')
                 }
               })
-              .catch(err=>console.log(err))
+              .catch((err)=>{
+                console.log(err)
+                console.log("ERROR AT BACKEND")
+              })
             
           })
           .catch(err=>console.log(err))

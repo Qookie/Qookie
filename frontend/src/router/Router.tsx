@@ -28,6 +28,7 @@ const Router = () => {
               <Route path="/mind" element={<Login />} />
               <Route path="/mypage" element={<Mypage />} />
               <Route path="/challenge" element={<Challenge />} />
+              <Route path="/loading" element={<Loading />} />
             </Routes>
           ) : (
             <Routes>
