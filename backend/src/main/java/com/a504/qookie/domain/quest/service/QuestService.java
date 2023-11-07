@@ -424,7 +424,15 @@ public class QuestService {
 		// Member coin 업데이트 때리고
 		member.setPoint(request.coin());
 		// Redis에 넣기
-		String key = getBadgeChallengeKey(request.badgeId(), request.questName());
-		template.opsForSet().add(key, member.getId() + "");
+		if (request.badgeId() != 0L) {
+			String key = getBadgeChallengeKey(request.badgeId(), request.questName());
+			template.opsForSet().add(key, member.getId() + "");
+		}else{
+			LocalDateTime now = LocalDateTime.now();
+			int year = now.getYear();
+			int month = now.getDayOfMonth();
+			String monthlyChallengeKey =  request.questName() + ":" + year + ":" + month;
+			template.opsForSet().add(monthlyChallengeKey, member.getId() + "");
+		}
 	}
 }
