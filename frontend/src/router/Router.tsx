@@ -11,33 +11,31 @@ import Mypage from '../pages/Mypage';
 import { useRecoilState } from 'recoil';
 import { UserState } from '../recoil/UserState';
 import NotFound from '../pages/NotFound';
-import Notification from '../pages/Notification'
+import Notification from '../pages/Notification';
 
 const Router = () => {
-  const [userState, _] = useRecoilState(UserState)
+  const [userState, _] = useRecoilState(UserState);
   return (
     <BrowserRouter>
       <HeaderWrapper />
-        {
-          userState ? (
-            <Routes>
-              <Route path="/*" element={<NotFound />}/>
-              <Route path="/init" element={<InitQookie />} />
-              <Route path="/set-wakeup" element={<SetWakeupTime />} />
-              <Route path="/home" element={<Home />} />
-              <Route path="/calendar" element={<Login />} />
-              <Route path="/mind" element={<Login />} />
-              <Route path="/mypage" element={<Mypage />} />
-              <Route path="/challenge" element={<Challenge />} />
-              <Route path="/notification" element={<Notification />} />
-            </Routes>
-          ) : (
-            <Routes>
-              <Route path="/*" element={<Login />} />
-              <Route path="/loading" element={<Loading />} />
-            </Routes>
-          )
-        }
+      {userState ? (
+        <Routes>
+          <Route path="/*" element={<NotFound />} />
+          <Route path="/init" element={<InitQookie />} />
+          <Route path="/set-wakeup" element={<SetWakeupTime />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/calendar" element={<Login />} />
+          <Route path="/mind" element={<Login />} />
+          <Route path="/mypage" element={<Mypage />} />
+          <Route path="/challenge" element={<Challenge />} />
+          <Route path="/notification" element={<Notification />} />
+        </Routes>
+      ) : (
+        <Routes>
+          <Route path="/*" element={<Login />} />
+          <Route path="/loading" element={<Loading />} />
+        </Routes>
+      )}
       <NavBarWrapper />
     </BrowserRouter>
   );
@@ -79,7 +77,7 @@ const NavBarWrapper = () => {
       case '/mypage':
         return true;
       case '/notification':
-        return true
+        return true;
       default:
         return false;
     }

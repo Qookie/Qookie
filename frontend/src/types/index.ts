@@ -18,9 +18,9 @@ export interface QookieInfo {
 
 export interface NotificationProp {
   notificationId: number;
-	category: string;
-	info: string;
-	createdAt: string;
+  category: string;
+  info: string;
+  createdAt: string;
 }
 
 export interface ResponseType {

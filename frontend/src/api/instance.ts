@@ -1,7 +1,7 @@
 import Axios, { InternalAxiosRequestConfig } from 'axios';
 
 // Todo: 서버 세팅후 .env 파일로 분리
-export const BASE_URL = process.env.REACT_APP_HOST
+export const BASE_URL = process.env.REACT_APP_HOST;
 
 const axios = Axios.create({
   baseURL: BASE_URL,

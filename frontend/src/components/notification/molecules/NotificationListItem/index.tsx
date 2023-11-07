@@ -7,27 +7,27 @@ import { useNavigate } from 'react-router-dom';
 export default function NotificationListItem({ prop }: { prop: NotificationProp }) {
   const navigate = useNavigate();
 
-	const getPagePath = (category: string) => {
-		switch (category) {
-			case 'Alarm':
-				return '/wake';
-			case 'Challenge':
-				return '/challenge'
-			case 'Cookie':
-				return '/home';
-			case 'Heart':
-				return '/mind'
-			case 'Item':
-				return '/store'
-			case 'Quest':
-				return '/home'
-			default:
-				return '/'
-		}
-	}
+  const getPagePath = (category: string) => {
+    switch (category) {
+      case 'Alarm':
+        return '/wake';
+      case 'Challenge':
+        return '/challenge';
+      case 'Cookie':
+        return '/home';
+      case 'Heart':
+        return '/mind';
+      case 'Item':
+        return '/store';
+      case 'Quest':
+        return '/home';
+      default:
+        return '/';
+    }
+  };
 
   const toEachPage = () => {
-		navigate(getPagePath(prop.category))
+    navigate(getPagePath(prop.category));
   };
 
   return (

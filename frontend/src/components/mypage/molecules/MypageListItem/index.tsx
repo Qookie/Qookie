@@ -35,7 +35,7 @@ export default function MypageListItem({ mypage }: Props) {
     if (mypage === 'logOut') {
       signOut(auth).then(() => {
         setUserState(null);
-        localStorage.removeItem("messageToken")
+        localStorage.removeItem('messageToken');
         navigate('/');
       });
     } else {

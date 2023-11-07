@@ -4,7 +4,6 @@ import Text from '../../../shared/atoms/Text';
 import { toBeforeString } from '../../../../utils/date';
 
 export default function NotificationContent({ prop }: { prop: NotificationProp }) {
-
   const selected = () => {
     switch (prop.category) {
       case 'Alarm':
@@ -22,11 +21,13 @@ export default function NotificationContent({ prop }: { prop: NotificationProp }
       default:
         return <></>;
     }
-  }
+  };
   return (
     <ContentContainer>
-      <Text typography='compact'>{selected()}</Text>
-      <Text typography='weak' color='gray'>{toBeforeString(prop.createdAt)}</Text>
+      <Text typography="compact">{selected()}</Text>
+      <Text typography="weak" color="gray">
+        {toBeforeString(prop.createdAt)}
+      </Text>
     </ContentContainer>
   );
 }
@@ -37,6 +38,4 @@ const ContentContainer = styled.div`
   display: flex;
   flex-direction: column;
 `;
-const CreatedAtStyle = styled.div`
-
-`;
+const CreatedAtStyle = styled.div``;

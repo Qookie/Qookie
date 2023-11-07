@@ -1,8 +1,4 @@
-import {
-  signInWithRedirect,
-  GoogleAuthProvider,
-  OAuthProvider,
-} from 'firebase/auth';
+import { signInWithRedirect, GoogleAuthProvider, OAuthProvider } from 'firebase/auth';
 import styled, { keyframes } from 'styled-components';
 
 import CookieGrow from '../assets/pngs/CookieGrow.png';

@@ -39,7 +39,7 @@ const TYPOGRAPHY_VARIANT = {
   compact: `
     font-size: 16px;
     line-height: 20px;
-  `
+  `,
 };
 
 export default Text;

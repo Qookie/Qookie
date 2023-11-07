@@ -1,12 +1,5 @@
 import styled from 'styled-components';
-import {
-  Alarm,
-  Challenge,
-  Cookie,
-  Heart,
-  Item,
-  Quest,
-} from '../../../../assets/svgs/notification';
+import { Alarm, Challenge, Cookie, Heart, Item, Quest } from '../../../../assets/svgs/notification';
 
 export default function NotificationImage({ category }: { category: string }) {
   const selected = () => {

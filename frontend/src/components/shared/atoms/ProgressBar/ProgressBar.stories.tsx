@@ -13,5 +13,5 @@ export const Default: Story = {
   args: {
     total: 100,
     now: 30,
-  }
+  },
 };
