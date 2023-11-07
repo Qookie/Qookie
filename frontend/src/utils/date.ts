@@ -15,6 +15,16 @@ export const getToday = () => {
   return `${year}.${month}.${day}`;
 };
 
-export const toBeforeString = () => {
+export const toBeforeString = (date: string) => {
   const now = new Date();
+  const then = new Date(date);
+  const diff = (new Date()).getTime() - (new Date(date)).getTime()
+  return ""
+}
+
+export const getMonthDate = (date: string) => {
+  const then = new Date(date);
+  const month = then.getMonth()
+  const day = then.getDate()
+  return `${month}. ${day}.`
 }

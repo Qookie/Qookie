@@ -1,11 +1,11 @@
 import NotificationList from '../components/notification/organisms/NotificationList';
 import { useState, useEffect } from 'react';
 import { NotificationProp } from '../types';
-import Title from '../components/shared/atoms/Title';
 import Text from '../components/shared/atoms/Text';
 import styled from 'styled-components';
 import { http } from '../api/instance';
 import { ResponseType } from '../types';
+import { getMonthDate } from '../utils/date';
 
 const testProp1 = {
   notificationId: 1,
@@ -96,7 +96,7 @@ export default function Notification() {
 						return (
 							<div key={nl[0].notificationId}>
 								<DateContainer>
-									<Text typography='button'>{createdAtOrToday(nl[0].createdAt)}</Text>
+									<Text typography='button' color='gray'>{getMonthDate(nl[0].createdAt)}</Text>
 								</DateContainer>
 								
 								<NotificationList notificationList={nl} />

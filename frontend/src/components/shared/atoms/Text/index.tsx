@@ -35,7 +35,6 @@ const TYPOGRAPHY_VARIANT = {
   weak: `
   font-size: 16px;
   line-height: 28px;
-  color: gray;
   `
 };
 

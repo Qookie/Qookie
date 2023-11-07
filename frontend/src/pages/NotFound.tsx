@@ -11,6 +11,7 @@ export default function NotFound() {
   const logout = () => {
     signOut(auth).then(() => {
       setUserState(null);
+      localStorage.removeItem("messageToken")
       navigate('/');
     });
   };

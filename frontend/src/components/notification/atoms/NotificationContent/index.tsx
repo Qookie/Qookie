@@ -1,7 +1,7 @@
 import { NotificationProp } from '../../../../types';
 import styled from 'styled-components';
 import Text from '../../../shared/atoms/Text';
-
+import { toBeforeString } from '../../../../utils/date';
 
 export default function NotificationContent({ prop }: { prop: NotificationProp }) {
 
@@ -26,7 +26,7 @@ export default function NotificationContent({ prop }: { prop: NotificationProp }
   return (
     <ContentContainer>
       <Text typography='main'>{selected()}</Text>
-      <Text typography='weak'>{prop.createdAt}</Text>
+      <Text typography='weak' color='gray'>{toBeforeString(prop.createdAt)}</Text>
     </ContentContainer>
   );
 }
