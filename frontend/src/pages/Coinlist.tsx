@@ -6,9 +6,11 @@ import MonthSelector from '../components/shared/molecules/MonthSelector';
 import RewardData from '../components/coinlist/molecules/RewardData';
 import BottomSheet from '../components/shared/molecules/BottomSheet';
 import DatePicker from '../components/shared/molecules/DatePicker';
+import moment, { Moment } from 'moment';
 
 export default function Coinlist() {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState<boolean>(false);
+  const [month, setMonth] = useState<Moment>(moment());
 
   const onClose = () => {
     setIsBottomSheetOpen(false);
@@ -16,6 +18,10 @@ export default function Coinlist() {
 
   const onMonthSelectorClick = () => {
     setIsBottomSheetOpen(true);
+  };
+
+  const onChangeMonth = (nextMonth: number) => {
+    setMonth((prev) => prev.clone().month(nextMonth - 1));
   };
 
   return (
@@ -28,7 +34,12 @@ export default function Coinlist() {
       </TopContainer>
       <Divider />
       <BottomContainer>
-        <MonthSelector onClick={onMonthSelectorClick} />
+        <MonthSelector
+          onClick={onMonthSelectorClick}
+          onClickNextMonth={onChangeMonth}
+          onClickPrevMonth={onChangeMonth}
+          selectedMonth={month.month() + 1}
+        />
         <RewardData date={'10.12'} title={'기상 퀘스트 달성 보상'} qoin={10} />
         <RewardData date={'10.12'} title={'식사 퀘스트 달성 보상'} qoin={10} />
         <RewardData date={'10.12'} title={'토끼귀 구매'} qoin={-10} />
