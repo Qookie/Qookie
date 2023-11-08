@@ -41,7 +41,7 @@ const reload = () => window.location.reload()
           <Route path="/mind" element={<Login />} />
           <Route path="/mypage" element={<Mypage />} />
           <Route path="/challenge" element={<Challenge />} />
-            <Route path="/notification" element={<Notification />} />
+          <Route path="/notification" element={<Notification />} />
           <Route path="/loading" element={<Loading />} />
 
           <Route path="/quest">
