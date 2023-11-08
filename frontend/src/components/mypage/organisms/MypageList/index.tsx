@@ -3,21 +3,9 @@ import MypageListItem, { Mypage } from '../../molecules/MypageListItem';
 import Divider from '../../../shared/atoms/Divider';
 
 export default function MypageList() {
-  const iconList: Mypage[] = [
-    'deco',
-    'badge',
-    'myQookie',
-    'qoin',
-  ];
-  const withoutIconList: Mypage[] = [
-    'info',
-    'notice',
-    'privacy',
-  ];
-  const warnItemList: Mypage[] = [
-    'logOut',
-    'withDraw',
-  ];
+  const iconList: Mypage[] = ['deco', 'badge', 'myQookie', 'qoin'];
+  const withoutIconList: Mypage[] = ['info', 'notice', 'privacy'];
+  const warnItemList: Mypage[] = ['logOut', 'withDraw'];
   return (
     <ListContainer>
       {iconList.map((item, index) => (
