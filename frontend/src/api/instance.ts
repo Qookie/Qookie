@@ -1,4 +1,4 @@
-import Axios, { AxiosError, InternalAxiosRequestConfig, AxiosRequestConfig } from 'axios';
+import Axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { auth } from '../firebase/firebaseConfig';
 
 // Todo: 서버 세팅후 .env 파일로 분리
@@ -44,5 +44,8 @@ export const http = {
   ) {
     const header = isFile ? { headers: { 'Content-Type': 'multipart/form-data' } } : {};
     return axios.post<Response>(url, body, header).then((res) => res.data);
+  },
+  patch: function patch<Response = unknown, Request = any>(url: string, body?: Request) {
+    return axios.patch<Response>(url, body).then((res) => res.data);
   },
 };
