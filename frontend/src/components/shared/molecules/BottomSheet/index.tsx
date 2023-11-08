@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import Text from '../../atoms/Text';
-import Button from '../../atoms/Button';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 
 interface BottomModalProps {
@@ -13,16 +12,14 @@ interface BottomModalProps {
 export default function BottomSheet({ isOpen, onClose, title, children }: BottomModalProps) {
   return (
     <>
-      <Backdrop onClick={onClose} isOpen={isOpen}>
-        <Container isOpen={isOpen}>
-          <TopConatiner>
-            <Title>{title}</Title>
-            <XMarkIcon width={'1.4rem'} height={'1.4rem'} onClick={onClose} />
-          </TopConatiner>
-          <ChildrenContainer>{children}</ChildrenContainer>
-          <Button theme="default">완료</Button>
-        </Container>
-      </Backdrop>
+      <Backdrop onClick={onClose} isOpen={isOpen} />
+      <Container isOpen={isOpen}>
+        <TopConatiner>
+          <Title>{title}</Title>
+          <XMarkIcon width={'1.4rem'} height={'1.4rem'} onClick={onClose} />
+        </TopConatiner>
+        <ChildrenContainer>{children}</ChildrenContainer>
+      </Container>
     </>
   );
 }

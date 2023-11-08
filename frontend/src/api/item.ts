@@ -1,3 +1,5 @@
+import { ItemTypeProps } from '../components/store/molecules/Item';
+import { orderReqProps } from '../components/store/organisms/Cart';
 import { AllItemProps } from '../pages/Store';
 import { http } from './instance';
 
@@ -26,13 +28,13 @@ const getMyItemList = async () => {
   }
 };
 
-const orderItemReq = async (items: any) => {
+const orderItemReq = async (itemId: orderReqProps[]) => {
   try {
     const orderReq = {
-      items: [items],
+      items: itemId,
     };
     const res = await http.post<ItemPropsResponse>('/api/item/order', orderReq);
-    console.log('order res', res.payload);
+    console.log('order res', res);
     return res;
   } catch (e) {
     console.log('orderItemReq', e);

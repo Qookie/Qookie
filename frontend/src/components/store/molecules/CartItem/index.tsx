@@ -4,26 +4,12 @@ import { useEffect, useState } from 'react';
 import Chip from '../../../shared/molecules/Chip';
 import Text from '../../../shared/atoms/Text';
 
-const dummyData = {
-  id: 1,
-  name: '토끼 모자',
-  price: 10,
-  media:
-    'https://cdn3.vectorstock.com/i/1000x1000/10/22/seamless-triangular-patter-vector-21431022.jpg',
-};
-
-export default function CartItem({ item, isChecked, check }: ItemProps) {
+export default function CartItem({ item, handleCheck }: ItemProps) {
   const [cartItem, setCartItem] = useState<ItemTypeProps>(item);
   const [isSelected, setIsSelected] = useState<boolean>(false);
 
   useEffect(() => {
-    if (check !== isSelected) {
-      setIsSelected((pre) => !pre);
-    }
-  }, [check]);
-
-  useEffect(() => {
-    setCartItem(dummyData);
+    setCartItem(item);
   }, []);
 
   useEffect(() => {
@@ -31,14 +17,15 @@ export default function CartItem({ item, isChecked, check }: ItemProps) {
       const newItem = {
         id: cartItem.id,
         media: cartItem.media,
+        thumbnail: cartItem.thumbnail,
         name: cartItem.name,
         price: cartItem.price,
       };
-      if (isSelected && isChecked) {
-        isChecked(newItem, isSelected);
+      if (handleCheck) {
+        handleCheck(newItem, isSelected);
       }
     }
-  }, [isSelected, cartItem]);
+  }, [isSelected]);
 
   const handleSelectItem = () => {
     setIsSelected((pre) => !pre);

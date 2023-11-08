@@ -5,7 +5,7 @@ import mouseSwipe from '../../../../utils/mouseSwipe';
 import { AllItemProps } from '../../../../pages/Store';
 import Item, { ItemTypeProps } from '../../molecules/Item';
 
-interface TabProps {
+export interface TabProps {
   list?: AllItemProps;
   handleList: (list: SelectedProps) => void;
   handleCart?: (list: SelectedProps) => void;

@@ -10,6 +10,8 @@ import { useEffect, useState } from 'react';
 import { ItemTypeProps } from '../components/store/molecules/Item';
 import { itemApi } from '../api';
 import { QookieInfo } from '../types';
+import BottomSheet from '../components/shared/molecules/BottomSheet';
+import Cart from '../components/store/organisms/Cart';
 
 export interface AllItemProps {
   [index: number]: ItemTypeProps[];
@@ -24,6 +26,7 @@ export default function Store() {
   const [cartItemList, setCartItemList] = useState<SelectedProps>({});
   const [showQookie, setShowQookie] = useState<QookieInfo>(qookie);
   const [isItem, setIsItem] = useState<boolean>(false);
+  const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
 
   useEffect(() => {
     itemApi.getItemList().then((res) => {
@@ -96,6 +99,10 @@ export default function Store() {
     setCartItemList(list);
   };
 
+  const onCartHandler = () => {
+    setIsCartOpen((pre) => !pre);
+  };
+
   return (
     <PageContainer>
       <TopContainer>
@@ -104,7 +111,7 @@ export default function Store() {
           <Qookie {...showQookie} />
         </QookieContainer>
         <ButtonContainer>
-          <Button theme={isItem ? 'default' : 'disabled'} size="icon">
+          <Button theme={isItem ? 'default' : 'disabled'} size="icon" onClick={onCartHandler}>
             <ShoppingCartIcon width={20} height={20} />
             구매
           </Button>
@@ -133,6 +140,12 @@ export default function Store() {
           handleCart={currentTab === 0 ? cartItemSetHandler : undefined}
         />
       </BottomContainer>
+      <BottomSheet
+        isOpen={isCartOpen}
+        title={'장바구니'}
+        onClose={onCartHandler}
+        children={<Cart list={cartItemList} handleList={cartItemSetHandler} />}
+      />
     </PageContainer>
   );
 }

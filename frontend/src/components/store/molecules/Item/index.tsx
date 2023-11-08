@@ -17,8 +17,8 @@ export interface ItemTypeProps {
 export interface ItemProps {
   item: ItemTypeProps;
   chip?: boolean;
-  handleCheck: (...args: (boolean | ItemTypeProps | any)[]) => void;
-  select: ItemTypeProps[];
+  handleCheck?: (...args: (boolean | ItemTypeProps | any)[]) => void;
+  select?: ItemTypeProps[];
 }
 
 export default function Item({ item, chip, handleCheck, select }: ItemProps) {
@@ -32,7 +32,7 @@ export default function Item({ item, chip, handleCheck, select }: ItemProps) {
   });
 
   const selectHandler = () => {
-    handleCheck(item);
+    handleCheck && handleCheck(item);
   };
 
   return (
