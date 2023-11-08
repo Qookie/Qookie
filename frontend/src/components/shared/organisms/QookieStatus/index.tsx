@@ -10,9 +10,7 @@ export default function QookieStatus({ ...props }: QookieInfo) {
         <Qookie {...props} />
       </BackgroundContainer>
       <ContentsWrapper>
-        <StatusCard
-           {...props}
-        />
+        <StatusCard {...props} />
       </ContentsWrapper>
     </QookieContainer>
   );

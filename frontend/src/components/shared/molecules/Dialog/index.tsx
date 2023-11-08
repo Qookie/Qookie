@@ -1,16 +1,17 @@
 import styled from 'styled-components';
 import Text from '../../atoms/Text';
 import Button from '../../atoms/Button';
+import { ReactEventHandler } from 'react';
 
 export interface DialogProps {
   title: string;
   content: string;
   negative: string;
-  onNegativeClick: () => void;
+  onNegativeClick: (e?: React.MouseEvent<HTMLElement>) => void;
   positive: string;
-  onPositiveClick: () => void;
+  onPositiveClick: (e?: React.MouseEvent<HTMLElement>) => void;
   isopen: boolean;
-  onCloseRequest: () => void;
+  onCloseRequest: (e?: React.MouseEvent<HTMLElement>) => void;
 }
 
 export default function Dialog({
@@ -51,6 +52,8 @@ const Backdrop = styled.div`
   position: fixed;
   top: 0;
   bottom: 0;
+  left: 0;
+  right: 0;
   background: rgba(0, 0, 0, 0.5);
   z-index: 10;
   width: min(100%, 430px);

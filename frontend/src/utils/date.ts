@@ -13,3 +13,34 @@ export const getToday = () => {
   const day = currentDate.getDate().toString().padStart(2, '0');
   return `${year}.${month}.${day}`;
 };
+
+export const toBeforeString = (date: string) => {
+  const seconds = (new Date().getTime() - new Date(date).getTime()) / 1000;
+  const minutes = seconds / 60;
+  const hours = minutes / 60;
+  const days = hours / 24;
+  const months = days / 30;
+  const years = months / 12;
+
+  if (years >= 1) {
+    return `${years}년 전`;
+  } else if (months >= 1) {
+    return `${Math.floor(months)}달 전`;
+  } else if (days >= 1) {
+    return `${Math.floor(days)}일 전`;
+  } else if (hours >= 1) {
+    return `${Math.floor(hours)}시간 전`;
+  } else if (minutes >= 1) {
+    return `${Math.floor(minutes)}분 전`;
+  } else if (seconds >= 1) {
+    return `${Math.floor(seconds)} 초 전`;
+  }
+  return '';
+};
+
+export const getMonthDate = (date: string) => {
+  const then = new Date(date);
+  const month = then.getMonth() + 1;
+  const day = then.getDate();
+  return `${month}. ${day}.`;
+};

@@ -15,3 +15,15 @@ export interface QookieInfo {
   background: string;
   accessories: string[];
 }
+
+export interface NotificationProp {
+  notificationId: number;
+  category: string;
+  info: string;
+  createdAt: string;
+}
+
+export interface ResponseType {
+  msg: string;
+  payload: object;
+}

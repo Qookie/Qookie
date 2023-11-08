@@ -6,6 +6,8 @@ import { signOut } from '@firebase/auth';
 import { auth } from '../../../../firebase/firebaseConfig';
 import { useSetRecoilState } from 'recoil';
 import { UserState } from '../../../../modules/user';
+import Dialog from '../../../shared/molecules/Dialog';
+import { useState } from 'react';
 
 interface Props {
   icon?: React.ReactNode;
@@ -16,27 +18,51 @@ interface Props {
 export default function MypageListItem({ icon, intro, path }: Props) {
   const navigate = useNavigate();
   const setUserState = useSetRecoilState(UserState);
+  const [dialogState, setDialogState] = useState(false);
 
   const navigateHandler = () => {
     // logout
     if (path === 'logout') {
-      signOut(auth).then(() => {
-        setUserState(null);
-        navigate('/');
-      });
+      setDialogState(true);
     } else {
       navigate(`/${path}`);
     }
   };
 
+  const doSignOut = () => {
+    signOut(auth).then(() => {
+      setUserState(null);
+      navigate('/');
+    });
+  };
+
+  const dialogHandler = (e?: React.MouseEvent<HTMLElement>) => {
+    if (e) {
+      e.stopPropagation();
+      setDialogState((dialogState) => !dialogState);
+    }
+  };
+
   return (
-    <ItemContainer onClick={navigateHandler}>
-      <LeftContainer>
-        {icon && <IconContainer>{icon}</IconContainer>}
-        <Text typography="button">{intro}</Text>
-      </LeftContainer>
-      <ChevronRightIcon width={20} />
-    </ItemContainer>
+    <>
+      <ItemContainer onClick={navigateHandler}>
+        <LeftContainer>
+          {icon && <IconContainer>{icon}</IconContainer>}
+          <Text typography="button">{intro}</Text>
+        </LeftContainer>
+        <ChevronRightIcon width={20} />
+        <Dialog
+          title={'로그아웃 할까요?'}
+          content={'정말 로그아웃 할까요?'}
+          negative={'아니요'}
+          onNegativeClick={dialogHandler}
+          positive={'네'}
+          onPositiveClick={doSignOut}
+          isopen={dialogState}
+          onCloseRequest={dialogHandler}
+        />
+      </ItemContainer>
+    </>
   );
 }
 

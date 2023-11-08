@@ -20,6 +20,6 @@ type Story = StoryObj<typeof HomeButton>;
 export const Default: Story = {
   name: 'attendance',
   args: {
-    title: '출석체크'
-  }
+    title: '출석체크',
+  },
 };

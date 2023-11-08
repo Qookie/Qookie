@@ -23,6 +23,7 @@ import StretchQuest from '../pages/quest/StretchQuest';
 import MeditaionQuest from '../pages/quest/MeditaionQuest';
 import WaterQuest from '../pages/quest/WaterQuest';
 import KeyPage from '../pages/KeyPage';
+import Notification from '../pages/Notification';
 
 const Router = () => {
   const [userState, _] = useRecoilState(UserState);
@@ -44,6 +45,7 @@ const reload = () => window.location.reload()
           <Route path="/store" element={<Store />} />
           <Route path="/admin" element={<ItemUpload />} />
           <Route path="/challenge" element={<Challenge />} />
+          <Route path="/notification" element={<Notification />} />
           <Route path="/loading" element={<Loading />} />
 
           <Route path="/quest">
@@ -104,6 +106,8 @@ const NavBarWrapper = () => {
       case '/calendar':
         return true;
       case '/mypage':
+        return true;
+      case '/notification':
         return true;
       default:
         return false;
