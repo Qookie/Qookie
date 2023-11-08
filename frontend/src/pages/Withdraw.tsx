@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { auth } from '../firebase/firebaseConfig';
 import { useState } from 'react';
 import Dialog from '../components/shared/molecules/Dialog';
+import { http } from '../api/instance';
 
 export default function Withdraw() {
   const [dialogState, setDialogState] = useState(false);
@@ -23,12 +24,12 @@ export default function Withdraw() {
     if (!currentUser) {
       return;
     }
-    currentUser
-      .delete()
-      .then(() => {
-        // send backend something
-      })
-      .catch((err) => console.log(err));
+    http.patch('/api/member/delete').then((res) => {
+      console.log('BACK: ', res);
+      currentUser.delete().catch((err) => {
+        alert(`멤버 삭제가 실패했습니다.: ${err}`);
+      });
+    });
   };
 
   const cancel = () => {
