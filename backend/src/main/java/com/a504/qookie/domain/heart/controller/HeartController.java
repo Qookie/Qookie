@@ -1,6 +1,5 @@
 package com.a504.qookie.domain.heart.controller;
 
-import com.a504.qookie.domain.heart.dto.HeartListRequest;
 import com.a504.qookie.domain.heart.dto.HeartRequest;
 import com.a504.qookie.domain.heart.dto.HeartResponse;
 import com.a504.qookie.domain.heart.entity.Heart;
@@ -15,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,12 +39,13 @@ public class HeartController {
         return BaseResponse.ok(HttpStatus.OK, "heart create OK");
     }
 
-    @GetMapping("/list")
+    @GetMapping("/list/{year}/{month}")
     public ResponseEntity<?> list(
-            @RequestBody HeartListRequest heartListRequest,
+            @PathVariable String year,
+            @PathVariable String month,
             @AuthenticationPrincipal CustomMemberDetails customMemberDetails) {
 
-        List<HeartResponse> heartResponses = heartService.list(heartListRequest, customMemberDetails.getMember());
+        List<HeartResponse> heartResponses = heartService.list(year, month, customMemberDetails.getMember());
 
         return BaseResponse.okWithData(HttpStatus.OK, "heart list OK", heartResponses);
     }
