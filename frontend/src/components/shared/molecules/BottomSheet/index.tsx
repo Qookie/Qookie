@@ -1,28 +1,58 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import Text from '../../atoms/Text';
 import Button from '../../atoms/Button';
+import { useState } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
+import { useEffect } from 'react';
 
-interface BottomModalProps {
+export interface BottomModalProps {
   isOpen: boolean;
   onClose: () => void;
   title: string;
   children: React.ReactNode;
+  onComplete: () => void;
 }
 
-export default function BottomSheet({ isOpen, onClose, title, children }: BottomModalProps) {
+export default function BottomSheet({
+  isOpen,
+  onClose,
+  title,
+  children,
+  onComplete,
+}: BottomModalProps) {
+  const [visible, setVisible] = useState<boolean>(false);
+
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+    if (isOpen) {
+      setVisible(() => true);
+    } else {
+      timeoutId = setTimeout(() => setVisible(() => false), 350);
+    }
+    return () => {
+      if (timeoutId !== undefined) {
+        clearTimeout(timeoutId);
+      }
+    };
+  }, [isOpen]);
+
+  if (!visible) {
+    return null;
+  }
+
   return (
     <>
-      <Backdrop onClick={onClose} isOpen={isOpen}>
-        <Container isOpen={isOpen}>
-          <TopConatiner>
-            <Title>{title}</Title>
-            <XMarkIcon width={'1.4rem'} height={'1.4rem'} onClick={onClose} />
-          </TopConatiner>
-          <ChildrenContainer>{children}</ChildrenContainer>
-          <Button theme="default">완료</Button>
-        </Container>
-      </Backdrop>
+      <Backdrop onClick={onClose} isOpen={isOpen}></Backdrop>
+      <Container isOpen={isOpen}>
+        <TopConatiner>
+          <Title>{title}</Title>
+          <XMarkIcon width={'1.4rem'} height={'1.4rem'} onClick={onClose} />
+        </TopConatiner>
+        <ChildrenContainer>{children}</ChildrenContainer>
+        <Button theme="default" onClick={onComplete}>
+          완료
+        </Button>
+      </Container>
     </>
   );
 }
@@ -35,13 +65,10 @@ const Backdrop = styled.div<{ isOpen: boolean }>`
   z-index: 10;
   width: min(100%, 430px);
   height: 100%;
+  display: flex;
   align-items: center;
   justify-content: center;
-  visibility: ${({ isOpen }) => (isOpen ? 'visible' : 'hidden')};
-  opacity: ${({ isOpen }) => (isOpen ? '1' : '0')};
-  transition:
-    visibility ease-in-out 0.4s,
-    opacity ease-in-out 0.4s;
+  animation: ${({ isOpen }) => (isOpen ? fadeOut : fadeIn)} 0.3s ease-in-out forwards;
 `;
 
 const Container = styled.div<{ isOpen: boolean }>`
@@ -51,8 +78,7 @@ const Container = styled.div<{ isOpen: boolean }>`
   bottom: 0;
   z-index: 20;
   width: min(100%, 430px);
-  transform: translateY(${({ isOpen }) => (isOpen ? '0%' : '180%')});
-  transition: transform ease-in-out 0.4s;
+  animation: ${({ isOpen }) => (isOpen ? SlideUp : SlideDown)} 0.3s ease-in-out forwards;
   padding: 15px 0px;
 `;
 
@@ -73,4 +99,40 @@ const ChildrenContainer = styled.div`
 const Title = styled(Text)`
   font-size: 24px;
   font-weight: 600;
+`;
+
+const SlideUp = keyframes`
+  from {
+    transform: translateY(180%);
+  }
+  to {
+    transform: none;
+  }
+`;
+
+const SlideDown = keyframes`
+  from {
+    transform: none;
+  }
+  to {
+    transform: translateY(180%);
+  }
+`;
+
+const fadeIn = keyframes`
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+`;
+
+const fadeOut = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 `;
