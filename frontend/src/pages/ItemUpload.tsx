@@ -2,13 +2,13 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import Button from '../components/shared/atoms/Button';
 import { adminApi } from '../api';
-import { number } from 'prop-types';
 
 export default function ItemUpload() {
   const [name, setName] = useState<string>('');
   const [category, setCategory] = useState<string>('');
   const [price, setPrice] = useState<number>(0);
   const [image, setImage] = useState<File>();
+  const [thumbnail, setThumbnail] = useState<File>();
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
@@ -31,10 +31,20 @@ export default function ItemUpload() {
     }
   };
 
+  const handleThumbnailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const selectedImage = e.target.files[0];
+      setThumbnail(selectedImage);
+    } else {
+      console.log('no selected');
+    }
+  };
+
   const uploadHandler = async () => {
     await adminApi
       .postItemUpload({
         image: image,
+        thumbnail: thumbnail,
         price: price,
         name: name,
         category: category,
@@ -52,7 +62,10 @@ export default function ItemUpload() {
       <input type="text" placeholder="Category" value={category} onChange={handleCategoryChange} />
       <p>(배경, 모자, 신발, 하의, 상의, 액세서리)</p>
       <input type="number" placeholder="Price" value={price} onChange={handlePriceChange} />
+      <p>이미지</p>
       <input type="file" accept="image/*" onChange={handleImageChange} />
+      <p>썸네일 (선택) </p>
+      <input type="file" accept="image/*" onChange={handleThumbnailChange} />
       <Button onClick={() => uploadHandler()}>업로드</Button>
     </Container>
   );
