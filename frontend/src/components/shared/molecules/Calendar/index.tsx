@@ -10,7 +10,7 @@ interface Props {
   onClickDateCallback?: (date?: Moment) => void;
 }
 
-const dayOfWeek = ['월', '화', '수', '목', '금', '토', '일'];
+const dayOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
 
 function Calendar({ month, dateBackground, onClickDateCallback }: Props) {
   const generateMonthDate = () => {

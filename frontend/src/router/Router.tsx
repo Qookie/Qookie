@@ -21,12 +21,13 @@ import StretchQuest from '../pages/quest/StretchQuest';
 import MeditaionQuest from '../pages/quest/MeditaionQuest';
 import WaterQuest from '../pages/quest/WaterQuest';
 import KeyPage from '../pages/KeyPage';
+import AttendanceQuest from '../pages/quest/AttendanceQuest';
 import Notification from '../pages/Notification';
 
 const Router = () => {
   const [userState, _] = useRecoilState(UserState);
 
-const reload = () => window.location.reload()
+  const reload = () => window.location.reload();
 
   return (
     <BrowserRouter>
@@ -54,13 +55,14 @@ const reload = () => window.location.reload()
             <Route path="stretch" element={<StretchQuest />} />
             <Route path="meditation" element={<MeditaionQuest />} />
             <Route path="water" element={<WaterQuest />} />
+            <Route path="attendance" element={<AttendanceQuest />} />
           </Route>
         </Routes>
       ) : (
         <Routes>
           <Route path="/*" element={<Login />} />
           <Route path="/loading" element={<Loading />} />
-          <Route path="/.well-known/assetlinks.json" element={<KeyPage/>}/>
+          <Route path="/.well-known/assetlinks.json" element={<KeyPage />} />
         </Routes>
       )}
       <NavBarWrapper />

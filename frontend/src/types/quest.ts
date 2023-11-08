@@ -1,5 +1,5 @@
 export enum QuestId {
-  WAKE = 0,
+  WAKE = 1,
   EAT,
   WALK,
   SQUAT,
@@ -8,6 +8,7 @@ export enum QuestId {
   STRETCH,
   MEDITATION,
   WATER,
+  ATTENDANCE,
 }
 
 export enum Quest {
@@ -19,5 +20,6 @@ export enum Quest {
   PHOTO = 'photo',
   STRETCH = 'stretch',
   MEDITATION = 'meditation',
-  WATER = 'WATER',
+  WATER = 'water',
+  ATTENDANCE = 'attendance',
 }
