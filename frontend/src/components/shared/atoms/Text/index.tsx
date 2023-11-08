@@ -33,12 +33,12 @@ const TYPOGRAPHY_VARIANT = {
     line-height: 20px;
   `,
   weak: `
-    font-size: 16px;
+    font-size: 12px;
     line-height: 22px;
   `,
   compact: `
-    font-size: 16px;
-    line-height: 20px;
+    font-size: 14px;
+    line-height: 15px;
   `,
 };
 

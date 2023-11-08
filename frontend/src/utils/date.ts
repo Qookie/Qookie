@@ -15,20 +15,25 @@ export const getToday = () => {
 };
 
 export const toBeforeString = (date: string) => {
-  const diff = (new Date().getTime() - new Date(date).getTime()) / 1000 / 60 / 60 / 24 / 30 / 12;
+  const seconds = (new Date().getTime() - new Date(date).getTime()) / 1000;
+  const minutes = seconds / 60;
+  const hours = minutes / 60;
+  const days = hours / 24;
+  const months = days / 30;
+  const years = months / 12;
 
-  if (diff >= 1) {
-    return `${diff}년 전`;
-  } else if (diff * 12 >= 1) {
-    return `${Math.floor(diff * 12)}달 전`;
-  } else if (diff * 12 * 30 >= 1) {
-    return `${Math.floor(diff * 12 * 30)}일 전`;
-  } else if (diff * 12 * 30 * 24 >= 1) {
-    return `${Math.floor(diff * 12 * 30 * 24)}시간 전`;
-  } else if (diff * 12 * 30 * 24 * 60 >= 1) {
-    return `${Math.floor(diff * 12 * 30 * 24 * 60)}분 전`;
-  } else if (diff * 12 * 30 * 24 * 60 * 60 >= 1) {
-    return `${Math.floor(diff * 12 * 30 * 24 * 60 * 60)} 초 전`;
+  if (years >= 1) {
+    return `${years}년 전`;
+  } else if (months >= 1) {
+    return `${Math.floor(months)}달 전`;
+  } else if (days >= 1) {
+    return `${Math.floor(days)}일 전`;
+  } else if (hours >= 1) {
+    return `${Math.floor(hours)}시간 전`;
+  } else if (minutes >= 1) {
+    return `${Math.floor(minutes)}분 전`;
+  } else if (seconds >= 1) {
+    return `${Math.floor(seconds)} 초 전`;
   }
   return '';
 };

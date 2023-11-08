@@ -1,5 +1,6 @@
 import NotificationListItem from '../../molecules/NotificationListItem';
 import { NotificationProp } from '../../../../types';
+import styled from 'styled-components';
 
 export default function NotificationList({
   notificationList,
@@ -9,8 +10,16 @@ export default function NotificationList({
   return (
     <>
       {notificationList.map((n) => {
-        return <NotificationListItem key={n.notificationId} prop={n} />;
+        return (
+          <ItemContainer>
+            <NotificationListItem key={n.notificationId} prop={n} />
+          </ItemContainer>
+        );
       })}
     </>
   );
 }
+
+const ItemContainer = styled.div`
+  margin-bottom: 1vh;
+`;

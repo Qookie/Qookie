@@ -28,28 +28,23 @@ const Loading = () => {
   const setUserState = useSetRecoilState(UserState);
 
   const socialLoginCallback = async () => {
-    console.log('0');
     const provider = searchParams.get('provider');
     searchParams.delete('provider');
     setSearchParams();
-    console.log('1');
     if (provider === 'oidc.kakao') {
+      providers['google.com'];
       signInWithRedirect(auth, providers[provider]);
-      console.log('2');
     } else if (provider === 'google.com') {
       signInWithRedirect(auth, providers[provider]);
-      console.log('2');
     }
   };
 
   useEffect(() => {
     socialLoginCallback();
     getRedirectResult(auth).then((res) => {
-      console.log('A');
       if (res === null) {
         return;
       }
-      console.log('B');
       const { user } = res;
 
       const copiedUser = JSON.parse(JSON.stringify(user));
@@ -58,7 +53,6 @@ const Loading = () => {
       user
         .getIdToken()
         .then((accessToken) => {
-          console.log('C');
           localStorage.setItem('accessToken', accessToken);
           const { displayName, email, uid } = user;
           http
@@ -69,7 +63,6 @@ const Loading = () => {
               messageToken: localStorage.getItem('messageToken'),
             })
             .then((res) => {
-              console.log('D');
               if (res.payload.new) {
                 navigate('/init');
               } else {
