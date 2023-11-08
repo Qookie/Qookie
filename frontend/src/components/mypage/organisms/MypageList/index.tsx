@@ -60,21 +60,15 @@ export default function MypageList() {
   return (
     <ListContainer>
       {qookieSection.map((item, index) => (
-        <ItemContainer>
-          <MypageListItem icon={item.icon} intro={item.intro} path={item.path} key={index} />
-        </ItemContainer>
+        <MypageListItem icon={item.icon} intro={item.intro} path={item.path} key={index} />
       ))}
       <Divider />
       {userSection.map((item, index) => (
-        <ItemContainer>
-          <MypageListItem icon={item.icon} intro={item.intro} path={item.path} key={index} />
-        </ItemContainer>
+        <MypageListItem icon={item.icon} intro={item.intro} path={item.path} key={index} />
       ))}
       <Divider />
       {warnSection.map((item, index) => (
-        <ItemContainer>
-          <MypageListItem icon={item.icon} intro={item.intro} path={item.path} key={index} />
-        </ItemContainer>
+        <MypageListItem icon={item.icon} intro={item.intro} path={item.path} key={index} />
       ))}
     </ListContainer>
   );
@@ -82,8 +76,4 @@ export default function MypageList() {
 
 const ListContainer = styled.div`
   width: 100%;
-`;
-
-const ItemContainer = styled.div`
-  padding: 1.35rem 1rem;
 `;

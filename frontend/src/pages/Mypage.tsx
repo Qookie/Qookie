@@ -20,5 +20,5 @@ export default function Mypage() {
 const HomeContainer = styled.div``;
 
 const BottomContainer = styled.div`
-  padding: 2.5rem 1rem 6rem 1rem;
+  padding: 2.5rem 0 6rem 0;
 `;

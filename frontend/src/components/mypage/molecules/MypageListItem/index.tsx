@@ -51,17 +51,17 @@ export default function MypageListItem({ icon, intro, path }: Props) {
           <Text typography="button">{intro}</Text>
         </LeftContainer>
         <ChevronRightIcon width={20} />
-        <Dialog
-          title={'로그아웃 할까요?'}
-          content={'정말 로그아웃 할까요?'}
-          negative={'아니요'}
-          onNegativeClick={dialogHandler}
-          positive={'네'}
-          onPositiveClick={doSignOut}
-          isopen={dialogState}
-          onCloseRequest={dialogHandler}
-        />
       </ItemContainer>
+      <Dialog
+        title={'로그아웃 할까요?'}
+        content={'정말 로그아웃 할까요?'}
+        negative={'아니요'}
+        onNegativeClick={dialogHandler}
+        positive={'네'}
+        onPositiveClick={doSignOut}
+        isopen={dialogState}
+        onCloseRequest={dialogHandler}
+      />
     </>
   );
 }
@@ -71,6 +71,8 @@ const ItemContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 1.35rem 2rem;
+  box-sizing: border-box;
 `;
 
 const LeftContainer = styled.div`
