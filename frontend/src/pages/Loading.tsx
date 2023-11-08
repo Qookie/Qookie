@@ -1,10 +1,17 @@
-import { getRedirectResult, getIdToken, signInWithRedirect } from 'firebase/auth';
+import {
+  getRedirectResult,
+  getIdToken,
+  signInWithRedirect,
+  User,
+  UserCredential,
+  deleteUser,
+} from 'firebase/auth';
 import { auth } from '../firebase/firebaseConfig';
 import { http } from '../api/instance';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import Spinner from '../components/shared/atoms/Spinner';
-import { OAuthProvider, GoogleAuthProvider } from 'firebase/auth';
+import { OAuthProvider, GoogleAuthProvider, reauthenticateWithCredential } from 'firebase/auth';
 import { useSetRecoilState } from 'recoil';
 import { UserState } from '../modules/user';
 
@@ -27,7 +34,6 @@ const Loading = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const setUserState = useSetRecoilState(UserState);
 
-
   const socialLoginCallback = async () => {
     const provider = searchParams.get('provider');
     searchParams.delete('provider');
@@ -39,42 +45,43 @@ const Loading = () => {
     }
   };
 
+  const signIn = (res: UserCredential) => {
+    const { user } = res;
+    const copiedUser = JSON.parse(JSON.stringify(user));
+    setUserState(copiedUser);
+    user
+      .getIdToken()
+      .then((accessToken) => {
+        localStorage.setItem('accessToken', accessToken);
+        const { displayName, email, uid } = user;
+        http
+          .post<LoginResponse>('/api/member/login', {
+            displayName,
+            email,
+            uid,
+            messageToken: localStorage.getItem('messageToken'),
+          })
+          .then((res) => {
+            if (res.payload.new) {
+              navigate('/init');
+            } else {
+              navigate('/home');
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+            console.log('ERROR AT BACKEND WHILE LOGIN');
+          });
+      })
+      .catch((err) => console.log(err));
+  };
+
   useEffect(() => {
     socialLoginCallback();
     getRedirectResult(auth).then((res) => {
-      if (res === null) {
-        return;
+      if (res !== null) {
+        signIn(res);
       }
-      const { user } = res;
-
-      const copiedUser = JSON.parse(JSON.stringify(user));
-      setUserState(copiedUser);
-
-      user
-        .getIdToken()
-        .then((accessToken) => {
-          localStorage.setItem('accessToken', accessToken);
-          const { displayName, email, uid } = user;
-          http
-            .post<LoginResponse>('/api/member/login', {
-              displayName,
-              email,
-              uid,
-              messageToken: localStorage.getItem('messageToken'),
-            })
-            .then((res) => {
-              if (res.payload.new) {
-                navigate('/init');
-              } else {
-                navigate('/home');
-              }
-            })
-            .catch((err) =>{
-                console.log(err)
-                console.log("ERROR AT BACKEND WHILE LOGIN")
-            });
-        })
-        .catch((err) => console.log(err));
     });
   }, []);
 
