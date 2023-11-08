@@ -7,7 +7,6 @@ import com.a504.qookie.domain.item.dto.ItemUploadRequest;
 import com.a504.qookie.domain.item.dto.ItemWearRequest;
 import com.a504.qookie.domain.item.dto.MyItemResponse;
 import com.a504.qookie.domain.item.dto.OrderItemRequest;
-import com.a504.qookie.domain.item.dto.OrderListRequest;
 import com.a504.qookie.domain.item.dto.OrderRequest;
 import com.a504.qookie.domain.item.dto.OrderResponse;
 import com.a504.qookie.domain.item.entity.Item;
@@ -45,18 +44,24 @@ public class ItemService {
     private static final Long BASE_BACKGROUND_ID = 2L;
     private static final Long NO_WEAR_ITEM_ID = 1L;
 
-    public String upload(ItemUploadRequest itemUploadRequest, MultipartFile image) {
-        String url = awsS3Service.uploadImageToS3(image);
+    @Transactional
+    public String upload(ItemUploadRequest itemUploadRequest, MultipartFile image, MultipartFile thumbnail) {
+        String imageUrl = awsS3Service.uploadImageToS3(image);
+        String thumbnailUrl = imageUrl;
+        if (thumbnail != null) {
+            thumbnailUrl = awsS3Service.uploadImageToS3(thumbnail);
+        }
 
         itemRepository.save(Item.builder()
-                .media(url)
+                .media(imageUrl)
+                .thumbnail(thumbnailUrl)
                 .name(itemUploadRequest.name())
                 .price(itemUploadRequest.price())
                 .isNew(true)
                 .category(itemUploadRequest.category())
                 .build());
 
-        return url;
+        return imageUrl;
     }
 
     public List<ItemResponse>[] list(Member member) {
@@ -258,9 +263,9 @@ public class ItemService {
         return true;
     }
 
-    public List<OrderResponse> orderList(OrderListRequest orderListRequest, Member member) {
+    public List<OrderResponse> orderList(String year, String month, Member member) {
 
-        return itemRepository.findMemberItemByMonthAndMember(orderListRequest.time(), member);
+        return itemRepository.findMemberItemByMonthAndMember(year + "-" + month, member);
     }
 
     @Transactional

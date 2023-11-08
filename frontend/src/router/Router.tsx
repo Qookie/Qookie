@@ -10,12 +10,25 @@ import SetWakeupTime from '../pages/SetWakeupTime';
 import Mypage from '../pages/Mypage';
 import Store from '../pages/Store';
 import ItemUpload from '../pages/ItemUpload';
+import WakeupQuest from '../pages/quest/WakeupQuest';
+import EatQuest from '../pages/quest/EatQuest';
 import { useRecoilState } from 'recoil';
-import { UserState } from '../recoil/UserState';
+import { UserState } from '../modules/user';
 import NotFound from '../pages/NotFound';
+import WalkQuest from '../pages/quest/WalkQuest';
+import SquatQuest from '../pages/quest/SquatQuest';
+import PromiseQuest from '../pages/quest/PromiseQuest';
+import PhotoQuest from '../pages/quest/PhotoQuest';
+import StretchQuest from '../pages/quest/StretchQuest';
+import MeditaionQuest from '../pages/quest/MeditaionQuest';
+import WaterQuest from '../pages/quest/WaterQuest';
+import KeyPage from '../pages/KeyPage';
 
 const Router = () => {
   const [userState, _] = useRecoilState(UserState);
+
+const reload = () => window.location.reload()
+
   return (
     <BrowserRouter>
       <HeaderWrapper />
@@ -24,24 +37,32 @@ const Router = () => {
           <Route path="/*" element={<NotFound />} />
           <Route path="/init" element={<InitQookie />} />
           <Route path="/set-wakeup" element={<SetWakeupTime />} />
-
           <Route path="/home" element={<Home />} />
-
           <Route path="/calendar" element={<Login />} />
-
           <Route path="/mind" element={<Login />} />
-
           <Route path="/mypage" element={<Mypage />} />
           <Route path="/store" element={<Store />} />
-
-          <Route path="/challenge" element={<Challenge />} />
-          
           <Route path="/admin" element={<ItemUpload />} />
+          <Route path="/challenge" element={<Challenge />} />
+          <Route path="/loading" element={<Loading />} />
+
+          <Route path="/quest">
+            <Route path="wake" element={<WakeupQuest />} />
+            <Route path="eat" element={<EatQuest />} />
+            <Route path="walk" element={<WalkQuest />} />
+            <Route path="squat" element={<SquatQuest />} />
+            <Route path="promise" element={<PromiseQuest />} />
+            <Route path="photo" element={<PhotoQuest />} />
+            <Route path="stretch" element={<StretchQuest />} />
+            <Route path="meditation" element={<MeditaionQuest />} />
+            <Route path="water" element={<WaterQuest />} />
+          </Route>
         </Routes>
       ) : (
         <Routes>
           <Route path="/*" element={<Login />} />
           <Route path="/loading" element={<Loading />} />
+          <Route path="/.well-known/assetlinks.json" element={<KeyPage/>}/>
         </Routes>
       )}
       <NavBarWrapper />

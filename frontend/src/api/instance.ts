@@ -40,8 +40,9 @@ export const http = {
   post: function post<Response = unknown, Request = any>(
     url: string,
     body?: Request,
-    config?: AxiosRequestConfig,
+    isFile?: boolean,
   ) {
-    return axios.post<Response>(url, body, config).then((res) => res.data);
+    const header = isFile ? { headers: { 'Content-Type': 'multipart/form-data' } } : {};
+    return axios.post<Response>(url, body, header).then((res) => res.data);
   },
 };

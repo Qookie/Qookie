@@ -6,10 +6,11 @@ public record ItemResponse(
         Long id,
         String name,
         String media,
+        String thumbnail,
         int price,
         Boolean isNew
 ) {
     public ItemResponse(Item item) {
-        this(item.getId(), item.getName(), item.getMedia(), item.getPrice(), item.getIsNew());
+        this(item.getId(), item.getName(), item.getMedia(), item.getThumbnail(), item.getPrice(), item.getIsNew());
     }
 }

@@ -6,9 +6,10 @@ public record MyItemResponse(
         Long id,
         String name,
         String media,
+        String thumbnail,
         Boolean isWear
 ) {
     public MyItemResponse(Item item, Boolean isWear) {
-        this(item.getId(), item.getName(), item.getMedia(), isWear);
+        this(item.getId(), item.getName(), item.getMedia(), item.getThumbnail(), isWear);
     }
 }

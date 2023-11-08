@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "io.ssafy.p.k9a504.qookie",
+        "sha256_cert_fingerprints": ["D8:3F:34:07:7C:99:6A:85:7D:7D:41:C1:4B:CB:E8:47:7E:B9:1C:E0:8C:FA:59:E7:A6:46:96:71:18:75:1C:34"]
+      }
+    }]

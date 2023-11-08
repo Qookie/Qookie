@@ -1,16 +1,12 @@
 package com.a504.qookie.domain.heart.service;
 
-import com.a504.qookie.domain.heart.dto.HeartListRequest;
 import com.a504.qookie.domain.heart.dto.HeartRequest;
 import com.a504.qookie.domain.heart.dto.HeartResponse;
 import com.a504.qookie.domain.heart.entity.Heart;
 import com.a504.qookie.domain.heart.repository.HeartRepository;
 import com.a504.qookie.domain.member.entity.Member;
-import com.a504.qookie.domain.message.dto.MessageResponse;
 import jakarta.transaction.Transactional;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,9 +26,10 @@ public class HeartService {
     }
 
     @Transactional
-    public List<HeartResponse> list(HeartListRequest heartListRequest, Member member) {
+    public List<HeartResponse> list(String year, String month,
+            Member member) {
 
-        return  heartRepository.findHeartByMonthAndMember(heartListRequest.time(), member);
+        return  heartRepository.findHeartByMonthAndMember(year + "-" + month, member);
 
     }
 }

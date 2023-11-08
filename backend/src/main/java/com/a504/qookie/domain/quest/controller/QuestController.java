@@ -2,19 +2,18 @@ package com.a504.qookie.domain.quest.controller;
 
 
 import com.a504.qookie.domain.quest.dto.AttendanceCalendarResponse;
-import com.a504.qookie.domain.quest.dto.CalenderRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.a504.qookie.domain.quest.dto.ChallengeRequest;
 import com.a504.qookie.domain.quest.dto.QuestType;
 import com.a504.qookie.domain.quest.service.AwsS3Service;
 import com.a504.qookie.domain.quest.service.QuestService;
@@ -61,11 +60,12 @@ public class QuestController {
 		return BaseResponse.okWithData(HttpStatus.OK, questType.getMessage() + " 퀘스트 완료", imageName);
 	}
 
-	@GetMapping("/calendar/attendance")
+	@GetMapping("/calendar/attendance/{year}/{month}")
 	public ResponseEntity<?> getAttendanceInfo(
 			@AuthenticationPrincipal CustomMemberDetails member,
-			@RequestBody CalenderRequest calenderRequest){
-		AttendanceCalendarResponse attendanceCalendarResponse = questService.getAttendanceInfo(member.getMember(), calenderRequest);
+			@PathVariable String year,
+			@PathVariable String month){
+		AttendanceCalendarResponse attendanceCalendarResponse = questService.getAttendanceInfo(member.getMember(), year, month);
 		return BaseResponse.okWithData(HttpStatus.OK, "Attendance Calendar OK", attendanceCalendarResponse);
 	}
 
@@ -74,5 +74,14 @@ public class QuestController {
 		@AuthenticationPrincipal CustomMemberDetails member
 	){
 		return BaseResponse.okWithData(HttpStatus.OK, "챌린지 현황 조회 완료", questService.getChallengeStatus(member.getMember()));
+	}
+
+	@PostMapping("/challenge")
+	public ResponseEntity<?> completeChallenge(
+		@AuthenticationPrincipal CustomMemberDetails member,
+		ChallengeRequest request
+	){
+		questService.completeChallenge(member.getMember(), request);
+		return BaseResponse.ok(HttpStatus.OK, "챌린지 완료하기 성공");
 	}
 }

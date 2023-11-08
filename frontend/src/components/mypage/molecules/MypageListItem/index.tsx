@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { signOut } from '@firebase/auth';
 import { auth } from '../../../../firebase/firebaseConfig';
 import { useSetRecoilState } from 'recoil';
-import { UserState } from '../../../../recoil/UserState';
+import { UserState } from '../../../../modules/user';
 
 export const mypageList = [
   'store',
