@@ -1,40 +1,79 @@
 import styled from 'styled-components';
-import MypageListItem, { Mypage } from '../../molecules/MypageListItem';
+import MypageListItem from '../../molecules/MypageListItem';
 import Divider from '../../../shared/atoms/Divider';
+import { Badge, Deco, MyQookie, QoinList } from '../../../../assets/svgs';
 
 export default function MypageList() {
-  const iconList: Mypage[] = [
-    'store',
-    'badge',
-    'myQookie',
-    'qoin',
+  const qookieSection = [
+    {
+      icon: <Deco />,
+      intro: '쿠키 꾸미기',
+      path: 'store',
+    },
+    {
+      icon: <Badge />,
+      intro: '나의 배지',
+      path: 'badge',
+    },
+    {
+      icon: <MyQookie />,
+      intro: '내가 만든 쿠키',
+      path: 'myqookie',
+    },
+    {
+      icon: <QoinList />,
+      intro: '코인 내역',
+      path: 'qoinlist',
+    },
   ];
-  const withoutIconList: Mypage[] = [
-    'info',
-    'notice',
-    'privacy',
+
+  const userSection = [
+    {
+      icon: '',
+      intro: '회원 정보',
+      path: 'info',
+    },
+    {
+      icon: '',
+      intro: '공지사항',
+      path: 'notice',
+    },
+    {
+      icon: '',
+      intro: '개인정보처리방침',
+      path: 'privacy',
+    },
   ];
-  const warnItemList: Mypage[] = [
-    'logOut',
-    'withDraw',
+
+  const warnSection = [
+    {
+      icon: '',
+      intro: '로그아웃',
+      path: 'logout',
+    },
+    {
+      icon: '',
+      intro: '회원 탈퇴',
+      path: 'withdraw',
+    },
   ];
   return (
     <ListContainer>
-      {iconList.map((item, index) => (
+      {qookieSection.map((item, index) => (
         <ItemContainer>
-          <MypageListItem mypage={item} key={index} />
+          <MypageListItem icon={item.icon} intro={item.intro} path={item.path} key={index} />
         </ItemContainer>
       ))}
       <Divider />
-      {withoutIconList.map((item, index) => (
+      {userSection.map((item, index) => (
         <ItemContainer>
-          <MypageListItem mypage={item} key={index} />
+          <MypageListItem icon={item.icon} intro={item.intro} path={item.path} key={index} />
         </ItemContainer>
       ))}
       <Divider />
-      {warnItemList.map((item, index) => (
+      {warnSection.map((item, index) => (
         <ItemContainer>
-          <MypageListItem mypage={item} key={index} />
+          <MypageListItem icon={item.icon} intro={item.intro} path={item.path} key={index} />
         </ItemContainer>
       ))}
     </ListContainer>
