@@ -4,7 +4,6 @@ import com.a504.qookie.domain.item.dto.ItemResponse;
 import com.a504.qookie.domain.item.dto.ItemUploadRequest;
 import com.a504.qookie.domain.item.dto.ItemWearRequest;
 import com.a504.qookie.domain.item.dto.MyItemResponse;
-import com.a504.qookie.domain.item.dto.OrderListRequest;
 import com.a504.qookie.domain.item.dto.OrderRequest;
 import com.a504.qookie.domain.item.dto.OrderResponse;
 import com.a504.qookie.domain.item.serivce.ItemService;
@@ -17,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -74,12 +74,13 @@ public class ItemController {
         return BaseResponse.ok(HttpStatus.OK, "item order OK");
     }
 
-    @GetMapping("/order/list")
+    @GetMapping("/order/list/{year}/{month}")
     public ResponseEntity<?> orderList(
-            @RequestBody OrderListRequest orderListRequest,
+            @PathVariable String year,
+            @PathVariable String month,
             @AuthenticationPrincipal CustomMemberDetails customMemberDetails) {
 
-        List<OrderResponse> orderResponses = itemService.orderList(orderListRequest, customMemberDetails.getMember());
+        List<OrderResponse> orderResponses = itemService.orderList(year, month, customMemberDetails.getMember());
 
         return BaseResponse.okWithData(HttpStatus.OK, "item order list OK", orderResponses);
     }

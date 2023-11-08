@@ -1,19 +1,14 @@
 package com.a504.qookie.domain.quest.service;
 
-import com.a504.qookie.domain.member.dto.QuestStatus;
 import com.a504.qookie.domain.cookie.entity.Body;
 import com.a504.qookie.domain.cookie.repository.BodyRepository;
 import com.a504.qookie.domain.quest.dto.AttendanceCalendarResponse;
 import com.a504.qookie.domain.quest.dto.CalenderRequest;
 import java.time.LocalDateTime;
-import java.time.Month;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
-import org.checkerframework.checker.units.qual.C;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +20,7 @@ import com.a504.qookie.domain.member.entity.MemberQuest;
 import com.a504.qookie.domain.member.repository.HistoryRepository;
 import com.a504.qookie.domain.member.repository.MemberQuestRepository;
 import com.a504.qookie.domain.member.repository.MemberRepository;
+import com.a504.qookie.domain.quest.dto.ChallengeRequest;
 import com.a504.qookie.domain.quest.dto.ChallengeStatus;
 import com.a504.qookie.domain.quest.dto.ChallengeStatusList;
 import com.a504.qookie.domain.quest.dto.CheckQuestResponse;
@@ -343,8 +339,9 @@ public class QuestService {
 
 	}
 
-	public AttendanceCalendarResponse getAttendanceInfo(Member member, CalenderRequest calenderRequest) {
-		String checkAttendanceKey = member.getId() + ":" + calenderRequest.year() + ":" + calenderRequest.month() + ":" + "ATTENDANCE";
+	public AttendanceCalendarResponse getAttendanceInfo(Member member,
+			String year, String month) {
+		String checkAttendanceKey = member.getId() + ":" + year + ":" + month + ":" + "ATTENDANCE";
 		Boolean todayComplete = template.opsForSet().isMember(checkAttendanceKey, LocalDateTime.now().getDayOfMonth() + "");
 		List<Integer> list = template.opsForSet().members(checkAttendanceKey).stream().map(Integer::valueOf).toList();
 		return new AttendanceCalendarResponse(todayComplete, list);
@@ -421,5 +418,21 @@ public class QuestService {
 
 	String getBadgeChallengeKey(Long id, String questName){
 		return id + ":" + questName + ":badge";
+	}
+
+	public void completeChallenge(Member member, ChallengeRequest request){
+		// Member coin 업데이트 때리고
+		member.setPoint(request.coin());
+		// Redis에 넣기
+		if (request.badgeId() != 0L) {
+			String key = getBadgeChallengeKey(request.badgeId(), request.questName());
+			template.opsForSet().add(key, member.getId() + "");
+		}else{
+			LocalDateTime now = LocalDateTime.now();
+			int year = now.getYear();
+			int month = now.getDayOfMonth();
+			String monthlyChallengeKey =  request.questName() + ":" + year + ":" + month;
+			template.opsForSet().add(monthlyChallengeKey, member.getId() + "");
+		}
 	}
 }
