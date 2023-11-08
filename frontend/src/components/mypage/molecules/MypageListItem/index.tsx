@@ -65,11 +65,11 @@ export default function MypageListItem({ mypage }: Props) {
         </LeftContainer>
         <ChevronRightIcon width={20} />
         <Dialog
-          title={'testTitle'}
-          content={'testContent'}
-          negative={'negative'}
+          title={'로그아웃 할까요?'}
+          content={'정말 로그아웃 할까요?'}
+          negative={'아니요'}
           onNegativeClick={dialogHandler}
-          positive={'positive'}
+          positive={'네'}
           onPositiveClick={doSignOut}
           isopen={dialogState}
           onCloseRequest={dialogHandler}
