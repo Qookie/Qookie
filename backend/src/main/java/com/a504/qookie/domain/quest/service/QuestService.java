@@ -269,7 +269,6 @@ public class QuestService {
 		}
 		// 뱃지 챌린지 업데이트 및 알림해주는 기능
 		String badge_challenge_key = member.getId() +":"+ questName + ":badge"; // (유저PK):(퀘스트이름)
-		template.opsForSet().add(badge_challenge_key, cur_day + "");
 		String badgeCnt = template.opsForValue().get(badge_challenge_key);
 		if (badgeCnt == null){
 			template.opsForValue().set(badge_challenge_key, "1");
@@ -379,25 +378,25 @@ public class QuestService {
 		List<ChallengeStatus> badgelist = new ArrayList<>();
 		LocalDateTime now = LocalDateTime.now();
 		int year = now.getYear();
-		int month = now.getDayOfMonth();
+		int month = now.getMonthValue();
 		// 월간 챌린지
 		checkMonthlyChallenge("WAKE", member, year, month, monthlist, "규칙적인 기상", 15);
 		checkMonthlyChallenge("EAT", member, year, month, monthlist, "규칙적인 식사", 15);
 		checkMonthlyChallenge("WALK", member, year, month, monthlist, "만보기", 10);
 		//한국인의 밥 상 10 - 50 - 100
-		checkBadgeChallenge(1L, member, badgelist, "한국인의 밥 상", 10, 50, 100, "EAT");
+		checkBadgeChallenge(19L, member, badgelist, "한국인의 밥 상", 10, 50, 100, "EAT");
 		//시간맞춰 기 상 10 - 50- 100
-		checkBadgeChallenge(4L, member, badgelist, "시간맞춰 기 상", 10, 50, 100, "WAKE");
+		checkBadgeChallenge(16L, member, badgelist, "시간맞춰 기 상", 10, 50, 100, "WAKE");
 		// 나 쿠키를 항 상
-		checkBadgeChallenge(19L, member, badgelist, "나 쿠키를 항 상", 10, 50, 100, "ATTENDANCE");
+		checkBadgeChallenge(1L, member, badgelist, "나 쿠키를 항 상", 10, 50, 100, "ATTENDANCE");
 		// 반가사유 상 10 - 50 - 100
-		checkBadgeChallenge(10L, member, badgelist, " 반가사유 상", 10, 50, 100, "MEDITATION");
+		checkBadgeChallenge(7L, member, badgelist, " 반가사유 상", 10, 50, 100, "MEDITATION");
 		// 사진 속 세 상 5 - 10 - 15
-		checkBadgeChallenge(7L, member, badgelist, "사진속 세 상", 5, 10, 15, "PHOTO");
+		checkBadgeChallenge(10L, member, badgelist, "사진속 세 상", 5, 10, 15, "PHOTO");
 		// 내 사랑 신 상 3 - 5 - 10
-		checkBadgeChallenge(13L, member, badgelist, "내 사랑 신 상", 3, 5, 10, "BUY_NEW");
+		checkBadgeChallenge(4L, member, badgelist, "내 사랑 신 상", 3, 5, 10, "BUY_NEW");
 		// 스쿼트 실력 향 상 3 - 5 - 10
-		checkBadgeChallenge(16L, member, badgelist, "스쿼트 실력 향 상", 10, 50, 100, "SQUAT");
+		checkBadgeChallenge(13L, member, badgelist, "스쿼트 실력 향 상", 10, 50, 100, "SQUAT");
 		return new ChallengeStatusList(monthlist, badgelist);
 	}
 
@@ -453,9 +452,10 @@ public class QuestService {
 	public void completeChallenge(Member member, ChallengeRequest request){
 		// Member coin 업데이트 때리고
 		member.setPoint(request.coin());
+		memberRepository.save(member);
 		// Redis에 넣기
 		if (request.badgeId() != 0L) {
-			String key = request.badgeId() + ":badge";
+			String key = request.badgeId() + ":" + request.questName() +":"+ ((request.badgeId() - 1L) % 3 + 1) +":badge";
 			template.opsForSet().add(key, member.getId() + "");
 		}else{
 			LocalDateTime now = LocalDateTime.now();
