@@ -45,13 +45,15 @@ public class BadgeService {
             BadgeDetailResponse thirdBadge = null;
             QuestType quest = null;
             for (int j = 1; j <= 3; j++) {
+
                 int badgeId = (i - 1) * 3 + j;
-                String key = badgeId + ":badge";
-                boolean isCompleted = Boolean.TRUE.equals(
-                        template.opsForSet().isMember(key, member.getId() + ""));
 
                 Badge badge = badgeRepository.findById(Long.valueOf(badgeId))
                         .orElseThrow(() -> new IllegalArgumentException("뱃지가 없습니다"));
+
+                String key = badgeId + ":" + badge.getQuest().toString() +":"+ ((badgeId - 1L) % 3 + 1) +":badge";
+                boolean isCompleted = Boolean.TRUE.equals(
+                        template.opsForSet().isMember(key, member.getId() + ""));
 
                 int requirement = badge.getRequirement();
 
