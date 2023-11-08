@@ -2,7 +2,6 @@ import Axios, { AxiosResponse, AxiosError, InternalAxiosRequestConfig } from 'ax
 import { auth } from '../firebase/firebaseConfig';
 import axios from 'axios';
 
-// Todo: 서버 세팅후 .env 파일로 분리
 export const BASE_URL = process.env.REACT_APP_HOST;
 
 const axiosInstance = Axios.create({
