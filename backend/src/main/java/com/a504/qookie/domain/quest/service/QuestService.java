@@ -1,9 +1,12 @@
 package com.a504.qookie.domain.quest.service;
 
+import com.a504.qookie.domain.badge.entity.Badge;
+import com.a504.qookie.domain.badge.repository.BadgeRepository;
 import com.a504.qookie.domain.cookie.entity.Body;
 import com.a504.qookie.domain.cookie.repository.BodyRepository;
+import com.a504.qookie.domain.member.entity.MemberBadge;
+import com.a504.qookie.domain.member.repository.MemberBadgeRepository;
 import com.a504.qookie.domain.quest.dto.AttendanceCalendarResponse;
-import com.a504.qookie.domain.quest.dto.CalenderRequest;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +46,8 @@ public class QuestService {
 	private final HistoryRepository historyRepository;
 	private final RedisTemplate<String, String> template;
 	private final BodyRepository bodyRepository;
+	private final MemberBadgeRepository memberBadgeRepository;
+	private final BadgeRepository badgeRepository;
 
 	public CheckQuestResponse checkQuest(Member member, String questName) { // 오늘 날짜의 questName 퀘스트를 완료했는지
 		LocalDateTime now = LocalDateTime.now();
@@ -427,6 +432,11 @@ public class QuestService {
 		if (request.badgeId() != 0L) {
 			String key = getBadgeChallengeKey(request.badgeId(), request.questName());
 			template.opsForSet().add(key, member.getId() + "");
+
+			Badge badge = badgeRepository.findById(request.badgeId())
+					.orElseThrow(() -> new IllegalArgumentException("뱃지가 없습니다"));
+
+			memberBadgeRepository.save(new MemberBadge(member, badge));
 		}else{
 			LocalDateTime now = LocalDateTime.now();
 			int year = now.getYear();
