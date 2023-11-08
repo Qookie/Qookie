@@ -32,13 +32,11 @@ export default function ItemTab({ list, handleList, handleCart }: TabProps) {
 
   useEffect(() => {
     handleList(selectedItem);
-    console.log('real item list', selectedItem);
   }, [selectedItem]);
 
   useEffect(() => {
     if (handleCart) {
       handleCart(listToBuy);
-      console.log('list to buy', listToBuy);
     }
   }, [listToBuy]);
 
