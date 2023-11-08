@@ -16,7 +16,8 @@ export default function Withdraw() {
   const navigate = useNavigate();
   const qookie = useRecoilValue(QookieInfoState);
   // TODO: add crying eye item
-  const cryingQookieProp = { ...qookie, background: '', eye: '여기에 우는 아이템 url' };
+  // const cryingQookieProp = { ...qookie, background: '', eye: '여기에 우는 아이템 url' };
+  const cryingQookieProp = { ...qookie, background: '' };
 
   const doWithdraw = async () => {
     await auth.authStateReady();
