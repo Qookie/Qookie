@@ -9,15 +9,19 @@ import ItemTab, { SelectedProps } from '../components/store/organisms/ItemTab';
 import { useEffect, useState } from 'react';
 import { ItemTypeProps } from '../components/store/molecules/Item';
 import { itemApi } from '../api';
-import { QookieInfo } from '../types';
+import { QookieInfo, wearReqType } from '../types';
 import BottomSheet from '../components/shared/molecules/BottomSheet';
 import Cart from '../components/store/organisms/Cart';
+import { history } from '../utils/history';
+import Dialog from '../components/shared/molecules/Dialog';
+import { useNavigate } from 'react-router-dom';
 
 export interface AllItemProps {
   [index: number]: ItemTypeProps[];
 }
 
 export default function Store() {
+  const navigate = useNavigate();
   const [qookie, setQookie] = useRecoilState(QookieInfoState);
   const [currentTab, setCurrentTab] = useState<number>(0);
   const [itemList, setItemList] = useState<AllItemProps>();
@@ -27,6 +31,7 @@ export default function Store() {
   const [showQookie, setShowQookie] = useState<QookieInfo>(qookie);
   const [isItem, setIsItem] = useState<boolean>(false);
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
+  const [isExit, setIsExit] = useState<boolean>(false);
 
   useEffect(() => {
     itemApi.getItemList().then((res) => {
@@ -40,6 +45,20 @@ export default function Store() {
       }
     });
   }, []);
+
+  useEffect(() => {
+    const wearItems: SelectedProps = {};
+    if (myItemList) {
+      for (const index in myItemList) {
+        myItemList[index].map((item: ItemTypeProps) => {
+          if (item.isWear) {
+            wearItems[index] = [item];
+          }
+        });
+      }
+    }
+    setWearItemList(wearItems);
+  }, [myItemList]);
 
   useEffect(() => {
     const newQookieWear = {
@@ -72,6 +91,26 @@ export default function Store() {
     }
   }, [cartItemList]);
 
+  useEffect(() => {
+    const checkBackEvent = () => {
+      if (isItem) {
+        // modal open
+        setIsExit(true);
+        navigate('/store');
+      } else {
+        exitStoreHandler();
+      }
+    };
+
+    const unCheckBackEvent = history.listen(({ action }) => {
+      if (action === 'POP') {
+        checkBackEvent();
+      }
+    });
+
+    return unCheckBackEvent;
+  }, [isItem, wearItemList]);
+
   const checkItemLength = (index: number) => {
     if (wearItemList && wearItemList[index] && wearItemList[index].length > 0) {
       return wearItemList[index][0].media;
@@ -85,6 +124,27 @@ export default function Store() {
       return urlList;
     }
     return [];
+  };
+
+  const getWearItemId = (index: number) => {
+    console.log('wear list', wearItemList);
+    if (wearItemList && wearItemList[index] && wearItemList[index].length > 0) {
+      if (index === 1) console.log('hat', wearItemList[index][0]);
+      return wearItemList[index][0].id;
+    }
+    if (index === 0) {
+      return 2;
+    } else {
+      return 1;
+    }
+  };
+
+  const getWearItemArr = (index: number) => {
+    if (wearItemList && wearItemList[index] && wearItemList[index].length > 0) {
+      const idList: number[] = wearItemList[index].map((item) => item.id);
+      return idList;
+    }
+    return [1];
   };
 
   const selectTabHandler = (now: number) => {
@@ -101,6 +161,28 @@ export default function Store() {
 
   const onCartHandler = () => {
     setIsCartOpen((pre) => !pre);
+  };
+
+  const exitModal = () => {
+    setIsExit(false);
+  };
+
+  const exitStoreHandler = () => {
+    console.log('exit');
+    const checkItemChange: wearReqType = {
+      backgroundId: getWearItemId(0),
+      hatId: getWearItemId(1),
+      shoeId: getWearItemId(2),
+      bottomId: getWearItemId(3),
+      topId: getWearItemId(4),
+      accessories: getWearItemArr(5),
+    };
+
+    itemApi.wearItemReq(checkItemChange).then((res) => {
+      console.log(res);
+      setQookie({ ...qookie, ...showQookie });
+      navigate('/mypage');
+    });
   };
 
   return (
@@ -145,6 +227,16 @@ export default function Store() {
         title={'장바구니'}
         onClose={onCartHandler}
         children={<Cart list={cartItemList} handleList={cartItemSetHandler} />}
+      />
+      <Dialog
+        title="장착한 아이템이 사라져요"
+        content={`구매하지 않은 장착 아이템은 저장되지 않아요 \n구매하지 않고 나가시겠어요?`}
+        negative="구매하기"
+        onNegativeClick={onCartHandler}
+        positive="나가기"
+        onPositiveClick={exitStoreHandler}
+        isopen={isExit}
+        onCloseRequest={exitModal}
       />
     </PageContainer>
   );

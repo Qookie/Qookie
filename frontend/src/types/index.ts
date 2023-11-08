@@ -27,3 +27,12 @@ export interface ResponseType {
   msg: string;
   payload: object;
 }
+
+export interface wearReqType {
+  hatId: number;
+  topId: number;
+  bottomId: number;
+  shoeId: number;
+  backgroundId: number;
+  accessories: number[];
+}

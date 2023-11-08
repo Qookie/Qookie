@@ -12,6 +12,7 @@ export interface ItemTypeProps {
   thumbnail: string;
   price?: number;
   isNew?: boolean;
+  isWear?: boolean;
 }
 
 export interface ItemProps {

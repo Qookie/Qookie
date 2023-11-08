@@ -1,6 +1,7 @@
 import { ItemTypeProps } from '../components/store/molecules/Item';
 import { orderReqProps } from '../components/store/organisms/Cart';
 import { AllItemProps } from '../pages/Store';
+import { wearReqType } from '../types';
 import { http } from './instance';
 
 export interface ItemPropsResponse {
@@ -11,7 +12,6 @@ export interface ItemPropsResponse {
 const getItemList = async () => {
   try {
     const res = await http.get<ItemPropsResponse>('/api/item/list');
-    console.log('itemRes', res);
     return res.payload;
   } catch (e) {
     console.log('getItemList', e);
@@ -21,7 +21,6 @@ const getItemList = async () => {
 const getMyItemList = async () => {
   try {
     const res = await http.get<ItemPropsResponse>('/api/item/myItem');
-    console.log('itemRes', res.payload);
     return res.payload;
   } catch (e) {
     console.log('getMyItemList', e);
@@ -34,12 +33,20 @@ const orderItemReq = async (itemId: orderReqProps[]) => {
       items: itemId,
     };
     const res = await http.post<ItemPropsResponse>('/api/item/order', orderReq);
-    console.log('order res', res);
     return res;
   } catch (e) {
     console.log('orderItemReq', e);
   }
 };
 
-const item = { getItemList, getMyItemList, orderItemReq };
+const wearItemReq = async (itemId: wearReqType) => {
+  try {
+    const res = await http.patch<ItemPropsResponse>('/api/item/wear', itemId);
+    return res;
+  } catch (e) {
+    console.log('orderItemReq', e);
+  }
+};
+
+const item = { getItemList, getMyItemList, orderItemReq, wearItemReq };
 export default item;
