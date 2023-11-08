@@ -10,6 +10,7 @@ import { auth } from '../firebase/firebaseConfig';
 import { useState } from 'react';
 import Dialog from '../components/shared/molecules/Dialog';
 import { http } from '../api/instance';
+import TitleLayout from '../components/shared/Template/TitleLayout';
 
 export default function Withdraw() {
   const [dialogState, setDialogState] = useState(false);
@@ -44,33 +45,34 @@ export default function Withdraw() {
 
   return (
     <WithdrawContainer>
-      <TitleContainer>
-        <Text typography="title">탈퇴하기</Text>
-        <Text typography="weak" color="gray">
-          {' '}
-          탈퇴시 모든 데이터가 사라집니다.
-        </Text>
-      </TitleContainer>
-      <QookieStatus {...cryingQookieProp} />
-      <Money MoneyTheme="disabled"></Money>
-      <ButtonContainer>
-        <Button size="medium" theme="transparent" onClick={dialogHandler}>
-          탈퇴하기
-        </Button>
-        <Button size="medium" theme="default" onClick={cancel}>
-          취소
-        </Button>
-      </ButtonContainer>
-      <Dialog
-        title={'탈퇴를 진행할까요?'}
-        content={'탈퇴시 모든 데이터가 사라집니다.'}
-        negative={'아니요'}
-        onNegativeClick={dialogHandler}
-        positive={'네'}
-        onPositiveClick={doWithdraw}
-        isopen={dialogState}
-        onCloseRequest={dialogHandler}
-      />
+      <TitleLayout
+        title="탈퇴하기"
+        desc="탈퇴시 모든 데이터가 사라집니다."
+        children={
+          <ChildrenContainer>
+            <QookieStatus {...cryingQookieProp} />
+            <Money MoneyTheme="disabled"></Money>
+            <ButtonContainer>
+              <Button size="medium" theme="transparent" onClick={dialogHandler}>
+                탈퇴하기
+              </Button>
+              <Button size="medium" theme="default" onClick={cancel}>
+                취소
+              </Button>
+            </ButtonContainer>
+            <Dialog
+              title={'탈퇴를 진행할까요?'}
+              content={'탈퇴시 모든 데이터가 사라집니다.'}
+              negative={'아니요'}
+              onNegativeClick={dialogHandler}
+              positive={'네'}
+              onPositiveClick={doWithdraw}
+              isopen={dialogState}
+              onCloseRequest={dialogHandler}
+            />
+          </ChildrenContainer>
+        }
+      ></TitleLayout>
     </WithdrawContainer>
   );
 }
@@ -79,12 +81,12 @@ const WithdrawContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-top: 10vh;
-  padding: 0 2vh 0;
+  margin-top: 4rem;
+  padding: 0 2vh 1rem;
 `;
 
-const TitleContainer = styled.div`
-  margin-bottom: -4vh;
+const ChildrenContainer = styled.div`
+  margin-top: -4rem;
 `;
 
 const ButtonContainer = styled.div`
