@@ -76,6 +76,10 @@ public class ItemService {
 
         for (Item item:itemList) {
 
+            //기본 배경화면은 빼기
+            if (item.getId().equals(BASE_BACKGROUND_ID))
+                continue;
+
             // 이미 구매한 상품이라면 리스트에서 빼기
             if (memberItemRepository.existsByMemberAndItem(member, item)) {
                 continue;
