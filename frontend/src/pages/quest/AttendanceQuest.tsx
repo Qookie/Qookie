@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import QuestLayout from '../../components/quest/templates/QuestLayout';
 import { http } from '../../api/instance';
 import { showToast } from '../../components/shared/molecules/Alert';
-import { Quest } from '../../types/quest';
 import CalendarImage from '../../assets/pngs/calendar_big.png';
 import moment from 'moment';
-import { Attendance } from './../../components/shared/molecules/Calendar/Calendar.stories';
 import QuestInnerLayout from '../../components/quest/templates/QuestInnerLayout';
 import { QuestStatus, QuestSubText } from '../../components/quest/types';
 import Text from '../../components/shared/atoms/Text';
@@ -21,7 +18,7 @@ interface AttendanceResponse {
   };
 }
 
-type styleTest = Record<string, string>;
+type DateStyle = Record<string, string>;
 
 const attendanceStyle = `background: url(${AttendanceImage}) center no-repeat`;
 
@@ -59,7 +56,7 @@ function AttendanceQuest() {
     setAttendance(attendanceDays ?? []);
   };
 
-  const attendaneStyleMap = attendace.reduce<styleTest>((acc, cur) => {
+  const attendaneStyleMap = attendace.reduce<DateStyle>((acc, cur) => {
     acc[`${cur}`] = attendanceStyle;
     return acc;
   }, {});
