@@ -270,67 +270,94 @@ public class QuestService {
 		// 뱃지 챌린지 업데이트 및 알림해주는 기능
 		String badge_challenge_key = member.getId() +":"+ questName + ":badge"; // (유저PK):(퀘스트이름)
 		template.opsForSet().add(badge_challenge_key, cur_day + "");
+		String badgeCnt = template.opsForValue().get(badge_challenge_key);
+		if (badgeCnt == null){
+			template.opsForValue().set(badge_challenge_key, "1");
+		}else{
+			template.opsForValue().set(badge_challenge_key, Long.parseLong(badgeCnt) + 1L + "");
+		}
+		Long size = Long.parseLong(template.opsForValue().get(badge_challenge_key));
 		if (questName.equals("PHOTO")) { // 하늘사진 찍기라면
 			// 위에서 업데이트 했기 때문에 null이 될 수 없음이 보장됨
-			Long size = template.opsForSet().size(badge_challenge_key);
 			if (size == 5) {
-				member.setPoint(30);
 				historyRepository.save(
 					History.builder()
 						.member(member)
-						.message("1단계 " + questType.getMessage() +" 퀘스트 뱃지 챌린지 달성 보상")
+						.message("1단계 " + questType.getMessage() +" 퀘스트 뱃지 챌린지 달성 보상 을 받아보세요")
 						.cost(30)
 						.build());
 				/* TODO : 알림 해주기 */
 			}
 			if (size == 10) {
-				member.setPoint(50);
 				historyRepository.save(
 					History.builder()
 						.member(member)
-						.message("2단계 " + questType.getMessage() +" 뱃지 챌린지 달성 보상")
+						.message("2단계 " + questType.getMessage() +" 퀘스트 뱃지 챌린지 달성 보상 을 받아보세요")
 						.cost(50)
 						.build());
 				/* TODO : 알림 해주기 */
 			}
 			if (size == 15) {
-				member.setPoint(100);
 				historyRepository.save(
 					History.builder()
 						.member(member)
-						.message("3단계 " + questType.getMessage() +" 뱃지 챌린지 달성 보상")
+						.message("3단계 " + questType.getMessage() +" 퀘스트 뱃지 챌린지 달성 보상 을 받아보세요")
 						.cost(100)
 						.build());
 				/* TODO : 알림 해주기 */
 			}
-		} else if (questName.equals("SQUAT") || questName.equals("EAT") || questName.equals("WAKE") || questName.equals("MEDITATION")) {
-			Long size = template.opsForSet().size(badge_challenge_key);
+		} else if (questName.equals("SQUAT") || questName.equals("EAT") || questName.equals("WAKE") || questName.equals("MEDITATION") || questName.equals("ATTENDANCE")) {
 			if (size == 10) {
-				member.setPoint(30);
 				historyRepository.save(
 					History.builder()
 						.member(member)
-						.message("1단계 " + questType.getMessage() +" 뱃지 챌린지 달성 보상")
+						.message("1단계 " + questType.getMessage() +" 퀘스트 뱃지 챌린지 달성 보상 을 받아보세요")
 						.cost(30)
 						.build());
 				/* TODO : 알림 해주기 */
 			}
 			if (size == 50) {
-				member.setPoint(50);
 				historyRepository.save(
 					History.builder()
 						.member(member)
-						.message("2단계 " + questType.getMessage() +" 뱃지 챌린지 달성 보상")
+						.message("2단계 " + questType.getMessage() +" 퀘스트 뱃지 챌린지 달성 보상 을 받아보세요")
 						.cost(50)
 						.build());
 				/* TODO : 알림 해주기 */
 			}
 			if (size == 100) {
-				member.setPoint(100);
 				historyRepository.save(
 					History.builder()
 						.member(member)
-						.message("3단계 " + questType.getMessage() +" 뱃지 챌린지 달성 보상")
+						.message("3단계 " + questType.getMessage() +" 퀘스트 뱃지 챌린지 달성 보상 을 받아보세요")
+						.cost(100)
+						.build());
+				/* TODO : 알림 해주기 */
+			}
+		}else if(questName.equals("BUT_NEW")){
+			if (size == 3) {
+				historyRepository.save(
+					History.builder()
+						.member(member)
+						.message("1단계 " + questType.getMessage() +" 퀘스트 뱃지 챌린지 달성 보상 을 받아보세요")
+						.cost(30)
+						.build());
+				/* TODO : 알림 해주기 */
+			}
+			if (size == 5) {
+				historyRepository.save(
+					History.builder()
+						.member(member)
+						.message("2단계 " + questType.getMessage() +" 퀘스트 뱃지 챌린지 달성 보상 을 받아보세요")
+						.cost(50)
+						.build());
+				/* TODO : 알림 해주기 */
+			}
+			if (size == 10) {
+				historyRepository.save(
+					History.builder()
+						.member(member)
+						.message("3단계 " + questType.getMessage() +" 퀘스트 뱃지 챌린지 달성 보상 을 받아보세요")
 						.cost(100)
 						.build());
 				/* TODO : 알림 해주기 */
@@ -361,6 +388,8 @@ public class QuestService {
 		checkBadgeChallenge(1L, member, badgelist, "한국인의 밥 상", 10, 50, 100, "EAT");
 		//시간맞춰 기 상 10 - 50- 100
 		checkBadgeChallenge(4L, member, badgelist, "시간맞춰 기 상", 10, 50, 100, "WAKE");
+		// 나 쿠키를 항 상
+		checkBadgeChallenge(19L, member, badgelist, "나 쿠키를 항 상", 10, 50, 100, "ATTENDANCE");
 		// 반가사유 상 10 - 50 - 100
 		checkBadgeChallenge(10L, member, badgelist, " 반가사유 상", 10, 50, 100, "MEDITATION");
 		// 사진 속 세 상 5 - 10 - 15
@@ -374,12 +403,13 @@ public class QuestService {
 
 	void checkBadgeChallenge(Long badgeId, Member member, List<ChallengeStatus> list, String sentence, int targetCnt1, int targetCnt2, int targetCnt3 , String questName){
 		Long memberId = member.getId();
-		String monthKey = getBadgeChallengeKey(memberId, questName);
-		Long cnt = template.opsForSet().size(monthKey);
+		String badgeKey = getBadgeChallengeKey(memberId, questName);
+		String tmp = template.opsForValue().get(badgeKey);
+		Long cnt = tmp == null ? 0 : Long.parseLong(tmp);
 		int flag = 0;
 		for (int i = 0 ; i < 3; i++){  // 뱃지 아이디는 연속적으로 있으니까.
 			badgeId += i;
-			String key = badgeId + "";
+			String key = badgeId + ":badge";
 			if (!template.opsForSet().isMember(key, memberId + "")) {  // 이번 뱃지 획득못함
 				flag = 1;
 				if (i == 0){
@@ -425,7 +455,7 @@ public class QuestService {
 		member.setPoint(request.coin());
 		// Redis에 넣기
 		if (request.badgeId() != 0L) {
-			String key = getBadgeChallengeKey(request.badgeId(), request.questName());
+			String key = request.badgeId() + ":badge";
 			template.opsForSet().add(key, member.getId() + "");
 		}else{
 			LocalDateTime now = LocalDateTime.now();
