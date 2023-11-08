@@ -15,6 +15,9 @@ export default function Qookie({ ...props }: QookieInfo) {
             </BagContainer>
           )}
           {props.hat && <HatContainer src={props.hat} alt="hat" />}
+          {props.shoe && <ShoeContainer src={props.shoe} alt="shoe" />}
+          {props.bottom && <BottomContainer src={props.bottom} alt="bottom" />}
+          {props.top && <TopContainer src={props.top} alt="top" />}
           {props.accessories &&
             props.accessories.map((acc, index) => <AccContainer src={acc} alt="acc" />)}
         </Container>
@@ -60,6 +63,27 @@ const HatContainer = styled.img`
   position: absolute;
   top: -40%;
   left: 50%;
+  transform: translateX(-50%);
+`;
+
+const TopContainer = styled.img`
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+`;
+
+const BottomContainer = styled.img`
+  position: absolute;
+  top: 100%;
+  left: 43.5%;
+  transform: translateX(-50%);
+`;
+
+const ShoeContainer = styled.img`
+  position: absolute;
+  top: 100%;
+  left: 43.5%;
   transform: translateX(-50%);
 `;
 

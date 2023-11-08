@@ -8,6 +8,7 @@ import Item, { ItemTypeProps } from '../../molecules/Item';
 interface TabProps {
   list?: AllItemProps;
   handleList: (list: SelectedProps) => void;
+  handleCart?: (list: SelectedProps) => void;
 }
 
 export interface SelectedProps {
@@ -23,15 +24,23 @@ const SelectedDefault = {
   5: [],
 };
 
-export default function ItemTab({ list, handleList }: TabProps) {
+export default function ItemTab({ list, handleList, handleCart }: TabProps) {
   const [currentTab, setCurrentTab] = useState<number>(0);
   const tabSwipeRef = useRef<HTMLDivElement>(null);
   const [selectedItem, setSelectedItem] = useState<SelectedProps>(SelectedDefault);
+  const [listToBuy, setListToBuy] = useState<SelectedProps>(SelectedDefault);
 
   useEffect(() => {
     handleList(selectedItem);
-    console.log(selectedItem);
+    console.log('real item list', selectedItem);
   }, [selectedItem]);
+
+  useEffect(() => {
+    if (handleCart) {
+      handleCart(listToBuy);
+      console.log('list to buy', listToBuy);
+    }
+  }, [listToBuy]);
 
   mouseSwipe(tabSwipeRef);
 
@@ -49,6 +58,13 @@ export default function ItemTab({ list, handleList }: TabProps) {
   };
 
   const selectItemHandler = (args: ItemTypeProps) => {
+    if (handleCart) {
+      handleCartItemList(args);
+    }
+    handleWearItemList(args);
+  };
+
+  const handleWearItemList = (args: ItemTypeProps) => {
     if (currentTab === 5) {
       setSelectedItem((prev) => {
         const newArr = { ...prev };
@@ -63,6 +79,38 @@ export default function ItemTab({ list, handleList }: TabProps) {
       });
     } else {
       setSelectedItem((prev) => {
+        const newArr = { ...prev };
+        const currentTabArray = newArr[currentTab];
+
+        if (currentTabArray === undefined || currentTabArray[0] === undefined) {
+          newArr[currentTab] = [args];
+        } else {
+          if (currentTabArray[0].id === args.id) {
+            newArr[currentTab] = [];
+          } else {
+            newArr[currentTab] = [args];
+          }
+        }
+        return newArr;
+      });
+    }
+  };
+
+  const handleCartItemList = (args: ItemTypeProps) => {
+    if (currentTab === 5) {
+      setListToBuy((prev) => {
+        const newArr = { ...prev };
+        const currentTabArray = newArr[currentTab];
+
+        if (currentTabArray === undefined || !currentTabArray.some((item) => item.id === args.id)) {
+          newArr[currentTab] = [...currentTabArray, args];
+        } else {
+          newArr[currentTab] = currentTabArray.filter((item) => item.id !== args.id);
+        }
+        return newArr;
+      });
+    } else {
+      setListToBuy((prev) => {
         const newArr = { ...prev };
         const currentTabArray = newArr[currentTab];
 

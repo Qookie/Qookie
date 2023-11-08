@@ -21,8 +21,9 @@ export default function Store() {
   const [itemList, setItemList] = useState<AllItemProps>();
   const [myItemList, setMyItemList] = useState<AllItemProps>();
   const [wearItemList, setWearItemList] = useState<SelectedProps>({});
+  const [cartItemList, setCartItemList] = useState<SelectedProps>({});
   const [showQookie, setShowQookie] = useState<QookieInfo>(qookie);
-  const [itemOrder, setItemOrder] = useState<ItemTypeProps[]>([]);
+  const [isItem, setIsItem] = useState<boolean>(false);
 
   useEffect(() => {
     itemApi.getItemList().then((res) => {
@@ -56,6 +57,18 @@ export default function Store() {
     });
   }, [wearItemList]);
 
+  useEffect(() => {
+    let count = 0;
+    for (const i in cartItemList) {
+      count += cartItemList[i].length;
+    }
+    if (count > 0) {
+      setIsItem(true);
+    } else {
+      setIsItem(false);
+    }
+  }, [cartItemList]);
+
   const checkItemLength = (index: number) => {
     if (wearItemList && wearItemList[index] && wearItemList[index].length > 0) {
       return wearItemList[index][0].media;
@@ -79,6 +92,10 @@ export default function Store() {
     setWearItemList(list);
   };
 
+  const cartItemSetHandler = (list: SelectedProps) => {
+    setCartItemList(list);
+  };
+
   return (
     <PageContainer>
       <TopContainer>
@@ -87,7 +104,7 @@ export default function Store() {
           <Qookie {...showQookie} />
         </QookieContainer>
         <ButtonContainer>
-          <Button theme={itemOrder.length > 0 ? 'default' : 'disabled'} size="icon">
+          <Button theme={isItem ? 'default' : 'disabled'} size="icon">
             <ShoppingCartIcon width={20} height={20} />
             구매
           </Button>
@@ -110,7 +127,11 @@ export default function Store() {
             MY
           </Title>
         </TitleTab>
-        <ItemTab list={currentTab === 0 ? itemList : myItemList} handleList={wearItemSetHandler} />
+        <ItemTab
+          list={currentTab === 0 ? itemList : myItemList}
+          handleList={wearItemSetHandler}
+          handleCart={currentTab === 0 ? cartItemSetHandler : undefined}
+        />
       </BottomContainer>
     </PageContainer>
   );

@@ -9,6 +9,7 @@ export interface ItemTypeProps {
   id: number;
   name: string;
   media: string;
+  thumbnail: string;
   price?: number;
   isNew?: boolean;
 }
@@ -38,7 +39,7 @@ export default function Item({ item, chip, handleCheck, select }: ItemProps) {
     <Container onClick={selectHandler} state={isChecked}>
       {item.media ? (
         <ItemContainer>
-          <ItemImg src={item.media} alt={item.name} />
+          <ItemImg src={item.thumbnail} alt={item.name} />
           {item.isNew && <NewIcon src={NewItem} alt={'new'} />}
         </ItemContainer>
       ) : (
