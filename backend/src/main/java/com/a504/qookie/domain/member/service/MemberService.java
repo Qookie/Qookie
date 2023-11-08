@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -93,7 +94,10 @@ public class MemberService {
         List<History> historyList = historyRepository.findAllByCreatedAtBetweenOrderByCreatedAtDesc(start, end);
         List<HistoryResponse> list = new ArrayList<>();
         for (History history: historyList){
-            list.add(new HistoryResponse(totalPoint, history.getMessage(), history.getCost(), history.getCreatedAt()));
+            if (Objects.equals(history.getMember().getId(), member.getId())) {
+                list.add(
+                    new HistoryResponse(totalPoint, history.getMessage(), history.getCost(), history.getCreatedAt()));
+            }
         }
         return list;
     }

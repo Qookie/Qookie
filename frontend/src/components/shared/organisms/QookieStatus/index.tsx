@@ -8,9 +8,7 @@ export default function QookieStatus({ ...props }: QookieInfo) {
     <QookieContainer>
       <Qookie {...props} />
       <ContentsWrapper>
-        <StatusCard
-           {...props}
-        />
+        <StatusCard {...props} />
       </ContentsWrapper>
     </QookieContainer>
   );

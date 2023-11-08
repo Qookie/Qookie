@@ -30,8 +30,8 @@ const Loading = () => {
 
   const socialLoginCallback = async () => {
     const provider = searchParams.get('provider');
-    searchParams.delete('provider')
-    setSearchParams()
+    searchParams.delete('provider');
+    setSearchParams();
     if (provider === 'oidc.kakao') {
       signInWithRedirect(auth, providers[provider]);
     } else if (provider === 'google.com') {
@@ -40,44 +40,43 @@ const Loading = () => {
   };
 
   useEffect(() => {
-    socialLoginCallback()
-    getRedirectResult(auth)
-      .then((res) => {
-        if (res === null) {
-          return
-        }
-        const { user } = res;
+    socialLoginCallback();
+    getRedirectResult(auth).then((res) => {
+      if (res === null) {
+        return;
+      }
+      const { user } = res;
 
-        const copiedUser = JSON.parse(JSON.stringify(user))
-        setUserState(copiedUser);
-        
-        user.getIdToken()
-          .then((accessToken) => {
-            localStorage.setItem("accessToken", accessToken)
-            const { displayName, email, uid } = user;
-            http.post<LoginResponse>('/api/member/login', {
+      const copiedUser = JSON.parse(JSON.stringify(user));
+      setUserState(copiedUser);
+
+      user
+        .getIdToken()
+        .then((accessToken) => {
+          localStorage.setItem('accessToken', accessToken);
+          const { displayName, email, uid } = user;
+          http
+            .post<LoginResponse>('/api/member/login', {
               displayName,
               email,
               uid,
-              messageToken: localStorage.getItem('messageToken')
+              messageToken: localStorage.getItem('messageToken'),
             })
-              .then((res) => {
-                if (res.payload.new) {
-                  navigate('/init')
-                } else {
-                  navigate('/home')
-                }
-              })
-              .catch((err)=>{
+            .then((res) => {
+              if (res.payload.new) {
+                navigate('/init');
+              } else {
+                navigate('/home');
+              }
+            })
+            .catch((err) =>{
                 console.log(err)
-                console.log("ERROR AT BACKEND")
-              })
-            
-          })
-          .catch(err=>console.log(err))
-      })
-  }, [])
-
+                console.log("ERROR AT BACKEND WHILE LOGIN")
+            });
+        })
+        .catch((err) => console.log(err));
+    });
+  }, []);
 
   return <Spinner />;
 };
