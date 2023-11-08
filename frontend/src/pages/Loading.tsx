@@ -5,6 +5,8 @@ import {
   User,
   UserCredential,
   deleteUser,
+  signOut,
+  Auth,
 } from 'firebase/auth';
 import { auth } from '../firebase/firebaseConfig';
 import { http } from '../api/instance';
@@ -34,10 +36,17 @@ const Loading = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const setUserState = useSetRecoilState(UserState);
 
+  const doSignOut = (auth: Auth) => {
+    signOut(auth).then(() => {
+      setUserState(null);
+      navigate('/');
+    });
+  };
+
   const socialLoginCallback = async () => {
     const provider = searchParams.get('provider');
     searchParams.delete('provider');
-    setSearchParams();
+    setSearchParams(searchParams);
     if (provider === 'oidc.kakao') {
       signInWithRedirect(auth, providers[provider]);
     } else if (provider === 'google.com') {
@@ -69,17 +78,56 @@ const Loading = () => {
             }
           })
           .catch((err) => {
-            console.log(err);
-            console.log('ERROR AT BACKEND WHILE LOGIN');
+            console.log('ERROR AT BACKEND WHILE LOGIN', err);
           });
       })
       .catch((err) => console.log(err));
   };
 
+  const withdraw = async (res: UserCredential) => {
+    const currentUser = res.user;
+    const credential = OAuthProvider.credentialFromResult(res);
+    if (!credential) {
+      return;
+    }
+    const newCredential = await reauthenticateWithCredential(currentUser, credential);
+    const uidBefore = searchParams.get('uid');
+
+    if (uidBefore !== newCredential.user.providerData[0].uid) {
+      alert(
+        '탈퇴하려는 정보와 기존 로그인 정보가 일치하지 않습니다!\n개인정보 보호를 위해 로그아웃 됩니다.\n다시 로그인 해 주세요',
+      );
+      doSignOut(auth);
+      navigate('/');
+      return;
+    }
+
+    try {
+      await deleteUser(newCredential.user);
+      await http.patch('/api/member/delete');
+      alert('회원 탈퇴 성공!');
+      doSignOut(auth);
+      navigate('/');
+    } catch (err) {
+      alert(
+        '회원 탈퇴 실패!\n' +
+          err +
+          '\n개인정보 보호를 위해 로그아웃 됩니다.\n다시 로그인 해 주세요',
+      );
+      doSignOut(auth);
+      navigate('/');
+    }
+  };
+
   useEffect(() => {
     socialLoginCallback();
     getRedirectResult(auth).then((res) => {
-      if (res !== null) {
+      if (res === null) {
+        return;
+      }
+      if (searchParams.get('withdraw') === 'true') {
+        withdraw(res);
+      } else {
         signIn(res);
       }
     });

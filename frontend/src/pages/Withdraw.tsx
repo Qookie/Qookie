@@ -24,12 +24,10 @@ export default function Withdraw() {
     if (!currentUser) {
       return;
     }
-    http.patch('/api/member/delete').then((res) => {
-      console.log('BACK: ', res);
-      currentUser.delete().catch((err) => {
-        alert(`멤버 삭제가 실패했습니다.: ${err}`);
-      });
-    });
+    const providerId = currentUser.providerData[0].providerId;
+    const uid = currentUser.providerData[0].uid;
+    alert('회원 탈퇴를 위해서 본인 인증이 필요합니다.');
+    navigate(`/loading?provider=${providerId}&uid=${uid}&withdraw=true`);
   };
 
   const cancel = () => {
