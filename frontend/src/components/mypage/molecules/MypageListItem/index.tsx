@@ -19,7 +19,7 @@ export const mypageList = [
   'notice',
   'privacy',
   'logOut',
-  'withDraw',
+  'withdraw',
 ] as const;
 export type Mypage = (typeof mypageList)[number];
 
@@ -112,7 +112,7 @@ const MYPAGE_ITEM = {
     icon: '',
     intro: '로그아웃',
   },
-  withDraw: {
+  withdraw: {
     icon: '',
     intro: '회원 탈퇴',
   },

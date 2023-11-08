@@ -22,6 +22,7 @@ import MeditaionQuest from '../pages/quest/MeditaionQuest';
 import WaterQuest from '../pages/quest/WaterQuest';
 import KeyPage from '../pages/KeyPage';
 import Notification from '../pages/Notification';
+import Withdraw from '../pages/Withdraw';
 
 const Router = () => {
   const [userState, _] = useRecoilState(UserState);
@@ -43,6 +44,7 @@ const reload = () => window.location.reload()
           <Route path="/challenge" element={<Challenge />} />
           <Route path="/notification" element={<Notification />} />
           <Route path="/loading" element={<Loading />} />
+          <Route path="/withdraw" element={<Withdraw/>}/>
 
           <Route path="/quest">
             <Route path="wake" element={<WakeupQuest />} />

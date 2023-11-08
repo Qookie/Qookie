@@ -5,7 +5,7 @@ import Divider from '../../../shared/atoms/Divider';
 export default function MypageList() {
   const iconList: Mypage[] = ['deco', 'badge', 'myQookie', 'qoin'];
   const withoutIconList: Mypage[] = ['info', 'notice', 'privacy'];
-  const warnItemList: Mypage[] = ['logOut', 'withDraw'];
+  const warnItemList: Mypage[] = ['logOut', 'withdraw'];
   return (
     <ListContainer>
       {iconList.map((item, index) => (
