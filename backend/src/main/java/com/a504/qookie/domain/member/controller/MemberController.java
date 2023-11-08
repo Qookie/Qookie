@@ -5,8 +5,6 @@ import com.a504.qookie.domain.member.entity.Member;
 import com.a504.qookie.domain.member.service.MemberService;
 import com.a504.qookie.global.response.BaseResponse;
 import com.a504.qookie.global.security.CustomMemberDetails;
-import com.amazonaws.Response;
-import com.google.api.Http;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +12,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.NoSuchAlgorithmException;
-import java.time.LocalDateTime;
 import java.time.Month;
 
 @RestController
