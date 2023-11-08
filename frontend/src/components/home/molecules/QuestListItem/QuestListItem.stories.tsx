@@ -21,5 +21,5 @@ export const Default: Story = {
   name: 'wake',
   args: {
     quest: 'wake',
-  }
+  },
 };

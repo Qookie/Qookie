@@ -23,11 +23,11 @@ export interface QookieInfoResponse {
 const Home = () => {
   const [qookie, setQookie] = useRecoilState(QookieInfoState);
   const navigate = useNavigate();
-  const [userState, setUserState] = useRecoilState(UserState)
+  const [userState, setUserState] = useRecoilState(UserState);
 
   // 로그인 후 setQookie 확인 필요
   useEffect(() => {
-    console.log("USERSTATE:", userState)
+    console.log('USERSTATE:', userState);
     qookieApi.getQookieInfo().then((res) => res !== null && setQookie({ ...qookie, ...res }));
   }, []);
 
