@@ -3,19 +3,19 @@ import 'swiper/css';
 import { Swiper, SwiperClass, SwiperSlide } from 'swiper/react';
 
 interface Props {
-  onSelectYear?: (year: string) => void;
-  onSelectMonth?: (month: string) => void;
+  onSelectYear?: (year: number) => void;
+  onSelectMonth?: (month: number) => void;
+  year: number;
+  month: number;
 }
 
-const nowDate = new Date();
-
-const years = ['2023', '2024'];
+const years = [2023, 2024];
 
 const months = Array(12)
   .fill(0)
-  .map((v, i) => (v = String(i + 1)));
+  .map((v, i) => (v = i + 1));
 
-export default function DatePicker({ onSelectYear, onSelectMonth }: Props) {
+export default function DatePicker({ year, month, onSelectYear, onSelectMonth }: Props) {
   return (
     <Container>
       <PickerContainer>
@@ -25,12 +25,12 @@ export default function DatePicker({ onSelectYear, onSelectMonth }: Props) {
             loop={false}
             direction="vertical"
             centeredSlides={true}
-            initialSlide={0}
+            initialSlide={years.findIndex((y: number) => y === year)}
             onTransitionEnd={(swiper: SwiperClass) => {
               onSelectYear?.(years[swiper.realIndex]);
             }}
           >
-            {years.map((no: string) => (
+            {years.map((no: number) => (
               <SwiperSlide key={no}>
                 {({ isActive }) => (
                   <SwiperItem className={isActive ? 'active' : ''}>{no}년</SwiperItem>
@@ -45,12 +45,12 @@ export default function DatePicker({ onSelectYear, onSelectMonth }: Props) {
             loop={true}
             direction="vertical"
             centeredSlides={true}
-            initialSlide={nowDate.getMonth() - 1}
+            initialSlide={months.findIndex((m: number) => m === month)}
             onTransitionEnd={(swiper: SwiperClass) => {
               onSelectMonth?.(months[swiper.realIndex]);
             }}
           >
-            {months.map((no: string) => (
+            {months.map((no: number) => (
               <SwiperSlide key={no}>
                 {({ isActive }) => (
                   <SwiperItem className={isActive ? 'active' : ''}>{no}월</SwiperItem>
