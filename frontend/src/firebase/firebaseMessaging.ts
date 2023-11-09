@@ -1,5 +1,6 @@
 import { messaging } from './firebaseConfig';
 import { getToken, onMessage, isSupported } from '@firebase/messaging';
+import { showToast } from '../components/shared/molecules/Alert';
 
 const initiateFirebaseMessaging = () => {
   // get permission from user
@@ -23,7 +24,10 @@ const initiateFirebaseMessaging = () => {
         });
 
       onMessage(messaging, (payload) => {
-        console.log('recieved message: ', payload);
+        console.log('PL', payload);
+        if (payload.data) {
+          showToast({ title: payload.data.title, content: payload.data.body });
+        }
       });
     } else {
       console.log('notification permission denied');
