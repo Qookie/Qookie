@@ -5,7 +5,7 @@ import Qookie from '../components/shared/molecules/Qookie';
 import Button from '../components/shared/atoms/Button';
 import { ShoppingCartIcon } from '@heroicons/react/24/outline';
 import Title from '../components/shared/atoms/Title';
-import ItemTab, { SelectedProps } from '../components/store/organisms/ItemTab';
+import ItemTab from '../components/store/organisms/ItemTab';
 import { useEffect, useState } from 'react';
 import { ItemTypeProps } from '../components/store/molecules/Item';
 import { itemApi } from '../api';
@@ -26,8 +26,8 @@ export default function Store() {
   const [currentTab, setCurrentTab] = useState<number>(0);
   const [itemList, setItemList] = useState<AllItemProps>();
   const [myItemList, setMyItemList] = useState<AllItemProps>();
-  const [wearItemList, setWearItemList] = useState<SelectedProps>({});
-  const [cartItemList, setCartItemList] = useState<SelectedProps>({});
+  const [wearItemList, setWearItemList] = useState<AllItemProps>({});
+  const [cartItemList, setCartItemList] = useState<AllItemProps>({});
   const [showQookie, setShowQookie] = useState<QookieInfo>(qookie);
   const [isItem, setIsItem] = useState<boolean>(false);
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
@@ -47,7 +47,7 @@ export default function Store() {
   }, []);
 
   useEffect(() => {
-    const wearItems: SelectedProps = {};
+    const wearItems: AllItemProps = {};
     if (myItemList) {
       for (const index in myItemList) {
         myItemList[index].map((item: ItemTypeProps) => {
@@ -94,7 +94,6 @@ export default function Store() {
   useEffect(() => {
     const checkBackEvent = () => {
       if (isItem) {
-        // modal open
         setIsExit(true);
         navigate('/store');
       } else {
@@ -127,9 +126,7 @@ export default function Store() {
   };
 
   const getWearItemId = (index: number) => {
-    console.log('wear list', wearItemList);
     if (wearItemList && wearItemList[index] && wearItemList[index].length > 0) {
-      if (index === 1) console.log('hat', wearItemList[index][0]);
       return wearItemList[index][0].id;
     }
     if (index === 0) {
@@ -151,11 +148,11 @@ export default function Store() {
     setCurrentTab(now);
   };
 
-  const wearItemSetHandler = (list: SelectedProps) => {
+  const wearItemSetHandler = (list: AllItemProps) => {
     setWearItemList(list);
   };
 
-  const cartItemSetHandler = (list: SelectedProps) => {
+  const cartItemSetHandler = (list: AllItemProps) => {
     setCartItemList(list);
   };
 
@@ -168,7 +165,6 @@ export default function Store() {
   };
 
   const exitStoreHandler = () => {
-    console.log('exit');
     const checkItemChange: wearReqType = {
       backgroundId: getWearItemId(0),
       hatId: getWearItemId(1),
@@ -178,8 +174,7 @@ export default function Store() {
       accessories: getWearItemArr(5),
     };
 
-    itemApi.wearItemReq(checkItemChange).then((res) => {
-      console.log(res);
+    itemApi.wearItemReq(checkItemChange).then(() => {
       setQookie({ ...qookie, ...showQookie });
       navigate('/mypage');
     });
@@ -188,7 +183,7 @@ export default function Store() {
   return (
     <PageContainer>
       <TopContainer>
-        <BackgroundImg src={qookie.background} alt="bg" />
+        <BackgroundImg src={showQookie.background} alt="bg" />
         <QookieContainer>
           <Qookie {...showQookie} />
         </QookieContainer>
@@ -218,6 +213,7 @@ export default function Store() {
         </TitleTab>
         <ItemTab
           list={currentTab === 0 ? itemList : myItemList}
+          wearList={wearItemList}
           handleList={wearItemSetHandler}
           handleCart={currentTab === 0 ? cartItemSetHandler : undefined}
         />
@@ -226,7 +222,9 @@ export default function Store() {
         isOpen={isCartOpen}
         title={'장바구니'}
         onClose={onCartHandler}
-        children={<Cart list={cartItemList} handleList={cartItemSetHandler} />}
+        children={
+          <Cart list={cartItemList} wearList={wearItemList} handleList={cartItemSetHandler} />
+        }
       />
       <Dialog
         title="장착한 아이템이 사라져요"
@@ -253,17 +251,13 @@ const TopContainer = styled.div`
   width: min(100%, 430px);
   height: 23rem;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const QookieContainer = styled.div`
   position: absolute;
-  top: 40%;
-  left: 50%;
-  width: 100%;
-  height: 100%;
-  display: inline-flex;
-  justify-content: center;
-  transform: translate(-50%, -50%);
 `;
 
 const BackgroundImg = styled.img`

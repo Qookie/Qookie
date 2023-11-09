@@ -48,6 +48,6 @@ export const http = {
     return axiosInstance.post<Response>(url, body, header).then((res) => res.data);
   },
   patch: function patch<Response = unknown, Request = any>(url: string, body?: Request) {
-    return axios.patch<Response>(url, body).then((res) => res.data);
+    return axiosInstance.patch<Response>(url, body).then((res) => res.data);
   },
 };

@@ -7,12 +7,9 @@ import Item, { ItemTypeProps } from '../../molecules/Item';
 
 export interface TabProps {
   list?: AllItemProps;
-  handleList: (list: SelectedProps) => void;
-  handleCart?: (list: SelectedProps) => void;
-}
-
-export interface SelectedProps {
-  [index: number]: ItemTypeProps[];
+  wearList: AllItemProps;
+  handleList: (list: AllItemProps) => void;
+  handleCart?: (list: AllItemProps) => void;
 }
 
 const SelectedDefault = {
@@ -24,11 +21,11 @@ const SelectedDefault = {
   5: [],
 };
 
-export default function ItemTab({ list, handleList, handleCart }: TabProps) {
+export default function ItemTab({ list, wearList, handleList, handleCart }: TabProps) {
   const [currentTab, setCurrentTab] = useState<number>(0);
   const tabSwipeRef = useRef<HTMLDivElement>(null);
-  const [selectedItem, setSelectedItem] = useState<SelectedProps>(SelectedDefault);
-  const [listToBuy, setListToBuy] = useState<SelectedProps>(SelectedDefault);
+  const [selectedItem, setSelectedItem] = useState<AllItemProps>(SelectedDefault);
+  const [listToBuy, setListToBuy] = useState<AllItemProps>(SelectedDefault);
 
   useEffect(() => {
     handleList(selectedItem);

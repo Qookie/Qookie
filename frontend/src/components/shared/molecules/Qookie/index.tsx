@@ -14,7 +14,7 @@ export default function Qookie({ ...props }: QookieInfo) {
               <BagImg src={props.extraBody} alt="bag" />
             </BagContainer>
           )}
-          {props.hat && <HatContainer src={props.hat} alt="hat" />}
+          {props.hat && <HatContainer src={props.hat} alt="hat" level={props.level} />}
           {props.shoe && <ShoeContainer src={props.shoe} alt="shoe" />}
           {props.bottom && <BottomContainer src={props.bottom} alt="bottom" />}
           {props.top && <TopContainer src={props.top} alt="top" />}
@@ -59,9 +59,9 @@ const MouthContainer = styled.img`
   transform: translateX(-50%);
 `;
 
-const HatContainer = styled.img`
+const HatContainer = styled.img<{ level: number }>`
   position: absolute;
-  top: -40%;
+  top: ${({ level }) => (level < 30 ? '-40%' : '-28%')};
   left: 50%;
   transform: translateX(-50%);
 `;
@@ -75,8 +75,8 @@ const TopContainer = styled.img`
 
 const BottomContainer = styled.img`
   position: absolute;
-  top: 100%;
-  left: 43.5%;
+  bottom: 0;
+  left: 44%;
   transform: translateX(-50%);
 `;
 
