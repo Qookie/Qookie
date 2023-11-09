@@ -8,12 +8,8 @@ import QuestList from '../components/home/organisms/QuestList';
 import HomeButton from '../components/home/molecules/HomeButton';
 import { QookieInfo } from '../types';
 import { useNavigate } from 'react-router-dom';
-import attendance from '../assets/pngs/calendar.png';
+import attendance from '../assets/pngs/calendar_small.png';
 import challenge from '../assets/pngs/challenge.png';
-import { onAuthStateChanged, signOut } from 'firebase/auth';
-import { auth } from '../firebase/firebaseConfig';
-import { UserContext } from '../firebase/firebaseAuth';
-import { UserState } from '../modules/user';
 
 export interface QookieInfoResponse {
   msg: string;
@@ -38,7 +34,7 @@ const Home = () => {
             title="출석체크"
             icon={attendance}
             customStyle={styleAttendance}
-            onClick={() => navigate('/attendance')}
+            onClick={() => navigate('/quest/attendance')}
           />
           <HomeButton
             title="챌린지"
