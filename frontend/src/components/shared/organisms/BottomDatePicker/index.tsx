@@ -25,7 +25,7 @@ function BottomDatePicker({ isOpen, title, onClose, initialTime, onChangeYearMon
 
   useEffect(() => {
     setToday(initialTime);
-  }, [initialTime]);
+  }, [initialTime, isOpen]);
 
   return (
     <BottomSheet isOpen={isOpen} onClose={onClose} title={title} onComplete={onComplete}>
