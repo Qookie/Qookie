@@ -3,10 +3,11 @@ import styled from 'styled-components';
 interface TextAreaProps {
   placeholder: string;
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  value: string;
 }
 
-export default function TextArea({ placeholder, onChange }: TextAreaProps) {
-  return <StyledTextArea placeholder={placeholder} onChange={onChange} />;
+export default function TextArea({ placeholder, onChange, value }: TextAreaProps) {
+  return <StyledTextArea placeholder={placeholder} onChange={onChange} value={value} />;
 }
 
 const StyledTextArea = styled.textarea`
@@ -16,6 +17,7 @@ const StyledTextArea = styled.textarea`
     font-size: 14px;
   }
 
+  width: 90%;
   height: 105px;
   outline: none;
   resize: none;
