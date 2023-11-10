@@ -10,15 +10,13 @@ import variables
 
 
 def callback(ch, method, properties, body):
+    print("received from spring: ", str(body))
     global connection
-    print("body: " + str(body))
     data = json.loads(body)
-    print(data)
     gpt_reply = send_to_gpt(data["username"], data["category"], data["content"])
     # send back to spring
     ret = {"heartId": data["heartId"], "content": gpt_reply}
 
-    # or use ch?
     channel = connection.channel()
     channel.basic_publish(
         exchange=variables.gpt_exchange,
@@ -27,7 +25,7 @@ def callback(ch, method, properties, body):
     )
     channel.close()
 
-    print("send: " + str(json.dumps(ret)))
+    print("send to spring: " + str(json.dumps(ret)))
 
 
 def listen_spring(connection_: pika.BlockingConnection):
