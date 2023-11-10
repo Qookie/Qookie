@@ -46,9 +46,9 @@ public class GeoCoordinate implements Serializable {
         // Calculate and return the distance
         // ignore noise
         double ret = EARTH_RADIUS * c;
-        if (ret < 1.5) {
-            return 0;
-        }
+//        if (ret < 1.5) {
+//            return 0;
+//        }
         return ret;
     }
 }

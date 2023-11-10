@@ -38,8 +38,8 @@ function WalkQuest() {
           .then((res) => {
             // TODO: delete this
             showToast({
-              title: data.timestamp,
-              content: `DIS: ${res.payload.distance}\nLAT: ${data.coords.latitude} / LON: ${data.coords.longitude}`,
+              title: `ACC: ${data.coords.accuracy}`,
+              content: `AL:${data.coords.altitude}/ALC:${data.coords.altitudeAccuracy},HE:${data.coords.heading},SP:${data.coords.speed},DIS: ${res.payload.distance}\nLAT: ${data.coords.latitude} / LON: ${data.coords.longitude}`,
             });
             setDistance(res.payload.distance);
             return res.payload.distance;
