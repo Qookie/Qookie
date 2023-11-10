@@ -11,8 +11,8 @@ export default function NotificationList({
     <>
       {notificationList.map((n) => {
         return (
-          <ItemContainer>
-            <NotificationListItem key={n.notificationId} prop={n} />
+          <ItemContainer key={n.notificationId}>
+            <NotificationListItem prop={n} />
           </ItemContainer>
         );
       })}

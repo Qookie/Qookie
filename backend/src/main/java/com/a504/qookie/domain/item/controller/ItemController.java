@@ -1,9 +1,9 @@
 package com.a504.qookie.domain.item.controller;
 
-import com.a504.qookie.domain.item.dto.ItemResponse;
+import com.a504.qookie.domain.item.dto.ItemListResponse;
 import com.a504.qookie.domain.item.dto.ItemUploadRequest;
 import com.a504.qookie.domain.item.dto.ItemWearRequest;
-import com.a504.qookie.domain.item.dto.MyItemResponse;
+import com.a504.qookie.domain.item.dto.MyItemListResponse;
 import com.a504.qookie.domain.item.dto.OrderRequest;
 import com.a504.qookie.domain.item.dto.OrderResponse;
 import com.a504.qookie.domain.item.serivce.ItemService;
@@ -47,7 +47,7 @@ public class ItemController {
             @AuthenticationPrincipal CustomMemberDetails customMemberDetails
     ) {
 
-        List<ItemResponse>[] list = itemService.list(customMemberDetails.getMember());
+        ItemListResponse list = itemService.list(customMemberDetails.getMember());
 
         return BaseResponse.okWithData(HttpStatus.OK, "item list OK", list);
     }
@@ -57,7 +57,7 @@ public class ItemController {
             @AuthenticationPrincipal CustomMemberDetails customMemberDetails
     ) {
 
-        List<MyItemResponse>[] list = itemService.myItem(customMemberDetails.getMember());
+        MyItemListResponse list = itemService.myItem(customMemberDetails.getMember());
 
         return BaseResponse.okWithData(HttpStatus.OK, "my item list OK", list);
     }

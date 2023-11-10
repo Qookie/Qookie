@@ -1,14 +1,15 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Money from '../components/coinlist/molecules/Money';
 import Text from '../components/shared/atoms/Text';
 import MonthSelector from '../components/shared/molecules/MonthSelector';
 import RewardData from '../components/coinlist/molecules/RewardData';
-import BottomSheet from '../components/shared/molecules/BottomSheet';
-import DatePicker from '../components/shared/molecules/DatePicker';
+import moment, { Moment } from 'moment';
+import BottomDatePicker from '../components/shared/organisms/BottomDatePicker';
 
 export default function Coinlist() {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState<boolean>(false);
+  const [today, setToday] = useState<Moment>(moment());
 
   const onClose = () => {
     setIsBottomSheetOpen(false);
@@ -16,6 +17,15 @@ export default function Coinlist() {
 
   const onMonthSelectorClick = () => {
     setIsBottomSheetOpen(true);
+  };
+
+  const onChangeMonth = (nextMonth: number) => {
+    setToday((prev) => prev.clone().month(nextMonth - 1));
+  };
+
+  const onChangeYearMonth = (nextYearMonth: Moment) => {
+    setToday(nextYearMonth.clone());
+    setIsBottomSheetOpen(false);
   };
 
   return (
@@ -28,18 +38,24 @@ export default function Coinlist() {
       </TopContainer>
       <Divider />
       <BottomContainer>
-        <MonthSelector onClick={onMonthSelectorClick} />
+        <MonthSelector
+          onClick={onMonthSelectorClick}
+          onClickNextMonth={onChangeMonth}
+          onClickPrevMonth={onChangeMonth}
+          selectedMonth={today.month() + 1}
+        />
         <RewardData date={'10.12'} title={'기상 퀘스트 달성 보상'} qoin={10} />
         <RewardData date={'10.12'} title={'식사 퀘스트 달성 보상'} qoin={10} />
         <RewardData date={'10.12'} title={'토끼귀 구매'} qoin={-10} />
         <RewardData date={'10.11'} title={'10월 기상 챌린지 달성 보상'} qoin={100} />
         <RewardData date={'10.11'} title={'기상 퀘스트 달성 보상'} qoin={10} />
       </BottomContainer>
-      <BottomSheet
+      <BottomDatePicker
         isOpen={isBottomSheetOpen}
         onClose={onClose}
-        children={<DatePicker />}
-        title={'조회 기간'}
+        initialTime={today}
+        title="조회 기간"
+        onChangeYearMonth={onChangeYearMonth}
       />
     </Container>
   );

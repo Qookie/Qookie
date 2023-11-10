@@ -5,22 +5,23 @@ import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 
 interface MonthSelectorProps {
   onClick?: () => void;
+  onClickNextMonth: (nextMonth: number) => void;
+  onClickPrevMonth: (prevMonth: number) => void;
+  selectedMonth: number;
 }
 
-export const MonthState = atom({
-  key: 'month',
-  default: new Date().getMonth(),
-});
-
-export default function MonthSelector({ onClick }: MonthSelectorProps) {
-  const [selectedMonth, setSelectedMonth] = useRecoilState(MonthState);
-
+export default function MonthSelector({
+  onClick,
+  onClickNextMonth,
+  onClickPrevMonth,
+  selectedMonth,
+}: MonthSelectorProps) {
   const handlePreviousMonth = () => {
-    setSelectedMonth((selectedMonth + 11) % 12 || 12);
+    onClickNextMonth((selectedMonth + 11) % 12 || 12);
   };
-  
+
   const handleNextMonth = () => {
-    setSelectedMonth((selectedMonth % 12) + 1);
+    onClickPrevMonth((selectedMonth % 12) + 1);
   };
 
   return (
