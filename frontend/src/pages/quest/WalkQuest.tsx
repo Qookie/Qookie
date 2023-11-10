@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import QuestLayout from '../../components/quest/templates/QuestLayout';
 import TreeImage from '../../assets/pngs/tree.png';
 import { http } from '../../api/instance';
@@ -6,7 +6,16 @@ import { showToast } from '../../components/shared/molecules/Alert';
 import { Quest } from '../../types/quest';
 import RewardText from '../../components/quest/molecules/RewardText';
 
+type DistanceResponse = {
+  msg: string;
+  payload: {
+    distance: number;
+  };
+};
+
 function WalkQuest() {
+  const [watchId, setWatchId] = useState<number>(0);
+
   const onSuccessQuest = async () => {
     try {
       await http.post('/api/quest/walk');
@@ -17,17 +26,26 @@ function WalkQuest() {
   };
 
   const watchSuccessCallback = (data: GeolocationPosition) => {
+    console.log('curWatchId: ', watchId);
     const body = {
       lat: data.coords.latitude,
       lon: data.coords.longitude,
     };
-    http.post2a('api/geo/test', body).then((res) => {
-      console.log(res);
-      showToast({
-        title: data.timestamp,
-        content: `ACC: ${data.coords.accuracy}\nLAT: ${data.coords.latitude} / LON: ${data.coords.longitude}`,
+    http
+      .post2a<DistanceResponse>('api/geo/test', body)
+      .then((res) => {
+        console.log(res);
+        showToast({
+          title: data.timestamp,
+          content: `DIS: ${res.payload.distance}\nLAT: ${data.coords.latitude} / LON: ${data.coords.longitude}`,
+        });
+        return res.payload.distance;
+      })
+      .then((dis) => {
+        if (dis > 300) {
+          navigator.geolocation.clearWatch(watchId);
+        }
       });
-    });
   };
 
   const watchFailureCallback = (data: GeolocationPositionError) => {
@@ -42,7 +60,12 @@ function WalkQuest() {
 
   const startWalking = () => {
     if ('geolocation' in navigator) {
-      navigator.geolocation.watchPosition(watchSuccessCallback, watchFailureCallback, options);
+      const curWatchId = navigator.geolocation.watchPosition(
+        watchSuccessCallback,
+        watchFailureCallback,
+        options,
+      );
+      setWatchId(curWatchId);
     }
   };
 
