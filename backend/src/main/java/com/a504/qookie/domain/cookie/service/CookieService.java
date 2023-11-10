@@ -193,6 +193,11 @@ public class CookieService {
         cookieCollectionRepository.save(new CookieCollection(member, cookie, url));
 
         cookieRepository.delete(cookie);
+
+        String accessories_key =
+                member.getId() + ":accessories"; // (유저PK):accessories
+
+        template.delete(accessories_key);
     }
 
     public LastBodyResponse getLastBody() {
