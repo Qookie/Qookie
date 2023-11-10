@@ -16,6 +16,7 @@ type DistanceResponse = {
 
 function WalkQuest() {
   const [distance, setDistance] = useState<number>(0);
+  const [test, setTest] = useState<GeolocationPosition>();
 
   const onSuccessQuest = async () => {
     try {
@@ -38,9 +39,10 @@ function WalkQuest() {
           .then((res) => {
             // TODO: delete this
             showToast({
-              title: `ACC: ${data.coords.accuracy}`,
-              content: `AL:${data.coords.altitude}/ALC:${data.coords.altitudeAccuracy},HE:${data.coords.heading},SP:${data.coords.speed},DIS: ${res.payload.distance}\nLAT: ${data.coords.latitude} / LON: ${data.coords.longitude}`,
+              title: data.timestamp,
+              content: `DIS: ${res.payload.distance}\nLAT: ${data.coords.latitude} / LON: ${data.coords.longitude}`,
             });
+            setTest(data);
             setDistance(res.payload.distance);
             return res.payload.distance;
           })
@@ -67,7 +69,7 @@ function WalkQuest() {
   };
 
   // TODO: add distance bar and useEffect to render
-  useEffect(() => {}, [distance]);
+  useEffect(() => {}, [distance, test]);
 
   return (
     <QuestLayout
@@ -91,6 +93,25 @@ function WalkQuest() {
       <button type="button" onClick={startWalking}>
         START WALKING
       </button>
+      <div>
+        {'TIMESTAMP: ' + test?.timestamp}
+        <br />
+        {'ACC: ' + test?.coords.accuracy}
+        <br />
+        {'DIS: ' + distance}
+        <br />
+        {'ALT: ' + test?.coords.altitude}
+        <br />
+        {'ALT_ACC: ' + test?.coords.altitudeAccuracy}
+        <br />
+        {'HEADING: ' + test?.coords.heading}
+        <br />
+        {'LAT: ' + test?.coords.latitude}
+        <br />
+        {'LON: ' + test?.coords.longitude}
+        <br />
+        {'SPD: ' + test?.coords.speed}
+      </div>
       <ProgressBar total={50} now={distance} />
     </QuestLayout>
   );
