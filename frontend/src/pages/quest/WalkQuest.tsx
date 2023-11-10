@@ -15,6 +15,36 @@ function WalkQuest() {
       console.log(error);
     }
   };
+
+  const watchSuccessCallback = (data: GeolocationPosition) => {
+    console.log('success', data);
+    console.log(data.timestamp);
+    console.log(data.coords);
+    const body = {
+      timestamp: data.timestamp,
+      accuracy: data.coords.accuracy,
+      lat: data.coords.latitude,
+      lon: data.coords.longitude,
+    };
+    http.post('api/geo/test', body);
+  };
+
+  const watchFailureCallback = (data: GeolocationPositionError) => {
+    console.log('err', data);
+    console.log(data.message);
+  };
+
+  const options = {
+    maximumAge: 10000,
+    enableHighAccuracy: true,
+  };
+
+  const startWalking = () => {
+    if ('geolocation' in navigator) {
+      console.log('START');
+      navigator.geolocation.watchPosition(watchSuccessCallback, watchFailureCallback, options);
+    }
+  };
   return (
     <QuestLayout
       quest={Quest.WALK}
@@ -34,6 +64,9 @@ function WalkQuest() {
           margin: '0 auto',
         }}
       />
+      <button type="button" onClick={startWalking}>
+        START WALKING
+      </button>
     </QuestLayout>
   );
 }
