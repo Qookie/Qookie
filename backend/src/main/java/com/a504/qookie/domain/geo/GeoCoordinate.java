@@ -21,7 +21,7 @@ public class GeoCoordinate implements Serializable {
     }
 
     public GeoCoordinate updateGeoCoordinate(GeoRequest geoRequest) {
-        this.distance = calculateDistance(geoRequest);
+        this.distance += calculateDistance(geoRequest);
         this.latitude = geoRequest.getLat();
         this.longitude = geoRequest.getLon();
         return this;

@@ -44,6 +44,7 @@ function WalkQuest() {
       .then((dis) => {
         if (dis > 300) {
           navigator.geolocation.clearWatch(watchId);
+          // TODO: reset distance of user = delete redis value
         }
       });
   };
