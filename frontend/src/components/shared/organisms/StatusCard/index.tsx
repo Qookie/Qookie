@@ -14,6 +14,8 @@ import { qookieApi } from '../../../../api';
 import Qookie from '../../molecules/Qookie';
 import QookieBag from '../../../../assets/pngs/QookieBag.png';
 import Text from '../../atoms/Text';
+import { useResetRecoilState } from 'recoil';
+import { QookieInfoState } from '../../../../modules/qookie';
 
 export interface StatusCardProps {
   level: number;
@@ -23,6 +25,7 @@ export interface StatusCardProps {
 }
 
 export default function StatusCard({ ...props }: QookieInfo) {
+  const resetList = useResetRecoilState(QookieInfoState);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [isBottomOpen, setIsBottomOpen] = useState<boolean>(false);
   const [bakeProps, setBakeProps] = useState<QookieInfo>(props);
@@ -38,7 +41,10 @@ export default function StatusCard({ ...props }: QookieInfo) {
     const res = await bakePng(divRef);
     if (res) {
       const imgFile = await converUrltoFile(res);
-      qookieApi.bakeQookieReq(imgFile).then((res) => console.log(res));
+      qookieApi.bakeQookieReq(imgFile).then(() => {
+        resetList();
+        openBottomHandler();
+      });
     }
   };
 
@@ -108,7 +114,7 @@ export default function StatusCard({ ...props }: QookieInfo) {
 
     return {
       ...props,
-      background: '',
+      background: { id: 0, media: '' },
       body: `data:image/png;base64,${bodyUrl}`,
       eye: `data:image/png;base64,${eyeUrl}`,
       mouth: `data:image/png;base64,${mouthUrl}`,
