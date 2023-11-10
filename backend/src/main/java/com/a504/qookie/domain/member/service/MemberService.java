@@ -18,6 +18,7 @@ import jakarta.transaction.Transactional;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -61,7 +62,14 @@ public class MemberService {
 
     public MemberResponse getInfo(Member member) {
 
-        return memberRepository.findMemberInfoById(member.getId());
+        Optional<Cookie> cookie = cookieRepository.findByMember(member);
+
+        String cookieName = null;
+        if (cookie.isPresent()) {
+            cookieName = cookie.get().getName();
+        }
+
+        return new MemberResponse(member.getName(), member.getWakeUp(), cookieName);
     }
 
     @Transactional
