@@ -28,10 +28,11 @@ public class GeolocationController {
             @AuthenticationPrincipal CustomMemberDetails customMemberDetails,
             @RequestBody GeoRequest geoRequest
     ) {
-        log.info(geoRequest.toString());
         double distance = geolocationService.saveAndGetDistance(customMemberDetails.getMember(), geoRequest);
         Map<String, Double> data = new HashMap<>();
         data.put("distance", distance);
+        log.info(geoRequest.toString());
+        log.info(String.valueOf(distance));
         return BaseResponse.okWithData(HttpStatus.OK, "good", data);
     }
 }

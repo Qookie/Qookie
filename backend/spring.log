@@ -1775,3 +1775,241 @@ Unconditional classes:
 2023-11-10T15:23:08.549+09:00  INFO 22876 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Start completed.
 2023-11-10T15:23:08.606+09:00  INFO 22876 --- [restartedMain] o.h.b.i.BytecodeProviderInitiator        : HHH000021: Bytecode provider name : bytebuddy
 2023-11-10T15:23:08.693+09:00  INFO 22876 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-11-10T15:23:09.462+09:00  INFO 22876 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-11-10T15:23:09.866+09:00  INFO 22876 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2023-11-10T15:23:09.900+09:00  WARN 22876 --- [restartedMain] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: b6c884dd-c32e-42ab-babd-0d914d81051a
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2023-11-10T15:23:09.966+09:00  INFO 22876 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure Or [Mvc [pattern='/api/**']] with [org.springframework.security.web.session.DisableEncodeUrlFilter@5cd5c454, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7b6a880a, org.springframework.security.web.context.SecurityContextHolderFilter@444fea21, org.springframework.security.web.header.HeaderWriterFilter@761e1f4e, org.springframework.web.filter.CorsFilter@4885c0c0, org.springframework.security.web.authentication.logout.LogoutFilter@3c81fbbc, com.a504.qookie.global.jwt.JwtFilter@320647d5, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@11b895c3, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@1468c82, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@4083c2a5, org.springframework.security.web.access.ExceptionTranslationFilter@23066d03]
+2023-11-10T15:23:10.026+09:00  WARN 22876 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: org.springframework.amqp.rabbit.core.RabbitAdmin
+2023-11-10T15:23:10.038+09:00  INFO 22876 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8000 (http) with context path ''
+2023-11-10T15:23:10.039+09:00  INFO 22876 --- [restartedMain] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: localhost:5672
+2023-11-10T15:23:10.040+09:00  INFO 22876 --- [restartedMain] o.s.a.r.l.SimpleMessageListenerContainer : Broker not available; cannot force queue declarations during start: java.net.ConnectException: Connection refused: no further information
+2023-11-10T15:23:10.040+09:00  INFO 22876 --- [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-1] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: localhost:5672
+2023-11-10T15:23:10.067+09:00 ERROR 22876 --- [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-1] o.s.a.r.l.SimpleMessageListenerContainer : Failed to check/redeclare auto-delete queue(s).
+
+org.springframework.amqp.AmqpConnectException: java.net.ConnectException: Connection refused: no further information
+	at org.springframework.amqp.rabbit.support.RabbitExceptionTranslator.convertRabbitAccessException(RabbitExceptionTranslator.java:61) ~[spring-rabbit-3.0.9.jar:3.0.9]
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.createBareConnection(AbstractConnectionFactory.java:594) ~[spring-rabbit-3.0.9.jar:3.0.9]
+	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.createConnection(CachingConnectionFactory.java:711) ~[spring-rabbit-3.0.9.jar:3.0.9]
+	at org.springframework.amqp.rabbit.connection.ConnectionFactoryUtils.createConnection(ConnectionFactoryUtils.java:257) ~[spring-rabbit-3.0.9.jar:3.0.9]
+	at org.springframework.amqp.rabbit.core.RabbitTemplate.doExecute(RabbitTemplate.java:2225) ~[spring-rabbit-3.0.9.jar:3.0.9]
+	at org.springframework.amqp.rabbit.core.RabbitTemplate.execute(RabbitTemplate.java:2198) ~[spring-rabbit-3.0.9.jar:3.0.9]
+	at org.springframework.amqp.rabbit.core.RabbitTemplate.execute(RabbitTemplate.java:2178) ~[spring-rabbit-3.0.9.jar:3.0.9]
+	at org.springframework.amqp.rabbit.core.RabbitAdmin.getQueueInfo(RabbitAdmin.java:465) ~[spring-rabbit-3.0.9.jar:3.0.9]
+	at org.springframework.amqp.rabbit.core.RabbitAdmin.getQueueProperties(RabbitAdmin.java:449) ~[spring-rabbit-3.0.9.jar:3.0.9]
+	at org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer.attemptDeclarations(AbstractMessageListenerContainer.java:1937) ~[spring-rabbit-3.0.9.jar:3.0.9]
+	at org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer.redeclareElementsIfNecessary(AbstractMessageListenerContainer.java:1905) ~[spring-rabbit-3.0.9.jar:3.0.9]
+	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer$AsyncMessageProcessingConsumer.initialize(SimpleMessageListenerContainer.java:1381) ~[spring-rabbit-3.0.9.jar:3.0.9]
+	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer$AsyncMessageProcessingConsumer.run(SimpleMessageListenerContainer.java:1223) ~[spring-rabbit-3.0.9.jar:3.0.9]
+	at java.base/java.lang.Thread.run(Thread.java:833) ~[na:na]
+Caused by: java.net.ConnectException: Connection refused: no further information
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method) ~[na:na]
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:672) ~[na:na]
+	at java.base/sun.nio.ch.NioSocketImpl.timedFinishConnect(NioSocketImpl.java:542) ~[na:na]
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:597) ~[na:na]
+	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:327) ~[na:na]
+	at java.base/java.net.Socket.connect(Socket.java:633) ~[na:na]
+	at com.rabbitmq.client.impl.SocketFrameHandlerFactory.create(SocketFrameHandlerFactory.java:61) ~[amqp-client-5.17.1.jar:5.17.1]
+	at com.rabbitmq.client.ConnectionFactory.newConnection(ConnectionFactory.java:1234) ~[amqp-client-5.17.1.jar:5.17.1]
+	at com.rabbitmq.client.ConnectionFactory.newConnection(ConnectionFactory.java:1184) ~[amqp-client-5.17.1.jar:5.17.1]
+	at com.rabbitmq.client.ConnectionFactory.newConnection(ConnectionFactory.java:1354) ~[amqp-client-5.17.1.jar:5.17.1]
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.connectHostPort(AbstractConnectionFactory.java:645) ~[spring-rabbit-3.0.9.jar:3.0.9]
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.connect(AbstractConnectionFactory.java:610) ~[spring-rabbit-3.0.9.jar:3.0.9]
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.createBareConnection(AbstractConnectionFactory.java:557) ~[spring-rabbit-3.0.9.jar:3.0.9]
+	... 12 common frames omitted
+
+2023-11-10T15:23:10.070+09:00  INFO 22876 --- [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-1] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: localhost:5672
+2023-11-10T15:23:10.086+09:00  INFO 22876 --- [restartedMain] com.a504.qookie.QookieApplication        : Started QookieApplication in 2.376 seconds (process running for 1436.51)
+2023-11-10T15:23:10.088+09:00  INFO 22876 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation delta:
+
+
+==========================
+CONDITION EVALUATION DELTA
+==========================
+
+
+Positive matches:
+-----------------
+
+    None
+
+
+Negative matches:
+-----------------
+
+   LettuceConnectionConfiguration#redisConnectionFactory:
+      Did not match:
+         - @ConditionalOnMissingBean (types: org.springframework.data.redis.connection.RedisConnectionFactory; SearchStrategy: all) found beans of type 'org.springframework.data.redis.connection.RedisConnectionFactory' redisConnectionFactory (OnBeanCondition)
+
+   RedisAutoConfiguration#redisTemplate:
+      Did not match:
+         - @ConditionalOnMissingBean (names: redisTemplate; SearchStrategy: all) found beans named redisTemplate (OnBeanCondition)
+
+
+Exclusions:
+-----------
+
+    None
+
+
+Unconditional classes:
+----------------------
+
+    None
+
+
+
+2023-11-10T15:30:16.014+09:00  INFO 22876 --- [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] o.s.a.r.l.SimpleMessageListenerContainer : Waiting for workers to finish.
+2023-11-10T15:30:16.015+09:00  INFO 22876 --- [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] o.s.a.r.l.SimpleMessageListenerContainer : Successfully waited for workers to finish.
+2023-11-10T15:30:16.151+09:00  INFO 22876 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-11-10T15:30:16.152+09:00  INFO 22876 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Shutdown initiated...
+2023-11-10T15:30:16.156+09:00  INFO 22876 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Shutdown completed.
+2023-11-10T15:36:28.918+09:00  INFO 16512 --- [restartedMain] com.a504.qookie.QookieApplication        : Starting QookieApplication using Java 17.0.7 with PID 16512 (C:\Users\SSAFY\Desktop\jayul\S09P31A504\backend\build\classes\java\main started by SSAFY in C:\Users\SSAFY\Desktop\jayul\S09P31A504\backend)
+2023-11-10T15:36:28.921+09:00  INFO 16512 --- [restartedMain] com.a504.qookie.QookieApplication        : The following 1 profile is active: "secret"
+2023-11-10T15:36:28.991+09:00  INFO 16512 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2023-11-10T15:36:28.991+09:00  INFO 16512 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2023-11-10T15:36:29.875+09:00  INFO 16512 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2023-11-10T15:36:29.877+09:00  INFO 16512 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-11-10T15:36:30.073+09:00  INFO 16512 --- [restartedMain] .RepositoryConfigurationExtensionSupport : Spring Data JPA - Could not safely identify store assignment for repository candidate interface com.a504.qookie.global.redis.JwtPublicKeyRedisRepository; If you want this repository to be a JPA repository, consider annotating your entities with one of these annotations: jakarta.persistence.Entity, jakarta.persistence.MappedSuperclass (preferred), or consider extending one of the following types with your repository: org.springframework.data.jpa.repository.JpaRepository
+2023-11-10T15:36:30.121+09:00  INFO 16512 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 238 ms. Found 15 JPA repository interfaces.
+2023-11-10T15:36:30.138+09:00  INFO 16512 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2023-11-10T15:36:30.139+09:00  INFO 16512 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2023-11-10T15:36:30.157+09:00  INFO 16512 --- [restartedMain] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.a504.qookie.domain.badge.repository.BadgeRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2023-11-10T15:36:30.158+09:00  INFO 16512 --- [restartedMain] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.a504.qookie.domain.cookie.repository.BodyRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2023-11-10T15:36:30.158+09:00  INFO 16512 --- [restartedMain] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.a504.qookie.domain.cookie.repository.CookieCollectionRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2023-11-10T15:36:30.158+09:00  INFO 16512 --- [restartedMain] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.a504.qookie.domain.cookie.repository.CookieRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2023-11-10T15:36:30.158+09:00  INFO 16512 --- [restartedMain] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.a504.qookie.domain.cookie.repository.EyeRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2023-11-10T15:36:30.158+09:00  INFO 16512 --- [restartedMain] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.a504.qookie.domain.cookie.repository.MouthRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2023-11-10T15:36:30.159+09:00  INFO 16512 --- [restartedMain] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.a504.qookie.domain.heart.repository.HeartRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2023-11-10T15:36:30.159+09:00  INFO 16512 --- [restartedMain] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.a504.qookie.domain.item.repository.ItemRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2023-11-10T15:36:30.160+09:00  INFO 16512 --- [restartedMain] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.a504.qookie.domain.member.repository.HistoryRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2023-11-10T15:36:30.160+09:00  INFO 16512 --- [restartedMain] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.a504.qookie.domain.member.repository.MemberBadgeRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2023-11-10T15:36:30.160+09:00  INFO 16512 --- [restartedMain] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.a504.qookie.domain.member.repository.MemberItemRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2023-11-10T15:36:30.161+09:00  INFO 16512 --- [restartedMain] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.a504.qookie.domain.member.repository.MemberQuestRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2023-11-10T15:36:30.162+09:00  INFO 16512 --- [restartedMain] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.a504.qookie.domain.member.repository.MemberRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2023-11-10T15:36:30.162+09:00  INFO 16512 --- [restartedMain] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.a504.qookie.domain.notification.NotificationRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2023-11-10T15:36:30.162+09:00  INFO 16512 --- [restartedMain] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.a504.qookie.domain.quest.repository.QuestRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2023-11-10T15:36:30.172+09:00  INFO 16512 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 25 ms. Found 1 Redis repository interfaces.
+2023-11-10T15:36:30.887+09:00  INFO 16512 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8000 (http)
+2023-11-10T15:36:30.895+09:00  INFO 16512 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-11-10T15:36:30.896+09:00  INFO 16512 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.13]
+2023-11-10T15:36:30.984+09:00  INFO 16512 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-11-10T15:36:30.984+09:00  INFO 16512 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1992 ms
+2023-11-10T15:36:31.147+09:00  INFO 16512 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-11-10T15:36:31.214+09:00  INFO 16512 --- [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.2.9.Final
+2023-11-10T15:36:31.217+09:00  INFO 16512 --- [restartedMain] org.hibernate.cfg.Environment            : HHH000406: Using bytecode reflection optimizer
+2023-11-10T15:36:31.373+09:00  INFO 16512 --- [restartedMain] o.h.b.i.BytecodeProviderInitiator        : HHH000021: Bytecode provider name : bytebuddy
+2023-11-10T15:36:31.519+09:00  INFO 16512 --- [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2023-11-10T15:36:31.536+09:00  INFO 16512 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-11-10T15:36:32.045+09:00  INFO 16512 --- [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@2d49e9e6
+2023-11-10T15:36:32.047+09:00  INFO 16512 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-11-10T15:36:32.480+09:00  INFO 16512 --- [restartedMain] o.h.b.i.BytecodeProviderInitiator        : HHH000021: Bytecode provider name : bytebuddy
+2023-11-10T15:36:33.282+09:00  INFO 16512 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-11-10T15:36:34.552+09:00  INFO 16512 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-11-10T15:36:36.013+09:00  INFO 16512 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2023-11-10T15:36:36.086+09:00  WARN 16512 --- [restartedMain] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 187a1571-46bc-403d-964d-1a989f5068fe
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2023-11-10T15:36:36.334+09:00  INFO 16512 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure Or [Mvc [pattern='/api/**']] with [org.springframework.security.web.session.DisableEncodeUrlFilter@4b818c44, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7855878, org.springframework.security.web.context.SecurityContextHolderFilter@397ab9c0, org.springframework.security.web.header.HeaderWriterFilter@74c3d861, org.springframework.web.filter.CorsFilter@1c9ba563, org.springframework.security.web.authentication.logout.LogoutFilter@7fb7bd90, com.a504.qookie.global.jwt.JwtFilter@10ba6845, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@428b5f7a, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@28e1a0d7, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@571e25ba, org.springframework.security.web.access.ExceptionTranslationFilter@efa1c85]
+2023-11-10T15:36:36.656+09:00  WARN 16512 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: org.springframework.amqp.rabbit.core.RabbitAdmin
+2023-11-10T15:36:36.710+09:00  INFO 16512 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8000 (http) with context path ''
+2023-11-10T15:36:36.712+09:00  INFO 16512 --- [restartedMain] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: localhost:5672
+2023-11-10T15:36:36.718+09:00  INFO 16512 --- [restartedMain] o.s.a.r.l.SimpleMessageListenerContainer : Broker not available; cannot force queue declarations during start: java.net.ConnectException: Connection refused: no further information
+2023-11-10T15:36:36.724+09:00  INFO 16512 --- [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-1] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: localhost:5672
+2023-11-10T15:36:36.746+09:00 ERROR 16512 --- [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-1] o.s.a.r.l.SimpleMessageListenerContainer : Failed to check/redeclare auto-delete queue(s).
+
+org.springframework.amqp.AmqpConnectException: java.net.ConnectException: Connection refused: no further information
+	at org.springframework.amqp.rabbit.support.RabbitExceptionTranslator.convertRabbitAccessException(RabbitExceptionTranslator.java:61) ~[spring-rabbit-3.0.9.jar:3.0.9]
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.createBareConnection(AbstractConnectionFactory.java:594) ~[spring-rabbit-3.0.9.jar:3.0.9]
+	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.createConnection(CachingConnectionFactory.java:711) ~[spring-rabbit-3.0.9.jar:3.0.9]
+	at org.springframework.amqp.rabbit.connection.ConnectionFactoryUtils.createConnection(ConnectionFactoryUtils.java:257) ~[spring-rabbit-3.0.9.jar:3.0.9]
+	at org.springframework.amqp.rabbit.core.RabbitTemplate.doExecute(RabbitTemplate.java:2225) ~[spring-rabbit-3.0.9.jar:3.0.9]
+	at org.springframework.amqp.rabbit.core.RabbitTemplate.execute(RabbitTemplate.java:2198) ~[spring-rabbit-3.0.9.jar:3.0.9]
+	at org.springframework.amqp.rabbit.core.RabbitTemplate.execute(RabbitTemplate.java:2178) ~[spring-rabbit-3.0.9.jar:3.0.9]
+	at org.springframework.amqp.rabbit.core.RabbitAdmin.getQueueInfo(RabbitAdmin.java:465) ~[spring-rabbit-3.0.9.jar:3.0.9]
+	at org.springframework.amqp.rabbit.core.RabbitAdmin.getQueueProperties(RabbitAdmin.java:449) ~[spring-rabbit-3.0.9.jar:3.0.9]
+	at org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer.attemptDeclarations(AbstractMessageListenerContainer.java:1937) ~[spring-rabbit-3.0.9.jar:3.0.9]
+	at org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer.redeclareElementsIfNecessary(AbstractMessageListenerContainer.java:1905) ~[spring-rabbit-3.0.9.jar:3.0.9]
+	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer$AsyncMessageProcessingConsumer.initialize(SimpleMessageListenerContainer.java:1381) ~[spring-rabbit-3.0.9.jar:3.0.9]
+	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer$AsyncMessageProcessingConsumer.run(SimpleMessageListenerContainer.java:1223) ~[spring-rabbit-3.0.9.jar:3.0.9]
+	at java.base/java.lang.Thread.run(Thread.java:833) ~[na:na]
+Caused by: java.net.ConnectException: Connection refused: no further information
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method) ~[na:na]
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:672) ~[na:na]
+	at java.base/sun.nio.ch.NioSocketImpl.timedFinishConnect(NioSocketImpl.java:542) ~[na:na]
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:597) ~[na:na]
+	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:327) ~[na:na]
+	at java.base/java.net.Socket.connect(Socket.java:633) ~[na:na]
+	at com.rabbitmq.client.impl.SocketFrameHandlerFactory.create(SocketFrameHandlerFactory.java:61) ~[amqp-client-5.17.1.jar:5.17.1]
+	at com.rabbitmq.client.ConnectionFactory.newConnection(ConnectionFactory.java:1234) ~[amqp-client-5.17.1.jar:5.17.1]
+	at com.rabbitmq.client.ConnectionFactory.newConnection(ConnectionFactory.java:1184) ~[amqp-client-5.17.1.jar:5.17.1]
+	at com.rabbitmq.client.ConnectionFactory.newConnection(ConnectionFactory.java:1354) ~[amqp-client-5.17.1.jar:5.17.1]
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.connectHostPort(AbstractConnectionFactory.java:645) ~[spring-rabbit-3.0.9.jar:3.0.9]
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.connect(AbstractConnectionFactory.java:610) ~[spring-rabbit-3.0.9.jar:3.0.9]
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.createBareConnection(AbstractConnectionFactory.java:557) ~[spring-rabbit-3.0.9.jar:3.0.9]
+	... 12 common frames omitted
+
+2023-11-10T15:36:36.752+09:00  INFO 16512 --- [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-1] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: localhost:5672
+2023-11-10T15:36:36.793+09:00  INFO 16512 --- [restartedMain] com.a504.qookie.QookieApplication        : Started QookieApplication in 8.347 seconds (process running for 9.108)
+2023-11-10T15:36:54.744+09:00  INFO 16512 --- [http-nio-8000-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-11-10T15:36:54.745+09:00  INFO 16512 --- [http-nio-8000-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-11-10T15:36:54.747+09:00  INFO 16512 --- [http-nio-8000-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2023-11-10T15:36:56.003+09:00 DEBUG 16512 --- [http-nio-8000-exec-2] org.hibernate.SQL                        : select m1_0.member_id,m1_0.active,m1_0.email,m1_0.message_token,m1_0.name,m1_0.point,m1_0.uid,m1_0.wakeup from member m1_0 where m1_0.uid=?
+2023-11-10T15:36:56.096+09:00 DEBUG 16512 --- [http-nio-8000-exec-2] org.hibernate.SQL                        : select m1_0.member_id,m1_0.active,m1_0.email,m1_0.message_token,m1_0.name,m1_0.point,m1_0.uid,m1_0.wakeup from member m1_0 where m1_0.member_id=?
+2023-11-10T15:36:56.122+09:00 DEBUG 16512 --- [http-nio-8000-exec-2] org.hibernate.SQL                        : update member set active=?,email=?,message_token=?,name=?,point=?,uid=?,wakeup=? where member_id=?
+2023-11-10T15:36:56.391+09:00 DEBUG 16512 --- [http-nio-8000-exec-5] org.hibernate.SQL                        : select m1_0.member_id,m1_0.active,m1_0.email,m1_0.message_token,m1_0.name,m1_0.point,m1_0.uid,m1_0.wakeup from member m1_0 where m1_0.uid=?
+2023-11-10T15:36:56.421+09:00 DEBUG 16512 --- [http-nio-8000-exec-5] org.hibernate.SQL                        : select c1_0.cookie_id,c1_0.background,c1_0.body_id,c1_0.bottom,c1_0.created_at,c1_0.exp,c1_0.eye_id,c1_0.hat,c1_0.level,c1_0.member_id,c1_0.mouth_id,c1_0.name,c1_0.shoe,c1_0.top from cookie c1_0 where c1_0.member_id=?
+2023-11-10T15:36:56.496+09:00 DEBUG 16512 --- [http-nio-8000-exec-5] org.hibernate.SQL                        : select b1_0.body_id,b1_0.image,b1_0.stage from body b1_0 where b1_0.stage=?
+2023-11-10T15:36:56.505+09:00 DEBUG 16512 --- [http-nio-8000-exec-5] org.hibernate.SQL                        : select b1_0.body_id,b1_0.image,b1_0.stage from body b1_0 where b1_0.body_id=?
+2023-11-10T15:36:56.516+09:00 DEBUG 16512 --- [http-nio-8000-exec-5] org.hibernate.SQL                        : select e1_0.eye_id,e1_0.image from eye e1_0 where e1_0.eye_id=?
+2023-11-10T15:36:56.526+09:00 DEBUG 16512 --- [http-nio-8000-exec-5] org.hibernate.SQL                        : select m1_0.mouth_id,m1_0.image from mouth m1_0 where m1_0.mouth_id=?
+2023-11-10T15:36:56.540+09:00 DEBUG 16512 --- [http-nio-8000-exec-5] org.hibernate.SQL                        : select i1_0.item_id,i1_0.category,i1_0.is_new,i1_0.media,i1_0.name,i1_0.price,i1_0.thumbnail from item i1_0 where i1_0.item_id=?
+2023-11-10T15:36:56.542+09:00 DEBUG 16512 --- [http-nio-8000-exec-6] org.hibernate.SQL                        : select m1_0.member_id,m1_0.active,m1_0.email,m1_0.message_token,m1_0.name,m1_0.point,m1_0.uid,m1_0.wakeup from member m1_0 where m1_0.uid=?
+2023-11-10T15:36:56.550+09:00 DEBUG 16512 --- [http-nio-8000-exec-5] org.hibernate.SQL                        : select i1_0.item_id,i1_0.category,i1_0.is_new,i1_0.media,i1_0.name,i1_0.price,i1_0.thumbnail from item i1_0 where i1_0.item_id=?
+2023-11-10T15:36:56.569+09:00 DEBUG 16512 --- [http-nio-8000-exec-6] org.hibernate.SQL                        : select c1_0.cookie_id,c1_0.background,c1_0.body_id,c1_0.bottom,c1_0.created_at,c1_0.exp,c1_0.eye_id,c1_0.hat,c1_0.level,c1_0.member_id,c1_0.mouth_id,c1_0.name,c1_0.shoe,c1_0.top from cookie c1_0 where c1_0.member_id=?
+2023-11-10T15:36:56.586+09:00 DEBUG 16512 --- [http-nio-8000-exec-6] org.hibernate.SQL                        : select b1_0.body_id,b1_0.image,b1_0.stage from body b1_0 where b1_0.stage=?
+2023-11-10T15:36:56.594+09:00 DEBUG 16512 --- [http-nio-8000-exec-6] org.hibernate.SQL                        : select b1_0.body_id,b1_0.image,b1_0.stage from body b1_0 where b1_0.body_id=?
+2023-11-10T15:36:56.602+09:00 DEBUG 16512 --- [http-nio-8000-exec-6] org.hibernate.SQL                        : select e1_0.eye_id,e1_0.image from eye e1_0 where e1_0.eye_id=?
+2023-11-10T15:36:56.615+09:00 DEBUG 16512 --- [http-nio-8000-exec-6] org.hibernate.SQL                        : select m1_0.mouth_id,m1_0.image from mouth m1_0 where m1_0.mouth_id=?
+2023-11-10T15:36:56.638+09:00 DEBUG 16512 --- [http-nio-8000-exec-6] org.hibernate.SQL                        : select i1_0.item_id,i1_0.category,i1_0.is_new,i1_0.media,i1_0.name,i1_0.price,i1_0.thumbnail from item i1_0 where i1_0.item_id=?
+2023-11-10T15:36:56.644+09:00 DEBUG 16512 --- [http-nio-8000-exec-6] org.hibernate.SQL                        : select i1_0.item_id,i1_0.category,i1_0.is_new,i1_0.media,i1_0.name,i1_0.price,i1_0.thumbnail from item i1_0 where i1_0.item_id=?
+2023-11-10T15:36:57.810+09:00 DEBUG 16512 --- [http-nio-8000-exec-9] org.hibernate.SQL                        : select m1_0.member_id,m1_0.active,m1_0.email,m1_0.message_token,m1_0.name,m1_0.point,m1_0.uid,m1_0.wakeup from member m1_0 where m1_0.uid=?
+2023-11-10T15:36:57.843+09:00 DEBUG 16512 --- [http-nio-8000-exec-9] org.hibernate.SQL                        : select m1_0.member_quest_id,m1_0.created_at,m1_0.image,m1_0.member_id,m1_0.quest_id from member_quest m1_0 where m1_0.created_at between ? and ?
+2023-11-10T15:36:58.061+09:00 DEBUG 16512 --- [http-nio-8000-exec-10] org.hibernate.SQL                        : select m1_0.member_id,m1_0.active,m1_0.email,m1_0.message_token,m1_0.name,m1_0.point,m1_0.uid,m1_0.wakeup from member m1_0 where m1_0.uid=?
+2023-11-10T15:36:58.078+09:00 DEBUG 16512 --- [http-nio-8000-exec-10] org.hibernate.SQL                        : select m1_0.member_quest_id,m1_0.created_at,m1_0.image,m1_0.member_id,m1_0.quest_id from member_quest m1_0 where m1_0.created_at between ? and ?
+2023-11-10T15:36:58.993+09:00 DEBUG 16512 --- [http-nio-8000-exec-2] org.hibernate.SQL                        : select m1_0.member_id,m1_0.active,m1_0.email,m1_0.message_token,m1_0.name,m1_0.point,m1_0.uid,m1_0.wakeup from member m1_0 where m1_0.uid=?
+2023-11-10T15:36:59.016+09:00  INFO 16512 --- [http-nio-8000-exec-2] c.a.q.domain.geo.GeolocationController   : LAT: 37.5014297 LON: 127.0397167
+2023-11-10T15:37:01.151+09:00 DEBUG 16512 --- [http-nio-8000-exec-4] org.hibernate.SQL                        : select m1_0.member_id,m1_0.active,m1_0.email,m1_0.message_token,m1_0.name,m1_0.point,m1_0.uid,m1_0.wakeup from member m1_0 where m1_0.uid=?
+2023-11-10T15:37:01.171+09:00  INFO 16512 --- [http-nio-8000-exec-4] c.a.q.domain.geo.GeolocationController   : LAT: 37.5014297 LON: 127.0397167
+2023-11-10T15:37:03.308+09:00 DEBUG 16512 --- [http-nio-8000-exec-6] org.hibernate.SQL                        : select m1_0.member_id,m1_0.active,m1_0.email,m1_0.message_token,m1_0.name,m1_0.point,m1_0.uid,m1_0.wakeup from member m1_0 where m1_0.uid=?
+2023-11-10T15:37:03.332+09:00  INFO 16512 --- [http-nio-8000-exec-6] c.a.q.domain.geo.GeolocationController   : LAT: 37.5014297 LON: 127.0397167
+2023-11-10T15:37:05.463+09:00 DEBUG 16512 --- [http-nio-8000-exec-8] org.hibernate.SQL                        : select m1_0.member_id,m1_0.active,m1_0.email,m1_0.message_token,m1_0.name,m1_0.point,m1_0.uid,m1_0.wakeup from member m1_0 where m1_0.uid=?
+2023-11-10T15:37:05.485+09:00  INFO 16512 --- [http-nio-8000-exec-8] c.a.q.domain.geo.GeolocationController   : LAT: 37.5014297 LON: 127.0397167
+2023-11-10T15:37:07.621+09:00 DEBUG 16512 --- [http-nio-8000-exec-10] org.hibernate.SQL                        : select m1_0.member_id,m1_0.active,m1_0.email,m1_0.message_token,m1_0.name,m1_0.point,m1_0.uid,m1_0.wakeup from member m1_0 where m1_0.uid=?
+2023-11-10T15:37:07.646+09:00  INFO 16512 --- [http-nio-8000-exec-10] c.a.q.domain.geo.GeolocationController   : LAT: 37.5014297 LON: 127.0397167
+2023-11-10T15:37:09.816+09:00 DEBUG 16512 --- [http-nio-8000-exec-2] org.hibernate.SQL                        : select m1_0.member_id,m1_0.active,m1_0.email,m1_0.message_token,m1_0.name,m1_0.point,m1_0.uid,m1_0.wakeup from member m1_0 where m1_0.uid=?
+2023-11-10T15:37:09.886+09:00  INFO 16512 --- [http-nio-8000-exec-2] c.a.q.domain.geo.GeolocationController   : LAT: 37.5014297 LON: 127.0397167
+2023-11-10T15:37:12.033+09:00 DEBUG 16512 --- [http-nio-8000-exec-4] org.hibernate.SQL                        : select m1_0.member_id,m1_0.active,m1_0.email,m1_0.message_token,m1_0.name,m1_0.point,m1_0.uid,m1_0.wakeup from member m1_0 where m1_0.uid=?
+2023-11-10T15:37:12.054+09:00  INFO 16512 --- [http-nio-8000-exec-4] c.a.q.domain.geo.GeolocationController   : LAT: 37.5014297 LON: 127.0397167
+2023-11-10T15:37:14.177+09:00 DEBUG 16512 --- [http-nio-8000-exec-6] org.hibernate.SQL                        : select m1_0.member_id,m1_0.active,m1_0.email,m1_0.message_token,m1_0.name,m1_0.point,m1_0.uid,m1_0.wakeup from member m1_0 where m1_0.uid=?
+2023-11-10T15:37:14.195+09:00  INFO 16512 --- [http-nio-8000-exec-6] c.a.q.domain.geo.GeolocationController   : LAT: 37.5014297 LON: 127.0397167
+2023-11-10T15:37:16.315+09:00 DEBUG 16512 --- [http-nio-8000-exec-8] org.hibernate.SQL                        : select m1_0.member_id,m1_0.active,m1_0.email,m1_0.message_token,m1_0.name,m1_0.point,m1_0.uid,m1_0.wakeup from member m1_0 where m1_0.uid=?
+2023-11-10T15:37:16.329+09:00  INFO 16512 --- [http-nio-8000-exec-8] c.a.q.domain.geo.GeolocationController   : LAT: 37.5014297 LON: 127.0397167
+2023-11-10T15:37:35.544+09:00 DEBUG 16512 --- [http-nio-8000-exec-10] org.hibernate.SQL                        : select m1_0.member_id,m1_0.active,m1_0.email,m1_0.message_token,m1_0.name,m1_0.point,m1_0.uid,m1_0.wakeup from member m1_0 where m1_0.uid=?
+2023-11-10T15:37:35.576+09:00  INFO 16512 --- [http-nio-8000-exec-10] c.a.q.domain.geo.GeolocationController   : LAT: 37.5014297 LON: 127.0397167
+2023-11-10T15:37:37.710+09:00 DEBUG 16512 --- [http-nio-8000-exec-2] org.hibernate.SQL                        : select m1_0.member_id,m1_0.active,m1_0.email,m1_0.message_token,m1_0.name,m1_0.point,m1_0.uid,m1_0.wakeup from member m1_0 where m1_0.uid=?
+2023-11-10T15:37:37.725+09:00  INFO 16512 --- [http-nio-8000-exec-2] c.a.q.domain.geo.GeolocationController   : LAT: 37.5014297 LON: 127.0397167
+2023-11-10T15:37:40.320+09:00 DEBUG 16512 --- [http-nio-8000-exec-4] org.hibernate.SQL                        : select m1_0.member_id,m1_0.active,m1_0.email,m1_0.message_token,m1_0.name,m1_0.point,m1_0.uid,m1_0.wakeup from member m1_0 where m1_0.uid=?
+2023-11-10T15:37:40.346+09:00  INFO 16512 --- [http-nio-8000-exec-4] c.a.q.domain.geo.GeolocationController   : LAT: 37.5014297 LON: 127.0397167
+2023-11-10T15:37:45.520+09:00  INFO 16512 --- [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] o.s.a.r.l.SimpleMessageListenerContainer : Waiting for workers to finish.
+2023-11-10T15:37:45.520+09:00  INFO 16512 --- [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] o.s.a.r.l.SimpleMessageListenerContainer : Successfully waited for workers to finish.
+2023-11-10T15:37:45.673+09:00  INFO 16512 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-11-10T15:37:45.676+09:00  INFO 16512 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-11-10T15:37:45.759+09:00  INFO 16512 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

@@ -7,6 +7,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +25,7 @@ public class GeolocationService {
         } else {
             newGeoCoordinate = new GeoCoordinate(geoRequest);
         }
-        geoRedisTemplate.opsForValue().set(key, newGeoCoordinate);
+        geoRedisTemplate.opsForValue().set(key, newGeoCoordinate, 2, TimeUnit.HOURS);
         return newGeoCoordinate.getDistance();
     }
 

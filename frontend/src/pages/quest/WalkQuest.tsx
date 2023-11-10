@@ -59,14 +59,46 @@ function WalkQuest() {
     enableHighAccuracy: true,
   };
 
+  const getGeoLocationPer = () => {
+    navigator.geolocation.getCurrentPosition(
+      (data: GeolocationPosition) => {
+        const body = {
+          lat: data.coords.latitude,
+          lon: data.coords.longitude,
+        };
+        http
+          .post<DistanceResponse>('api/geo/test', body)
+          .then((res) => {
+            console.log(res);
+            showToast({
+              title: data.timestamp,
+              content: `DIS: ${res.payload.distance}\nLAT: ${data.coords.latitude} / LON: ${data.coords.longitude}`,
+            });
+            return res.payload.distance;
+          })
+          .then((dis) => {
+            if (dis > 300) {
+              navigator.geolocation.clearWatch(watchId);
+              // TODO: reset distance of user = delete redis value
+            } else {
+              setTimeout(getGeoLocationPer, 2000);
+            }
+          });
+      },
+      null,
+      options,
+    );
+  };
+
   const startWalking = () => {
     if ('geolocation' in navigator) {
-      const curWatchId = navigator.geolocation.watchPosition(
-        watchSuccessCallback,
-        watchFailureCallback,
-        options,
-      );
-      setWatchId(curWatchId);
+      getGeoLocationPer();
+      // const curWatchId = navigator.geolocation.watchPosition(
+      //   watchSuccessCallback,
+      //   watchFailureCallback,
+      //   options,
+      // );
+      // setWatchId(curWatchId);
     }
   };
 
