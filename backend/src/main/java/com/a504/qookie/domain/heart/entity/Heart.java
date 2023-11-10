@@ -28,7 +28,7 @@ public class Heart {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Member member;
 
-	@Column(name = "content")
+	@Column(name = "content", length = 2048)
 	private String content;
 
 	@Column(name = "created_at")
