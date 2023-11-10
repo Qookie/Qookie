@@ -10,13 +10,6 @@ const axiosInstance = Axios.create({
     'Content-Type': 'application/json',
   },
 });
-const axiosInstance2 = Axios.create({
-  // baseURL: 'https://k9a504a.p.ssafy.io',
-  baseURL: 'http://localhost:8000',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
 
 const onFailure = async (error: AxiosError) => {
   const config = error.config;
@@ -32,13 +25,6 @@ const onFailure = async (error: AxiosError) => {
 };
 
 axiosInstance.interceptors.request.use(async (config: InternalAxiosRequestConfig) => {
-  const accessToken = localStorage.getItem('accessToken');
-  config.headers.Authorization = `Bearer ${accessToken}`;
-
-  return config;
-});
-
-axiosInstance2.interceptors.request.use(async (config: InternalAxiosRequestConfig) => {
   const accessToken = localStorage.getItem('accessToken');
   config.headers.Authorization = `Bearer ${accessToken}`;
 
@@ -63,13 +49,5 @@ export const http = {
   },
   patch: function patch<Response = unknown>(url: string) {
     return axiosInstance.patch<Response>(url).then((res) => res.data);
-  },
-  post2a: function post<Response = unknown, Request = any>(
-    url: string,
-    body?: Request,
-    isFile?: boolean,
-  ) {
-    const header = isFile ? { headers: { 'Content-Type': 'multipart/form-data' } } : {};
-    return axiosInstance2.post<Response>(url, body, header).then((res) => res.data);
   },
 };

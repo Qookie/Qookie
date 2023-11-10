@@ -32,7 +32,7 @@ function WalkQuest() {
       lon: data.coords.longitude,
     };
     http
-      .post2a<DistanceResponse>('api/geo/test', body)
+      .post<DistanceResponse>('api/geo/test', body)
       .then((res) => {
         console.log(res);
         showToast({
