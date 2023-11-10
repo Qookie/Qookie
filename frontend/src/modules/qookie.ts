@@ -18,11 +18,11 @@ export const QookieInfoState = atom<QookieInfo>({
     extraBody: '',
     eye: '',
     mouth: '',
-    hat: '',
-    top: '',
-    bottom: '',
-    shoe: '',
-    background: '',
+    hat: { id: 0, media: '' },
+    top: { id: 0, media: '' },
+    bottom: { id: 0, media: '' },
+    shoe: { id: 0, media: '' },
+    background: { id: 0, media: '' },
     accessories: [],
   },
   effects_UNSTABLE: [persistAtom],
@@ -42,6 +42,7 @@ export const QookieInfoSelector = selector({
     if (newValue instanceof DefaultValue) {
       return;
     }
+
     // Qookie Info 타입만 업데이트 및 API 호출
     set(QookieInfoState, newValue);
   },

@@ -14,12 +14,14 @@ export default function Qookie({ ...props }: QookieInfo) {
               <BagImg src={props.extraBody} alt="bag" />
             </BagContainer>
           )}
-          {props.hat && <HatContainer src={props.hat} alt="hat" level={props.level} />}
-          {props.shoe && <ShoeContainer src={props.shoe} alt="shoe" />}
-          {props.bottom && <BottomContainer src={props.bottom} alt="bottom" />}
-          {props.top && <TopContainer src={props.top} alt="top" />}
+          {props.hat && <HatContainer src={props.hat.media} alt="hat" level={props.level} />}
+          {props.shoe && <ShoeContainer src={props.shoe.media} alt="shoe" />}
+          {props.bottom && <BottomContainer src={props.bottom.media} alt="bottom" />}
+          {props.top && <TopContainer src={props.top.media} alt="top" />}
           {props.accessories &&
-            props.accessories.map((acc, index) => <AccContainer src={acc} alt="acc" />)}
+            props.accessories.map((acc, index) => (
+              <AccContainer key={index} src={acc.media} alt="acc" />
+            ))}
         </Container>
       )}
     </>

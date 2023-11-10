@@ -8,12 +8,21 @@ export interface QookieInfo {
   extraBody: string;
   eye: string;
   mouth: string;
-  hat: string;
-  top: string;
-  bottom: string;
-  shoe: string;
-  background: string;
-  accessories: string[];
+  hat: ItemProp;
+  top: ItemProp;
+  bottom: ItemProp;
+  shoe: ItemProp;
+  background: ItemProp;
+  accessories: ItemProp[];
+}
+
+interface ItemProp {
+  id: number;
+  media: string;
+  name?: string;
+  thumbnail?: string;
+  isWear?: boolean;
+  isNew?: boolean;
 }
 
 export interface NotificationProp {
