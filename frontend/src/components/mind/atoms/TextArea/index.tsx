@@ -7,7 +7,7 @@ interface TextAreaProps {
 }
 
 export default function TextArea({ placeholder, onChange, value }: TextAreaProps) {
-  return <StyledTextArea placeholder={placeholder} onChange={onChange} value={value} />;
+  return <StyledTextArea placeholder={placeholder} onChange={onChange} value={value} maxLength={2000} />;
 }
 
 const StyledTextArea = styled.textarea`
