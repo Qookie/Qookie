@@ -21,13 +21,13 @@ public class GeoCoordinate implements Serializable {
     }
 
     public GeoCoordinate updateGeoCoordinate(GeoRequest geoRequest) {
-        this.distance += calculateDistance(geoRequest);
+        this.distance += calculateDistanceDelta(geoRequest);
         this.latitude = geoRequest.getLat();
         this.longitude = geoRequest.getLon();
         return this;
     }
 
-    private double calculateDistance(GeoRequest geoRequest) {
+    private double calculateDistanceDelta(GeoRequest geoRequest) {
         double EARTH_RADIUS = 6371000;
         double lat1Rad = Math.toRadians(this.latitude);
         double lon1Rad = Math.toRadians(this.longitude);
@@ -44,6 +44,11 @@ public class GeoCoordinate implements Serializable {
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
         // Calculate and return the distance
-        return EARTH_RADIUS * c;
+        // ignore noise
+        double ret = EARTH_RADIUS * c;
+        if (ret < 1.5) {
+            return 0;
+        }
+        return ret;
     }
 }

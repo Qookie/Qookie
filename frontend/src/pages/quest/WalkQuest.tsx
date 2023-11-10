@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import QuestLayout from '../../components/quest/templates/QuestLayout';
 import TreeImage from '../../assets/pngs/tree.png';
 import { http } from '../../api/instance';
 import { showToast } from '../../components/shared/molecules/Alert';
 import { Quest } from '../../types/quest';
 import RewardText from '../../components/quest/molecules/RewardText';
+import ProgressBar from '../../components/shared/atoms/ProgressBar';
 
 type DistanceResponse = {
   msg: string;
@@ -14,7 +15,7 @@ type DistanceResponse = {
 };
 
 function WalkQuest() {
-  const [watchId, setWatchId] = useState<number>(0);
+  const [distance, setDistance] = useState<number>(0);
 
   const onSuccessQuest = async () => {
     try {
@@ -23,40 +24,6 @@ function WalkQuest() {
     } catch (error) {
       console.log(error);
     }
-  };
-
-  const watchSuccessCallback = (data: GeolocationPosition) => {
-    console.log('curWatchId: ', watchId);
-    const body = {
-      lat: data.coords.latitude,
-      lon: data.coords.longitude,
-    };
-    http
-      .post<DistanceResponse>('api/geo/test', body)
-      .then((res) => {
-        console.log(res);
-        showToast({
-          title: data.timestamp,
-          content: `DIS: ${res.payload.distance}\nLAT: ${data.coords.latitude} / LON: ${data.coords.longitude}`,
-        });
-        return res.payload.distance;
-      })
-      .then((dis) => {
-        if (dis > 300) {
-          navigator.geolocation.clearWatch(watchId);
-          // TODO: reset distance of user = delete redis value
-        }
-      });
-  };
-
-  const watchFailureCallback = (data: GeolocationPositionError) => {
-    console.log('err', data);
-    console.log(data.message);
-  };
-
-  const options = {
-    maximumAge: 5000,
-    enableHighAccuracy: true,
   };
 
   const getGeoLocationPer = () => {
@@ -69,15 +36,16 @@ function WalkQuest() {
         http
           .post<DistanceResponse>('api/geo/test', body)
           .then((res) => {
-            console.log(res);
+            // TODO: delete this
             showToast({
               title: data.timestamp,
               content: `DIS: ${res.payload.distance}\nLAT: ${data.coords.latitude} / LON: ${data.coords.longitude}`,
             });
+            setDistance(res.payload.distance);
             return res.payload.distance;
           })
           .then((dis) => {
-            if (dis > 5) {
+            if (dis > 50) {
               onSuccessQuest();
             } else {
               setTimeout(getGeoLocationPer, 2000);
@@ -85,21 +53,21 @@ function WalkQuest() {
           });
       },
       null,
-      options,
+      {
+        maximumAge: 2000,
+        enableHighAccuracy: true,
+      },
     );
   };
 
   const startWalking = () => {
     if ('geolocation' in navigator) {
       getGeoLocationPer();
-      // const curWatchId = navigator.geolocation.watchPosition(
-      //   watchSuccessCallback,
-      //   watchFailureCallback,
-      //   options,
-      // );
-      // setWatchId(curWatchId);
     }
   };
+
+  // TODO: add distance bar and useEffect to render
+  useEffect(() => {}, [distance]);
 
   return (
     <QuestLayout
@@ -123,6 +91,7 @@ function WalkQuest() {
       <button type="button" onClick={startWalking}>
         START WALKING
       </button>
+      <ProgressBar total={50} now={distance} />
     </QuestLayout>
   );
 }
