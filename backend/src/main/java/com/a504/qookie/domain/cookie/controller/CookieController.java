@@ -4,6 +4,7 @@ import com.a504.qookie.domain.cookie.dto.CookieCollectionResponse;
 import com.a504.qookie.domain.cookie.dto.CookieCreateRequest;
 import com.a504.qookie.domain.cookie.dto.CookieResponse;
 import com.a504.qookie.domain.cookie.dto.FaceResponse;
+import com.a504.qookie.domain.cookie.dto.LastBodyResponse;
 import com.a504.qookie.domain.cookie.service.CookieService;
 import com.a504.qookie.global.response.BaseResponse;
 import com.a504.qookie.global.security.CustomMemberDetails;
@@ -107,5 +108,12 @@ public class CookieController {
         cookieService.bake(image, customMemberDetails.getMember());
 
         return BaseResponse.ok(HttpStatus.OK, "cookie bake OK");
+    }
+
+    @GetMapping("/lastBody")
+    public ResponseEntity<?> getLastBody() {
+        LastBodyResponse lastBodyResponse = cookieService.getLastBody();
+
+        return BaseResponse.okWithData(HttpStatus.OK, "last body OK", lastBodyResponse);
     }
 }

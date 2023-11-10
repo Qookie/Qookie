@@ -4,6 +4,7 @@ import com.a504.qookie.domain.cookie.dto.CookieCollectionResponse;
 import com.a504.qookie.domain.cookie.dto.CookieItemResponse;
 import com.a504.qookie.domain.cookie.dto.CookieResponse;
 import com.a504.qookie.domain.cookie.dto.FaceResponse;
+import com.a504.qookie.domain.cookie.dto.LastBodyResponse;
 import com.a504.qookie.domain.cookie.entity.Body;
 import com.a504.qookie.domain.cookie.entity.Cookie;
 import com.a504.qookie.domain.cookie.entity.CookieCollection;
@@ -192,5 +193,13 @@ public class CookieService {
         cookieCollectionRepository.save(new CookieCollection(member, cookie, url));
 
         cookieRepository.delete(cookie);
+    }
+
+    public LastBodyResponse getLastBody() {
+
+        Body body = bodyRepository.findByStage(7)
+                .orElseThrow(() -> new IllegalArgumentException("맞는 바디가 없습니다."));
+
+        return new LastBodyResponse(body.getImage());
     }
 }
