@@ -1,6 +1,7 @@
 package com.a504.qookie.domain.cookie.service;
 
 import com.a504.qookie.domain.cookie.dto.CookieCollectionResponse;
+import com.a504.qookie.domain.cookie.dto.CookieItemResponse;
 import com.a504.qookie.domain.cookie.dto.CookieResponse;
 import com.a504.qookie.domain.cookie.dto.FaceResponse;
 import com.a504.qookie.domain.cookie.entity.Body;
@@ -68,7 +69,12 @@ public class CookieService {
 
         cookieRepository.save(cookie);
 
-        return new CookieResponse(cookie, cookie.getBody().getImage(), null, new ArrayList<>());
+        return new CookieResponse(cookie, cookie.getBody().getImage(), null,
+                new CookieItemResponse(noItem.getId(), noItem.getMedia()),
+                new CookieItemResponse(noItem.getId(), noItem.getMedia()),
+                new CookieItemResponse(noItem.getId(), noItem.getMedia()),
+                new CookieItemResponse(noItem.getId(), noItem.getMedia()),
+                new CookieItemResponse(background.getId(), background.getMedia()), new ArrayList<>());
     }
 
     public String uploadBody(MultipartFile image, int stage) {
@@ -140,7 +146,7 @@ public class CookieService {
         List<Long> list = template.opsForList().range(accessories_key, 0, -1)
                 .stream().map(Long::valueOf).toList();
 
-        List<String> accessoriesList = new ArrayList<>();
+        List<CookieItemResponse> accessoriesList = new ArrayList<>();
 
         for (Long itemId:list) {
             if (itemId.equals(NO_WEAR_ITEM_ID))
@@ -149,7 +155,7 @@ public class CookieService {
             Item item = itemRepository.findById(itemId)
                     .orElseThrow(() -> new IllegalArgumentException("아이템이 없습니다"));
 
-            accessoriesList.add(item.getMedia());
+            accessoriesList.add(new CookieItemResponse(item.getId(), item.getMedia()));
         }
 
         if (5 <= cookie.getLevel() && cookie.getLevel() <= 9) {
@@ -157,10 +163,22 @@ public class CookieService {
                     .orElseThrow(() -> new IllegalArgumentException("몸통이 없습니다"))
                     .getImage();
 
-            return new CookieResponse(cookie, stage1BodyImage, cookie.getBody().getImage(), accessoriesList);
+            return new CookieResponse(cookie, stage1BodyImage, cookie.getBody().getImage(),
+                    new CookieItemResponse(cookie.getHat().getId(), cookie.getHat().getMedia()),
+                    new CookieItemResponse(cookie.getTop().getId(), cookie.getTop().getMedia()),
+                    new CookieItemResponse(cookie.getBottom().getId(), cookie.getBottom().getMedia()),
+                    new CookieItemResponse(cookie.getShoe().getId(), cookie.getShoe().getMedia()),
+                    new CookieItemResponse(cookie.getBackground().getId(), cookie.getBackground().getMedia()),
+                    accessoriesList);
 
         }
-        return new CookieResponse(cookie, cookie.getBody().getImage(), null, accessoriesList);
+        return new CookieResponse(cookie, cookie.getBody().getImage(), null,
+                new CookieItemResponse(cookie.getHat().getId(), cookie.getHat().getMedia()),
+                new CookieItemResponse(cookie.getTop().getId(), cookie.getTop().getMedia()),
+                new CookieItemResponse(cookie.getBottom().getId(), cookie.getBottom().getMedia()),
+                new CookieItemResponse(cookie.getShoe().getId(), cookie.getShoe().getMedia()),
+                new CookieItemResponse(cookie.getBackground().getId(), cookie.getBackground().getMedia()),
+                accessoriesList);
     }
 
     @Transactional
