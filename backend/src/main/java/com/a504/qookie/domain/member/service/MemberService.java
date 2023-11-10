@@ -81,11 +81,11 @@ public class MemberService {
         member.setName(memberRequest.memberName());
         member.setTime(LocalTime.parse(memberRequest.wakeTime()));
 
-        Cookie cookie = cookieRepository.findByMember(member)
-                .orElseThrow(() -> new IllegalArgumentException("쿠키가 없습니다"));
+        Optional<Cookie> cookie = cookieRepository.findByMember(member);
 
-        cookie.changeName(memberRequest.cookieName());
-
+        if (cookie.isPresent()) {
+            cookie.get().changeName(memberRequest.cookieName());
+        }
     }
 
     @Transactional
