@@ -6,6 +6,7 @@ import com.a504.qookie.domain.item.dto.ItemListResponse;
 import com.a504.qookie.domain.item.dto.ItemResponse;
 import com.a504.qookie.domain.item.dto.ItemUploadRequest;
 import com.a504.qookie.domain.item.dto.ItemWearRequest;
+import com.a504.qookie.domain.item.dto.MyItemListResponse;
 import com.a504.qookie.domain.item.dto.MyItemResponse;
 import com.a504.qookie.domain.item.dto.OrderItemRequest;
 import com.a504.qookie.domain.item.dto.OrderRequest;
@@ -106,7 +107,7 @@ public class ItemService {
         return new ItemListResponse(lists[0], lists[1], lists[2], lists[3], lists[4], lists[5]);
     }
 
-    public List<MyItemResponse>[] myItem(Member member) {
+    public MyItemListResponse myItem(Member member) {
 
         Cookie cookie = cookieRepository.findByMember(member)
                 .orElseThrow(() -> new IllegalArgumentException("쿠키가 없습니다"));
@@ -223,7 +224,7 @@ public class ItemService {
             }
         }
 
-        return lists;
+        return new MyItemListResponse(lists[0], lists[1], lists[2], lists[3], lists[4], lists[5]);
     }
 
     @Transactional
