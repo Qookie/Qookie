@@ -13,7 +13,7 @@ import LetterQookie from '../assets/pngs/letterqookie.png';
 import Check from '../assets/pngs/check.png';
 
 import TitleLayout from '../components/shared/Template/TitleLayout';
-import TextImgLayout from '../components/shared/Template/TextImgLayout';
+import TextImgLayout from '../components/shared/molecules/TextImg';
 import BottomPageLayout from '../components/shared/Template/BottomPageLayout';
 import { useNavigate } from 'react-router-dom';
 
@@ -63,12 +63,13 @@ export default function Mind() {
 
       <MiddleContainer>
         <TextArea placeholder='오늘은 어떤 감사함을 느꼈나요?' value={inputValue} onChange={handleChange} />
+        <Counter typography='main' color='var(--MR_GRAY2)'>({inputValue.length} / 2000)</Counter>
         {inputValue ?
           (<Button onClick={() => postMind('/api/heart/create')}>보내기</Button>)
           :
           (<Button onClick={() => null} theme='disabled'>보내기</Button>)
         }
-        <PastMind onClick={() => setIsBottomOpen(true)}>
+        <PastMind onClick={() => navigate('/past-mind')}>
           <PastText>
             지난 마음
           </PastText>
@@ -174,4 +175,9 @@ const BottomPageText = styled(Text)`
   margin-top: 20px;
   margin-bottom: 50px;
   text-align: center;
+`;
+
+const Counter = styled(Text)`
+  text-align: end;
+  margin-bottom: 10px;
 `;
