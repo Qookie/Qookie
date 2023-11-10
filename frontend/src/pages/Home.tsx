@@ -1,20 +1,14 @@
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
 import { QookieInfoState } from '../modules/qookie';
-import { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 import { qookieApi } from '../api';
 import QookieStatus from '../components/shared/organisms/QookieStatus';
 import QuestList from '../components/home/organisms/QuestList';
 import HomeButton from '../components/home/molecules/HomeButton';
-import { QookieInfo } from '../types';
 import { useNavigate } from 'react-router-dom';
 import attendance from '../assets/pngs/calendar_small.png';
 import challenge from '../assets/pngs/challenge.png';
-
-export interface QookieInfoResponse {
-  msg: string;
-  payload: QookieInfo | null;
-}
 
 const Home = () => {
   const [qookie, setQookie] = useRecoilState(QookieInfoState);

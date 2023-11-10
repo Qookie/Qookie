@@ -3,7 +3,7 @@ import { QookieInfo } from '../../../../types';
 
 export default function Qookie({ ...props }: QookieInfo) {
   return (
-    <BackgroundContainer src={props.background}>
+    <BackgroundContainer src={props.background.media}>
       <Container>
         {props.level > 0 && (
           <DoughContainer>
