@@ -10,6 +10,12 @@ const axiosInstance = Axios.create({
     'Content-Type': 'application/json',
   },
 });
+const axiosInstance2 = Axios.create({
+  baseURL: 'https://k9a504a.p.ssafy.io',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
 
 const onFailure = async (error: AxiosError) => {
   const config = error.config;
@@ -49,5 +55,13 @@ export const http = {
   },
   patch: function patch<Response = unknown>(url: string) {
     return axiosInstance.patch<Response>(url).then((res) => res.data);
+  },
+  post2a: function post<Response = unknown, Request = any>(
+    url: string,
+    body?: Request,
+    isFile?: boolean,
+  ) {
+    const header = isFile ? { headers: { 'Content-Type': 'multipart/form-data' } } : {};
+    return axiosInstance2.post<Response>(url, body, header).then((res) => res.data);
   },
 };

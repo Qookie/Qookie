@@ -26,7 +26,11 @@ function WalkQuest() {
       lat: data.coords.latitude,
       lon: data.coords.longitude,
     };
-    http.post('api/geo/test', body);
+    http.post2a('api/geo/test', body);
+    showToast({
+      title: data.timestamp,
+      content: `ACC: ${data.coords.accuracy}\nLAT: ${data.coords.latitude} / LON: ${data.coords.longitude}`,
+    });
   };
 
   const watchFailureCallback = (data: GeolocationPositionError) => {
@@ -35,7 +39,7 @@ function WalkQuest() {
   };
 
   const options = {
-    maximumAge: 10000,
+    maximumAge: 5000,
     enableHighAccuracy: true,
   };
 
