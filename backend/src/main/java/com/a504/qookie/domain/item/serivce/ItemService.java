@@ -2,6 +2,7 @@ package com.a504.qookie.domain.item.serivce;
 
 import com.a504.qookie.domain.cookie.entity.Cookie;
 import com.a504.qookie.domain.cookie.repository.CookieRepository;
+import com.a504.qookie.domain.item.dto.ItemListResponse;
 import com.a504.qookie.domain.item.dto.ItemResponse;
 import com.a504.qookie.domain.item.dto.ItemUploadRequest;
 import com.a504.qookie.domain.item.dto.ItemWearRequest;
@@ -64,7 +65,7 @@ public class ItemService {
         return imageUrl;
     }
 
-    public List<ItemResponse>[] list(Member member) {
+    public ItemListResponse list(Member member) {
 
         List<ItemResponse>[] lists = new ArrayList[6];
         // 0:배경, 1:모자, 2:신발, 3:하의, 4:상의, 5:액세서리
@@ -102,7 +103,7 @@ public class ItemService {
             }
         }
 
-        return lists;
+        return new ItemListResponse(lists[0], lists[1], lists[2], lists[3], lists[4], lists[5]);
     }
 
     public List<MyItemResponse>[] myItem(Member member) {
