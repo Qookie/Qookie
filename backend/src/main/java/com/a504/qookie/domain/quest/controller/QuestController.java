@@ -1,6 +1,7 @@
 package com.a504.qookie.domain.quest.controller;
 
 
+import com.a504.qookie.domain.geo.GeolocationService;
 import com.a504.qookie.domain.quest.dto.AttendanceCalendarResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +33,7 @@ public class QuestController {
 
 	private final QuestService questService;
 	private final AwsS3Service awsS3Service;
+	private final GeolocationService geolocationService;
 
 	// 완료 했는지 안했는지만
 	@GetMapping("/{questName}")
@@ -46,6 +48,9 @@ public class QuestController {
 	@PostMapping("/{questName}")
 	public ResponseEntity<?> completeQuest(@AuthenticationPrincipal CustomMemberDetails member
 		, @PathVariable String questName){
+		if (questName.equalsIgnoreCase("WALK")) {
+			geolocationService.resetDistance(member.getMember());
+		}
 		QuestType questType = QuestType.valueOf(questName.toUpperCase());
 		questService.completeQuest(member.getMember(), questName.toUpperCase());
 		return BaseResponse.ok(HttpStatus.OK, questType.getMessage() + " 퀘스트 완료");

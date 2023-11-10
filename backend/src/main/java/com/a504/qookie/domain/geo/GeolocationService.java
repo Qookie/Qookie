@@ -32,4 +32,8 @@ public class GeolocationService {
     private static String makeRedisGeoKey(Member member) {
         return "Geo " + member.getUid();
     }
+
+    public void resetDistance(Member member) {
+        geoRedisTemplate.delete(makeRedisGeoKey(member));
+    }
 }

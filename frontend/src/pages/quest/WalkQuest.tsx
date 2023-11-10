@@ -77,9 +77,8 @@ function WalkQuest() {
             return res.payload.distance;
           })
           .then((dis) => {
-            if (dis > 300) {
-              navigator.geolocation.clearWatch(watchId);
-              // TODO: reset distance of user = delete redis value
+            if (dis > 5) {
+              onSuccessQuest();
             } else {
               setTimeout(getGeoLocationPer, 2000);
             }
