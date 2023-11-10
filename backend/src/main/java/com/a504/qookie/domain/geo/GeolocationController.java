@@ -12,11 +12,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/geo")
 public class GeolocationController {
+
+    private final GeolocationService geolocationService;
 
     @PostMapping("/test")
     public ResponseEntity<?> test(
@@ -24,7 +29,9 @@ public class GeolocationController {
             @RequestBody GeoRequest geoRequest
     ) {
         log.info(geoRequest.toString());
-        System.out.println(geoRequest.toString());
-        return BaseResponse.ok(HttpStatus.OK, "good");
+        double distance = geolocationService.saveAndGetDistance(customMemberDetails.getMember(), geoRequest);
+        Map<String, Double> data = new HashMap<>();
+        data.put("distance", distance);
+        return BaseResponse.okWithData(HttpStatus.OK, "good", data);
     }
 }

@@ -11,7 +11,8 @@ const axiosInstance = Axios.create({
   },
 });
 const axiosInstance2 = Axios.create({
-  baseURL: 'https://k9a504a.p.ssafy.io',
+  // baseURL: 'https://k9a504a.p.ssafy.io',
+  baseURL: 'http://localhost:8000',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -31,6 +32,13 @@ const onFailure = async (error: AxiosError) => {
 };
 
 axiosInstance.interceptors.request.use(async (config: InternalAxiosRequestConfig) => {
+  const accessToken = localStorage.getItem('accessToken');
+  config.headers.Authorization = `Bearer ${accessToken}`;
+
+  return config;
+});
+
+axiosInstance2.interceptors.request.use(async (config: InternalAxiosRequestConfig) => {
   const accessToken = localStorage.getItem('accessToken');
   config.headers.Authorization = `Bearer ${accessToken}`;
 

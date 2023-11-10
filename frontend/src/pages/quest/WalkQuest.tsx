@@ -17,19 +17,16 @@ function WalkQuest() {
   };
 
   const watchSuccessCallback = (data: GeolocationPosition) => {
-    console.log('success', data);
-    console.log(data.timestamp);
-    console.log(data.coords);
     const body = {
-      timestamp: data.timestamp,
-      accuracy: data.coords.accuracy,
       lat: data.coords.latitude,
       lon: data.coords.longitude,
     };
-    http.post2a('api/geo/test', body);
-    showToast({
-      title: data.timestamp,
-      content: `ACC: ${data.coords.accuracy}\nLAT: ${data.coords.latitude} / LON: ${data.coords.longitude}`,
+    http.post2a('api/geo/test', body).then((res) => {
+      console.log(res);
+      showToast({
+        title: data.timestamp,
+        content: `ACC: ${data.coords.accuracy}\nLAT: ${data.coords.latitude} / LON: ${data.coords.longitude}`,
+      });
     });
   };
 
@@ -45,10 +42,10 @@ function WalkQuest() {
 
   const startWalking = () => {
     if ('geolocation' in navigator) {
-      console.log('START');
       navigator.geolocation.watchPosition(watchSuccessCallback, watchFailureCallback, options);
     }
   };
+
   return (
     <QuestLayout
       quest={Quest.WALK}
