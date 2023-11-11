@@ -3,9 +3,11 @@ import QookieStatus from '../components/shared/organisms/QookieStatus';
 import { useRecoilState } from 'recoil';
 import { QookieInfoState } from '../modules/qookie';
 import MypageList from '../components/mypage/organisms/MypageList';
+import { useEffect } from 'react';
 
 export default function Mypage() {
   const [qookie, setQookie] = useRecoilState(QookieInfoState);
+  useEffect(() => {}, [qookie]);
 
   return (
     <HomeContainer>
