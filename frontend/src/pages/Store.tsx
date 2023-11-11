@@ -6,8 +6,7 @@ import Button from '../components/shared/atoms/Button';
 import { ShoppingCartIcon } from '@heroicons/react/24/outline';
 import Title from '../components/shared/atoms/Title';
 import ItemTab from '../components/store/organisms/ItemTab';
-import { useEffect, useState } from 'react';
-import { ItemTypeProps } from '../components/store/molecules/Item';
+import { useEffect, useRef, useState } from 'react';
 import { itemApi } from '../api';
 import { QookieInfo, wearReqType } from '../types';
 import BottomSheet from '../components/shared/molecules/BottomSheet';
@@ -15,85 +14,190 @@ import Cart from '../components/store/organisms/Cart';
 import { history } from '../utils/history';
 import Dialog from '../components/shared/molecules/Dialog';
 import { useNavigate } from 'react-router-dom';
-
-export interface AllItemProps {
-  [index: number]: ItemTypeProps[];
-}
+import {
+  AllItemProps,
+  DefaultAllItem,
+  DefaultSelected,
+  ItemProps,
+  SelectedItemProps,
+} from '../types/item';
+import { ACCItem, BgItem, HatItem, PantsItem, ShoeItem, TopItem } from '../assets/svgs';
+import mouseSwipe from '../utils/mouseSwipe';
+import { resolve } from 'path';
 
 export default function Store() {
   const navigate = useNavigate();
   const [qookie, setQookie] = useRecoilState(QookieInfoState);
-  const [currentTab, setCurrentTab] = useState<number>(0);
-  const [itemList, setItemList] = useState<AllItemProps>();
-  const [myItemList, setMyItemList] = useState<AllItemProps>();
-  const [wearItemList, setWearItemList] = useState<AllItemProps>({});
-  const [cartItemList, setCartItemList] = useState<AllItemProps>({});
+  // selectedItemList 에는 qookie info 가 없어서 showQookie 필요
   const [showQookie, setShowQookie] = useState<QookieInfo>(qookie);
-  const [isItem, setIsItem] = useState<boolean>(false);
+  const [currentTab, setCurrentTab] = useState<number>(0);
+  const [curCategory, setCurCategory] = useState<string>('background');
+  // api 호출로 받아오는 리스트
+  const [itemList, setItemList] = useState<AllItemProps>(DefaultAllItem);
+  const [myItemList, setMyItemList] = useState<AllItemProps>(DefaultAllItem);
+  // 선택된(입은) 아이템 리스트
+  const [selectedItemList, setSelectedItemList] = useState<SelectedItemProps>(DefaultSelected);
+
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
   const [isExit, setIsExit] = useState<boolean>(false);
 
+  const tabSwipeRef = useRef<HTMLDivElement>(null);
+  mouseSwipe(tabSwipeRef);
+
   useEffect(() => {
+    setShowQookie({ ...qookie, ...selectedItemList });
+  }, [selectedItemList]);
+
+  // recoil 에 있는 내 아이템을 selected default 로 지정
+  const defaultItemList = {
+    background: qookie.background,
+    hat: qookie.hat,
+    shoe: qookie.shoe,
+    bottom: qookie.bottom,
+    top: qookie.top,
+    accessories: qookie.accessories,
+  };
+
+  useEffect(() => {
+    setSelectedItemList(defaultItemList);
+  }, [qookie]);
+
+  useEffect(() => {
+    // 시작하면 item list 불러오기
+    getAllItemList();
+    getMyItemList();
+  }, []);
+
+  const getAllItemList = () => {
+    // all item list 불러오기
     itemApi.getItemList().then((res) => {
       if (res) {
         setItemList(res);
       }
     });
+  };
+
+  const getMyItemList = () => {
+    // my item list 불러오기
     itemApi.getMyItemList().then((res) => {
       if (res) {
         setMyItemList(res);
       }
     });
-  }, []);
+  };
 
-  useEffect(() => {
-    const wearItems: AllItemProps = {};
-    if (myItemList) {
-      for (const index in myItemList) {
-        myItemList[index].map((item: ItemTypeProps) => {
-          if (item.isWear) {
-            wearItems[index] = [item];
-          }
-        });
+  const changeSelectItemHandler = (item: ItemProps) => {
+    // selected item list 내용 바꾸기 & selected 값 반환
+    const tab = curCategory as keyof SelectedItemProps;
+    if (Array.isArray(selectedItemList[tab])) {
+      // array 인지 확인 : accessories 인 경우
+      if ((selectedItemList[tab] as ItemProps[]).some((value) => value.id === item.id)) {
+        // 이미 있는 경우(취소)면 filter 로 삭제
+        const updatedList: ItemProps[] = (selectedItemList[tab] as ItemProps[]).filter(
+          (value) => value.id !== item.id,
+        );
+        if (updatedList.length === 0) {
+          updatedList.push({ id: 1, media: null });
+        }
+        console.log('update', updatedList);
+        setSelectedItemList((prev) => ({ ...prev, [tab]: updatedList }));
+        return false;
+      } else {
+        // 없으면 추가
+        if (item.id === 1) {
+          // 전체삭제 버튼이면?
+          setSelectedItemList((prev) => ({ ...prev, [tab]: DefaultSelected[tab] }));
+          return false;
+        } else {
+          const updatedList = (selectedItemList[tab] as ItemProps[]).filter(
+            (value) => value.id !== 1,
+          );
+          setSelectedItemList((prev) => {
+            const newValue = [...updatedList, item];
+            return { ...prev, [tab]: newValue };
+          });
+        }
+        return true;
+      }
+    } else {
+      // acc 제외 단일 객체인 경우
+      if (
+        selectedItemList[tab] &&
+        'id' in selectedItemList[tab] &&
+        item.id === (selectedItemList[tab] as ItemProps).id
+      ) {
+        // 있는 경우(취소)는 default item 으로 변경
+        setSelectedItemList((prev) => ({ ...prev, [tab]: DefaultSelected[tab] }));
+        return false;
+      } else {
+        // 없으면 선택에 추가
+        setSelectedItemList((prev) => ({ ...prev, [tab]: item }));
+        return true;
       }
     }
-    setWearItemList(wearItems);
-  }, [myItemList]);
+  };
 
-  useEffect(() => {
-    const newQookieWear = {
-      background: checkItemLength(0),
-      hat: checkItemLength(1),
-      shoe: checkItemLength(2),
-      bottom: checkItemLength(3),
-      top: checkItemLength(4),
-    };
-    const accessories = checkArrLength(5);
+  const categoryTab = {
+    background: <BgItem />,
+    hat: <HatItem />,
+    shoe: <ShoeItem />,
+    bottom: <PantsItem />,
+    top: <TopItem />,
+    accessories: <ACCItem />,
+  };
 
-    setShowQookie((pre) => {
-      return {
-        ...pre,
-        ...newQookieWear,
-        accessories: accessories,
-      };
+  const checkItemToBuy = () => {
+    const cartItemList: ItemProps[] = [];
+
+    Object.keys(categoryTab).forEach((category) => {
+      const tab = category as keyof SelectedItemProps;
+
+      if (tab === 'accessories') {
+        // acc 는 리스트니까 확인해서 하나씩 넣어주기
+        selectedItemList[tab].forEach((acc) => {
+          if (!myItemList[tab].some((item) => item.id === acc.id)) {
+            // myItemList에 없는 경우에만 추가
+            cartItemList.push(acc);
+          }
+        });
+      } else {
+        // acc 제외하고 myItemList 에 없으면 cartItemList 에 추가
+        if (!myItemList[tab].some((item) => item.id === selectedItemList[tab].id)) {
+          // myItemList에 없는 경우에만 추가
+          cartItemList.push(selectedItemList[tab]);
+        }
+      }
     });
-  }, [wearItemList]);
+    return cartItemList;
+  };
+
+  const resetItem = () => {
+    for (const category of Object.keys(categoryTab)) {
+      const tab = category as keyof SelectedItemProps;
+      if (tab === 'accessories') {
+        for (const acc of selectedItemList[tab]) {
+          const matchingItems = myItemList[tab].some((item) => item.id === acc.id);
+          if (!matchingItems) {
+            const updatedList = (selectedItemList[tab] as ItemProps[]).filter(
+              (value) => value.id !== acc.id,
+            );
+            setSelectedItemList((prev) => ({ ...prev, [tab]: updatedList }));
+          }
+        }
+      } else {
+        const matchingItems = myItemList[tab].some((item) => item.id === selectedItemList[tab].id);
+        if (!matchingItems) {
+          setSelectedItemList((prev) => ({ ...prev, [tab]: DefaultSelected[tab] }));
+        }
+      }
+    }
+    exitStoreHandler();
+  };
 
   useEffect(() => {
-    let count = 0;
-    for (const i in cartItemList) {
-      count += cartItemList[i].length;
-    }
-    if (count > 0) {
-      setIsItem(true);
-    } else {
-      setIsItem(false);
-    }
-  }, [cartItemList]);
-
-  useEffect(() => {
+    // 뒤로가기 감지
     const checkBackEvent = () => {
-      if (isItem) {
+      if (checkItemToBuy().length > 0) {
         setIsExit(true);
         navigate('/store');
       } else {
@@ -108,52 +212,18 @@ export default function Store() {
     });
 
     return unCheckBackEvent;
-  }, [isItem, wearItemList]);
+  }, [selectedItemList]);
 
-  const checkItemLength = (index: number) => {
-    if (wearItemList && wearItemList[index] && wearItemList[index].length > 0) {
-      return wearItemList[index][0].media;
-    }
-    return '';
+  const selectAllTabHandler = async () => {
+    // 상점 tab 클릭시
+    await getAllItemList();
+    setCurrentTab(0);
   };
 
-  const checkArrLength = (index: number) => {
-    if (wearItemList && wearItemList[index] && wearItemList[index].length > 0) {
-      const urlList: string[] = wearItemList[index].map((item) => item.media);
-      return urlList;
-    }
-    return [];
-  };
-
-  const getWearItemId = (index: number) => {
-    if (wearItemList && wearItemList[index] && wearItemList[index].length > 0) {
-      return wearItemList[index][0].id;
-    }
-    if (index === 0) {
-      return 2;
-    } else {
-      return 1;
-    }
-  };
-
-  const getWearItemArr = (index: number) => {
-    if (wearItemList && wearItemList[index] && wearItemList[index].length > 0) {
-      const idList: number[] = wearItemList[index].map((item) => item.id);
-      return idList;
-    }
-    return [1];
-  };
-
-  const selectTabHandler = (now: number) => {
-    setCurrentTab(now);
-  };
-
-  const wearItemSetHandler = (list: AllItemProps) => {
-    setWearItemList(list);
-  };
-
-  const cartItemSetHandler = (list: AllItemProps) => {
-    setCartItemList(list);
+  const selectMyTabHandler = async () => {
+    // my tab 클릭시
+    await getMyItemList();
+    setCurrentTab(1);
   };
 
   const onCartHandler = () => {
@@ -164,31 +234,68 @@ export default function Store() {
     setIsExit(false);
   };
 
-  const exitStoreHandler = () => {
-    const checkItemChange: wearReqType = {
-      backgroundId: getWearItemId(0),
-      hatId: getWearItemId(1),
-      shoeId: getWearItemId(2),
-      bottomId: getWearItemId(3),
-      topId: getWearItemId(4),
-      accessories: getWearItemArr(5),
-    };
+  // item tab 으로 넘겨줄 현재 카테고리의 아이템 리스트 반환
+  const currentItemListHandler = () => {
+    const tab = curCategory as keyof SelectedItemProps;
+    let returnItemList: ItemProps[] = [];
+    if (currentTab == 0) {
+      returnItemList = itemList[tab];
+    } else {
+      returnItemList = myItemList[tab];
+    }
+    return returnItemList;
+  };
 
-    itemApi.wearItemReq(checkItemChange).then(() => {
-      setQookie({ ...qookie, ...showQookie });
-      navigate('/mypage');
-    });
+  // selected list 에 있는 item 인지 확인해서 item의 click state 반환
+  const checkItemHandler = (item: ItemProps) => {
+    const tab = curCategory as keyof SelectedItemProps;
+    if (Array.isArray(selectedItemList[tab])) {
+      return (selectedItemList[tab] as ItemProps[]).some((value) => value.id === item.id);
+    } else {
+      return (selectedItemList[tab] as ItemProps).id === item.id;
+    }
+  };
+
+  const exitStoreHandler = () => {
+    // 입은 옷 저장 api
+    // selected item 중에 내것이 아닌 것은 제외하고 보내야하는데
+    // reset 코드는 작동하지만, selectedItemList 의 변동사항이 반영되지 않은 채,
+    // 그 다음 로직이 먼저 진행됨
+    if (selectedItemList) {
+      const acc: number[] = [1];
+      selectedItemList.accessories.map((item) => acc.push(item.id));
+
+      const wearItemId: wearReqType = {
+        hatId: selectedItemList.hat.id,
+        topId: selectedItemList.top.id,
+        bottomId: selectedItemList.bottom.id,
+        shoeId: selectedItemList.shoe.id,
+        backgroundId: selectedItemList.background.id,
+        accessories: acc,
+      };
+
+      itemApi.wearItemReq(wearItemId).then(() => {
+        setQookie({ ...qookie, ...selectedItemList });
+        navigate('/mypage');
+      });
+    }
   };
 
   return (
     <PageContainer>
       <TopContainer>
-        <BackgroundImg src={showQookie.background} alt="bg" />
+        {selectedItemList.background.media && (
+          <BackgroundImg src={selectedItemList?.background.media} alt="bg" />
+        )}
         <QookieContainer>
           <Qookie {...showQookie} />
         </QookieContainer>
         <ButtonContainer>
-          <Button theme={isItem ? 'default' : 'disabled'} size="icon" onClick={onCartHandler}>
+          <Button
+            theme={checkItemToBuy().length > 0 ? 'default' : 'disabled'}
+            size="icon"
+            onClick={onCartHandler}
+          >
             <ShoppingCartIcon width={20} height={20} />
             구매
           </Button>
@@ -199,32 +306,41 @@ export default function Store() {
           <Title
             typography="title"
             color={currentTab !== 0 ? 'var(--MR_GRAY1)' : 'var(--MR_BLACK)'}
-            onClick={() => selectTabHandler(0)}
+            onClick={selectAllTabHandler}
           >
             상점
           </Title>
           <Title
             typography="title"
             color={currentTab !== 1 ? 'var(--MR_GRAY1)' : 'var(--MR_BLACK)'}
-            onClick={() => selectTabHandler(1)}
+            onClick={selectMyTabHandler}
           >
             MY
           </Title>
         </TitleTab>
+        <TabContainer ref={tabSwipeRef}>
+          {Object.entries(categoryTab).map(([key, value]) => (
+            <IconContainer
+              key={key}
+              current={curCategory === key}
+              onClick={() => setCurCategory(key)}
+            >
+              {value}
+            </IconContainer>
+          ))}
+        </TabContainer>
         <ItemTab
-          list={currentTab === 0 ? itemList : myItemList}
-          wearList={wearItemList}
-          handleList={wearItemSetHandler}
-          handleCart={currentTab === 0 ? cartItemSetHandler : undefined}
+          curCategory={curCategory}
+          tabItemProps={currentItemListHandler}
+          handleCheck={changeSelectItemHandler}
+          isCheck={checkItemHandler}
         />
       </BottomContainer>
       <BottomSheet
         isOpen={isCartOpen}
         title={'장바구니'}
         onClose={onCartHandler}
-        children={
-          <Cart list={cartItemList} wearList={wearItemList} handleList={cartItemSetHandler} />
-        }
+        children={<Cart totalList={checkItemToBuy()} onClose={onCartHandler} />}
       />
       <Dialog
         title="장착한 아이템이 사라져요"
@@ -232,7 +348,7 @@ export default function Store() {
         negative="구매하기"
         onNegativeClick={onCartHandler}
         positive="나가기"
-        onPositiveClick={exitStoreHandler}
+        onPositiveClick={resetItem}
         isopen={isExit}
         onCloseRequest={exitModal}
       />
@@ -282,4 +398,30 @@ const TitleTab = styled.div`
   display: flex;
   padding: 1.5rem 1rem 0rem 1rem;
   gap: 1.3rem;
+`;
+
+const TabContainer = styled.div`
+  width: 100%;
+  overflow-x: scroll;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  background: #f8f8f8;
+  padding: 0.6rem 0;
+`;
+
+const IconContainer = styled.div<{ current: boolean }>`
+  height: 100%;
+  padding: 0 2rem;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
+  ${({ current }) =>
+    current &&
+    `
+    & > svg > path {
+      fill: var(--MR_RED);
+    }
+    `}
 `;

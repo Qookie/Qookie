@@ -1,43 +1,24 @@
-import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Chip from '../../../shared/molecules/Chip';
 import { Qoin } from '../../../../assets/svgs';
 import { NoSymbolIcon } from '@heroicons/react/24/outline';
 import NewItem from '../../../../assets/pngs/new.png';
+import { ItemProps } from '../../../../types/item';
 
-export interface ItemTypeProps {
-  id: number;
-  name: string;
-  media: string;
-  thumbnail: string;
-  price?: number;
-  isNew?: boolean;
-  isWear?: boolean;
-}
-
-export interface ItemProps {
-  item: ItemTypeProps;
+interface Props {
+  item: ItemProps;
   chip?: boolean;
-  handleCheck?: (...args: (boolean | ItemTypeProps | any)[]) => void;
-  select?: ItemTypeProps[];
+  handleCheck: (item: ItemProps) => boolean;
+  isCheck: boolean;
 }
 
-export default function Item({ item, chip, handleCheck, select }: ItemProps) {
-  const [isChecked, setIsChecked] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (select) {
-      const isItemChecked = select.some((value) => value.id === item.id);
-      setIsChecked(isItemChecked);
-    }
-  });
-
+export default function Item({ item, chip, handleCheck, isCheck }: Props) {
   const selectHandler = () => {
-    handleCheck && handleCheck(item);
+    handleCheck(item);
   };
 
   return (
-    <Container onClick={selectHandler} state={isChecked}>
+    <Container onClick={selectHandler} state={isCheck}>
       {item.media ? (
         <ItemContainer>
           <ItemImg src={item.thumbnail} alt={item.name} />

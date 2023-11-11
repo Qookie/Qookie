@@ -1,148 +1,68 @@
-import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { ACCItem, BgItem, HatItem, PantsItem, ShoeItem, TopItem } from '../../../../assets/svgs';
-import mouseSwipe from '../../../../utils/mouseSwipe';
-import { AllItemProps } from '../../../../pages/Store';
-import Item, { ItemTypeProps } from '../../molecules/Item';
+import Item from '../../molecules/Item';
+import { ItemProps } from '../../../../types/item';
+import { useRecoilValue } from 'recoil';
+import { QookieInfoState } from '../../../../modules/qookie';
+import { useEffect, useState } from 'react';
 
-export interface TabProps {
-  list?: AllItemProps;
-  wearList: AllItemProps;
-  handleList: (list: AllItemProps) => void;
-  handleCart?: (list: AllItemProps) => void;
+interface TabProps {
+  curCategory: string;
+  tabItemProps: () => ItemProps[];
+  handleCheck: (item: ItemProps) => boolean;
+  isCheck: (item: ItemProps) => boolean;
 }
 
-const SelectedDefault = {
-  0: [],
-  1: [],
-  2: [],
-  3: [],
-  4: [],
-  5: [],
-};
-
-export default function ItemTab({ list, wearList, handleList, handleCart }: TabProps) {
-  const [currentTab, setCurrentTab] = useState<number>(0);
-  const tabSwipeRef = useRef<HTMLDivElement>(null);
-  const [selectedItem, setSelectedItem] = useState<AllItemProps>(SelectedDefault);
-  const [listToBuy, setListToBuy] = useState<AllItemProps>(SelectedDefault);
+export default function ItemTab({ curCategory, tabItemProps, handleCheck, isCheck }: TabProps) {
+  const itemList: ItemProps[] = tabItemProps();
+  const [lockItem, setLockItem] = useState<boolean>(false);
+  const qookie = useRecoilValue(QookieInfoState);
+  
+  const levelCheck = () => {
+    const level = qookie.level;
+    if (curCategory === 'accessories' || curCategory === 'top') {
+      if (level > 40) {
+        return true;
+      }
+    }
+    if (curCategory === 'bottom') {
+      if (level > 30) {
+        return true;
+      }
+    }
+    if (curCategory === 'shoe') {
+      if (level > 20) {
+        return true;
+      }
+    }
+    if (curCategory === 'hat') {
+      if (level > 10) {
+        return true;
+      }
+    }
+    if (curCategory === 'background') {
+      return true;
+    }
+    return false;
+  };
 
   useEffect(() => {
-    handleList(selectedItem);
-  }, [selectedItem]);
-
-  useEffect(() => {
-    if (handleCart) {
-      handleCart(listToBuy);
-    }
-  }, [listToBuy]);
-
-  mouseSwipe(tabSwipeRef);
-
-  const tabItem = [
-    { name: 'background', icon: <BgItem /> },
-    { name: 'hat', icon: <HatItem /> },
-    { name: 'shoe', icon: <ShoeItem /> },
-    { name: 'pant', icon: <PantsItem /> },
-    { name: 'top', icon: <TopItem /> },
-    { name: 'acc', icon: <ACCItem /> },
-  ];
-
-  const selectTabHandler = (idx: number) => {
-    setCurrentTab(idx);
-  };
-
-  const selectItemHandler = (args: ItemTypeProps) => {
-    if (handleCart) {
-      handleCartItemList(args);
-    }
-    handleWearItemList(args);
-  };
-
-  const handleWearItemList = (args: ItemTypeProps) => {
-    if (currentTab === 5) {
-      setSelectedItem((prev) => {
-        const newArr = { ...prev };
-        const currentTabArray = newArr[currentTab];
-
-        if (currentTabArray === undefined || !currentTabArray.some((item) => item.id === args.id)) {
-          newArr[currentTab] = [...currentTabArray, args];
-        } else {
-          newArr[currentTab] = currentTabArray.filter((item) => item.id !== args.id);
-        }
-        return newArr;
-      });
-    } else {
-      setSelectedItem((prev) => {
-        const newArr = { ...prev };
-        const currentTabArray = newArr[currentTab];
-
-        if (currentTabArray === undefined || currentTabArray[0] === undefined) {
-          newArr[currentTab] = [args];
-        } else {
-          if (currentTabArray[0].id === args.id) {
-            newArr[currentTab] = [];
-          } else {
-            newArr[currentTab] = [args];
-          }
-        }
-        return newArr;
-      });
-    }
-  };
-
-  const handleCartItemList = (args: ItemTypeProps) => {
-    if (currentTab === 5) {
-      setListToBuy((prev) => {
-        const newArr = { ...prev };
-        const currentTabArray = newArr[currentTab];
-
-        if (currentTabArray === undefined || !currentTabArray.some((item) => item.id === args.id)) {
-          newArr[currentTab] = [...currentTabArray, args];
-        } else {
-          newArr[currentTab] = currentTabArray.filter((item) => item.id !== args.id);
-        }
-        return newArr;
-      });
-    } else {
-      setListToBuy((prev) => {
-        const newArr = { ...prev };
-        const currentTabArray = newArr[currentTab];
-
-        if (currentTabArray === undefined || currentTabArray[0] === undefined) {
-          newArr[currentTab] = [args];
-        } else {
-          if (currentTabArray[0].id === args.id) {
-            newArr[currentTab] = [];
-          } else {
-            newArr[currentTab] = [args];
-          }
-        }
-        return newArr;
-      });
-    }
-  };
+    const res = levelCheck();
+    setLockItem(res);
+    console.log(res);
+  }, [curCategory]);
 
   return (
     <Container>
-      <TabContainer ref={tabSwipeRef}>
-        {tabItem.map((el, idx) => (
-          <IconContainer current={currentTab === idx} onClick={() => selectTabHandler(idx)}>
-            {el.icon}
-          </IconContainer>
-        ))}
-      </TabContainer>
-      <ItemContainer>
-        {list &&
-          list[currentTab].map((item, index) => (
-            <Item
-              item={item}
-              key={index}
-              handleCheck={selectItemHandler}
-              select={selectedItem[currentTab]}
-            />
-          ))}
-      </ItemContainer>
+      {lockItem ? (
+        <ItemContainer>
+          {itemList &&
+            itemList.map((item) => (
+              <Item item={item} key={item.id} handleCheck={handleCheck} isCheck={isCheck(item)} />
+            ))}
+        </ItemContainer>
+      ) : (
+        <LockContainer>지금은 착용할 수 없어요ㅠ</LockContainer>
+      )}
     </Container>
   );
 }
@@ -151,30 +71,12 @@ const Container = styled.div`
   width: 100%;
 `;
 
-const TabContainer = styled.div`
+const LockContainer = styled.div`
+  padding: 5rem 0;
+  box-sizing: border-box;
+  text-align: center;
   width: 100%;
-  overflow-x: scroll;
-  white-space: nowrap;
-  display: flex;
-  align-items: center;
-  background: #f8f8f8;
-  padding: 0.6rem 0;
-`;
-
-const IconContainer = styled.div<{ current: boolean }>`
-  height: 100%;
-  padding: 0 2rem;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-
-  ${({ current }) =>
-    current &&
-    `
-    & > svg > path {
-      fill: var(--MR_RED);
-    }
-    `}
+  color: var(--MR_GRAY2);
 `;
 
 const ItemContainer = styled.div`

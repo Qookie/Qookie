@@ -2,32 +2,29 @@ import styled from 'styled-components';
 import CartItem from '../../molecules/CartItem';
 import Button from '../../../shared/atoms/Button';
 import Chip from '../../../shared/molecules/Chip';
-import { useEffect, useState } from 'react';
-import { ItemTypeProps } from '../../molecules/Item';
-import { TabProps } from '../ItemTab';
+import { useState } from 'react';
 import { itemApi } from '../../../../api';
+import { ItemProps } from '../../../../types/item';
+import { showToast } from '../../../shared/molecules/Alert';
+import { useNavigate } from 'react-router';
 
 export interface orderReqProps {
   itemId: number;
 }
 
-export default function Cart({ list, handleList }: TabProps) {
-  const [totalItemList, setTotalItemList] = useState<ItemTypeProps[]>([]);
-  const [selectedItemList, setSelectedItemList] = useState<ItemTypeProps[]>([]);
+interface CartProps {
+  totalList: ItemProps[];
+  onClose: () => void;
+}
+
+export default function Cart({ totalList, onClose }: CartProps) {
+  const [selectedItemList, setSelectedItemList] = useState<ItemProps[]>([]);
   const [selectedPrice, setSelectedPrice] = useState<number>(0);
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    const itemList: ItemTypeProps[] = [];
-    for (const row in list) {
-      list[Number(row)].map((item) => itemList.push(item));
-    }
-    setTotalItemList(itemList);
-  }, [list]);
-
-  const selectProductHandler = (item: ItemTypeProps, checked: boolean) => {
+  const selectProductHandler = (item: ItemProps, checked: boolean) => {
     if (checked) {
       setSelectedItemList((prev) => [...prev, item]);
-      setSelectedItemList((prev) => Array.from(new Set(prev)));
       setSelectedPrice((prev) => prev + (item.price || 0));
     } else if (selectedPrice > 0) {
       setSelectedItemList((prev) => prev.filter((value) => value.id !== item.id));
@@ -38,13 +35,21 @@ export default function Cart({ list, handleList }: TabProps) {
   const handleBuyItems = () => {
     const itemId: orderReqProps[] = [];
     selectedItemList.map((value) => itemId.push({ itemId: value.id }));
-    itemApi.orderItemReq(itemId).then((res) => console.log('orderItemReq', res));
+    itemApi.orderItemReq(itemId).then((res) => {
+      console.log('orderItemReq', res);
+      onClose();
+      showToast({
+        title: '아이템 구매 완료',
+        content: `${selectedItemList.length}개의 상품이 구매되었습니다.`,
+      });
+      navigate('/store');
+    });
   };
 
   return (
     <Container>
       <ItemContainer>
-        {totalItemList.map((item, idx) => (
+        {totalList.map((item, idx) => (
           <CartItem key={idx} item={item} handleCheck={selectProductHandler} />
         ))}
       </ItemContainer>
