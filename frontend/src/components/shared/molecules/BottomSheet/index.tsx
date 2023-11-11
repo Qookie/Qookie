@@ -9,16 +9,9 @@ export interface BottomModalProps {
   onClose: () => void;
   title: string;
   children: React.ReactNode;
-  onComplete: () => void;
 }
 
-export default function BottomSheet({
-  isOpen,
-  onClose,
-  title,
-  children,
-  onComplete,
-}: BottomModalProps) {
+export default function BottomSheet({ isOpen, onClose, title, children }: BottomModalProps) {
   const [visible, setVisible] = useState<boolean>(false);
 
   useEffect(() => {
@@ -90,6 +83,8 @@ const ChildrenContainer = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
+  padding: 0 1rem;
+  box-sizing: border-box;
 `;
 
 const Title = styled(Text)`
