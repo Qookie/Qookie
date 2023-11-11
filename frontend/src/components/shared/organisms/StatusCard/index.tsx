@@ -31,12 +31,6 @@ export default function StatusCard({ ...props }: QookieInfo) {
   const [bakeProps, setBakeProps] = useState<QookieInfo>(props);
   const divRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    makeBakeProps().then((res) => {
-      setBakeProps(res);
-    });
-  }, []);
-
   const handleBakeClick = async () => {
     const res = await bakePng(divRef);
     if (res) {
@@ -61,6 +55,11 @@ export default function StatusCard({ ...props }: QookieInfo) {
 
   const openDialogHandler = () => {
     setIsDialogOpen((pre) => !pre);
+    if (isDialogOpen) {
+      makeBakeProps().then((res) => {
+        setBakeProps(res);
+      });
+    }
   };
 
   const openBottomHandler = () => {
@@ -108,7 +107,16 @@ export default function StatusCard({ ...props }: QookieInfo) {
   };
 
   const makeBakeProps = async () => {
-    const bodyUrl = await getS3UrlHandler(props.body);
+    let lastBody: string = props.body;
+    try {
+      const res = await qookieApi.getQookieLastBody();
+      if (res) {
+        lastBody = res;
+      }
+    } catch (err) {
+      console.log(err);
+    }
+    const bodyUrl = await getS3UrlHandler(lastBody);
     const eyeUrl = await getS3UrlHandler(props.eye);
     const mouthUrl = await getS3UrlHandler(props.mouth);
 
