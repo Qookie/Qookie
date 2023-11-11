@@ -1,3 +1,5 @@
+import { ItemProps } from './item';
+
 export interface QookieInfo {
   name: string;
   createdAt: string;
@@ -8,21 +10,12 @@ export interface QookieInfo {
   extraBody: string;
   eye: string;
   mouth: string;
-  hat: ItemProp;
-  top: ItemProp;
-  bottom: ItemProp;
-  shoe: ItemProp;
-  background: ItemProp;
-  accessories: ItemProp[];
-}
-
-interface ItemProp {
-  id: number;
-  media: string;
-  name?: string;
-  thumbnail?: string;
-  isWear?: boolean;
-  isNew?: boolean;
+  hat: ItemProps;
+  top: ItemProps;
+  bottom: ItemProps;
+  shoe: ItemProps;
+  background: ItemProps;
+  accessories: ItemProps[];
 }
 
 export interface NotificationProp {
