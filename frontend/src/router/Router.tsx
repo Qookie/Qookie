@@ -23,6 +23,7 @@ import WaterQuest from '../pages/quest/WaterQuest';
 import KeyPage from '../pages/KeyPage';
 import AttendanceQuest from '../pages/quest/AttendanceQuest';
 import Notification from '../pages/Notification';
+import History from '../pages/History';
 
 const Router = () => {
   const [userState, _] = useRecoilState(UserState);
@@ -38,12 +39,12 @@ const Router = () => {
           <Route path="/init" element={<InitQookie />} />
           <Route path="/set-wakeup" element={<SetWakeupTime />} />
           <Route path="/home" element={<Home />} />
-          <Route path="/calendar" element={<Login />} />
           <Route path="/mind" element={<Login />} />
           <Route path="/mypage" element={<Mypage />} />
           <Route path="/challenge" element={<Challenge />} />
           <Route path="/notification" element={<Notification />} />
           <Route path="/loading" element={<Loading />} />
+          <Route path="/calendar" element={<History />} />
 
           <Route path="/quest">
             <Route path="wake" element={<WakeupQuest />} />
@@ -77,10 +78,10 @@ const HeaderWrapper = () => {
       return <Header page="home" />;
     case '/mind':
       return <Header page="tab" title="마음함" />;
-    case '/calendar':
-      return <Header page="tab" title="캘린더" />;
     case '/mypage':
       return <Header page="tab" title="마이페이지" />;
+
+    case '/calendar':
     case '/set-wakeup':
     case '/':
     case '/init':
