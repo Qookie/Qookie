@@ -7,7 +7,7 @@ interface Props {
   dateBackground?: {
     [key: string]: string;
   };
-  onClickDateCallback?: (date?: Moment) => void;
+  onClickDateCallback?: (date: Moment) => void;
 }
 
 const dayOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
