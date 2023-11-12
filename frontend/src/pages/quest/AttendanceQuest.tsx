@@ -34,6 +34,7 @@ function AttendanceQuest() {
     try {
       await http.post('/api/quest/attendance');
       showToast({ title: '10 포인트 적립🌟', content: '출석 퀘스트가 달성되었습니다.' });
+      fetchAttendance();
     } catch (error) {
       console.log(error);
     }
