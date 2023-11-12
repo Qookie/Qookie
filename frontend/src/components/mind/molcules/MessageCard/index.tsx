@@ -3,24 +3,23 @@ import styled from 'styled-components'
 import Text from '../../../shared/atoms/Text';
 import OhQookie from '../../../../assets/pngs/ohqookie.png';
 
-interface MessageProps {
-  // category: 'HAPPY' | 'WORRY' | 'THANK' | 'ANXIETY'
-  category: string;
-  date: string;
+export interface MessageProps {
+  category: 'HAPPY' | 'WORRY' | 'THANK' | 'ANXIETY';
+  createdAt: string;
   content: string;
   reply: string;
 }
 
-export default function MessageCard({ category, date, content, reply }: MessageProps) {
+export default function MessageCard({ category, createdAt, content, reply }: MessageProps) {
   return (
     <Container>
       <TopContainer>
-        <Text typography='title'>감사일기</Text>
-        <Text typography='main' color='var(--MR_GRAY2)'>2023-10-16</Text>
+        <Text typography='title'>{category} 일기</Text>
+        <Text typography='main' color='var(--MR_GRAY2)'>{createdAt.toString().split('T')[0]}</Text>
       </TopContainer>
 
       <ContentContainer>
-        <Text>오늘은 가만히 앉아서 컴퓨터만 했는데, 생각보다 빨리 집에 갈 시간이 돼서 감사하다.</Text>
+        <Text>{content}</Text>
       </ContentContainer>
 
       <ReplyContainer>
@@ -28,7 +27,7 @@ export default function MessageCard({ category, date, content, reply }: MessageP
         <ReplyDiv>
           {reply == null ? 
           <Text color='var(--MR_GRAY2)'>오쿠키 박사가 마음 답장을 작성중이에요!</Text> : (
-            <Text color='var(--MR_BLACK)'>답장입니다.</Text>)}
+            <Text color='var(--MR_BLACK)'>{reply}</Text>)}
         </ReplyDiv>
       </ReplyContainer>
     </Container>
@@ -40,7 +39,7 @@ const Container = styled.div`
   border: 1px solid var(--MR_GRAY1);
   border-radius: 12px;
   padding: 20px;
-  margin: 0 1rem;
+  margin: 15px 1rem;
 `;
 
 const TopContainer = styled.div`
