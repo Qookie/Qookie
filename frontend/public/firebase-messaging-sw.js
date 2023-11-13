@@ -14,3 +14,44 @@ firebase.initializeApp({
 });
 
 const messaging = firebase.messaging();
+messaging.onBackgroundMessage(messaging, (payload) => {
+  console.log('BG PAYLOAD: ', payload);
+
+  const notificationTitle = payload.notification.title;
+  const notificationOptions = {
+    body: payload.notification.body,
+    icon: '/192.png',
+  };
+  self.registration.showNotification(notificationTitle, notificationOptions);
+});
+
+// self.addEventListener('install', function (e) {
+//   console.log('fcm sw install');
+//   self.skipWaiting();
+// });
+
+// self.addEventListener('activate', function (e) {
+//   console.log('fcm activate');
+// });
+
+// self.addEventListener('push', function (e) {
+//   if (!e.data.json()) return;
+
+//   console.log(e);
+//   const resultData = e.data.json().notification;
+//   const notificationTitle = resultData.title;
+//   const notificationOptions = {
+//     body: resultData.body,
+//     icon: resultData.icon,
+//     tgag: resultData.tag,
+//   };
+
+//   self.registration.showNotification(notificationTitle, notificationOptions);
+// });
+
+// self.addEventListener("notificationclick", function (event) {
+//   console.log("notification click");
+//   const url = "/";
+//   event.notification.close();
+//   event.waitUntil(clients.openWindow(url));
+// });

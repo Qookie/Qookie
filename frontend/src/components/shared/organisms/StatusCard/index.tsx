@@ -4,7 +4,7 @@ import ProgressBar from '../../atoms/ProgressBar';
 import { calcDateDiff, getToday } from '../../../../utils/date';
 import Button from '../../atoms/Button';
 import Dialog from '../../molecules/Dialog';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 import BottomPageLayout from '../../Template/BottomPageLayout';
 import TitleLayout from '../../Template/TitleLayout';
@@ -14,6 +14,8 @@ import { qookieApi } from '../../../../api';
 import Qookie from '../../molecules/Qookie';
 import QookieBag from '../../../../assets/pngs/QookieBag.png';
 import Text from '../../atoms/Text';
+import { useResetRecoilState } from 'recoil';
+import { QookieInfoState } from '../../../../modules/qookie';
 
 export interface StatusCardProps {
   level: number;
@@ -23,21 +25,38 @@ export interface StatusCardProps {
 }
 
 export default function StatusCard({ ...props }: QookieInfo) {
+  const resetList = useResetRecoilState(QookieInfoState);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [isBottomOpen, setIsBottomOpen] = useState<boolean>(false);
+  const [bakeProps, setBakeProps] = useState<QookieInfo>(props);
   const divRef = useRef<HTMLDivElement>(null);
 
-  const handleDownloadClick = () => {
-    bakePng(divRef, { fileName: props.name });
+  useEffect(() => {
+    makeBakeProps().then((res) => {
+      setBakeProps(res);
+    });
+  }, []);
+
+  const handleBakeClick = async () => {
+    const res = await bakePng(divRef);
+    if (res) {
+      const imgFile = await converUrltoFile(res);
+      qookieApi.bakeQookieReq(imgFile).then(() => {
+        resetList();
+        openBottomHandler();
+      });
+    }
   };
 
-  const getS3UrlHandler = (url: string) => {
-    let newUrl = '';
-    qookieApi.getProxyUrl(url).then((res) => {
-      console.log(res);
-      newUrl = res;
-    });
-    return newUrl;
+  const converUrltoFile = async (url: string) => {
+    const res = await fetch(url);
+    const data = await res.blob();
+    const metaData = { type: `image/png` };
+    return new File([data], `${props.name}.png`, metaData);
+  };
+
+  const getS3UrlHandler = async (url: string) => {
+    return await qookieApi.getProxyUrl(url);
   };
 
   const openDialogHandler = () => {
@@ -88,16 +107,18 @@ export default function StatusCard({ ...props }: QookieInfo) {
     }
   };
 
-  let img = new Image();
-  img.src = /^data:image/.test(props.body) ? props.body : props.body + '?' + new Date().getTime();
+  const makeBakeProps = async () => {
+    const bodyUrl = await getS3UrlHandler(props.body);
+    const eyeUrl = await getS3UrlHandler(props.eye);
+    const mouthUrl = await getS3UrlHandler(props.mouth);
 
-  const bakeProps = {
-    ...props,
-    background: '',
-    body: img.src,
-    // body: getS3UrlHandler(props.body),
-    // eye: getS3UrlHandler(props.eye),
-    // mouth: getS3UrlHandler(props.mouth),
+    return {
+      ...props,
+      background: { id: 0, media: '' },
+      body: `data:image/png;base64,${bodyUrl}`,
+      eye: `data:image/png;base64,${eyeUrl}`,
+      mouth: `data:image/png;base64,${mouthUrl}`,
+    };
   };
 
   return (
@@ -138,17 +159,19 @@ export default function StatusCard({ ...props }: QookieInfo) {
             >
               <BottomInner>
                 <BakedQookie>
-                  <QookieContainer ref={divRef}>
-                    <Qookie {...bakeProps} />
-                    <QookieBagImg src={QookieBag} alt="bag" />
-                  </QookieContainer>
+                  <BakeSize ref={divRef}>
+                    <QookieContainer>
+                      <Qookie {...bakeProps} />
+                      <QookieBagImg src={QookieBag} alt="bag" />
+                    </QookieContainer>
+                  </BakeSize>
                   <NameTag>
                     <Text typography="button">{props.name}</Text>({getToday()})
                   </NameTag>
                 </BakedQookie>
                 <BottomBtnContainer>
-                  <TextBtn onClick={() => ''}>쿠키 보러 가기</TextBtn>
-                  <Button onClick={handleDownloadClick}>완료</Button>
+                  <TextBtn onClick={() => navigate('/myqookie')}>쿠키 보러 가기</TextBtn>
+                  <Button onClick={handleBakeClick}>완료</Button>
                 </BottomBtnContainer>
               </BottomInner>
             </TitleLayout>
@@ -207,6 +230,13 @@ const BottomInner = styled.div`
 const BakedQookie = styled.div`
   display: flex;
   flex-direction: column;
+`;
+
+const BakeSize = styled.div`
+  width: 12rem;
+  height: 15rem;
+  margin: auto;
+  padding-bottom: 5rem;
 `;
 
 const NameTag = styled.div`

@@ -10,6 +10,7 @@ import { auth } from './firebase/firebaseConfig';
 import { useEffect, useState } from 'react';
 import { User, onAuthStateChanged } from 'firebase/auth';
 import { UserContext } from './firebase/firebaseAuth';
+import Toast from './components/shared/molecules/Alert';
 
 function App() {
   const [user, setUser] = useState<User | null>(null);
@@ -21,6 +22,18 @@ function App() {
     });
 
     initiateFirebaseMessaging();
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker
+        .register('/firebase-messaging-sw.js')
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+
+    window.addEventListener('beforeinstallprompt', function (e) {});
 
     return () => unsubscribe();
   }, []);
@@ -30,6 +43,7 @@ function App() {
       <UserContext.Provider value={user}>
         <Layout>
           <GlobalStyle />
+          <Toast />
           <Router />
         </Layout>
       </UserContext.Provider>

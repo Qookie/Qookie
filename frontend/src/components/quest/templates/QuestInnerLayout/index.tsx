@@ -43,7 +43,6 @@ function QuestInnerLayout({
           {completeButtonText}
         </Button>
       </ButtonConatainer>
-      <Toast />
     </TitleLayout>
   );
 }
