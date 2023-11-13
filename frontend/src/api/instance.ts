@@ -47,7 +47,7 @@ export const http = {
     const header = isFile ? { headers: { 'Content-Type': 'multipart/form-data' } } : {};
     return axiosInstance.post<Response>(url, body, header).then((res) => res.data);
   },
-  patch: function patch<Response = unknown>(url: string) {
-    return axiosInstance.patch<Response>(url).then((res) => res.data);
+  patch: function patch<Response = unknown, Request = any>(url: string, body?: Request) {
+    return axiosInstance.patch<Response>(url, body).then((res) => res.data);
   },
 };

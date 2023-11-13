@@ -8,6 +8,8 @@ import Challenge from '../pages/Challenge';
 import Loading from '../pages/Loading';
 import SetWakeupTime from '../pages/SetWakeupTime';
 import Mypage from '../pages/Mypage';
+import Store from '../pages/Store';
+import ItemUpload from '../pages/ItemUpload';
 import WakeupQuest from '../pages/quest/WakeupQuest';
 import EatQuest from '../pages/quest/EatQuest';
 import { useRecoilState } from 'recoil';
@@ -42,6 +44,8 @@ const Router = () => {
           <Route path="/home" element={<Home />} />
           <Route path="/mind" element={<Login />} />
           <Route path="/mypage" element={<Mypage />} />
+          <Route path="/store" element={<Store />} />
+          <Route path="/admin" element={<ItemUpload />} />
           <Route path="/challenge" element={<Challenge />} />
           <Route path="/notification" element={<Notification />} />
           <Route path="/loading" element={<Loading />} />
