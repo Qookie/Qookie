@@ -24,7 +24,7 @@ function TitleLayout({ title, desc, children }: Props) {
 
 const Top = styled.div`
   box-sizing: border-box;
-  margin-top: 7vh;
+  margin-top: 80px;
   padding: 0 1rem;
   margin-bottom: 8vh;
 `;

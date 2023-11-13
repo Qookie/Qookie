@@ -2,12 +2,20 @@ package com.a504.qookie.domain.member.entity;
 
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalTime;
-import java.util.Arrays;
 
 import com.a504.qookie.domain.member.dto.LoginRequest;
 import com.a504.qookie.global.jwt.dto.JwtObject;
 import com.a504.qookie.global.util.CryptoUtil;
-import jakarta.persistence.*;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Index;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,9 +26,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(
-		indexes = {
-				@Index(name = "idx_uid", columnList = "uid")
-		}
+	indexes = {
+		@Index(name = "idx_uid", columnList = "uid")
+	}
 )
 public class Member {
 
@@ -46,15 +54,6 @@ public class Member {
 
 	@Column(name = "active", nullable = false, columnDefinition = "TINYINT(1)")
 	private Boolean active;
-
-	@PrePersist
-	@PreUpdate
-	private void setActiveDefault() {
-		if (this.active == null) {
-			this.active = true;
-		}
-	}
-
 	@Column(name = "message_token")
 	private String messageToken;
 
@@ -69,6 +68,14 @@ public class Member {
 		email = testEmail;
 		name = testName;
 		uid = testUid;
+	}
+
+	@PrePersist
+	@PreUpdate
+	private void setActiveDefault() {
+		if (this.active == null) {
+			this.active = true;
+		}
 	}
 
 	public void addInfo(LoginRequest loginRequest) {
@@ -96,9 +103,11 @@ public class Member {
 		return true;
 	}
 
-	public void setPoint(int point){
+	public void setPoint(int point) {
 		this.point += point;
 	}
 
-	public void buy(int point) { this.point -= point; }
+	public void buy(int point) {
+		this.point -= point;
+	}
 }
