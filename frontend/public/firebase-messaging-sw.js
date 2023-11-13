@@ -13,17 +13,17 @@ firebase.initializeApp({
   measurementId: 'G-0ZKEJQST24',
 });
 
-const messaging = firebase.messaging();
-messaging.onBackgroundMessage((payload) => {
-  console.log('BG PAYLOAD: ', payload);
+// const messaging = firebase.messaging();
+// messaging.onBackgroundMessage((payload) => {
+//   console.log('BG PAYLOAD: ', payload);
 
-  const notificationTitle = payload.data.title;
-  const notificationOptions = {
-    body: payload.data.body,
-    icon: '/logo192.png',
-  };
-  self.registration.showNotification(notificationTitle, notificationOptions);
-});
+//   const notificationTitle = payload.data.title;
+//   const notificationOptions = {
+//     body: payload.data.body,
+//     icon: '/logo192.png',
+//   };
+//   self.registration.showNotification(notificationTitle, notificationOptions);
+// });
 
 // self.addEventListener('install', function (e) {
 //   console.log('fcm sw install');
