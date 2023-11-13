@@ -16,92 +16,16 @@ firebase.initializeApp({
 const messaging = firebase.messaging();
 
 self.addEventListener('push', (event) => {
-  console.log('A', event);
   messaging.onBackgroundMessage((payload) => {
-    console.log('B', event);
-
     const notificationTitle = payload.data.title;
     const notificationOptions = {
       body: payload.data.body,
       icon: '/logo192.png',
     };
     var show = self.registration.showNotification(notificationTitle, notificationOptions);
-    console.log('C', show);
     event.waitUntil(show);
   });
-  // event.waitUntil(messaging.onBackgroundMessage((payload) => {}));
 });
-
-// self.addEventListener('message', (ev) => {
-//   console.log('C', ev);
-//   ev.waitUntil(Promise.resolve());
-// });
-
-// Listen for push events and ensure no default notification is shown
-// self.addEventListener('push', (event) => {
-//   console.log('AA');
-//   event.waitUntil(
-//     (async () => {
-//       // messaging.onBackgroundMessage((payload) => {
-//       //   console.log('BG: ', payload);
-
-//       //   const notificationTitle = payload.data.title;
-//       //   const notificationOptions = {
-//       //     body: payload.data.body,
-//       //     icon: '/logo192.png',
-//       //   };
-//       //   return self.registration.getNotifications().then((notifications) => {
-//       //     console.log('???: ', notifications);
-//       //     self.registration.showNotification(notificationTitle, notificationOptions);
-//       //     return;
-//       //   });
-//       // });
-//       console.log('A', event);
-//       // Your custom push handling here
-//       // ...
-//       var pl;
-//       messaging.onBackgroundMessage((payload) => {
-//         pl = payload;
-//         console.log('B');
-//         console.log('Payload: ', payload);
-//       });
-
-//       // If you don't want to show any notification for certain pushes,
-//       // just resolve immediately
-//       return self.registration.getNotifications().then((notifications) => {
-//         console.log('C', pl);
-//         const notificationTitle = pl.data.title;
-//         const notificationOptions = {
-//           body: pl.data.body,
-//           icon: '/logo192.png',
-//         };
-//         self.registration.showNotification(notificationTitle, notificationOptions);
-//         // Resolve the promise to let the browser know you have displayed a notification
-//         return;
-//       });
-//     })(),
-//   );
-// });
-
-// messaging.onBackgroundMessage((payload) => {
-//   console.log('BG PAYLOAD: ', payload);
-
-//   const notificationTitle = payload.data.title;
-//   const notificationOptions = {
-//     body: payload.data.body,
-//     icon: '/logo192.png',
-//   };
-//   return self.registration.getNotifications().then((notifications) => {
-//     console.log('???: ', notifications);
-//     self.registration.showNotification(notificationTitle, notificationOptions);
-//     return;
-//   });
-// });
-
-// self.addEventListener('install', function (e) {
-//   console.log('fcm sw install');
-//   self.skipWaiting();
-// });
 
 // self.addEventListener('notificationclick', function (event) {
 //   const url = '/mypage';
