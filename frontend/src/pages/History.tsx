@@ -35,11 +35,11 @@ const STEP3 = 9;
 
 const getStyle = (questCnt: number) => {
   if (questCnt <= STEP1) {
-    return 'border-radius: 18px; background-color: #FFF2D0';
+    return 'border-radius: 18px; background-color: #FFF2D0;';
   } else if (questCnt <= STEP2) {
-    return 'border-radius: 18px; background-color: #FFDF8E';
+    return 'border-radius: 18px; background-color: #FFDF8E;';
   } else if (questCnt <= STEP3) {
-    return 'border-radius: 18px; background-color: var(--MR_YELLOW)';
+    return 'border-radius: 18px; background-color: var(--MR_YELLOW);';
   }
 
   return '';
@@ -80,12 +80,23 @@ function History() {
     setmonthlyQuest(payload);
   };
 
-  const dateStyle = Object.keys(monthlyQuest).reduce<Record<string, string>>((acc, date) => {
-    const questsList = monthlyQuest[date];
+  const getQuestCount = (date: string) => {
+    const questsList = monthlyQuest[date] ?? [];
     const questCount = questsList.reduce<number>((acc, cur) => {
       return !cur ? acc : acc + 1;
     }, 0);
+
+    return questCount;
+  };
+
+  const dateStyle = Object.keys(monthlyQuest).reduce<Record<string, string>>((acc, date) => {
+    const questCount = getQuestCount(date);
     acc[date] = getStyle(questCount);
+
+    if (date === selectedDate?.date().toString()) {
+      acc[date] += `border: 2px solid var(--MR_GRAY2) `;
+    }
+
     return acc;
   }, {});
 
@@ -119,7 +130,7 @@ function History() {
           <Calendar month={today} dateBackground={dateStyle} onClickDateCallback={onClickDate} />
         </CalendarContainer>
         <QuestContainer>
-          {selectedDate !== null && (
+          {selectedDate && getQuestCount(selectedDate?.date().toString()) > 0 ? (
             <QuestSection>
               <Text color="var(--MR_GRAY2)">{formatMoment(selectedDate)}</Text>
               <QuestList>
@@ -134,6 +145,8 @@ function History() {
                 })}
               </QuestList>
             </QuestSection>
+          ) : (
+            <></>
           )}
         </QuestContainer>
       </Container>
