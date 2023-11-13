@@ -49,12 +49,12 @@ firebase.initializeApp({
 //   self.registration.showNotification(notificationTitle, notificationOptions);
 // });
 
-self.addEventListener('notificationclick', function (event) {
-  console.log('notification click');
-  const url = '/mypage';
-  event.notification.close();
-  event.waitUntil(clients.openWindow(url));
-});
+// self.addEventListener('notificationclick', function (event) {
+//   console.log('notification click');
+//   const url = '/mypage';
+//   event.notification.close();
+//   event.waitUntil(clients.openWindow(url));
+// });
 
 // Listen for push events and ensure no default notification is shown
 self.addEventListener('push', (event) => {
