@@ -15,21 +15,27 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
-messaging.onBackgroundMessage((payload) => {
-  console.log('A');
-
-  const notificationTitle = payload.data.title;
-  const notificationOptions = {
-    body: payload.data.body,
-    icon: '/logo192.png',
-  };
-  self.registration.showNotification(notificationTitle, notificationOptions);
-});
-
 self.addEventListener('push', (event) => {
-  console.log('B', event);
-  event.waitUntil(self.registration.showNotification('title', {}));
+  console.log('A', event);
+  messaging.onBackgroundMessage((payload) => {
+    console.log('B', event);
+
+    const notificationTitle = payload.data.title;
+    const notificationOptions = {
+      body: payload.data.body,
+      icon: '/logo192.png',
+    };
+    var show = self.registration.showNotification(notificationTitle, notificationOptions);
+    console.log('C', show);
+    event.waitUntil(show);
+  });
+  // event.waitUntil(messaging.onBackgroundMessage((payload) => {}));
 });
+
+// self.addEventListener('message', (ev) => {
+//   console.log('C', ev);
+//   ev.waitUntil(Promise.resolve());
+// });
 
 // Listen for push events and ensure no default notification is shown
 // self.addEventListener('push', (event) => {
