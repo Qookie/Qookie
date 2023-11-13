@@ -11,7 +11,7 @@ import { getMessaging } from 'firebase/messaging';
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: 'AIzaSyBbV_QLBEaOANp8Mr7rghh_tIVEYHa4Tas',
-  authDomain: 'a504-qookie.firebaseapp.com',
+  authDomain: process.env.REACT_APP_DOMAIN,
   projectId: 'a504-qookie',
   storageBucket: 'a504-qookie.appspot.com',
   messagingSenderId: '786533856529',
