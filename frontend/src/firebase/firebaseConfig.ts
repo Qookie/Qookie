@@ -11,13 +11,17 @@ import { getMessaging } from 'firebase/messaging';
 const firebaseConfig = {
   apiKey: 'AIzaSyBbV_QLBEaOANp8Mr7rghh_tIVEYHa4Tas',
   // authDomain: 'a504-qookie.firebaseapp.com',
-  authDomain: 'k9a504a.p.ssafy.io',
+  // authDomain: 'k9a504a.p.ssafy.io',
+  authDomain: process.env.REACT_APP_DOMAIN,
   projectId: 'a504-qookie',
   storageBucket: 'a504-qookie.appspot.com',
   messagingSenderId: '786533856529',
   appId: '1:786533856529:web:22ffae0e9c7ac8fc4908b0',
   measurementId: 'G-0ZKEJQST24',
 };
+
+console.log(process.env.REACT_APP_DOMAIN);
+console.log(process.env.REACT_APP_HOST);
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
