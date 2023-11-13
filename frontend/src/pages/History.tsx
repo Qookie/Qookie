@@ -121,7 +121,7 @@ function History() {
           {selectedDate !== null && (
             <QuestSection>
               <Text color="var(--MR_GRAY2)">2023-10-05 금요일</Text>
-              <div>
+              <QuestList>
                 {monthlyQuest[selectedDate.date()]?.map((cur: QuestStatus, check_idx: number) => {
                   if (check_idx === 0) {
                     return <></>;
@@ -131,7 +131,7 @@ function History() {
 
                   return cur?.finish ? <Icon key={check_idx} /> : <></>;
                 })}
-              </div>
+              </QuestList>
             </QuestSection>
           )}
         </QuestContainer>
@@ -157,13 +157,17 @@ const QuestContainer = styled.div`
 `;
 
 const QuestSection = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
   background-color: white;
   margin: 1rem;
   padding: 1rem;
   border-radius: 8px;
+`;
+
+const QuestList = styled.div`
+  padding: 0.5rem;
+  display: flex;
+  gap: 0.25rem;
+  flex-wrap: wrap;
 `;
 
 export default History;
