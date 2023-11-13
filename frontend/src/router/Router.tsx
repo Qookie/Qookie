@@ -27,6 +27,7 @@ import AttendanceQuest from '../pages/quest/AttendanceQuest';
 import Notification from '../pages/Notification';
 import History from '../pages/History';
 import Withdraw from '../pages/Withdraw';
+import Myqookie from '../pages/Myqookie';
 import Badge from '../pages/Badge';
 
 const Router = () => {
@@ -52,6 +53,7 @@ const Router = () => {
           <Route path="/loading" element={<Loading />} />
           <Route path="/calendar" element={<History />} />
           <Route path="/withdraw" element={<Withdraw />} />
+          <Route path="/myqookie" element={<Myqookie />} />
           <Route path="/badge" element={<Badge />} />
 
           <Route path="/quest">
