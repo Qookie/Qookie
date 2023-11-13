@@ -48,7 +48,6 @@ export default function Store() {
   }, [selectedItemList]);
 
   useEffect(() => {
-    console.log('my list update');
     getAllItemList();
     getMyItemList();
     setCurCategory('background');

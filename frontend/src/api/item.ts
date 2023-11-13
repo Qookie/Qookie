@@ -1,7 +1,6 @@
-import { ItemTypeProps } from '../components/store/molecules/Item';
 import { orderReqProps } from '../components/store/organisms/Cart';
-import { AllItemProps } from '../pages/Store';
 import { wearReqType } from '../types';
+import { AllItemProps } from '../types/item';
 import { http } from './instance';
 
 export interface ItemPropsResponse {
@@ -32,7 +31,6 @@ const orderItemReq = async (itemId: orderReqProps[]) => {
     const orderReq = {
       items: itemId,
     };
-    console.log('order req', orderReq);
     const res = await http.post<ItemPropsResponse>('/api/item/order', orderReq);
     return res;
   } catch (e) {
@@ -42,7 +40,6 @@ const orderItemReq = async (itemId: orderReqProps[]) => {
 
 const wearItemReq = async (itemId: wearReqType) => {
   try {
-    console.log('wearItemReq itemId', itemId);
     const res = await http.patch<ItemPropsResponse>('/api/item/wear', itemId);
     return res;
   } catch (e) {

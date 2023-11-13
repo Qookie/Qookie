@@ -41,18 +41,13 @@ export default function ItemUpload() {
   };
 
   const uploadHandler = async () => {
-    await adminApi
-      .postItemUpload({
-        image: image,
-        thumbnail: thumbnail,
-        price: price,
-        name: name,
-        category: category,
-      })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => console.log(err));
+    await adminApi.postItemUpload({
+      image: image,
+      thumbnail: thumbnail,
+      price: price,
+      name: name,
+      category: category,
+    });
   };
 
   return (
