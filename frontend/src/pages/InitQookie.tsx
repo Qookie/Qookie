@@ -150,11 +150,6 @@ const MainContainer = styled.div`
   padding: 0 1rem;
 `;
 
-const QookieImage = styled.img`
-  display: block;
-  margin: 0 auto 3rem auto;
-`;
-
 const ButtonCotainer = styled.div`
   position: absolute;
   display: flex;
