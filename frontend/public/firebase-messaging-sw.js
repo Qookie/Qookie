@@ -56,6 +56,26 @@ self.addEventListener('notificationclick', function (event) {
   event.waitUntil(clients.openWindow(url));
 });
 
-self.addEventListener('push', function (event) {
-  return;
+// Listen for push events and ensure no default notification is shown
+self.addEventListener('push', (event) => {
+  event.waitUntil(
+    (async () => {
+      console.log('A', event);
+      // Your custom push handling here
+      // ...
+
+      // If you don't want to show any notification for certain pushes,
+      // just resolve immediately
+      return self.registration.getNotifications().then((notifications) => {
+        console.log('B');
+        if (notifications && notifications.length > 0) {
+          console.log('C');
+          // You have active notifications, possibly handle them in some way
+        }
+        console.log('D');
+        // Resolve the promise to let the browser know you have displayed a notification
+        return;
+      });
+    })(),
+  );
 });
