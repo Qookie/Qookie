@@ -76,7 +76,6 @@ function History() {
   const [isDatePickerOpen, setDatePickerOpen] = useState<boolean>(false);
   const [selectedQuest, setSelectedQuest] = useState<number>(NOT_SELECTED_QUEST);
 
-  // 현재 선택된 일자 있으면
   const fetchCalendar = async () => {
     const curYear = today.get('y');
     const curMonth = String(today.month() + 1).padStart(2, '0');
@@ -155,14 +154,16 @@ function History() {
           캘린더
         </Text>
         <CalendarContainer>
-          <MonthSelector
-            onClick={() => {
-              setDatePickerOpen(true);
-            }}
-            onClickNextMonth={onChangeMonth}
-            onClickPrevMonth={onChangeMonth}
-            selectedMonth={today.month() + 1}
-          />
+          <div style={{ marginBottom: '3.125rem' }}>
+            <MonthSelector
+              onClick={() => {
+                setDatePickerOpen(true);
+              }}
+              onClickNextMonth={onChangeMonth}
+              onClickPrevMonth={onChangeMonth}
+              selectedMonth={today.month() + 1}
+            />
+          </div>
           <Calendar month={today} dateBackground={dateStyle} onClickDateCallback={onClickDate} />
         </CalendarContainer>
         <QuestContainer>
