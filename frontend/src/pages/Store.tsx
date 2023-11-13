@@ -228,6 +228,10 @@ export default function Store() {
 
   const onCartHandler = () => {
     setIsCartOpen((pre) => !pre);
+    if (!isCartOpen) {
+      getAllItemList();
+      getMyItemList();
+    }
   };
 
   const exitModal = () => {
