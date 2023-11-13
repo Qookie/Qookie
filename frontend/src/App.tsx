@@ -23,14 +23,7 @@ function App() {
 
     initiateFirebaseMessaging();
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker
-        .register('/firebase-messaging-sw.js')
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      navigator.serviceWorker.register('/firebase-messaging-sw.js');
     }
 
     window.addEventListener('beforeinstallprompt', function (e) {});
