@@ -140,7 +140,9 @@ function InitQookie() {
         )}
       </MainContainer>
       <ButtonCotainer>
-        <Button onClick={onClickNext}>다음</Button>
+        <Button onClick={onClickNext} style={{ marginTop: 'auto' }}>
+          다음
+        </Button>
       </ButtonCotainer>
     </TitleLayout>
   );
@@ -151,12 +153,10 @@ const MainContainer = styled.div`
 `;
 
 const ButtonCotainer = styled.div`
-  position: absolute;
   display: flex;
+  flex-grow: 1;
   justify-content: center;
-  bottom: 0;
   padding: 12px 16px;
-  left: 0;
   max-width: 420px;
   box-sizing: border-box;
   width: 100%;
