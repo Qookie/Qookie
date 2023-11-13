@@ -24,7 +24,6 @@ import KeyPage from '../pages/KeyPage';
 import AttendanceQuest from '../pages/quest/AttendanceQuest';
 import Notification from '../pages/Notification';
 import History from '../pages/History';
-import Coinlist from '../pages/Coinlist';
 
 const Router = () => {
   const [userState, _] = useRecoilState(UserState);
@@ -46,7 +45,6 @@ const Router = () => {
           <Route path="/notification" element={<Notification />} />
           <Route path="/loading" element={<Loading />} />
           <Route path="/calendar" element={<History />} />
-          <Route path="/coinlist" element={<Coinlist />} />
 
           <Route path="/quest">
             <Route path="wake" element={<WakeupQuest />} />

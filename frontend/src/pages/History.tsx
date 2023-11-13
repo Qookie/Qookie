@@ -44,29 +44,29 @@ const getStyle = (questCnt: number) => {
   return '';
 };
 
-const NOT_SELECTED = -1;
-
 const IconMap: {
-  [key in QuestId]: React.ReactNode;
+  [key in QuestId]: React.FunctionComponent<
+    React.SVGProps<SVGSVGElement> & {
+      title?: string | undefined;
+    }
+  >;
 } = {
-  [QuestId.WAKE]: <AlarmClockIcon />,
-  [QuestId.EAT]: <SaladIcon />,
-  [QuestId.WALK]: <ForestIcon />,
-  [QuestId.SQUAT]: <SquatIcon />,
-  [QuestId.PROMISE]: <CupIcon />,
-  [QuestId.PHOTO]: <SkyIcon />,
-  [QuestId.STRETCH]: <StretchingIcon />,
-  [QuestId.MEDITATION]: <HeartIcon />,
-  [QuestId.WATER]: <WaterIcon />,
-  [QuestId.ATTENDANCE]: <></>,
+  [QuestId.WAKE]: AlarmClockIcon,
+  [QuestId.EAT]: SaladIcon,
+  [QuestId.WALK]: ForestIcon,
+  [QuestId.SQUAT]: SquatIcon,
+  [QuestId.PROMISE]: CupIcon,
+  [QuestId.PHOTO]: SkyIcon,
+  [QuestId.STRETCH]: StretchingIcon,
+  [QuestId.MEDITATION]: HeartIcon,
+  [QuestId.WATER]: WaterIcon,
+  [QuestId.ATTENDANCE]: AlarmClockIcon,
 };
 
 function History() {
   const [today, setToday] = useState<Moment>(moment());
   const [monthlyQuest, setmonthlyQuest] = useState<DateQuest>({});
-  const [selectedDate, setSelectedDate] = useState<number>(NOT_SELECTED);
-
-  console.log(IconMap);
+  const [selectedDate, setSelectedDate] = useState<Moment | null>(null);
 
   // 현재 선택된 일자 있으면
   const fetchCalendar = async () => {
@@ -79,8 +79,6 @@ function History() {
     setmonthlyQuest(payload);
   };
 
-  // payload : key에 접근해서 수행한 퀘스트가 몇개인지 체크 후 개수에 따라서 스타일을 지정해주면 될듯
-
   const dateStyle = Object.keys(monthlyQuest).reduce<Record<string, string>>((acc, date) => {
     const questsList = monthlyQuest[date];
     const questCount = questsList.reduce<number>((acc, cur) => {
@@ -91,7 +89,8 @@ function History() {
   }, {});
 
   const onClickDate = (date: Moment) => {
-    setSelectedDate(date.date());
+    console.log('test', date);
+    setSelectedDate(date.clone());
   };
 
   useEffect(() => {
@@ -99,48 +98,73 @@ function History() {
   }, [today]);
 
   return (
-    <Container>
-      <Text
-        typography="title"
-        style={{
-          marginTop: '1.5rem',
-          marginBottom: '3.75rem',
-        }}
-      >
-        캘린더
-      </Text>
-      <CalendarContainer>
-        <MonthSelector
-          onClick={() => {}}
-          onClickNextMonth={(temp: number) => {}}
-          onClickPrevMonth={(temp: number) => {}}
-          selectedMonth={today.month() + 1}
-        />
-        <Calendar month={today} dateBackground={dateStyle} onClickDateCallback={onClickDate} />
-      </CalendarContainer>
-      <QuestContainer>
-        {// 선택할 날짜
-        monthlyQuest[selectedDate]?.map((cur: QuestStatus, idx: number) => {
-          if (idx === 0) {
-            return <></>;
-          }
+    <>
+      <Container>
+        <Text
+          typography="title"
+          style={{
+            marginTop: '1.5rem',
+            marginBottom: '3.75rem',
+          }}
+        >
+          캘린더
+        </Text>
+        <CalendarContainer>
+          <MonthSelector
+            onClick={() => {}}
+            onClickNextMonth={(temp: number) => {}}
+            onClickPrevMonth={(temp: number) => {}}
+            selectedMonth={today.month() + 1}
+          />
+          <Calendar month={today} dateBackground={dateStyle} onClickDateCallback={onClickDate} />
+        </CalendarContainer>
+        <QuestContainer>
+          {selectedDate !== null && (
+            <QuestSection>
+              <Text color="var(--MR_GRAY2)">2023-10-05 금요일</Text>
+              <div>
+                {monthlyQuest[selectedDate.date()]?.map((cur: QuestStatus, check_idx: number) => {
+                  if (check_idx === 0) {
+                    return <></>;
+                  }
 
-          console.log(idx as QuestId);
-          return cur?.finish ? IconMap[idx as QuestId] : <></>;
-        })
-        //수행한 퀘스트 아이콘들
-        // 이미지가 있는 퀘스트면 선택시 등록한 이미지가 보여야함
-        }
-      </QuestContainer>
-    </Container>
+                  const Icon = IconMap[check_idx as QuestId];
+
+                  return <Icon key={check_idx} />;
+                })}
+              </div>
+            </QuestSection>
+          )}
+        </QuestContainer>
+      </Container>
+    </>
   );
 }
 
 const Container = styled.div`
   margin: 0 1rem;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 `;
 
-const CalendarContainer = styled.div``;
-const QuestContainer = styled.div``;
+const CalendarContainer = styled.div`
+  margin-bottom: 2rem;
+`;
+const QuestContainer = styled.div`
+  background-color: #f7f7f7;
+  flex-grow: 1;
+`;
+
+const QuestSection = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  background-color: white;
+  margin: 1rem;
+  padding: 1rem;
+  border-radius: 8px;
+`;
 
 export default History;
