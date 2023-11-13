@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import java.util.Optional;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -132,8 +133,14 @@ public class QuestService {
 	}
 
 	public void updateExp(Member member) {
-		Cookie cookie = cookieRepository.findByMember(member)
-			.orElseThrow(() -> new IllegalArgumentException("쿠키가 없습니다"));
+		Optional<Cookie> optionalCookie = cookieRepository.findByMember(member);
+
+		// 쿠키가 없다면 나가기
+		if (optionalCookie.isEmpty()) {
+			return;
+		}
+		Cookie cookie = optionalCookie.get();
+
 		int cur_level = cookie.getLevel();
 		int cur_exp = cookie.getExp();
 		if (cur_level < 5) { // 그냥 경험치 받을때마다 레벨업함
