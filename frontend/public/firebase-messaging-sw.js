@@ -1,7 +1,7 @@
 // this file is for firebase messaging service-worker at background
 // use firebase version 9.-compat.js to use importScripts
-importScripts('https://www.gstatic.com/firebasejs/9.4.0/firebase-app-compat.js');
-importScripts('https://www.gstatic.com/firebasejs/9.4.0/firebase-messaging-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/9.23.0/firebase-messaging-compat.js');
 
 firebase.initializeApp({
   apiKey: 'AIzaSyBbV_QLBEaOANp8Mr7rghh_tIVEYHa4Tas',
@@ -14,13 +14,13 @@ firebase.initializeApp({
 });
 
 const messaging = firebase.messaging();
-messaging.onBackgroundMessage(messaging, (payload) => {
+messaging.onBackgroundMessage((payload) => {
   console.log('BG PAYLOAD: ', payload);
 
-  const notificationTitle = payload.notification.title;
+  const notificationTitle = payload.data.title;
   const notificationOptions = {
-    body: payload.notification.body,
-    icon: '/192.png',
+    body: payload.data.body,
+    icon: '/logo192.png',
   };
   self.registration.showNotification(notificationTitle, notificationOptions);
 });
