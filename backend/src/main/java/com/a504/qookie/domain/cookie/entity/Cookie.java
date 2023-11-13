@@ -1,8 +1,8 @@
 package com.a504.qookie.domain.cookie.entity;
 
-import com.a504.qookie.domain.item.entity.Item;
 import java.time.LocalDateTime;
 
+import com.a504.qookie.domain.item.entity.Item;
 import com.a504.qookie.domain.member.entity.Member;
 
 import jakarta.persistence.Column;
@@ -78,39 +78,44 @@ public class Cookie {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Item background;
 
-	public static Cookie createCookie(Member member, String name, Body body, Eye eye, Mouth mouth, Item background, Item noItem) {
+	public static Cookie createCookie(Member member, String name, Body body, Eye eye, Mouth mouth, Item background,
+		Item noItem) {
 		return Cookie.builder()
-				.member(member)
-				.name(name)
-				.createdAt(LocalDateTime.now())
-				.exp(0)
-				.level(1)
-				.body(body)
-				.eye(eye)
-				.mouth(mouth)
-				.background(background)
-				.hat(noItem)
-				.top(noItem)
-				.bottom(noItem)
-				.shoe(noItem)
-				.build();
+			.member(member)
+			.name(name)
+			.createdAt(LocalDateTime.now())
+			.exp(0)
+			.level(1)
+			.body(body)
+			.eye(eye)
+			.mouth(mouth)
+			.background(background)
+			.hat(noItem)
+			.top(noItem)
+			.bottom(noItem)
+			.shoe(noItem)
+			.build();
 	}
 
 	public void changeName(String cookieName) {
 		this.name = cookieName;
 	}
 
-	public void plusExp(int exp){
+	public void plusExp(int exp) {
 		this.exp += exp;
 	}
 
-	public void updateExp(int exp) {this.exp = exp;}
+	public void updateExp(int exp) {
+		this.exp = exp;
+	}
 
-	public void updateLevel(){
+	public void updateLevel() {
 		this.level += 1;
 	}
 
-	public void setBackground(Item background) { this.background = background; }
+	public void setBackground(Item background) {
+		this.background = background;
+	}
 
 	public void setItem(Item hat, Item top, Item bottom, Item shoe, Item background) {
 		this.hat = hat;

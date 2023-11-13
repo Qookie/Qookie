@@ -14,18 +14,20 @@ public record CookieResponse(
         String extraBody,
         String eye,
         String mouth,
-        String hat,
-        String top,
-        String bottom,
-        String shoe,
-        String background,
-        List<String> accessories
+        CookieItemResponse hat,
+        CookieItemResponse top,
+        CookieItemResponse bottom,
+        CookieItemResponse shoe,
+        CookieItemResponse background,
+        List<CookieItemResponse > accessories
 ) {
 
-    public CookieResponse(Cookie cookie, String body, String extraBody, List<String> accessories) {
-        this(cookie.getId(), cookie.getName(), cookie.getCreatedAt(), cookie.getExp(), cookie.getLevel(), body,
-                extraBody,
-                cookie.getEye().getImage(), cookie.getMouth().getImage(), cookie.getHat().getMedia(), cookie.getTop().getMedia(),
-                cookie.getBottom().getMedia(), cookie. getShoe().getMedia(), cookie.getBackground().getMedia(), accessories);
+    public CookieResponse(Cookie cookie, String body, String extraBody,
+            CookieItemResponse hat, CookieItemResponse top, CookieItemResponse bottom, CookieItemResponse shoe, CookieItemResponse background,
+            List<CookieItemResponse> accessories) {
+        this(cookie.getId(), cookie.getName(), cookie.getCreatedAt(), cookie.getExp(), cookie.getLevel(), body, extraBody,
+                cookie.getEye().getImage(), cookie.getMouth().getImage(),
+                hat, top, bottom, shoe, background,
+                accessories);
     }
 }

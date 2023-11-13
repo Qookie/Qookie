@@ -1,33 +1,35 @@
 package com.a504.qookie.domain.quest.service;
 
-import com.a504.qookie.domain.badge.entity.Badge;
-import com.a504.qookie.domain.badge.repository.BadgeRepository;
-import com.a504.qookie.domain.cookie.entity.Body;
-import com.a504.qookie.domain.cookie.repository.BodyRepository;
-import com.a504.qookie.domain.member.entity.MemberBadge;
-import com.a504.qookie.domain.member.repository.MemberBadgeRepository;
-import com.a504.qookie.domain.quest.dto.AttendanceCalendarResponse;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import com.a504.qookie.domain.badge.entity.Badge;
+import com.a504.qookie.domain.badge.repository.BadgeRepository;
+import com.a504.qookie.domain.cookie.entity.Body;
 import com.a504.qookie.domain.cookie.entity.Cookie;
+import com.a504.qookie.domain.cookie.repository.BodyRepository;
 import com.a504.qookie.domain.cookie.repository.CookieRepository;
 import com.a504.qookie.domain.member.entity.History;
 import com.a504.qookie.domain.member.entity.Member;
+import com.a504.qookie.domain.member.entity.MemberBadge;
 import com.a504.qookie.domain.member.entity.MemberQuest;
 import com.a504.qookie.domain.member.repository.HistoryRepository;
+import com.a504.qookie.domain.member.repository.MemberBadgeRepository;
 import com.a504.qookie.domain.member.repository.MemberQuestRepository;
 import com.a504.qookie.domain.member.repository.MemberRepository;
+import com.a504.qookie.domain.quest.dto.AttendanceCalendarResponse;
 import com.a504.qookie.domain.quest.dto.ChallengeRequest;
 import com.a504.qookie.domain.quest.dto.ChallengeStatus;
 import com.a504.qookie.domain.quest.dto.ChallengeStatusList;
 import com.a504.qookie.domain.quest.dto.CheckQuestResponse;
-// import com.a504.qookie.domain.quest.dto.QuestStatus;
 import com.a504.qookie.domain.quest.dto.QuestType;
 import com.a504.qookie.domain.quest.repository.QuestRepository;
 
@@ -59,33 +61,41 @@ public class QuestService {
 		System.out.println(" = " + idx);
 		System.out.println("questName = " + questName);
 
-		for (MemberQuest memberQuest : list){
+		for (MemberQuest memberQuest : list) {
 			if (Objects.equals(memberQuest.getQuest().getId(), idx) && Objects.equals(memberQuest.getMember().getId(),
-				member.getId())){
-				if (questName.equals("EAT") || questName.equals("PHOTO")) return new CheckQuestResponse(true, memberQuest.getImage());
+				member.getId())) {
+				if (questName.equals("EAT") || questName.equals("PHOTO"))
+					return new CheckQuestResponse(true, memberQuest.getImage());
 				return new CheckQuestResponse(true, null);
 			}
 		}
 		return new CheckQuestResponse(false, null);
 	}
 
-	public void completeQuest(Member member, String questName) {
+	public boolean completeQuest(Member member, String questName) {
 		QuestType questType = QuestType.valueOf(questName.toUpperCase());
-		member = memberRepository.findById(member.getId()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자 입니다."));
-		if (!questName.equals("ATTENDANCE")) { // 출석체크는 멤버퀘스트나 히스토리에 저장하면 안됨
+		member = memberRepository.findById(member.getId())
+			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자 입니다."));
+		if (!questName.equals("ATTENDANCE")) {
+			if (questName.equals("WAKE")){
+				LocalTime memberWakeTime = member.getWakeUp();
+				LocalTime limitTime = memberWakeTime.minus(1, ChronoUnit.HOURS);
+				LocalTime curTime = LocalDateTime.now().toLocalTime();
+				if (curTime.isAfter(memberWakeTime) || curTime.isBefore(limitTime)) return false;
+			}
 			memberQuestRepository.save(
-					MemberQuest.builder()
-							.member(member)
-							.quest(questRepository.findByName(questName)
-									.orElseThrow(
-											() -> new IllegalArgumentException("존재하지 않는 퀘스트 입니다.")))
-							.build());
+				MemberQuest.builder()
+					.member(member)
+					.quest(questRepository.findByName(questName)
+						.orElseThrow(
+							() -> new IllegalArgumentException("존재하지 않는 퀘스트 입니다.")))
+					.build());
 			historyRepository.save(
-					History.builder()
-							.member(member)
-							.message(questType.getMessage() + " 퀘스트 달성 보상")
-							.cost(10)
-							.build());
+				History.builder()
+					.member(member)
+					.message(questType.getMessage() + " 퀘스트 달성 보상")
+					.cost(10)
+					.build());
 		}
 		pointUpdate(member, 10);
 		updateExp(member);
@@ -93,11 +103,13 @@ public class QuestService {
 			checkAttendance(member);
 		}
 		checkChallenge(member, questName);
+		return true;
 	}
 
 	public void completeQuest(Member member, String questName, String imageName) {
 		QuestType questType = QuestType.valueOf(questName.toUpperCase());
-		member = memberRepository.findById(member.getId()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자 입니다."));
+		member = memberRepository.findById(member.getId())
+			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자 입니다."));
 		memberQuestRepository.save(
 			MemberQuest.builder()
 				.member(member)
@@ -121,7 +133,7 @@ public class QuestService {
 		int cur_year = LocalDateTime.now().getYear();
 		int cur_day = LocalDateTime.now().getDayOfMonth();
 		String checkAttendanceKey =
-				member.getId() + ":" + cur_year + ":" + cur_month + ":" + "ATTENDANCE"; // (유저PK):(년도):(이번달):(ATTENDANCE)
+			member.getId() + ":" + cur_year + ":" + cur_month + ":" + "ATTENDANCE"; // (유저PK):(년도):(이번달):(ATTENDANCE)
 		template.opsForSet().add(checkAttendanceKey, cur_day + "");
 	}
 
@@ -132,8 +144,14 @@ public class QuestService {
 	}
 
 	public void updateExp(Member member) {
-		Cookie cookie = cookieRepository.findByMember(member)
-			.orElseThrow(() -> new IllegalArgumentException("쿠키가 없습니다"));
+		Optional<Cookie> optionalCookie = cookieRepository.findByMember(member);
+
+		// 쿠키가 없다면 나가기
+		if (optionalCookie.isEmpty()) {
+			return;
+		}
+		Cookie cookie = optionalCookie.get();
+
 		int cur_level = cookie.getLevel();
 		int cur_exp = cookie.getExp();
 		if (cur_level < 5) { // 그냥 경험치 받을때마다 레벨업함
@@ -210,23 +228,23 @@ public class QuestService {
 		switch (cur_level) {
 			case 5:
 				body = bodyRepository.findByStage(2)
-						.orElseThrow(() -> new IllegalArgumentException("맞는 몸이 없습니다"));
+					.orElseThrow(() -> new IllegalArgumentException("맞는 몸이 없습니다"));
 				break;
 			case 10:
 				body = bodyRepository.findByStage(3)
-						.orElseThrow(() -> new IllegalArgumentException("맞는 몸이 없습니다"));
+					.orElseThrow(() -> new IllegalArgumentException("맞는 몸이 없습니다"));
 				break;
 			case 20:
 				body = bodyRepository.findByStage(4)
-						.orElseThrow(() -> new IllegalArgumentException("맞는 몸이 없습니다"));
+					.orElseThrow(() -> new IllegalArgumentException("맞는 몸이 없습니다"));
 				break;
 			case 30:
 				body = bodyRepository.findByStage(5)
-						.orElseThrow(() -> new IllegalArgumentException("맞는 몸이 없습니다"));
+					.orElseThrow(() -> new IllegalArgumentException("맞는 몸이 없습니다"));
 				break;
 			case 40:
 				body = bodyRepository.findByStage(6)
-						.orElseThrow(() -> new IllegalArgumentException("맞는 몸이 없습니다"));
+					.orElseThrow(() -> new IllegalArgumentException("맞는 몸이 없습니다"));
 				break;
 		}
 
@@ -238,7 +256,8 @@ public class QuestService {
 	}
 
 	public void checkChallenge(Member member, String questName) {
-		member = memberRepository.findById(member.getId()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+		member = memberRepository.findById(member.getId())
+			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
 		int cur_month = LocalDateTime.now().getMonth().getValue();
 		int cur_year = LocalDateTime.now().getYear();
 		int cur_day = LocalDateTime.now().getDayOfMonth();
@@ -273,11 +292,11 @@ public class QuestService {
 			}
 		}
 		// 뱃지 챌린지 업데이트 및 알림해주는 기능
-		String badge_challenge_key = member.getId() +":"+ questName + ":badge"; // (유저PK):(퀘스트이름)
+		String badge_challenge_key = member.getId() + ":" + questName + ":badge"; // (유저PK):(퀘스트이름)
 		String badgeCnt = template.opsForValue().get(badge_challenge_key);
-		if (badgeCnt == null){
+		if (badgeCnt == null) {
 			template.opsForValue().set(badge_challenge_key, "1");
-		}else{
+		} else {
 			template.opsForValue().set(badge_challenge_key, Long.parseLong(badgeCnt) + 1L + "");
 		}
 		Long size = Long.parseLong(template.opsForValue().get(badge_challenge_key));
@@ -287,7 +306,7 @@ public class QuestService {
 				historyRepository.save(
 					History.builder()
 						.member(member)
-						.message("1단계 " + questType.getMessage() +" 퀘스트 뱃지 챌린지 달성 보상 을 받아보세요")
+						.message("1단계 " + questType.getMessage() + " 퀘스트 뱃지 챌린지 달성 보상 을 받아보세요")
 						.cost(30)
 						.build());
 				/* TODO : 알림 해주기 */
@@ -296,7 +315,7 @@ public class QuestService {
 				historyRepository.save(
 					History.builder()
 						.member(member)
-						.message("2단계 " + questType.getMessage() +" 퀘스트 뱃지 챌린지 달성 보상 을 받아보세요")
+						.message("2단계 " + questType.getMessage() + " 퀘스트 뱃지 챌린지 달성 보상 을 받아보세요")
 						.cost(50)
 						.build());
 				/* TODO : 알림 해주기 */
@@ -305,17 +324,18 @@ public class QuestService {
 				historyRepository.save(
 					History.builder()
 						.member(member)
-						.message("3단계 " + questType.getMessage() +" 퀘스트 뱃지 챌린지 달성 보상 을 받아보세요")
+						.message("3단계 " + questType.getMessage() + " 퀘스트 뱃지 챌린지 달성 보상 을 받아보세요")
 						.cost(100)
 						.build());
 				/* TODO : 알림 해주기 */
 			}
-		} else if (questName.equals("SQUAT") || questName.equals("EAT") || questName.equals("WAKE") || questName.equals("MEDITATION") || questName.equals("ATTENDANCE")) {
+		} else if (questName.equals("SQUAT") || questName.equals("EAT") || questName.equals("WAKE") || questName.equals(
+			"MEDITATION") || questName.equals("ATTENDANCE")) {
 			if (size == 10) {
 				historyRepository.save(
 					History.builder()
 						.member(member)
-						.message("1단계 " + questType.getMessage() +" 퀘스트 뱃지 챌린지 달성 보상 을 받아보세요")
+						.message("1단계 " + questType.getMessage() + " 퀘스트 뱃지 챌린지 달성 보상 을 받아보세요")
 						.cost(30)
 						.build());
 				/* TODO : 알림 해주기 */
@@ -324,7 +344,7 @@ public class QuestService {
 				historyRepository.save(
 					History.builder()
 						.member(member)
-						.message("2단계 " + questType.getMessage() +" 퀘스트 뱃지 챌린지 달성 보상 을 받아보세요")
+						.message("2단계 " + questType.getMessage() + " 퀘스트 뱃지 챌린지 달성 보상 을 받아보세요")
 						.cost(50)
 						.build());
 				/* TODO : 알림 해주기 */
@@ -333,17 +353,17 @@ public class QuestService {
 				historyRepository.save(
 					History.builder()
 						.member(member)
-						.message("3단계 " + questType.getMessage() +" 퀘스트 뱃지 챌린지 달성 보상 을 받아보세요")
+						.message("3단계 " + questType.getMessage() + " 퀘스트 뱃지 챌린지 달성 보상 을 받아보세요")
 						.cost(100)
 						.build());
 				/* TODO : 알림 해주기 */
 			}
-		}else if(questName.equals("BUT_NEW")){
+		} else if (questName.equals("BUT_NEW")) {
 			if (size == 3) {
 				historyRepository.save(
 					History.builder()
 						.member(member)
-						.message("1단계 " + questType.getMessage() +" 퀘스트 뱃지 챌린지 달성 보상 을 받아보세요")
+						.message("1단계 " + questType.getMessage() + " 퀘스트 뱃지 챌린지 달성 보상 을 받아보세요")
 						.cost(30)
 						.build());
 				/* TODO : 알림 해주기 */
@@ -352,7 +372,7 @@ public class QuestService {
 				historyRepository.save(
 					History.builder()
 						.member(member)
-						.message("2단계 " + questType.getMessage() +" 퀘스트 뱃지 챌린지 달성 보상 을 받아보세요")
+						.message("2단계 " + questType.getMessage() + " 퀘스트 뱃지 챌린지 달성 보상 을 받아보세요")
 						.cost(50)
 						.build());
 				/* TODO : 알림 해주기 */
@@ -361,7 +381,7 @@ public class QuestService {
 				historyRepository.save(
 					History.builder()
 						.member(member)
-						.message("3단계 " + questType.getMessage() +" 퀘스트 뱃지 챌린지 달성 보상 을 받아보세요")
+						.message("3단계 " + questType.getMessage() + " 퀘스트 뱃지 챌린지 달성 보상 을 받아보세요")
 						.cost(100)
 						.build());
 				/* TODO : 알림 해주기 */
@@ -371,14 +391,15 @@ public class QuestService {
 	}
 
 	public AttendanceCalendarResponse getAttendanceInfo(Member member,
-			String year, String month) {
+		String year, String month) {
 		String checkAttendanceKey = member.getId() + ":" + year + ":" + month + ":" + "ATTENDANCE";
-		Boolean todayComplete = template.opsForSet().isMember(checkAttendanceKey, LocalDateTime.now().getDayOfMonth() + "");
+		Boolean todayComplete = template.opsForSet()
+			.isMember(checkAttendanceKey, LocalDateTime.now().getDayOfMonth() + "");
 		List<Integer> list = template.opsForSet().members(checkAttendanceKey).stream().map(Integer::valueOf).toList();
 		return new AttendanceCalendarResponse(todayComplete, list);
 	}
 
-	public ChallengeStatusList getChallengeStatus(Member member){
+	public ChallengeStatusList getChallengeStatus(Member member) {
 		List<ChallengeStatus> monthlist = new ArrayList<>();
 		List<ChallengeStatus> badgelist = new ArrayList<>();
 		LocalDateTime now = LocalDateTime.now();
@@ -405,73 +426,77 @@ public class QuestService {
 		return new ChallengeStatusList(monthlist, badgelist);
 	}
 
-	void checkBadgeChallenge(Long badgeId, Member member, List<ChallengeStatus> list, String sentence, int targetCnt1, int targetCnt2, int targetCnt3 , String questName){
+	void checkBadgeChallenge(Long badgeId, Member member, List<ChallengeStatus> list, String sentence, int targetCnt1,
+		int targetCnt2, int targetCnt3, String questName) {
 		Long memberId = member.getId();
 		String badgeKey = getBadgeChallengeKey(memberId, questName);
 		String tmp = template.opsForValue().get(badgeKey);
 		Long cnt = tmp == null ? 0 : Long.parseLong(tmp);
 		int flag = 0;
-		for (int i = 0 ; i < 3; i++){  // 뱃지 아이디는 연속적으로 있으니까.
+		for (int i = 0; i < 3; i++) {  // 뱃지 아이디는 연속적으로 있으니까.
 			badgeId += i;
 			String key = badgeId + ":badge";
 			if (!template.opsForSet().isMember(key, memberId + "")) {  // 이번 뱃지 획득못함
 				flag = 1;
-				if (i == 0){
+				if (i == 0) {
 					list.add(new ChallengeStatus(30, sentence, cnt, targetCnt1, questName, "incomplete", badgeId));
-				}else if (i == 1){
+				} else if (i == 1) {
 					list.add(new ChallengeStatus(50, sentence, cnt, targetCnt2, questName, "incomplete", badgeId));
-				}else{
+				} else {
 					list.add(new ChallengeStatus(100, sentence, cnt, targetCnt3, questName, "incomplete", badgeId));
 				}
 				break;
 			}
 		}
 		// 마지막 뱃지까지 획득한 상태
-		if (flag == 0) list.add(new ChallengeStatus(100, sentence, cnt, targetCnt3, questName, "complete", badgeId));
+		if (flag == 0)
+			list.add(new ChallengeStatus(100, sentence, cnt, targetCnt3, questName, "complete", badgeId));
 	}
 
-	void checkMonthlyChallenge(String questName, Member member, int year, int month, List<ChallengeStatus> list, String sentence, int targetCnt){
+	void checkMonthlyChallenge(String questName, Member member, int year, int month, List<ChallengeStatus> list,
+		String sentence, int targetCnt) {
 		String key = getMonthChallengeKey(member.getId(), year, month, questName);
 		Long cnt = getCount(key);
-		String monthlyChallengeKey =  questName + ":" + year + ":" + month;
+		String monthlyChallengeKey = questName + ":" + year + ":" + month;
 		// key가 있다 == 완료한 챌린지
-		if(template.opsForSet().isMember(monthlyChallengeKey, member.getId() + "")){
+		if (template.opsForSet().isMember(monthlyChallengeKey, member.getId() + "")) {
 			list.add(new ChallengeStatus(100, sentence, cnt, targetCnt, questName, "complete", 0L));
-		}else{ // key가 없다.
+		} else { // key가 없다.
 			list.add(new ChallengeStatus(100, sentence, cnt, targetCnt, questName, "incomplete", 0L));
 		}
 	}
 
-	Long getCount(String key){
+	Long getCount(String key) {
 		return template.opsForSet().size(key);
 	}
 
-	String getMonthChallengeKey(Long id, int year, int month, String questName){
+	String getMonthChallengeKey(Long id, int year, int month, String questName) {
 		return id + ":" + year + ":" + month + ":" + questName;
 	}
 
-	String getBadgeChallengeKey(Long id, String questName){
+	String getBadgeChallengeKey(Long id, String questName) {
 		return id + ":" + questName + ":badge";
 	}
 
-	public void completeChallenge(Member member, ChallengeRequest request){
+	public void completeChallenge(Member member, ChallengeRequest request) {
 		// Member coin 업데이트 때리고
 		member.setPoint(request.coin());
 		memberRepository.save(member);
 		// Redis에 넣기
 		if (request.badgeId() != 0L) {
-			String key = request.badgeId() + ":" + request.questName() +":"+ ((request.badgeId() - 1L) % 3 + 1) +":badge";
+			String key =
+				request.badgeId() + ":" + request.questName() + ":" + ((request.badgeId() - 1L) % 3 + 1) + ":badge";
 			template.opsForSet().add(key, member.getId() + "");
 
 			Badge badge = badgeRepository.findById(request.badgeId())
-					.orElseThrow(() -> new IllegalArgumentException("뱃지가 없습니다"));
+				.orElseThrow(() -> new IllegalArgumentException("뱃지가 없습니다"));
 
 			memberBadgeRepository.save(new MemberBadge(member, badge));
-		}else{
+		} else {
 			LocalDateTime now = LocalDateTime.now();
 			int year = now.getYear();
 			int month = now.getDayOfMonth();
-			String monthlyChallengeKey =  request.questName() + ":" + year + ":" + month;
+			String monthlyChallengeKey = request.questName() + ":" + year + ":" + month;
 			template.opsForSet().add(monthlyChallengeKey, member.getId() + "");
 		}
 	}
