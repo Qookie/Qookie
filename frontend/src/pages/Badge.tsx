@@ -92,11 +92,17 @@ function Badge() {
 
   return (
     <TitleLayout title="나의 배지">
-      {BadgeCategoryList.map((badgeCategory: BadgeCategory) => {
-        return <BadgeList title={BadgeTitle[badgeCategory]} badges={badgeList[badgeCategory]} />;
-      })}
+      <Container>
+        {BadgeCategoryList.map((badgeCategory: BadgeCategory) => {
+          return <BadgeList title={BadgeTitle[badgeCategory]} badges={badgeList[badgeCategory]} />;
+        })}
+      </Container>
     </TitleLayout>
   );
 }
+
+const Container = styled.div`
+  padding: 0 1rem;
+`;
 
 export default Badge;
