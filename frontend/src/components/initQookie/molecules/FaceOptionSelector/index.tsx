@@ -9,7 +9,7 @@ interface Props {
   label?: string;
   optionData?: FaceOption[];
   selected: number;
-  onSelectItem: (id: number) => void;
+  onSelectItem: (id: number, image: string) => void;
 }
 
 function FaceOptionSelctor({ label, optionData, onSelectItem, selected }: Props) {
@@ -23,7 +23,10 @@ function FaceOptionSelctor({ label, optionData, onSelectItem, selected }: Props)
           {optionData
             ? optionData.map(({ image, id }) => (
                 <SwiperSlide key={id}>
-                  <FaceOptionItem onClick={() => onSelectItem(id)} selected={id === selected}>
+                  <FaceOptionItem
+                    onClick={() => onSelectItem(id, image)}
+                    selected={id === selected}
+                  >
                     <FaceItemImg>
                       <img src={image} alt={`${id}`} />
                     </FaceItemImg>
