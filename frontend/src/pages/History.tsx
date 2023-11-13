@@ -15,6 +15,7 @@ import { ReactComponent as SkyIcon } from '../assets/svgs/sky.svg';
 import { ReactComponent as StretchingIcon } from '../assets/svgs/stretching.svg';
 import { ReactComponent as HeartIcon } from '../assets/svgs/heart.svg';
 import { ReactComponent as WaterIcon } from '../assets/svgs/water.svg';
+import { formatMoment } from '../utils/date';
 
 type QuestStatus = {
   finish: boolean;
@@ -120,7 +121,7 @@ function History() {
         <QuestContainer>
           {selectedDate !== null && (
             <QuestSection>
-              <Text color="var(--MR_GRAY2)">2023-10-05 금요일</Text>
+              <Text color="var(--MR_GRAY2)">{formatMoment(selectedDate)}</Text>
               <QuestList>
                 {monthlyQuest[selectedDate.date()]?.map((cur: QuestStatus, check_idx: number) => {
                   if (check_idx === 0) {

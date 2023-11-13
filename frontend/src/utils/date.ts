@@ -1,3 +1,5 @@
+import { Moment } from 'moment';
+
 export const calcDateDiff = (createdAt: string) => {
   const createdDate = new Date(createdAt);
   const currentDate = new Date();
@@ -43,4 +45,15 @@ export const getMonthDate = (date: string) => {
   const month = then.getMonth() + 1;
   const day = then.getDate();
   return `${month}. ${day}.`;
+};
+
+const days = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
+
+export const formatMoment = (moment: Moment) => {
+  const year = moment.year();
+  const month = (moment.month() + 1).toString().padStart(2, '0');
+  const date = moment.date().toString().padStart(2, '0');
+  const day = days[moment.day()];
+
+  return `${year}-${month}-${date} ${day}`;
 };
