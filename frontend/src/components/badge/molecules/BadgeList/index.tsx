@@ -1,7 +1,7 @@
 import React from 'react';
-import Text from '../../../../shared/atoms/Text';
-import BadgeItem from '../../BadgeItem';
-import { BadgeConditionalImage, Badges } from '../../../../../pages/Badge';
+import Text from '../../../shared/atoms/Text';
+import BadgeItem from '../../atoms/BadgeItem';
+import { BadgeConditionalImage, Badges } from '../../../../pages/Badge';
 import styled from 'styled-components';
 import NoBadge from '../../../../../assets/pngs/NoBadge.png';
 
