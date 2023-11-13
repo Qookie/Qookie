@@ -89,7 +89,6 @@ function History() {
   }, {});
 
   const onClickDate = (date: Moment) => {
-    console.log('test', date);
     setSelectedDate(date.clone());
   };
 
