@@ -1,5 +1,11 @@
+import { MyqookieProps } from '../components/mypage/molecules/MyqookieListItem';
 import { ResponseType } from '../types';
 import { http } from './instance';
+
+interface MyqookieResType {
+  msg: string;
+  payload: MyqookieProps[];
+}
 
 const getQookieInfo = async () => {
   try {
@@ -31,5 +37,14 @@ const bakeQookieReq = async (image: File) => {
   }
 };
 
-const qookie = { getQookieInfo, getProxyUrl, bakeQookieReq };
+const getQookieList = async () => {
+  try {
+    const res = await http.get<MyqookieResType>('/api/cookie/list');
+    return res.payload;
+  } catch (e) {
+    console.log('getQookieList', e);
+  }
+};
+
+const qookie = { getQookieInfo, getProxyUrl, bakeQookieReq, getQookieList };
 export default qookie;

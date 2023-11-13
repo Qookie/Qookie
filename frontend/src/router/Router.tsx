@@ -25,6 +25,7 @@ import AttendanceQuest from '../pages/quest/AttendanceQuest';
 import Notification from '../pages/Notification';
 import History from '../pages/History';
 import Withdraw from '../pages/Withdraw';
+import Myqookie from '../pages/Myqookie';
 
 const Router = () => {
   const [userState, _] = useRecoilState(UserState);
@@ -46,7 +47,8 @@ const Router = () => {
           <Route path="/notification" element={<Notification />} />
           <Route path="/loading" element={<Loading />} />
           <Route path="/calendar" element={<History />} />
-          <Route path="/withdraw" element={<Withdraw/>}/>
+          <Route path="/withdraw" element={<Withdraw />} />
+          <Route path="/myqookie" element={<Myqookie />} />
 
           <Route path="/quest">
             <Route path="wake" element={<WakeupQuest />} />
