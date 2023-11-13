@@ -68,6 +68,7 @@ const IconMap: {
 const NOT_SELECTED_QUEST = -1;
 
 function History() {
+  // TODO 이국신: useReducer로 변경
   const [today, setToday] = useState<Moment>(moment());
   const [monthlyQuest, setmonthlyQuest] = useState<DateQuest>({});
   const [selectedDate, setSelectedDate] = useState<Moment | null>(null);
@@ -114,7 +115,6 @@ function History() {
 
   const onCloseDatePicker = () => {
     setDatePickerOpen(false);
-    setSelectedDate(null);
   };
 
   const onChangeYearMonth = (nextYearMonth: Moment) => {
@@ -247,7 +247,7 @@ interface IconProps {
 const IconContainer = styled.div<IconProps>`
   box-sizing: border-box;
   padding-bottom: 0.5rem;
-  border-bottom: 2px solid ${({ isSelected }) => (isSelected ? 'var(--MR_GRAY2)' : 'transparent')};
+  border-bottom: 2px solid ${({ isSelected }) => (isSelected ? 'var(--MR_GRAY1)' : 'transparent')};
 `;
 
 export default History;
