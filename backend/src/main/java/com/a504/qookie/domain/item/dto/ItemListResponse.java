@@ -8,7 +8,7 @@ public record ItemListResponse(
         List<ItemResponse> shoe,
         List<ItemResponse> bottom,
         List<ItemResponse> top,
-        List<ItemResponse> accessaries
+        List<ItemResponse> accessories
 ) {
 
 }
