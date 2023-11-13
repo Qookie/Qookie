@@ -68,6 +68,7 @@ function History() {
   const [today, setToday] = useState<Moment>(moment());
   const [monthlyQuest, setmonthlyQuest] = useState<DateQuest>({});
   const [selectedDate, setSelectedDate] = useState<Moment | null>(null);
+  const [questImage, setQuestImage] = useState<string>('');
 
   // 현재 선택된 일자 있으면
   const fetchCalendar = async () => {
@@ -94,7 +95,7 @@ function History() {
     acc[date] = getStyle(questCount);
 
     if (date === selectedDate?.date().toString()) {
-      acc[date] += `border: 2px solid var(--MR_GRAY2) `;
+      acc[date] += `border: 2px solid var(--MR_GRAY2);`;
     }
 
     return acc;
@@ -102,6 +103,16 @@ function History() {
 
   const onClickDate = (date: Moment) => {
     setSelectedDate(date.clone());
+    setQuestImage('');
+  };
+
+  const onClickQuest = (questId: QuestId) => {
+    if (!selectedDate) {
+      return;
+    }
+
+    const questImage = monthlyQuest[selectedDate.date()][questId]?.image;
+    setQuestImage(questImage ?? '');
   };
 
   useEffect(() => {
@@ -141,9 +152,14 @@ function History() {
 
                   const Icon = IconMap[check_idx as QuestId];
 
-                  return cur?.finish ? <Icon key={check_idx} /> : <></>;
+                  return cur?.finish ? (
+                    <Icon key={check_idx} onClick={() => onClickQuest(check_idx as QuestId)} />
+                  ) : (
+                    <></>
+                  );
                 })}
               </QuestList>
+              {questImage && <QuestImage src={questImage} alt="퀘스트 이미지" />}
             </QuestSection>
           ) : (
             <></>
@@ -182,6 +198,12 @@ const QuestList = styled.div`
   display: flex;
   gap: 0.25rem;
   flex-wrap: wrap;
+`;
+
+const QuestImage = styled.img`
+  display: block;
+  width: 100%;
+  object-fit: cover;
 `;
 
 export default History;
