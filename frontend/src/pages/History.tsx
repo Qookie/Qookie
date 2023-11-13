@@ -129,7 +129,7 @@ function History() {
 
                   const Icon = IconMap[check_idx as QuestId];
 
-                  return <Icon key={check_idx} />;
+                  return cur?.finish ? <Icon key={check_idx} /> : <></>;
                 })}
               </div>
             </QuestSection>
