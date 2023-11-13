@@ -23,7 +23,6 @@ import {
 } from '../types/item';
 import { ACCItem, BgItem, HatItem, PantsItem, ShoeItem, TopItem } from '../assets/svgs';
 import mouseSwipe from '../utils/mouseSwipe';
-import { resolve } from 'path';
 
 export default function Store() {
   const navigate = useNavigate();
@@ -99,7 +98,6 @@ export default function Store() {
         if (updatedList.length === 0) {
           updatedList.push({ id: 1, media: null });
         }
-        console.log('update', updatedList);
         setSelectedItemList((prev) => ({ ...prev, [tab]: updatedList }));
         return false;
       } else {
@@ -172,26 +170,28 @@ export default function Store() {
   };
 
   const resetItem = () => {
+    // 그냥 나가는 경우 내 상품 아니면 제외
+    const filterdItemList: SelectedItemProps = selectedItemList;
     for (const category of Object.keys(categoryTab)) {
       const tab = category as keyof SelectedItemProps;
       if (tab === 'accessories') {
-        for (const acc of selectedItemList[tab]) {
+        for (const acc of filterdItemList[tab]) {
           const matchingItems = myItemList[tab].some((item) => item.id === acc.id);
           if (!matchingItems) {
-            const updatedList = (selectedItemList[tab] as ItemProps[]).filter(
+            const updatedList = (filterdItemList[tab] as ItemProps[]).filter(
               (value) => value.id !== acc.id,
             );
-            setSelectedItemList((prev) => ({ ...prev, [tab]: updatedList }));
+            filterdItemList[tab] = updatedList;
           }
         }
       } else {
-        const matchingItems = myItemList[tab].some((item) => item.id === selectedItemList[tab].id);
+        const matchingItems = myItemList[tab].some((item) => item.id === filterdItemList[tab].id);
         if (!matchingItems) {
-          setSelectedItemList((prev) => ({ ...prev, [tab]: DefaultSelected[tab] }));
+          filterdItemList[tab] = DefaultSelected[tab];
         }
       }
     }
-    exitStoreHandler();
+    return filterdItemList;
   };
 
   useEffect(() => {
@@ -256,11 +256,15 @@ export default function Store() {
     }
   };
 
+  const filterItem = async () => {
+    const newItemList: SelectedItemProps = await resetItem();
+    setSelectedItemList(newItemList);
+    exitStoreHandler();
+  };
+
   const exitStoreHandler = () => {
     // 입은 옷 저장 api
-    // selected item 중에 내것이 아닌 것은 제외하고 보내야하는데
-    // reset 코드는 작동하지만, selectedItemList 의 변동사항이 반영되지 않은 채,
-    // 그 다음 로직이 먼저 진행됨
+
     if (selectedItemList) {
       const acc: number[] = [1];
       selectedItemList.accessories.map((item) => acc.push(item.id));
@@ -348,7 +352,7 @@ export default function Store() {
         negative="구매하기"
         onNegativeClick={onCartHandler}
         positive="나가기"
-        onPositiveClick={resetItem}
+        onPositiveClick={filterItem}
         isopen={isExit}
         onCloseRequest={exitModal}
       />
