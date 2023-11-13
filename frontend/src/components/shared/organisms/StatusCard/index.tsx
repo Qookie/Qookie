@@ -31,12 +31,6 @@ export default function StatusCard({ ...props }: QookieInfo) {
   const [bakeProps, setBakeProps] = useState<QookieInfo>(props);
   const divRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    makeBakeProps().then((res) => {
-      setBakeProps(res);
-    });
-  }, []);
-
   const handleBakeClick = async () => {
     const res = await bakePng(divRef);
     if (res) {
@@ -61,6 +55,11 @@ export default function StatusCard({ ...props }: QookieInfo) {
 
   const openDialogHandler = () => {
     setIsDialogOpen((pre) => !pre);
+    if (isDialogOpen) {
+      makeBakeProps().then((res) => {
+        setBakeProps(res);
+      });
+    }
   };
 
   const openBottomHandler = () => {
@@ -108,13 +107,21 @@ export default function StatusCard({ ...props }: QookieInfo) {
   };
 
   const makeBakeProps = async () => {
-    const bodyUrl = await getS3UrlHandler(props.body);
+    let lastBody: string = props.body;
+    try {
+      const res = await qookieApi.getQookieLastBody();
+      if (res) {
+        lastBody = res;
+      }
+    } catch (err) {
+      console.log(err);
+    }
+    const bodyUrl = await getS3UrlHandler(lastBody);
     const eyeUrl = await getS3UrlHandler(props.eye);
     const mouthUrl = await getS3UrlHandler(props.mouth);
 
     return {
       ...props,
-      background: { id: 0, media: '' },
       body: `data:image/png;base64,${bodyUrl}`,
       eye: `data:image/png;base64,${eyeUrl}`,
       mouth: `data:image/png;base64,${mouthUrl}`,
@@ -228,8 +235,10 @@ const BottomInner = styled.div`
 `;
 
 const BakedQookie = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
+  align-items: center;
 `;
 
 const BakeSize = styled.div`
@@ -246,9 +255,9 @@ const NameTag = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  align-self: center;
   position: absolute;
-  bottom: 20%;
+  bottom: 22%;
+  transform: translateY(-50%);
   border-radius: 0.5rem;
   background-color: var(--MR_YELLOW);
 `;
@@ -268,15 +277,16 @@ const TextBtn = styled.button`
 `;
 
 const QookieContainer = styled.div`
-  transform: scale(0.5);
+  transform: scale(0.6);
+  margin-top: -3rem;
   position: relative;
 `;
 
 const QookieBagImg = styled.img`
   position: absolute;
-  top: 32%;
+  top: 34%;
   left: 50%;
-  transform: translate(-50%, -50%) scale(0.4);
+  transform: translate(-50%, -50%) scale(0.25);
 `;
 
 const BottomBtnContainer = styled.div`

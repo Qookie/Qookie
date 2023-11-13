@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MessageResponse {
-    private String content;
-    private Long heartId;
+	private String content;
+	private Long heartId;
 }

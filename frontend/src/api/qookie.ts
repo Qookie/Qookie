@@ -7,13 +7,26 @@ interface MyqookieResType {
   payload: MyqookieProps[];
 }
 
+interface BodyResType {
+  msg: string;
+  payload: { url: string };
+}
+
 const getQookieInfo = async () => {
   try {
     const res = await http.get<ResponseType>('/api/cookie/getInfo');
-    console.log('qookieRes', res);
     return res.payload;
   } catch (e) {
     console.log('getQookieInfo', e);
+  }
+};
+
+const getQookieLastBody = async () => {
+  try {
+    const res = await http.get<BodyResType>('/api/cookie/lastBody');
+    return res.payload.url;
+  } catch (e) {
+    console.log('getQookieLastBody', e);
   }
 };
 
@@ -46,5 +59,5 @@ const getQookieList = async () => {
   }
 };
 
-const qookie = { getQookieInfo, getProxyUrl, bakeQookieReq, getQookieList };
+const qookie = { getQookieInfo, getQookieLastBody, getProxyUrl, bakeQookieReq, getQookieList };
 export default qookie;

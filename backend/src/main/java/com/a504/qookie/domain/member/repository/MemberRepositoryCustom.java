@@ -4,6 +4,6 @@ import com.a504.qookie.domain.member.dto.MemberResponse;
 
 public interface MemberRepositoryCustom {
 
-    MemberResponse findMemberInfoById(Long memberId);
+	MemberResponse findMemberInfoById(Long memberId);
 
 }

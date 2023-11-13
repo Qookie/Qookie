@@ -1,6 +1,5 @@
 import styled, { keyframes } from 'styled-components';
 import Text from '../../atoms/Text';
-import Button from '../../atoms/Button';
 import { useState } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useEffect } from 'react';
@@ -10,16 +9,9 @@ export interface BottomModalProps {
   onClose: () => void;
   title: string;
   children: React.ReactNode;
-  onComplete: () => void;
 }
 
-export default function BottomSheet({
-  isOpen,
-  onClose,
-  title,
-  children,
-  onComplete,
-}: BottomModalProps) {
+export default function BottomSheet({ isOpen, onClose, title, children }: BottomModalProps) {
   const [visible, setVisible] = useState<boolean>(false);
 
   useEffect(() => {
@@ -42,16 +34,13 @@ export default function BottomSheet({
 
   return (
     <>
-      <Backdrop onClick={onClose} isOpen={isOpen}></Backdrop>
+      <Backdrop onClick={onClose} isOpen={isOpen} />
       <Container isOpen={isOpen}>
         <TopConatiner>
           <Title>{title}</Title>
           <XMarkIcon width={'1.4rem'} height={'1.4rem'} onClick={onClose} />
         </TopConatiner>
         <ChildrenContainer>{children}</ChildrenContainer>
-        <Button theme="default" onClick={onComplete}>
-          완료
-        </Button>
       </Container>
     </>
   );
@@ -94,6 +83,8 @@ const ChildrenContainer = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
+  padding: 0 1rem;
+  box-sizing: border-box;
 `;
 
 const Title = styled(Text)`
