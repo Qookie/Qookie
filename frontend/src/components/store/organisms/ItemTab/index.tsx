@@ -16,7 +16,7 @@ export default function ItemTab({ curCategory, tabItemProps, handleCheck, isChec
   const itemList: ItemProps[] = tabItemProps();
   const [lockItem, setLockItem] = useState<boolean>(false);
   const qookie = useRecoilValue(QookieInfoState);
-  
+
   const levelCheck = () => {
     const level = qookie.level;
     if (curCategory === 'accessories' || curCategory === 'top') {
@@ -48,7 +48,6 @@ export default function ItemTab({ curCategory, tabItemProps, handleCheck, isChec
   useEffect(() => {
     const res = levelCheck();
     setLockItem(res);
-    console.log(res);
   }, [curCategory]);
 
   return (

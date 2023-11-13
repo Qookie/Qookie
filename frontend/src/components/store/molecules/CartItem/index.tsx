@@ -1,11 +1,17 @@
 import styled from 'styled-components';
-import Item, { ItemProps, ItemTypeProps } from '../Item';
+import Item from '../Item';
 import { useEffect, useState } from 'react';
 import Chip from '../../../shared/molecules/Chip';
 import Text from '../../../shared/atoms/Text';
+import { ItemProps } from '../../../../types/item';
 
-export default function CartItem({ item, handleCheck }: ItemProps) {
-  const [cartItem, setCartItem] = useState<ItemTypeProps>(item);
+interface Props {
+  item: ItemProps;
+  handleCheck: (item: ItemProps, checked: boolean) => void;
+}
+
+export default function CartItem({ item, handleCheck }: Props) {
+  const [cartItem, setCartItem] = useState<ItemProps>(item);
   const [isSelected, setIsSelected] = useState<boolean>(false);
 
   useEffect(() => {
@@ -34,7 +40,9 @@ export default function CartItem({ item, handleCheck }: ItemProps) {
   return (
     <Container>
       <StyledInput type="checkbox" onChange={handleSelectItem} />
-      <ImageContainer>{cartItem && <Item item={cartItem} chip={false} />}</ImageContainer>
+      <ImageContainer>
+        {cartItem && <Item item={cartItem} chip={false} isCheck={false} />}
+      </ImageContainer>
       <RightSection>
         <Text typography="button">{cartItem?.name}</Text>
         {cartItem && <Chip type="qoin" text={cartItem.price ? cartItem.price : ''} />}

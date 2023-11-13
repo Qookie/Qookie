@@ -8,13 +8,15 @@ import { ItemProps } from '../../../../types/item';
 interface Props {
   item: ItemProps;
   chip?: boolean;
-  handleCheck: (item: ItemProps) => boolean;
+  handleCheck?: (item: ItemProps) => boolean;
   isCheck: boolean;
 }
 
 export default function Item({ item, chip, handleCheck, isCheck }: Props) {
   const selectHandler = () => {
-    handleCheck(item);
+    if (handleCheck) {
+      handleCheck(item);
+    }
   };
 
   return (

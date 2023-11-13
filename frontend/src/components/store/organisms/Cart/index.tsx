@@ -35,8 +35,7 @@ export default function Cart({ totalList, onClose }: CartProps) {
   const handleBuyItems = () => {
     const itemId: orderReqProps[] = [];
     selectedItemList.map((value) => itemId.push({ itemId: value.id }));
-    itemApi.orderItemReq(itemId).then((res) => {
-      console.log('orderItemReq', res);
+    itemApi.orderItemReq(itemId).then(() => {
       onClose();
       showToast({
         title: '아이템 구매 완료',
