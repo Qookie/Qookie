@@ -16,6 +16,7 @@ import { ReactComponent as StretchingIcon } from '../assets/svgs/stretching.svg'
 import { ReactComponent as HeartIcon } from '../assets/svgs/heart.svg';
 import { ReactComponent as WaterIcon } from '../assets/svgs/water.svg';
 import { formatMoment } from '../utils/date';
+import BottomDatePicker from '../components/shared/organisms/BottomDatePicker';
 
 type QuestStatus = {
   finish: boolean;
@@ -69,6 +70,7 @@ function History() {
   const [monthlyQuest, setmonthlyQuest] = useState<DateQuest>({});
   const [selectedDate, setSelectedDate] = useState<Moment | null>(null);
   const [questImage, setQuestImage] = useState<string>('');
+  const [isDatePickerOpen, setDatePickerOpen] = useState<boolean>(false);
 
   // 현재 선택된 일자 있으면
   const fetchCalendar = async () => {
@@ -106,6 +108,22 @@ function History() {
     setQuestImage('');
   };
 
+  const onCloseDatePicker = () => {
+    setDatePickerOpen(false);
+    setSelectedDate(null);
+  };
+
+  const onChangeYearMonth = (nextYearMonth: Moment) => {
+    setToday(nextYearMonth.clone());
+    setDatePickerOpen(false);
+    setSelectedDate(null);
+  };
+
+  const onChangeMonth = (nextMonth: number) => {
+    setToday((prev) => prev.clone().month(nextMonth - 1));
+    setSelectedDate(null);
+  };
+
   const onClickQuest = (questId: QuestId) => {
     if (!selectedDate) {
       return;
@@ -133,9 +151,11 @@ function History() {
         </Text>
         <CalendarContainer>
           <MonthSelector
-            onClick={() => {}}
-            onClickNextMonth={(temp: number) => {}}
-            onClickPrevMonth={(temp: number) => {}}
+            onClick={() => {
+              setDatePickerOpen(true);
+            }}
+            onClickNextMonth={onChangeMonth}
+            onClickPrevMonth={onChangeMonth}
             selectedMonth={today.month() + 1}
           />
           <Calendar month={today} dateBackground={dateStyle} onClickDateCallback={onClickDate} />
@@ -165,6 +185,13 @@ function History() {
             <></>
           )}
         </QuestContainer>
+        <BottomDatePicker
+          isOpen={isDatePickerOpen}
+          title="조회 기간"
+          initialTime={today}
+          onClose={onCloseDatePicker}
+          onChangeYearMonth={onChangeYearMonth}
+        />
       </Container>
     </>
   );
