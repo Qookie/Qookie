@@ -31,12 +31,12 @@ public class AwsS3Service {
 	@Value("${cloud.aws.prefix.url}")
 	private String prefix;
 
-	public String uploadImageToS3(MultipartFile cover){ // 이미지를 S3에 업로드
+	public String uploadImageToS3(MultipartFile cover) { // 이미지를 S3에 업로드
 		String fileName = uploadImage(cover);
 		return prefix + fileName;
 	}
 
-	public String uploadImage(MultipartFile cover){
+	public String uploadImage(MultipartFile cover) {
 		String fileExtension = getFileExtension(cover.getOriginalFilename());
 		// 업로드된 파일의 MIME 타입
 		String mimeType = cover.getContentType();
