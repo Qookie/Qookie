@@ -21,5 +21,5 @@ export const Default: Story = {
   name: 'today',
   args: {
     title: '일일 퀘스트',
-  }
+  },
 };

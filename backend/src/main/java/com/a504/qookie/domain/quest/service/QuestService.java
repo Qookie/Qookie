@@ -1,14 +1,18 @@
 package com.a504.qookie.domain.quest.service;
 
+import com.a504.qookie.domain.badge.entity.Badge;
+import com.a504.qookie.domain.badge.repository.BadgeRepository;
 import com.a504.qookie.domain.cookie.entity.Body;
 import com.a504.qookie.domain.cookie.repository.BodyRepository;
+import com.a504.qookie.domain.member.entity.MemberBadge;
+import com.a504.qookie.domain.member.repository.MemberBadgeRepository;
 import com.a504.qookie.domain.quest.dto.AttendanceCalendarResponse;
-import com.a504.qookie.domain.quest.dto.CalenderRequest;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import java.util.Optional;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -43,6 +47,8 @@ public class QuestService {
 	private final HistoryRepository historyRepository;
 	private final RedisTemplate<String, String> template;
 	private final BodyRepository bodyRepository;
+	private final MemberBadgeRepository memberBadgeRepository;
+	private final BadgeRepository badgeRepository;
 
 	public CheckQuestResponse checkQuest(Member member, String questName) { // 오늘 날짜의 questName 퀘스트를 완료했는지
 		LocalDateTime now = LocalDateTime.now();
@@ -127,8 +133,14 @@ public class QuestService {
 	}
 
 	public void updateExp(Member member) {
-		Cookie cookie = cookieRepository.findByMember(member)
-			.orElseThrow(() -> new IllegalArgumentException("쿠키가 없습니다"));
+		Optional<Cookie> optionalCookie = cookieRepository.findByMember(member);
+
+		// 쿠키가 없다면 나가기
+		if (optionalCookie.isEmpty()) {
+			return;
+		}
+		Cookie cookie = optionalCookie.get();
+
 		int cur_level = cookie.getLevel();
 		int cur_exp = cookie.getExp();
 		if (cur_level < 5) { // 그냥 경험치 받을때마다 레벨업함
@@ -269,68 +281,94 @@ public class QuestService {
 		}
 		// 뱃지 챌린지 업데이트 및 알림해주는 기능
 		String badge_challenge_key = member.getId() +":"+ questName + ":badge"; // (유저PK):(퀘스트이름)
-		template.opsForSet().add(badge_challenge_key, cur_day + "");
+		String badgeCnt = template.opsForValue().get(badge_challenge_key);
+		if (badgeCnt == null){
+			template.opsForValue().set(badge_challenge_key, "1");
+		}else{
+			template.opsForValue().set(badge_challenge_key, Long.parseLong(badgeCnt) + 1L + "");
+		}
+		Long size = Long.parseLong(template.opsForValue().get(badge_challenge_key));
 		if (questName.equals("PHOTO")) { // 하늘사진 찍기라면
 			// 위에서 업데이트 했기 때문에 null이 될 수 없음이 보장됨
-			Long size = template.opsForSet().size(badge_challenge_key);
 			if (size == 5) {
-				member.setPoint(30);
 				historyRepository.save(
 					History.builder()
 						.member(member)
-						.message("1단계 " + questType.getMessage() +" 퀘스트 뱃지 챌린지 달성 보상")
+						.message("1단계 " + questType.getMessage() +" 퀘스트 뱃지 챌린지 달성 보상 을 받아보세요")
 						.cost(30)
 						.build());
 				/* TODO : 알림 해주기 */
 			}
 			if (size == 10) {
-				member.setPoint(50);
 				historyRepository.save(
 					History.builder()
 						.member(member)
-						.message("2단계 " + questType.getMessage() +" 뱃지 챌린지 달성 보상")
+						.message("2단계 " + questType.getMessage() +" 퀘스트 뱃지 챌린지 달성 보상 을 받아보세요")
 						.cost(50)
 						.build());
 				/* TODO : 알림 해주기 */
 			}
 			if (size == 15) {
-				member.setPoint(100);
 				historyRepository.save(
 					History.builder()
 						.member(member)
-						.message("3단계 " + questType.getMessage() +" 뱃지 챌린지 달성 보상")
+						.message("3단계 " + questType.getMessage() +" 퀘스트 뱃지 챌린지 달성 보상 을 받아보세요")
 						.cost(100)
 						.build());
 				/* TODO : 알림 해주기 */
 			}
-		} else if (questName.equals("SQUAT") || questName.equals("EAT") || questName.equals("WAKE") || questName.equals("MEDITATION")) {
-			Long size = template.opsForSet().size(badge_challenge_key);
+		} else if (questName.equals("SQUAT") || questName.equals("EAT") || questName.equals("WAKE") || questName.equals("MEDITATION") || questName.equals("ATTENDANCE")) {
 			if (size == 10) {
-				member.setPoint(30);
 				historyRepository.save(
 					History.builder()
 						.member(member)
-						.message("1단계 " + questType.getMessage() +" 뱃지 챌린지 달성 보상")
+						.message("1단계 " + questType.getMessage() +" 퀘스트 뱃지 챌린지 달성 보상 을 받아보세요")
 						.cost(30)
 						.build());
 				/* TODO : 알림 해주기 */
 			}
 			if (size == 50) {
-				member.setPoint(50);
 				historyRepository.save(
 					History.builder()
 						.member(member)
-						.message("2단계 " + questType.getMessage() +" 뱃지 챌린지 달성 보상")
+						.message("2단계 " + questType.getMessage() +" 퀘스트 뱃지 챌린지 달성 보상 을 받아보세요")
 						.cost(50)
 						.build());
 				/* TODO : 알림 해주기 */
 			}
 			if (size == 100) {
-				member.setPoint(100);
 				historyRepository.save(
 					History.builder()
 						.member(member)
-						.message("3단계 " + questType.getMessage() +" 뱃지 챌린지 달성 보상")
+						.message("3단계 " + questType.getMessage() +" 퀘스트 뱃지 챌린지 달성 보상 을 받아보세요")
+						.cost(100)
+						.build());
+				/* TODO : 알림 해주기 */
+			}
+		}else if(questName.equals("BUT_NEW")){
+			if (size == 3) {
+				historyRepository.save(
+					History.builder()
+						.member(member)
+						.message("1단계 " + questType.getMessage() +" 퀘스트 뱃지 챌린지 달성 보상 을 받아보세요")
+						.cost(30)
+						.build());
+				/* TODO : 알림 해주기 */
+			}
+			if (size == 5) {
+				historyRepository.save(
+					History.builder()
+						.member(member)
+						.message("2단계 " + questType.getMessage() +" 퀘스트 뱃지 챌린지 달성 보상 을 받아보세요")
+						.cost(50)
+						.build());
+				/* TODO : 알림 해주기 */
+			}
+			if (size == 10) {
+				historyRepository.save(
+					History.builder()
+						.member(member)
+						.message("3단계 " + questType.getMessage() +" 퀘스트 뱃지 챌린지 달성 보상 을 받아보세요")
 						.cost(100)
 						.build());
 				/* TODO : 알림 해주기 */
@@ -352,34 +390,37 @@ public class QuestService {
 		List<ChallengeStatus> badgelist = new ArrayList<>();
 		LocalDateTime now = LocalDateTime.now();
 		int year = now.getYear();
-		int month = now.getDayOfMonth();
+		int month = now.getMonthValue();
 		// 월간 챌린지
 		checkMonthlyChallenge("WAKE", member, year, month, monthlist, "규칙적인 기상", 15);
 		checkMonthlyChallenge("EAT", member, year, month, monthlist, "규칙적인 식사", 15);
 		checkMonthlyChallenge("WALK", member, year, month, monthlist, "만보기", 10);
 		//한국인의 밥 상 10 - 50 - 100
-		checkBadgeChallenge(1L, member, badgelist, "한국인의 밥 상", 10, 50, 100, "EAT");
+		checkBadgeChallenge(19L, member, badgelist, "한국인의 밥 상", 10, 50, 100, "EAT");
 		//시간맞춰 기 상 10 - 50- 100
-		checkBadgeChallenge(4L, member, badgelist, "시간맞춰 기 상", 10, 50, 100, "WAKE");
+		checkBadgeChallenge(16L, member, badgelist, "시간맞춰 기 상", 10, 50, 100, "WAKE");
+		// 나 쿠키를 항 상
+		checkBadgeChallenge(1L, member, badgelist, "나 쿠키를 항 상", 10, 50, 100, "ATTENDANCE");
 		// 반가사유 상 10 - 50 - 100
-		checkBadgeChallenge(10L, member, badgelist, " 반가사유 상", 10, 50, 100, "MEDITATION");
+		checkBadgeChallenge(7L, member, badgelist, " 반가사유 상", 10, 50, 100, "MEDITATION");
 		// 사진 속 세 상 5 - 10 - 15
-		checkBadgeChallenge(7L, member, badgelist, "사진속 세 상", 5, 10, 15, "PHOTO");
+		checkBadgeChallenge(10L, member, badgelist, "사진속 세 상", 5, 10, 15, "PHOTO");
 		// 내 사랑 신 상 3 - 5 - 10
-		checkBadgeChallenge(13L, member, badgelist, "내 사랑 신 상", 3, 5, 10, "BUY_NEW");
+		checkBadgeChallenge(4L, member, badgelist, "내 사랑 신 상", 3, 5, 10, "BUY_NEW");
 		// 스쿼트 실력 향 상 3 - 5 - 10
-		checkBadgeChallenge(16L, member, badgelist, "스쿼트 실력 향 상", 10, 50, 100, "SQUAT");
+		checkBadgeChallenge(13L, member, badgelist, "스쿼트 실력 향 상", 10, 50, 100, "SQUAT");
 		return new ChallengeStatusList(monthlist, badgelist);
 	}
 
 	void checkBadgeChallenge(Long badgeId, Member member, List<ChallengeStatus> list, String sentence, int targetCnt1, int targetCnt2, int targetCnt3 , String questName){
 		Long memberId = member.getId();
-		String monthKey = getBadgeChallengeKey(memberId, questName);
-		Long cnt = template.opsForSet().size(monthKey);
+		String badgeKey = getBadgeChallengeKey(memberId, questName);
+		String tmp = template.opsForValue().get(badgeKey);
+		Long cnt = tmp == null ? 0 : Long.parseLong(tmp);
 		int flag = 0;
 		for (int i = 0 ; i < 3; i++){  // 뱃지 아이디는 연속적으로 있으니까.
 			badgeId += i;
-			String key = badgeId + "";
+			String key = badgeId + ":badge";
 			if (!template.opsForSet().isMember(key, memberId + "")) {  // 이번 뱃지 획득못함
 				flag = 1;
 				if (i == 0){
@@ -423,10 +464,16 @@ public class QuestService {
 	public void completeChallenge(Member member, ChallengeRequest request){
 		// Member coin 업데이트 때리고
 		member.setPoint(request.coin());
+		memberRepository.save(member);
 		// Redis에 넣기
 		if (request.badgeId() != 0L) {
-			String key = getBadgeChallengeKey(request.badgeId(), request.questName());
+			String key = request.badgeId() + ":" + request.questName() +":"+ ((request.badgeId() - 1L) % 3 + 1) +":badge";
 			template.opsForSet().add(key, member.getId() + "");
+
+			Badge badge = badgeRepository.findById(request.badgeId())
+					.orElseThrow(() -> new IllegalArgumentException("뱃지가 없습니다"));
+
+			memberBadgeRepository.save(new MemberBadge(member, badge));
 		}else{
 			LocalDateTime now = LocalDateTime.now();
 			int year = now.getYear();

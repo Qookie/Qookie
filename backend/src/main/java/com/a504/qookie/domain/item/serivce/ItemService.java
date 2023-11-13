@@ -2,9 +2,11 @@ package com.a504.qookie.domain.item.serivce;
 
 import com.a504.qookie.domain.cookie.entity.Cookie;
 import com.a504.qookie.domain.cookie.repository.CookieRepository;
+import com.a504.qookie.domain.item.dto.ItemListResponse;
 import com.a504.qookie.domain.item.dto.ItemResponse;
 import com.a504.qookie.domain.item.dto.ItemUploadRequest;
 import com.a504.qookie.domain.item.dto.ItemWearRequest;
+import com.a504.qookie.domain.item.dto.MyItemListResponse;
 import com.a504.qookie.domain.item.dto.MyItemResponse;
 import com.a504.qookie.domain.item.dto.OrderItemRequest;
 import com.a504.qookie.domain.item.dto.OrderRequest;
@@ -64,7 +66,7 @@ public class ItemService {
         return imageUrl;
     }
 
-    public List<ItemResponse>[] list(Member member) {
+    public ItemListResponse list(Member member) {
 
         List<ItemResponse>[] lists = new ArrayList[6];
         // 0:배경, 1:모자, 2:신발, 3:하의, 4:상의, 5:액세서리
@@ -75,6 +77,10 @@ public class ItemService {
         List<Item> itemList = itemRepository.findAll();
 
         for (Item item:itemList) {
+
+            //기본 배경화면은 빼기
+            if (item.getId().equals(BASE_BACKGROUND_ID))
+                continue;
 
             // 이미 구매한 상품이라면 리스트에서 빼기
             if (memberItemRepository.existsByMemberAndItem(member, item)) {
@@ -98,10 +104,10 @@ public class ItemService {
             }
         }
 
-        return lists;
+        return new ItemListResponse(lists[0], lists[1], lists[2], lists[3], lists[4], lists[5]);
     }
 
-    public List<MyItemResponse>[] myItem(Member member) {
+    public MyItemListResponse myItem(Member member) {
 
         Cookie cookie = cookieRepository.findByMember(member)
                 .orElseThrow(() -> new IllegalArgumentException("쿠키가 없습니다"));
@@ -218,7 +224,7 @@ public class ItemService {
             }
         }
 
-        return lists;
+        return new MyItemListResponse(lists[0], lists[1], lists[2], lists[3], lists[4], lists[5]);
     }
 
     @Transactional

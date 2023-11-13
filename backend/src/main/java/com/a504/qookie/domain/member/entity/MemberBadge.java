@@ -40,4 +40,9 @@ public class MemberBadge {
 
 	@Column(name = "created_at")
 	private LocalDateTime createdAt;
+
+	public MemberBadge(Member member, Badge badge) {
+		this.member = member;
+		this.badge = badge;
+	}
 }

@@ -21,11 +21,15 @@ import StretchQuest from '../pages/quest/StretchQuest';
 import MeditaionQuest from '../pages/quest/MeditaionQuest';
 import WaterQuest from '../pages/quest/WaterQuest';
 import KeyPage from '../pages/KeyPage';
+import AttendanceQuest from '../pages/quest/AttendanceQuest';
+import Notification from '../pages/Notification';
+import History from '../pages/History';
+import Withdraw from '../pages/Withdraw';
 
 const Router = () => {
   const [userState, _] = useRecoilState(UserState);
 
-const reload = () => window.location.reload()
+  const reload = () => window.location.reload();
 
   return (
     <BrowserRouter>
@@ -36,11 +40,13 @@ const reload = () => window.location.reload()
           <Route path="/init" element={<InitQookie />} />
           <Route path="/set-wakeup" element={<SetWakeupTime />} />
           <Route path="/home" element={<Home />} />
-          <Route path="/calendar" element={<Login />} />
           <Route path="/mind" element={<Login />} />
           <Route path="/mypage" element={<Mypage />} />
           <Route path="/challenge" element={<Challenge />} />
+          <Route path="/notification" element={<Notification />} />
           <Route path="/loading" element={<Loading />} />
+          <Route path="/calendar" element={<History />} />
+          <Route path="/withdraw" element={<Withdraw/>}/>
 
           <Route path="/quest">
             <Route path="wake" element={<WakeupQuest />} />
@@ -52,13 +58,14 @@ const reload = () => window.location.reload()
             <Route path="stretch" element={<StretchQuest />} />
             <Route path="meditation" element={<MeditaionQuest />} />
             <Route path="water" element={<WaterQuest />} />
+            <Route path="attendance" element={<AttendanceQuest />} />
           </Route>
         </Routes>
       ) : (
         <Routes>
           <Route path="/*" element={<Login />} />
           <Route path="/loading" element={<Loading />} />
-          <Route path="/.well-known/assetlinks.json" element={<KeyPage/>}/>
+          <Route path="/.well-known/assetlinks.json" element={<KeyPage />} />
         </Routes>
       )}
       <NavBarWrapper />
@@ -73,10 +80,10 @@ const HeaderWrapper = () => {
       return <Header page="home" />;
     case '/mind':
       return <Header page="tab" title="마음함" />;
-    case '/calendar':
-      return <Header page="tab" title="캘린더" />;
     case '/mypage':
       return <Header page="tab" title="마이페이지" />;
+
+    case '/calendar':
     case '/set-wakeup':
     case '/':
     case '/init':
@@ -100,6 +107,8 @@ const NavBarWrapper = () => {
       case '/calendar':
         return true;
       case '/mypage':
+        return true;
+      case '/notification':
         return true;
       default:
         return false;
