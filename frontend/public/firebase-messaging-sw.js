@@ -49,9 +49,13 @@ messaging.onBackgroundMessage((payload) => {
 //   self.registration.showNotification(notificationTitle, notificationOptions);
 // });
 
-// self.addEventListener("notificationclick", function (event) {
-//   console.log("notification click");
-//   const url = "/";
-//   event.notification.close();
-//   event.waitUntil(clients.openWindow(url));
-// });
+self.addEventListener('notificationclick', function (event) {
+  console.log('notification click');
+  const url = '/mypage';
+  event.notification.close();
+  event.waitUntil(clients.openWindow(url));
+});
+
+self.addEventListener('push', function (event) {
+  return;
+});
