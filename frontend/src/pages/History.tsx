@@ -65,12 +65,15 @@ const IconMap: {
   [QuestId.ATTENDANCE]: AlarmClockIcon,
 };
 
+const NOT_SELECTED_QUEST = -1;
+
 function History() {
   const [today, setToday] = useState<Moment>(moment());
   const [monthlyQuest, setmonthlyQuest] = useState<DateQuest>({});
   const [selectedDate, setSelectedDate] = useState<Moment | null>(null);
   const [questImage, setQuestImage] = useState<string>('');
   const [isDatePickerOpen, setDatePickerOpen] = useState<boolean>(false);
+  const [selectedQuest, setSelectedQuest] = useState<number>(NOT_SELECTED_QUEST);
 
   // 현재 선택된 일자 있으면
   const fetchCalendar = async () => {
@@ -106,6 +109,7 @@ function History() {
   const onClickDate = (date: Moment) => {
     setSelectedDate(date.clone());
     setQuestImage('');
+    setSelectedQuest(NOT_SELECTED_QUEST);
   };
 
   const onCloseDatePicker = () => {
@@ -131,6 +135,7 @@ function History() {
 
     const questImage = monthlyQuest[selectedDate.date()][questId]?.image;
     setQuestImage(questImage ?? '');
+    setSelectedQuest(questId);
   };
 
   useEffect(() => {
@@ -173,7 +178,9 @@ function History() {
                   const Icon = IconMap[check_idx as QuestId];
 
                   return cur?.finish ? (
-                    <Icon key={check_idx} onClick={() => onClickQuest(check_idx as QuestId)} />
+                    <IconContainer isSelected={check_idx === selectedQuest}>
+                      <Icon key={check_idx} onClick={() => onClickQuest(check_idx as QuestId)} />
+                    </IconContainer>
                   ) : (
                     <></>
                   );
@@ -223,7 +230,7 @@ const QuestSection = styled.div`
 const QuestList = styled.div`
   padding: 0.5rem;
   display: flex;
-  gap: 0.25rem;
+  gap: 0.5rem;
   flex-wrap: wrap;
 `;
 
@@ -231,6 +238,16 @@ const QuestImage = styled.img`
   display: block;
   width: 100%;
   object-fit: cover;
+`;
+
+interface IconProps {
+  isSelected: boolean;
+}
+
+const IconContainer = styled.div<IconProps>`
+  box-sizing: border-box;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid ${({ isSelected }) => (isSelected ? 'var(--MR_GRAY2)' : 'transparent')};
 `;
 
 export default History;
