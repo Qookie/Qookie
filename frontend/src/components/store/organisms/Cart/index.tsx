@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { itemApi } from '../../../../api';
 import { ItemProps } from '../../../../types/item';
 import { showToast } from '../../../shared/molecules/Alert';
-import { useNavigate } from 'react-router';
+import Error from '../../../shared/atoms/error';
 
 export interface orderReqProps {
   itemId: number;
@@ -20,7 +20,6 @@ interface CartProps {
 export default function Cart({ totalList, onClose }: CartProps) {
   const [selectedItemList, setSelectedItemList] = useState<ItemProps[]>([]);
   const [selectedPrice, setSelectedPrice] = useState<number>(0);
-  const navigate = useNavigate();
 
   const selectProductHandler = (item: ItemProps, checked: boolean) => {
     if (checked) {
@@ -36,20 +35,24 @@ export default function Cart({ totalList, onClose }: CartProps) {
     const itemId: orderReqProps[] = [];
     selectedItemList.map((value) => itemId.push({ itemId: value.id }));
     itemApi.orderItemReq(itemId).then(() => {
-      onClose();
       showToast({
         title: '아이템 구매 완료',
         content: `${selectedItemList.length}개의 상품이 구매되었습니다.`,
       });
+      onClose();
     });
   };
 
   return (
     <Container>
       <ItemContainer>
-        {totalList.map((item, idx) => (
-          <CartItem key={idx} item={item} handleCheck={selectProductHandler} />
-        ))}
+        {totalList.length > 0 ? (
+          totalList.map((item, idx) => (
+            <CartItem key={idx} item={item} handleCheck={selectProductHandler} />
+          ))
+        ) : (
+          <Error children={`장바구니에 담은\n아이템이 없습니다`} />
+        )}
       </ItemContainer>
       <PriceContainer>
         총 {selectedItemList.length}개의 아이템

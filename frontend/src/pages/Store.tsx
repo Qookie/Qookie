@@ -47,6 +47,13 @@ export default function Store() {
     setShowQookie({ ...qookie, ...selectedItemList });
   }, [selectedItemList]);
 
+  useEffect(() => {
+    console.log('my list update');
+    getAllItemList();
+    getMyItemList();
+    setCurCategory('background');
+  }, [isCartOpen]);
+
   // recoil 에 있는 내 아이템을 selected default 로 지정
   const defaultItemList = {
     background: qookie.background,
@@ -228,10 +235,6 @@ export default function Store() {
 
   const onCartHandler = () => {
     setIsCartOpen((pre) => !pre);
-    if (!isCartOpen) {
-      getAllItemList();
-      getMyItemList();
-    }
   };
 
   const exitModal = () => {
