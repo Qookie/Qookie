@@ -36,13 +36,17 @@ export default function Header({ page, title }: HeaderProps) {
     navigate('/notification');
   };
 
+  const toCoinlistPage = () => {
+    navigate('/qoinlist');
+  };
+
   const headerType = (page: string) => {
     switch (page) {
       case 'home':
         return (
           <HomeContainer>
             <HeaderIcon>
-              <CoinLogo />
+              <CoinLogo onClick={toCoinlistPage}/>
             </HeaderIcon>
             <HeaderIcon>
               <BellIcon onClick={toNotificationPage} />
