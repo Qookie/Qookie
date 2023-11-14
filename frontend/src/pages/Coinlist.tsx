@@ -1,15 +1,38 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Money from '../components/coinlist/molecules/Money';
-import Text from '../components/shared/atoms/Text';
 import MonthSelector from '../components/shared/molecules/MonthSelector';
+import TitleLayout from '../components/shared/Template/TitleLayout';
 import RewardData from '../components/coinlist/molecules/RewardData';
 import moment, { Moment } from 'moment';
 import BottomDatePicker from '../components/shared/organisms/BottomDatePicker';
+import { http } from '../api/instance';
+import Error from '../components/shared/atoms/error';
+
+interface coinProps {
+  totalCoin?: number;
+  message?: string;
+  cost?: number;
+  createdAt?: string;
+}
 
 export default function Coinlist() {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState<boolean>(false);
   const [today, setToday] = useState<Moment>(moment());
+  const [coinData, setCoinData] = useState<coinProps[]>([]);
+  const [totalCoin, setTotalCoin] = useState<number>(0);
+
+  const getCoinlist = async () => {
+    const curYear = today.get('y');
+    const curMonth = String(today.month() + 1).padStart(2, '0');
+    try {
+      const res = await http.get<any>(`/api/member/history/${curYear}/${curMonth}`);
+      setCoinData(res.payload.list);
+      setTotalCoin(res.payload.totalCoin);
+    } catch (e) {
+      console.log('coinlist Error : ', e);
+    }
+  };
 
   const onClose = () => {
     setIsBottomSheetOpen(false);
@@ -28,13 +51,15 @@ export default function Coinlist() {
     setIsBottomSheetOpen(false);
   };
 
+  useEffect(() => {
+    getCoinlist();
+  }, [today]);
+
   return (
     <Container>
       <TopContainer>
-        <CoinlistText typography="title" color="var(--MR_BLACK)">
-          재화 목록
-        </CoinlistText>
-        <Money />
+				<TitleLayout title={'재화 목록'}/>
+        <Money qoin={totalCoin} />
       </TopContainer>
       <Divider />
       <BottomContainer>
@@ -44,11 +69,20 @@ export default function Coinlist() {
           onClickPrevMonth={onChangeMonth}
           selectedMonth={today.month() + 1}
         />
-        <RewardData date={'10.12'} title={'기상 퀘스트 달성 보상'} qoin={10} />
-        <RewardData date={'10.12'} title={'식사 퀘스트 달성 보상'} qoin={10} />
-        <RewardData date={'10.12'} title={'토끼귀 구매'} qoin={-10} />
-        <RewardData date={'10.11'} title={'10월 기상 챌린지 달성 보상'} qoin={100} />
-        <RewardData date={'10.11'} title={'기상 퀘스트 달성 보상'} qoin={10} />
+        {coinData && coinData.length > 0 ? (
+          coinData.map((data, index) => (
+            <RewardData
+              key={index}
+              createdAt={data.createdAt?.substring(5, 10)}
+              message={data.message}
+              cost={data.cost}
+            />
+          ))
+        ) : (
+          <Nothing>
+            <Error children="데이터가 없어요!" />
+          </Nothing>
+        )}
       </BottomContainer>
       <BottomDatePicker
         isOpen={isBottomSheetOpen}
@@ -64,7 +98,6 @@ export default function Coinlist() {
 const Container = styled.div``;
 
 const TopContainer = styled.div`
-  margin-top: 80px;
   padding: 0 1rem;
 `;
 
@@ -72,13 +105,16 @@ const BottomContainer = styled.div`
   padding: 0 1rem;
 `;
 
-const CoinlistText = styled(Text)`
-  font-weight: 600;
-`;
-
 const Divider = styled.div`
   width: 100%;
   height: 8px;
   background: rgba(224, 224, 224, 0.25);
   margin: 40px 0;
+`;
+
+const Nothing = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 100px 0;
 `;

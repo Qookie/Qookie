@@ -44,7 +44,6 @@ const Layout = styled.div`
   max-width: 430px;
   width: 100%;
   min-height: 100vh;
-  overflow-y: auto;
   position: relative;
   height: 1px;
   @media screen and (min-width: 431px) {
