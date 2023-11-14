@@ -2,14 +2,44 @@ import styled from 'styled-components';
 import Button from '../../../shared/atoms/Button';
 import Text from '../../../shared/atoms/Text';
 import { Qoin } from '../../../../assets/svgs';
+import { http } from '../../../../api/instance';
+import { showToast } from '../../../shared/molecules/Alert';
 
-interface ChallengeProps {
-  title?: string;
-  condition?: string;
-  coin?: number;
+export interface ChallengeProps {
+  challengeName: string;
+  coin: number;
+  badgeId: number;
+  questName: string;
+  curCnt: number;
+  totalCnt: number;
+  status: string;
 }
 
-export default function ChallengeCard({ title, condition, coin }: ChallengeProps) {
+export default function ChallengeCard({
+  challengeName,
+  coin,
+  curCnt,
+  totalCnt,
+  questName,
+  status,
+  badgeId,
+}: ChallengeProps) {
+  const completeChallenge = async (url: string) => {
+    try {
+      const res = await http.post<any>(url, {
+        coin: coin,
+        badgeId: badgeId || 0,
+        questName: questName,
+      });
+      showToast({
+        title: `${coin} 포인트 적립 🌟`,
+        content: `${challengeName} 달성되었습니다.`,
+      });
+    } catch (e) {
+      console.log('completeChallenge Error : ', e);
+    }
+  };
+
   return (
     <Container>
       <CardContainer>
@@ -19,13 +49,20 @@ export default function ChallengeCard({ title, condition, coin }: ChallengeProps
             <AmountCoin>{coin}</AmountCoin>
           </EarnCoin>
           <TextContainer>
-            <ChallengeTitle typography="title">{title}</ChallengeTitle>
+            <ChallengeTitle typography="title">{challengeName}</ChallengeTitle>
             <ChallengeCondition typography="main" color="var(--MR_GRAY2)">
-              {condition}
+              {curCnt} / {totalCnt}일
             </ChallengeCondition>
           </TextContainer>
         </LeftContainer>
-        <Button size="small">받기</Button>
+        {curCnt >= totalCnt && status === 'incomplete' ? 
+          <Button size="small" onClick={() => completeChallenge('/api/quest/challenge')}>
+            받기
+          </Button> : (
+          <Button size="small" theme='disabled' onClick={() => null}>
+            받기
+          </Button>
+        )}
       </CardContainer>
     </Container>
   );
