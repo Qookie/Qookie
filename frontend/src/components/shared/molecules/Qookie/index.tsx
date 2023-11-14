@@ -15,8 +15,8 @@ export default function Qookie({ ...props }: QookieInfo) {
             </BagContainer>
           )}
           {props.hat.media && <HatContainer src={props.hat.media} alt="hat" level={props.level} />}
-          {props.shoe.media && <ShoeContainer src={props.shoe.media} alt="shoe" />}
           {props.bottom.media && <BottomContainer src={props.bottom.media} alt="bottom" />}
+          {props.shoe.media && <ShoeContainer src={props.shoe.media} alt="shoe" />}
           {props.top.media && <TopContainer src={props.top.media} alt="top" />}
           {props.accessories &&
             props.accessories.map(
@@ -84,8 +84,8 @@ const BottomContainer = styled.img`
 
 const ShoeContainer = styled.img`
   position: absolute;
-  top: 100%;
-  left: 43.5%;
+  bottom: -2%;
+  left: 42%;
   transform: translateX(-50%);
 `;
 
