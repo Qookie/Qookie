@@ -73,7 +73,6 @@ export default function StatusCard({ ...props }: QookieInfo) {
   };
 
   const openBottomHandler = async () => {
-    await handleBakeClick();
     setIsBottomOpen((pre) => !pre);
   };
   const navigate = useNavigate();
@@ -155,9 +154,6 @@ export default function StatusCard({ ...props }: QookieInfo) {
       accessories: await getAccUrls(),
     };
 
-    console.log('itemUrl', itemUrl);
-    console.log('accUrl', accUrl);
-
     return {
       ...props,
       body: `data:image/png;base64,${bodyUrl}`,
@@ -206,7 +202,7 @@ export default function StatusCard({ ...props }: QookieInfo) {
         />
         <BottomPageLayout
           isopen={isBottomOpen}
-          onCloseRequest={openBottomHandler}
+          onCloseRequest={handleBakeClick}
           children={
             <TitleLayout
               title={'쿠키 만들기가 완료되었습니다.'}
