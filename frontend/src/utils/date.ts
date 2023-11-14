@@ -8,6 +8,14 @@ export const calcDateDiff = (createdAt: string) => {
   return `${date}`;
 };
 
+export const convertDate = (date: string) => {
+  const createdDate = new Date(date);
+  const year = createdDate.getFullYear();
+  const month = (createdDate.getMonth() + 1).toString().padStart(2, '0');
+  const day = createdDate.getDate().toString().padStart(2, '0');
+  return `${year}.${month}.${day}`;
+};
+
 export const getToday = () => {
   const currentDate = new Date();
   const year = currentDate.getFullYear();
