@@ -11,7 +11,6 @@ export const QookieInfoState = atom<QookieInfo>({
   default: {
     name: '',
     createdAt: '',
-    active: 1,
     exp: 0,
     level: 0,
     body: '',

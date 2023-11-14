@@ -2,7 +2,6 @@ import React, { Suspense, useEffect, useState } from 'react';
 import TitleLayout from '../../../shared/Template/TitleLayout';
 import Button from '../../../shared/atoms/Button';
 import styled from 'styled-components';
-import Toast from '../../../shared/molecules/Alert';
 import { CommonQuestLayoutProps, QuestStatus } from '../../types';
 
 export interface Props extends CommonQuestLayoutProps {
@@ -34,7 +33,11 @@ function QuestInnerLayout({
       return;
     }
 
-    await onSuccessQuest();
+    const response = await onSuccessQuest();
+
+    if (response?.payload === false) {
+      return;
+    }
     setQuestStatus('SUCCESS');
   };
 

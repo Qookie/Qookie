@@ -5,12 +5,20 @@ import QuestLayout from '../../components/quest/templates/QuestLayout';
 import { Quest } from '../../types/quest';
 import RewardText from '../../components/quest/molecules/RewardText';
 import { showToast } from '../../components/shared/molecules/Alert';
+import { QuestResponse } from '../../components/quest/types';
 
 function WakeupQuest() {
   const onSuccessQuest = async () => {
     try {
-      await http.post('/api/quest/wake');
-      showToast({ title: '10 포인트 적립🌟', content: '기상 퀘스트가 달성되었습니다.' });
+      const response = await http.post<QuestResponse>('/api/quest/wake');
+
+      if (!response.payload) {
+        showToast({ title: '퀘스트 실패', content: '아직 기상시간이 아니에요!' });
+      } else {
+        showToast({ title: '10 포인트 적립🌟', content: '기상 퀘스트가 달성되었습니다.' });
+      }
+
+      return response;
     } catch (error) {
       console.log(error);
     }
