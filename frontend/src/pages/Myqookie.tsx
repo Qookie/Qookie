@@ -13,24 +13,18 @@ export default function Myqookie() {
   }, []);
 
   return (
-    <Container>
-      <TitleLayout
-        title="내가 만든 쿠키"
-        children={
-          <ListContainer>
-            {myQookieList.map((item, index) => (
-              <MyqookieListItem {...item} age={index + 1} key={index} />
-            ))}
-          </ListContainer>
-        }
-      />
-    </Container>
+    <TitleLayout
+      title="내가 만든 쿠키"
+      children={
+        <ListContainer>
+          {myQookieList.map((item, index) => (
+            <MyqookieListItem {...item} age={index + 1} key={index} />
+          ))}
+        </ListContainer>
+      }
+    />
   );
 }
-
-const Container = styled.div`
-  margin-top: 4rem;
-`;
 
 const ListContainer = styled.div`
   display: flex;

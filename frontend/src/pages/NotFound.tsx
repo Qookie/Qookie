@@ -43,8 +43,4 @@ const Container = styled.div`
   padding: 1rem;
   margin-top: 4rem;
   box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
 `;

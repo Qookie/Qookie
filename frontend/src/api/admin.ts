@@ -23,6 +23,7 @@ const postItemUpload = async (body: postItemReqProps) => {
     formData.append('category', body.category);
 
     const res = await http.post<postItemResponse>(`/api/item/upload`, formData, true);
+    console.log('upload complete');
     return res;
   } catch (e) {
     console.log('postItemUpload', e);

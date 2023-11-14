@@ -207,8 +207,8 @@ function History() {
 
 const Container = styled.div`
   margin: 0 1rem;
-  height: 100vh;
-  overflow: hidden;
+  height: calc(100vh - 4rem);
+  overflow: auto;
   display: flex;
   flex-direction: column;
 `;
