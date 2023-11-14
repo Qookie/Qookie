@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import moment, { Moment } from 'moment';
-import Text from '../components/shared/atoms/Text';
 import MonthSelector from '../components/shared/molecules/MonthSelector';
 import MessageCard, { MessageProps } from '../components/mind/molcules/MessageCard';
 import { http } from '../api/instance';
@@ -47,14 +46,14 @@ export default function PastMind() {
   }, [today]);
           
   return (
-    <>
+    <Container>
       <TitleLayout title={'지난 마음'}/>
-        <MonthSelector
-          onClick={onMonthSelectorClick}
-          onClickNextMonth={onChangeMonth}
-          onClickPrevMonth={onChangeMonth}
-          selectedMonth={today.month() + 1}
-        />
+      <MonthSelector
+        onClick={onMonthSelectorClick}
+        onClickNextMonth={onChangeMonth}
+        onClickPrevMonth={onChangeMonth}
+        selectedMonth={today.month() + 1}
+      />
       {mindData.map((data, index) => (
         <MessageCard key={index} category={data.category} createdAt={data.createdAt} content={data.content} reply={data.reply} />
       ))}
@@ -65,6 +64,9 @@ export default function PastMind() {
         title="조회 기간"
         onChangeYearMonth={onChangeYearMonth}
       />
-    </>
+    </Container>
   );
 }
+
+const Container = styled.div`
+`;
