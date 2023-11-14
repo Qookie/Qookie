@@ -35,7 +35,6 @@ const styleCategory = `
   box-shadow: 0 0 0 0.8px var(--MR_GRAY2) inset; 
 `;
 const IconContainer = styled.div`
-  padding-bottom: 0.2rem;
 `;
 
 const TextContainer = styled.div`
