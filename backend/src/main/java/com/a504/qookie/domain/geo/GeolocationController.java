@@ -33,6 +33,8 @@ public class GeolocationController {
         data.put("distance", distance);
         log.info(geoRequest.toString());
         log.info(String.valueOf(distance));
+        System.out.println(geoRequest);
+        System.out.println(distance);
         return BaseResponse.okWithData(HttpStatus.OK, "good", data);
     }
 }

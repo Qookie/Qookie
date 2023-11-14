@@ -23,7 +23,6 @@ const initiateFirebaseMessaging = () => {
         });
 
       onMessage(messaging, (payload) => {
-        console.log('PL', payload);
         if (payload.data) {
           showToast({
             title: payload.data?.title,

@@ -8,12 +8,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GeoRequest {
+    @JsonProperty("acc")
+    private double acc;
     @JsonProperty("lat")
     private double lat;
     @JsonProperty("lon")
     private double lon;
+    @JsonProperty("heading")
+    private double heading;
+    @JsonProperty("spd")
+    private double spd;
+
 
     public String toString() {
-        return "LAT: " + this.lat + " LON: " + this.lon;
+        return "ACC: " + this.acc + "LAT: " + this.lat + " LON: " + this.lon + "HEAD: " + this.heading + "SPD: " + this.spd;
     }
 }

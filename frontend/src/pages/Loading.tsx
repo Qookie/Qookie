@@ -122,7 +122,6 @@ const Loading = () => {
   useEffect(() => {
     socialLoginCallback();
     getRedirectResult(auth).then((res) => {
-      console.log('RES: ', res);
       if (res === null) {
         return;
       }

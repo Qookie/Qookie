@@ -31,8 +31,11 @@ function WalkQuest() {
     navigator.geolocation.getCurrentPosition(
       (data: GeolocationPosition) => {
         const body = {
+          acc: data.coords.accuracy,
           lat: data.coords.latitude,
           lon: data.coords.longitude,
+          heading: data.coords.heading,
+          spd: data.coords.speed,
         };
         http
           .post<DistanceResponse>('api/geo/test', body)

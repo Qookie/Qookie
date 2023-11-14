@@ -20,9 +20,6 @@ const firebaseConfig = {
   measurementId: 'G-0ZKEJQST24',
 };
 
-console.log(process.env.REACT_APP_DOMAIN);
-console.log(process.env.REACT_APP_HOST);
-
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
