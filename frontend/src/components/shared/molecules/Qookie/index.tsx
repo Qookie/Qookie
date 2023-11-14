@@ -91,7 +91,7 @@ const ShoeContainer = styled.img`
 
 const AccContainer = styled.img`
   position: absolute;
-  top: 0;
+  bottom: 0;
   left: 0;
   transform: translateX(-50%, -50%);
 `;
