@@ -3,21 +3,21 @@ import { Qoin } from '../../../../assets/svgs';
 import Text from '../../../shared/atoms/Text';
 
 interface RewardProps {
-  date?: string;
-  title?: string;
-  qoin?: number;
+  createdAt?: string;
+  message?: string;
+  cost?: number;
 }
 
-export default function RewardData({ date, title, qoin }: RewardProps) {
+export default function RewardData({ createdAt, message, cost }: RewardProps) {
   return (
     <Container>
       <LeftContainer>
-        <DateText>{date}</DateText>
-        <Quest>{title}</Quest>
+        <DateText>{createdAt}</DateText>
+        <Quest>{message}</Quest>
       </LeftContainer>
       <RewardContainer>
         <Qoin width={15} height={15} />
-        <Reward>{qoin}</Reward>
+        <Reward cost={cost}>{cost}</Reward>
       </RewardContainer>
     </Container>
   );
@@ -48,10 +48,10 @@ const Quest = styled(Text)`
   font-weight: 600;
 `;
 
-const Reward = styled(Text)`
+const Reward = styled(Text)<{cost?: number}>`
   font-size: 20px;
   font-weight: 600;
-  color: var(--MR_GRAY2);
+  color: ${({ cost }) => (cost && cost >= 0 ? 'var(--MR_GRAY2)' : 'red')};
 `;
 
 const DateText = styled(Text)`
