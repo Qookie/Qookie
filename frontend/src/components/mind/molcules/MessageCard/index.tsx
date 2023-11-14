@@ -3,7 +3,7 @@ import Text from '../../../shared/atoms/Text';
 import OhQookie from '../../../../assets/pngs/ohqookie.png';
 
 export interface MessageProps {
-  category: 'HAPPY' | 'WORRY' | 'THANKS' | 'ANXIETY';
+  category: string;
   createdAt: string;
   content: string;
   reply: string;

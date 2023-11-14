@@ -15,6 +15,12 @@ import TitleLayout from '../components/shared/Template/TitleLayout';
 import TextImgLayout from '../components/shared/molecules/TextImg';
 import BottomPageLayout from '../components/shared/Template/BottomPageLayout';
 import { showToast } from '../components/shared/molecules/Alert';
+import { MessageProps } from '../components/mind/molcules/MessageCard';
+
+interface ResProps {
+  msg: string, 
+  payload: MessageProps[] 
+}
 
 export default function Mind() {
   const [inputValue, setInputValue] = useState('');
@@ -33,7 +39,7 @@ export default function Mind() {
 
   const postMind = async (url: string) => {
     try {
-      const res = await http.post<any>(url, {
+      const res = await http.post<ResProps>(url, {
         content: inputValue,
         category: emotion,
       });
@@ -70,8 +76,8 @@ export default function Mind() {
           icon={
             <img
               src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Smiling%20Face%20with%20Open%20Hands.png"
-              width="25"
-              height="25"
+              width="20"
+              height="20"
             />
           }
           text="감사"
@@ -83,8 +89,8 @@ export default function Mind() {
           icon={
             <img
               src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Smiling%20Face%20with%20Hearts.png"
-              width="25"
-              height="25"
+              width="20"
+              height="20"
             />
           }
           text="행복"
@@ -96,8 +102,8 @@ export default function Mind() {
           icon={
             <img
               src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Confounded%20Face.png"
-              width="25"
-              height="25"
+              width="20"
+              height="20"
             />
           }
           text="불안"
@@ -109,8 +115,8 @@ export default function Mind() {
           icon={
             <img
               src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Anxious%20Face%20with%20Sweat.png"
-              width="25"
-              height="25"
+              width="20"
+              height="20"
             />
           }
           text="걱정"

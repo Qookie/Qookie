@@ -8,6 +8,11 @@ import BottomDatePicker from '../components/shared/organisms/BottomDatePicker';
 import TitleLayout from '../components/shared/Template/TitleLayout';
 import Error from '../components/shared/atoms/error';
 
+interface ResProps {
+  msg: string, 
+  payload: MessageProps[] 
+}
+
 export default function PastMind() {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState<boolean>(false);
   const [today, setToday] = useState<Moment>(moment());
@@ -17,7 +22,7 @@ export default function PastMind() {
     const curYear = today.get('y');
     const curMonth = String(today.month() + 1).padStart(2, '0');
     try {
-      const res = await http.get<any>(`/api/heart/list/${curYear}/${curMonth}`);
+      const res = await http.get<ResProps>(`/api/heart/list/${curYear}/${curMonth}`);
       setMindData(res.payload);
     } catch (e) {
       console.log('coinlist Error : ', e);
