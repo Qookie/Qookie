@@ -94,4 +94,10 @@ public class ItemController {
 
         return BaseResponse.ok(HttpStatus.OK, "item wear OK");
     }
-}
+    @GetMapping("/coin")
+    public ResponseEntity<?> getCoin(
+        @AuthenticationPrincipal CustomMemberDetails customMemberDetails
+    ){
+        return BaseResponse.okWithData(HttpStatus.OK, "현재 코인", customMemberDetails.getMember().getPoint());
+    }
+ }
