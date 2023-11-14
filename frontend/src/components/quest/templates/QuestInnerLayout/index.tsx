@@ -29,6 +29,10 @@ function QuestInnerLayout({
   questStatus,
 }: Props) {
   const onClickComplete = async () => {
+    if (questStatus !== 'DEFAULT') {
+      return;
+    }
+
     const response = await onSuccessQuest();
 
     if (response?.payload === false) {
