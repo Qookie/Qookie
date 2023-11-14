@@ -37,6 +37,7 @@ function WalkQuest() {
           lon: data.coords.longitude,
           heading: data.coords.heading,
           spd: data.coords.speed,
+          time: data.timestamp,
         };
         http
           .post<DistanceResponse>('api/geo/test', body)
