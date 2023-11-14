@@ -31,10 +31,18 @@ public class GeolocationController {
         double distance = geolocationService.saveAndGetDistance(customMemberDetails.getMember(), geoRequest);
         Map<String, Double> data = new HashMap<>();
         data.put("distance", distance);
-        log.info(geoRequest.toString());
-        log.info(String.valueOf(distance));
-        System.out.println(geoRequest);
-        System.out.println(distance);
+        String S = toS(geoRequest, distance);
+        log.error(S);
+        System.out.println(S);
         return BaseResponse.okWithData(HttpStatus.OK, "good", data);
+    }
+
+    private String toS(GeoRequest gr, double dis) {
+        return "DIS:" + dis
+                + " ACC: " + gr.getAcc()
+                + " LAT: " + gr.getLat()
+                + " LON: " + gr.getLon()
+                + " HEAD: " + gr.getHeading()
+                + " SPD: " + gr.getSpd();
     }
 }

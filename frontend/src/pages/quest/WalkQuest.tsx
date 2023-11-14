@@ -17,6 +17,7 @@ type DistanceResponse = {
 function WalkQuest() {
   const [distance, setDistance] = useState<number>(0);
   const [test, setTest] = useState<GeolocationPosition>();
+  const [walking, setWalking] = useState<boolean>(false);
 
   const onSuccessQuest = async () => {
     try {
@@ -50,23 +51,25 @@ function WalkQuest() {
             return res.payload.distance;
           })
           .then((dis) => {
-            if (dis > 50) {
+            if (dis > 5000) {
               onSuccessQuest();
+              setWalking(false);
             } else {
-              setTimeout(getGeoLocationPer, 2000);
+              setTimeout(getGeoLocationPer, 1000);
             }
           });
       },
       null,
       {
-        maximumAge: 2000,
+        maximumAge: 1000,
         enableHighAccuracy: true,
       },
     );
   };
 
   const startWalking = () => {
-    if ('geolocation' in navigator) {
+    if ('geolocation' in navigator && !walking) {
+      setWalking(true);
       getGeoLocationPer();
     }
   };

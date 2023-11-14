@@ -21,6 +21,6 @@ public class GeoRequest {
 
 
     public String toString() {
-        return "ACC: " + this.acc + "LAT: " + this.lat + " LON: " + this.lon + "HEAD: " + this.heading + "SPD: " + this.spd;
+        return "ACC: " + gr.acc + " LAT: " + gr.lat + " LON: " + gr.lon + " HEAD: " + gr.heading + " SPD: " + gr.spd;
     }
 }
