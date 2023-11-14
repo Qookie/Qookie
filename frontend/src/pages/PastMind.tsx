@@ -6,6 +6,7 @@ import MonthSelector from '../components/shared/molecules/MonthSelector';
 import MessageCard, { MessageProps } from '../components/mind/molcules/MessageCard';
 import { http } from '../api/instance';
 import BottomDatePicker from '../components/shared/organisms/BottomDatePicker';
+import TitleLayout from '../components/shared/Template/TitleLayout';
 
 export default function PastMind() {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState<boolean>(false);
@@ -47,7 +48,7 @@ export default function PastMind() {
           
   return (
     <>
-      <StyledTitle typography='title'>지난 마음</StyledTitle>
+      <TitleLayout title={'지난 마음'}/>
         <MonthSelector
           onClick={onMonthSelectorClick}
           onClickNextMonth={onChangeMonth}
@@ -67,9 +68,3 @@ export default function PastMind() {
     </>
   );
 }
-
-const StyledTitle = styled(Text)`
-  margin-top: 8vh;
-  margin-bottom: 5vh;
-  padding: 0 1rem;
-`;
