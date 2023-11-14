@@ -96,6 +96,6 @@ const TitleContainer = styled.div`
 `;
 
 const HeaderIcon = styled.div`
-  width: 1.4rem;
+  width: 1.6rem;
   height: 1.4rem;
 `;
