@@ -38,7 +38,7 @@ def send_to_gpt(user_name, category, user_input):
         "https://api.openai.com/v1/chat/completions",
         headers={
             "Content-Type": "application/json",
-            "Authorization": variables.gpt_api_key,
+            "Authorization": "Bearer " + variables.gpt_api_key,
         },
         data=data,
     ).json()
