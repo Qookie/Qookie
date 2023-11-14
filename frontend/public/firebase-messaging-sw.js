@@ -23,6 +23,7 @@ self.addEventListener('push', (event) => {
     const notificationOptions = {
       body: payload.data.body,
       icon: '/logo192.png',
+      data: { url: payload.data.url },
     };
     var show = self.registration.showNotification(notificationTitle, notificationOptions);
     event.waitUntil(show);
@@ -31,7 +32,7 @@ self.addEventListener('push', (event) => {
 
 self.addEventListener('notificationclick', function (event) {
   console.log('E', event);
-  const url = '/mypage';
+  const url = event.notification.data.url;
   event.notification.close();
   event.waitUntil(clients.openWindow(url));
 });

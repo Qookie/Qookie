@@ -65,7 +65,7 @@ public class MessageService {
             firebaseService.sendMessage(
                     "오쿠키의 마음 답장이 도착했어요!",
                     "지금 확인해보세요!",
-                    "heart",
+                    "mind",
                     heartMessage.member().getMessageToken());
         } catch (FirebaseMessagingException | NoSuchElementException | NullPointerException e) {
             // delete message if error

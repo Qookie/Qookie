@@ -5,6 +5,7 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
+import com.google.firebase.messaging.Notification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,14 +20,9 @@ public class FirebaseService {
             throw new NullPointerException("message Token is null");
         }
         Message firebaseMessage = Message.builder()
-                .putData("title", title)
                 .putData("body", body)
+                .putData("title", title)
                 .putData("url", url)
-                .putData("data", url)
-                .putData("dir", url)
-                .putData("tag", url)
-                .putData("badge", url)
-                .putData("onclick", url)
                 .setToken(messageToken)
                 .build();
         return FirebaseMessaging.getInstance().send(firebaseMessage);

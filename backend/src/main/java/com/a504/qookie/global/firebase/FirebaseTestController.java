@@ -22,7 +22,7 @@ public class FirebaseTestController {
             String ret = firebaseService.sendMessage(
                     "test title",
                     "test body",
-                    "",
+                    "mind",
                     customMemberDetails.getMember().getMessageToken());
             return BaseResponse.okWithData(HttpStatus.OK, "good", ret);
         } catch (Exception e) {
