@@ -28,8 +28,8 @@ const ChipContainer = styled.div<Pick<Props, 'type' | 'isClicked' | 'size'>>`
   align-items: center;
   gap: 0.25rem;
   ${({ type }) => (type == 'category' ? styleCategory : 'padding: 0.1rem 0.2rem')};
-  ${({ isClicked }) => isClicked && 'opacity: 0.45'};
   ${({ size }) => size == 'big' && 'padding: 0.6rem 0.4rem'};
+  ${({ isClicked }) => isClicked ? 'opacity: 1' : 'opacity: 0.45'};
 `;
 
 const styleCategory = `
@@ -37,7 +37,6 @@ const styleCategory = `
   box-shadow: 0 0 0 0.8px var(--MR_GRAY2) inset; 
 `;
 const IconContainer = styled.div`
-  padding-bottom: 0.2rem;
 `;
 
 const TextContainer = styled.div`

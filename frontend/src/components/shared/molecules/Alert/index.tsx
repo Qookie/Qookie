@@ -22,7 +22,7 @@ export default function Toast() {
     <>
       <StyledToast
         position="top-center" // 알람 위치 지정
-        autoClose={3000} // 자동 off 시간 - 3초 뒤
+        autoClose={1500} // 자동 off 시간 - 3초 뒤
         hideProgressBar={true} // 진행시간바 숨김
         closeButton={false} // 닫기 버튼 숨김
         transition={Zoom} // 알림 등장 애니메이션
@@ -49,6 +49,7 @@ const MessageContent = styled.div`
 `;
 
 const StyledToast = styled(ToastContainer)`
+  width: 100%;
   /* Toast 컨테이너 */
   .Toastify__toast {
     display: flex;
