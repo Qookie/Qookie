@@ -6,6 +6,8 @@ import styled from 'styled-components';
 import Button from '../components/shared/atoms/Button';
 import TimePicker from '../components/shared/molecules/TimePicker';
 import moment, { Moment } from 'moment';
+import { useSetRecoilState } from 'recoil';
+import { QookieInfoState } from '../modules/qookie';
 
 interface Profile {
   memberName: string;
@@ -30,6 +32,8 @@ function Profile() {
     wakeTime: moment(),
     cookieName: '',
   });
+
+  const setQookie = useSetRecoilState(QookieInfoState);
 
   const [mode, setMode] = useState<Mode>('VIEW');
 
@@ -82,6 +86,11 @@ function Profile() {
     });
 
     setMode('VIEW');
+
+    setQookie((prev) => ({
+      ...prev,
+      name: cookieName,
+    }));
   };
 
   const onSelectHour = (hour: string) => {
