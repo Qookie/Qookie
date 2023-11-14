@@ -33,12 +33,12 @@ public class GeolocationController {
         data.put("distance", distance);
         String S = toS(geoRequest, distance);
         log.error(S);
-        System.out.println(S);
+//        System.out.println(S);
         return BaseResponse.okWithData(HttpStatus.OK, "good", data);
     }
 
     private String toS(GeoRequest gr, double dis) {
-        return "DIS:" + dis
+        return "DIS: " + dis
                 + " ACC: " + gr.getAcc()
                 + " LAT: " + gr.getLat()
                 + " LON: " + gr.getLon()
