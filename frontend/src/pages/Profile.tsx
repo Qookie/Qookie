@@ -123,6 +123,8 @@ function Profile() {
     }));
   };
 
+  const isModeView = mode === 'VIEW';
+
   useEffect(() => {
     fetchProfile();
   }, []);
@@ -132,17 +134,17 @@ function Profile() {
       <Container>
         <Input
           label={'이름'}
-          disabled={mode === 'VIEW'}
+          disabled={isModeView}
           value={memberName}
           onChange={onChangeMemberName}
         />
         <Input
           label={'쿠키 이름'}
-          disabled={mode === 'VIEW'}
+          disabled={isModeView}
           value={cookieName}
           onChange={onChangeCookieName}
         />
-        <Input label={'기상 시간'} disabled={mode === 'VIEW'} value={wakeTime.format('hh:mm A')} />
+        <Input label={'기상 시간'} disabled={isModeView} value={wakeTime.format('hh:mm A')} />
         {mode === 'EDIT' && (
           <TimePicker
             time={wakeTime}
@@ -151,7 +153,7 @@ function Profile() {
             onSelectMeridiem={onSelectMeridiem}
           />
         )}
-        <Button onClick={onClickMainButton}>수정하기</Button>
+        <Button onClick={onClickMainButton}>{isModeView ? '수정하기' : '완료'}</Button>
       </Container>
     </TitleLayout>
   );
