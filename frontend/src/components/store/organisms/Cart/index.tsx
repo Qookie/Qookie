@@ -15,9 +15,10 @@ export interface orderReqProps {
 interface CartProps {
   totalList: ItemProps[];
   onClose: () => void;
+  isComplete: () => void;
 }
 
-export default function Cart({ totalList, onClose }: CartProps) {
+export default function Cart({ totalList, onClose, isComplete }: CartProps) {
   const [selectedItemList, setSelectedItemList] = useState<ItemProps[]>([]);
   const [selectedPrice, setSelectedPrice] = useState<number>(0);
 
@@ -39,6 +40,7 @@ export default function Cart({ totalList, onClose }: CartProps) {
         title: '아이템 구매 완료',
         content: `${selectedItemList.length}개의 상품이 구매되었습니다.`,
       });
+      isComplete();
       onClose();
     });
   };

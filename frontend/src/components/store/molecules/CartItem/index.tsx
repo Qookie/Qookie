@@ -16,6 +16,7 @@ export default function CartItem({ item, handleCheck }: Props) {
 
   useEffect(() => {
     setCartItem(item);
+    setIsSelected(true);
   }, []);
 
   useEffect(() => {
@@ -38,8 +39,8 @@ export default function CartItem({ item, handleCheck }: Props) {
   };
 
   return (
-    <Container>
-      <StyledInput type="checkbox" onChange={handleSelectItem} />
+    <Container htmlFor="item">
+      <StyledInput type="checkbox" onChange={handleSelectItem} checked={isSelected} id="item" />
       <ImageContainer>
         {cartItem && <Item item={cartItem} chip={false} isCheck={false} />}
       </ImageContainer>
@@ -51,7 +52,7 @@ export default function CartItem({ item, handleCheck }: Props) {
   );
 }
 
-const Container = styled.div`
+const Container = styled.label`
   width: 100%;
   height: 5rem;
   display: flex;

@@ -47,12 +47,6 @@ export default function Store() {
     setShowQookie({ ...qookie, ...selectedItemList });
   }, [selectedItemList]);
 
-  useEffect(() => {
-    getAllItemList();
-    getMyItemList();
-    setCurCategory('background');
-  }, [isCartOpen]);
-
   // recoil 에 있는 내 아이템을 selected default 로 지정
   const defaultItemList = {
     background: qookie.background,
@@ -173,6 +167,11 @@ export default function Store() {
       }
     });
     return cartItemList;
+  };
+
+  const handleCompleteBuy = () => {
+    getAllItemList();
+    getMyItemList();
   };
 
   const resetItem = () => {
@@ -350,7 +349,13 @@ export default function Store() {
         isOpen={isCartOpen}
         title={'장바구니'}
         onClose={onCartHandler}
-        children={<Cart totalList={checkItemToBuy()} onClose={onCartHandler} />}
+        children={
+          <Cart
+            totalList={checkItemToBuy()}
+            onClose={onCartHandler}
+            isComplete={handleCompleteBuy}
+          />
+        }
       />
       <Dialog
         title="장착한 아이템이 사라져요"
