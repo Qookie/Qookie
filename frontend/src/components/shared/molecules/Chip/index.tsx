@@ -27,7 +27,7 @@ const ChipContainer = styled.div<Pick<Props, 'type' | 'isClicked'>>`
   align-items: center;
   gap: 0.25rem;
   ${({ type }) => (type == 'category' ? styleCategory : 'padding: 0.1rem 0.2rem')};
-  ${({ isClicked }) => isClicked && 'opacity: 0.45'};
+  ${({ isClicked }) => isClicked ? 'opacity: 1' : 'opacity: 0.45'};
 `;
 
 const styleCategory = `
