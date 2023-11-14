@@ -6,6 +6,7 @@ import { showToast } from '../../components/shared/molecules/Alert';
 import { Quest } from '../../types/quest';
 import RewardText from '../../components/quest/molecules/RewardText';
 import ProgressBar from '../../components/shared/atoms/ProgressBar';
+import { QuestResponse } from '../../components/quest/types';
 
 type DistanceResponse = {
   msg: string;
@@ -14,69 +15,62 @@ type DistanceResponse = {
   };
 };
 
+type CheckResponse = {
+  msg: string;
+  payload: {
+    started: boolean;
+  };
+};
+
 function WalkQuest() {
   const [distance, setDistance] = useState<number>(0);
-  const [test, setTest] = useState<GeolocationPosition>();
   const [walking, setWalking] = useState<boolean>(false);
+
+  const checkIfWalking = async () => {
+    return (await http.get<CheckResponse>('api/geo/check')).payload.started;
+  };
 
   const onSuccessQuest = async () => {
     try {
-      await http.post('/api/quest/walk');
       showToast({ title: '10 포인트 적립🌟', content: '산책 퀘스트가 달성되었습니다.' });
+      return await http.post<QuestResponse>('/api/quest/walk');
     } catch (error) {
       console.log(error);
     }
   };
 
-  const getGeoLocationPer = () => {
-    navigator.geolocation.getCurrentPosition(
-      (data: GeolocationPosition) => {
+  const sendLocation = async () => {
+    return await navigator.geolocation.getCurrentPosition(
+      async (data: GeolocationPosition) => {
         const body = {
-          acc: data.coords.accuracy,
           lat: data.coords.latitude,
           lon: data.coords.longitude,
-          heading: data.coords.heading,
-          spd: data.coords.speed,
-          time: data.timestamp,
         };
-        http
-          .post<DistanceResponse>('api/geo/test', body)
-          .then((res) => {
-            // TODO: delete this
-            showToast({
-              title: data.timestamp,
-              content: `DIS: ${res.payload.distance}\nLAT: ${data.coords.latitude} / LON: ${data.coords.longitude}`,
-            });
-            setTest(data);
-            setDistance(res.payload.distance);
-            return res.payload.distance;
-          })
-          .then((dis) => {
-            if (dis > 5000) {
-              onSuccessQuest();
-              setWalking(false);
-            } else {
-              setTimeout(getGeoLocationPer, 1000);
-            }
-          });
+        const dist = (await http.post<DistanceResponse>('api/geo', body)).payload.distance;
+        setDistance(dist);
+        if (dist > 500) {
+          onSuccessQuest();
+          setWalking(false);
+        }
+        return dist;
       },
       null,
       {
-        maximumAge: 1000,
         enableHighAccuracy: true,
       },
     );
   };
 
-  const startWalking = () => {
-    if ('geolocation' in navigator && !walking) {
-      setWalking(true);
-      getGeoLocationPer();
-    }
-  };
-
   // TODO: add distance bar and useEffect to render
-  useEffect(() => {}, [distance, test]);
+  useEffect(() => {
+    checkIfWalking().then((started) => setWalking(started));
+  }, [distance]);
+
+  useEffect(() => {
+    if (walking && 'geolocation' in navigator) {
+      sendLocation();
+    }
+  }, [walking]);
 
   return (
     <QuestLayout
@@ -88,6 +82,7 @@ function WalkQuest() {
       questSubText={{
         DEFAULT: '아래 버튼을 클릭하면 퀘스트가 완료됩니다.',
         SUCCESS: <RewardText />,
+        DISABLED: `아직 ${0}m남았어요!`,
       }}
     >
       <img
@@ -97,29 +92,7 @@ function WalkQuest() {
           margin: '0 auto',
         }}
       />
-      <button type="button" onClick={startWalking}>
-        START WALKING
-      </button>
-      <div>
-        {'TIMESTAMP: ' + test?.timestamp}
-        <br />
-        {'ACC: ' + test?.coords.accuracy}
-        <br />
-        {'DIS: ' + distance}
-        <br />
-        {'ALT: ' + test?.coords.altitude}
-        <br />
-        {'ALT_ACC: ' + test?.coords.altitudeAccuracy}
-        <br />
-        {'HEADING: ' + test?.coords.heading}
-        <br />
-        {'LAT: ' + test?.coords.latitude}
-        <br />
-        {'LON: ' + test?.coords.longitude}
-        <br />
-        {'SPD: ' + test?.coords.speed}
-      </div>
-      <ProgressBar total={50} now={distance} />
+      {walking ? <ProgressBar total={500} now={distance} /> : <></>}
     </QuestLayout>
   );
 }
