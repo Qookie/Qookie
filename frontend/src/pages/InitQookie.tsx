@@ -121,7 +121,7 @@ function InitQookie() {
       <MainContainer>
         <Qookie {...qookie} eye={eyeImg} mouth={mouthImg} level={1} body={Dough} />
         {step === Step.Custom ? (
-          <>
+          <SelectorDiv>
             <FaceOptionSelctor
               label={'눈'}
               optionData={eyes}
@@ -134,7 +134,7 @@ function InitQookie() {
               selected={mouth}
               onSelectItem={onSelectMouth}
             />
-          </>
+          </SelectorDiv>
         ) : (
           <Input placeholder="이름을 지어주세요" onChange={onChangeQookieName} />
         )}
@@ -149,15 +149,22 @@ function InitQookie() {
 }
 
 const MainContainer = styled.div`
+  margin-top: -10vh;
   padding: 0 1rem;
+`;
+
+const SelectorDiv = styled.div`
+  margin-top: -4vh;
+  padding-right: 0;
+  box-sizing: border-box;
 `;
 
 const ButtonCotainer = styled.div`
   display: flex;
   flex-grow: 1;
   justify-content: center;
-  padding: 12px 16px;
   max-width: 420px;
+  padding: 0 1rem 1rem 1rem;
   box-sizing: border-box;
   width: 100%;
 `;

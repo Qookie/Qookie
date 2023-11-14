@@ -14,30 +14,33 @@ export default function Myqookie() {
   }, []);
 
   return (
-    <TitleLayout
-      title="내가 만든 쿠키"
-      children={
-        <ListContainer>
-          {myQookieList.length == 0 ? (
-            myQookieList.map((item, index) => (
-              <MyqookieListItem {...item} age={index + 1} key={index} />
-            ))
-          ) : (
-            <ErrorContainer>
-              <Error children="아직 쿠키가 없어요" />
-            </ErrorContainer>
-          )}
-        </ListContainer>
-      }
-    />
+    <MyqookieContainer>
+      <TitleLayout title="내가 만든 쿠키" children={<></>} />
+      <ListContainer>
+        {myQookieList.length > 0 ? (
+          myQookieList.map((item, index) => (
+            <MyqookieListItem {...item} age={index + 1} key={index} />
+          ))
+        ) : (
+          <ErrorContainer>
+            <Error children="아직 쿠키가 없어요" />
+          </ErrorContainer>
+        )}
+      </ListContainer>
+    </MyqookieContainer>
   );
 }
+
+const MyqookieContainer = styled.div`
+  margin-bottom: 2rem;
+`;
 
 const ListContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 0 1rem;
+  margin-top: -8vh;
   box-sizing: border-box;
 `;
 
