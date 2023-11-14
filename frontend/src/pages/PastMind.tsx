@@ -6,6 +6,7 @@ import MessageCard, { MessageProps } from '../components/mind/molcules/MessageCa
 import { http } from '../api/instance';
 import BottomDatePicker from '../components/shared/organisms/BottomDatePicker';
 import TitleLayout from '../components/shared/Template/TitleLayout';
+import Error from '../components/shared/atoms/error';
 
 export default function PastMind() {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState<boolean>(false);
@@ -18,7 +19,6 @@ export default function PastMind() {
     try {
       const res = await http.get<any>(`/api/heart/list/${curYear}/${curMonth}`);
       setMindData(res.payload);
-      console.log(mindData);
     } catch (e) {
       console.log('coinlist Error : ', e);
     }
@@ -44,19 +44,32 @@ export default function PastMind() {
   useEffect(() => {
     getMind();
   }, [today]);
-          
+
   return (
     <Container>
-      <TitleLayout title={'지난 마음'}/>
+      <TitleLayout title={'지난 마음'} />
       <MonthSelector
         onClick={onMonthSelectorClick}
         onClickNextMonth={onChangeMonth}
         onClickPrevMonth={onChangeMonth}
         selectedMonth={today.month() + 1}
       />
-      {mindData.map((data, index) => (
-        <MessageCard key={index} category={data.category} createdAt={data.createdAt} content={data.content} reply={data.reply} />
-      ))}
+      {mindData && mindData.length > 0 ? (
+        mindData.map((data, index) => (
+          <MessageCard
+            key={index}
+            category={data.category}
+            createdAt={data.createdAt}
+            content={data.content}
+            reply={data.reply}
+          />
+        ))
+      ) : (
+        <Nothing>
+          <Error children="데이터가 없어요!" />
+        </Nothing>
+      )}
+
       <BottomDatePicker
         isOpen={isBottomSheetOpen}
         onClose={onClose}
@@ -68,5 +81,11 @@ export default function PastMind() {
   );
 }
 
-const Container = styled.div`
+const Container = styled.div``;
+
+const Nothing = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 100px 0;
 `;
