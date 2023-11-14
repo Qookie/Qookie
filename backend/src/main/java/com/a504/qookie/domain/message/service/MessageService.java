@@ -51,11 +51,6 @@ public class MessageService {
         try {
             HeartMessage heartMessage = heartRepository.makeHeartMessageFromHeartId(messageResponse.getHeartId());
 
-            System.out.println(heartMessage.heart());
-            System.out.println(heartMessage.heart().getClass());
-            System.out.println(heartMessage.member());
-            System.out.println(heartMessage.member().getClass());
-
             // save reply to db
             heartMessage.heart().saveReply(messageResponse.getContent());
             // save notification to db

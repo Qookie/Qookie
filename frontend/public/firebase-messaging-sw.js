@@ -18,6 +18,7 @@ const messaging = firebase.messaging();
 
 self.addEventListener('push', (event) => {
   messaging.onBackgroundMessage((payload) => {
+    console.log('payload', payload);
     const notificationTitle = payload.data.title;
     const notificationOptions = {
       body: payload.data.body,
@@ -28,8 +29,9 @@ self.addEventListener('push', (event) => {
   });
 });
 
-// self.addEventListener('notificationclick', function (event) {
-//   const url = '/mypage';
-//   event.notification.close();
-//   event.waitUntil(clients.openWindow(url));
-// });
+self.addEventListener('notificationclick', function (event) {
+  console.log('E', event);
+  const url = '/mypage';
+  event.notification.close();
+  event.waitUntil(clients.openWindow(url));
+});

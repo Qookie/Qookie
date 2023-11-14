@@ -22,6 +22,11 @@ public class FirebaseService {
                 .putData("title", title)
                 .putData("body", body)
                 .putData("url", url)
+                .putData("data", url)
+                .putData("dir", url)
+                .putData("tag", url)
+                .putData("badge", url)
+                .putData("onclick", url)
                 .setToken(messageToken)
                 .build();
         return FirebaseMessaging.getInstance().send(firebaseMessage);
