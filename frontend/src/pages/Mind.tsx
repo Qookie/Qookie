@@ -171,7 +171,7 @@ export default function Mind() {
             '조금 기다리면 당신을 위한 상담사 오쿠키 박사님이 답장을 보내줄거예요!'
           }
         />
-        <Button theme="transparent" onClick={() => window.scrollTo(0, 0)}>
+        <Button theme="transparent" onClick={() => window.scroll({top:0, left:0, behavior:'smooth'})}>
           <img src={Letter} width={25} height={25} />
           &nbsp;마음 보내기
         </Button>
@@ -198,7 +198,6 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  margin: 20px 0;
 `;
 
 const MiddleContainer = styled.div`
