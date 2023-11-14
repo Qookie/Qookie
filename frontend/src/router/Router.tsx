@@ -29,6 +29,7 @@ import History from '../pages/History';
 import Withdraw from '../pages/Withdraw';
 import Myqookie from '../pages/Myqookie';
 import Badge from '../pages/Badge';
+import Profile from '../pages/Profile';
 
 const Router = () => {
   const [userState, _] = useRecoilState(UserState);
@@ -55,6 +56,7 @@ const Router = () => {
           <Route path="/withdraw" element={<Withdraw />} />
           <Route path="/myqookie" element={<Myqookie />} />
           <Route path="/badge" element={<Badge />} />
+          <Route path="/profile" element={<Profile />} />
 
           <Route path="/quest">
             <Route path="wake" element={<WakeupQuest />} />
