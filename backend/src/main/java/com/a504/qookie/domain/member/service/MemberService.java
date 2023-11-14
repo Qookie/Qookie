@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import com.a504.qookie.domain.cookie.entity.Cookie;
 import com.a504.qookie.domain.cookie.repository.CookieRepository;
 import com.a504.qookie.domain.member.dto.HistoryResponse;
+import com.a504.qookie.domain.member.dto.HistoryResponseList;
 import com.a504.qookie.domain.member.dto.LoginRequest;
 import com.a504.qookie.domain.member.dto.MemberRequest;
 import com.a504.qookie.domain.member.dto.MemberResponse;
@@ -96,7 +97,7 @@ public class MemberService {
 			.deleteMember();
 	}
 
-	public List<HistoryResponse> getHistory(Member member, int year, Month month) {
+	public HistoryResponseList getHistory(Member member, int year, Month month) {
 		int totalPoint = member.getPoint();
 		LocalDateTime start = LocalDateTime.of(year, month, 1, 0, 0);
 		LocalDateTime end;
@@ -113,10 +114,9 @@ public class MemberService {
 		List<History> historyList = historyRepository.findAllByCreatedAtBetweenAndMemberOrderByCreatedAtDesc(start, end, member);
 		List<HistoryResponse> list = new ArrayList<>();
 		for (History history : historyList) {
-			list.add(new HistoryResponse(totalPoint, history.getMessage(), history.getCost(), history.getCreatedAt()));
+			list.add(new HistoryResponse(history.getMessage(), history.getCost(), history.getCreatedAt()));
 		}
-		System.out.println("list.size() = " + list.size());
-		return list;
+		return new HistoryResponseList(totalPoint, list);
 	}
 
 	public Map<Integer, QuestStatus[]> getCalender(Member member, int year, Month month) {

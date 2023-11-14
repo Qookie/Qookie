@@ -15,12 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/firebase")
 public class FirebaseTestController {
     private final FirebaseService firebaseService;
+
     @GetMapping("/test")
     public ResponseEntity<?> firebaseTest(@AuthenticationPrincipal CustomMemberDetails customMemberDetails) {
         try {
             String ret = firebaseService.sendMessage(
                     "test title",
                     "test body",
+                    "",
                     customMemberDetails.getMember().getMessageToken());
             return BaseResponse.okWithData(HttpStatus.OK, "good", ret);
         } catch (Exception e) {
