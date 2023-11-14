@@ -3,6 +3,8 @@ server:
   ssl:
     enabled: false
 spring:
+  jackson:
+    time-zone: Asia/Seoul
   profiles:
     active: secret
   mvc:

@@ -3,50 +3,39 @@ import { QookieInfo } from '../../../../types';
 
 export default function Qookie({ ...props }: QookieInfo) {
   return (
-    <BackgroundContainer src={props.background.media}>
-      <Container>
-        {props.level > 0 && (
-          <DoughContainer>
-            <DoughImg src={props.body} alt="dough" />
-            <EyeContainer src={props.eye} alt="eye" />
-            <MouthContainer src={props.mouth} alt="mouth" />
-          </DoughContainer>
-        )}
-        {props.level >= 5 && props.level < 10 && (
-          <BagContainer>
-            <BagImg src={props.extraBody} alt="bag" />
-          </BagContainer>
-        )}
-      </Container>
-    </BackgroundContainer>
+    <>
+      {props.level > 0 && (
+        <Container>
+          <DoughContainer src={props.body} alt="body" />
+          <EyeContainer src={props.eye} alt="eye" />
+          <MouthContainer src={props.mouth} alt="mouth" />
+          {props.level >= 5 && props.level < 10 && (
+            <BagContainer>
+              <BagImg src={props.extraBody} alt="bag" />
+            </BagContainer>
+          )}
+          {props.hat.media && <HatContainer src={props.hat.media} alt="hat" level={props.level} />}
+          {props.shoe.media && <ShoeContainer src={props.shoe.media} alt="shoe" />}
+          {props.bottom.media && <BottomContainer src={props.bottom.media} alt="bottom" />}
+          {props.top.media && <TopContainer src={props.top.media} alt="top" />}
+          {props.accessories &&
+            props.accessories.map(
+              (acc, index) => acc.media && <AccContainer key={index} src={acc.media} alt="acc" />,
+            )}
+        </Container>
+      )}
+    </>
   );
 }
 
-const BackgroundContainer = styled.div<{ src: string }>`
-  ${(props) =>
-    props.src !== '' &&
-    `
-    background:
-      linear-gradient(0deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 20%),
-      center/cover no-repeat url(${props.src});
-  `}
-  width: 100%;
-  height: 460px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
 const Container = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  position: relative;
+  transform: scale(0.4);
 `;
 
-const DoughContainer = styled.div`
-  transform: scale(0.4);
+const DoughContainer = styled.img`
+  width: auto;
+  height: auto;
 `;
 
 const BagContainer = styled.div`
@@ -56,20 +45,53 @@ const BagContainer = styled.div`
   transform: translate(-50%, -50%) scale(0.4);
 `;
 
-const DoughImg = styled.img``;
-
 const BagImg = styled.img``;
 
 const EyeContainer = styled.img`
   position: absolute;
   top: 0;
-  left: 70%;
+  left: 62%;
   transform: translateX(-50%);
 `;
 
 const MouthContainer = styled.img`
   position: absolute;
   top: 0;
-  left: 70%;
+  left: 62%;
   transform: translateX(-50%);
+`;
+
+const HatContainer = styled.img<{ level: number }>`
+  position: absolute;
+  top: ${({ level }) => (level < 30 ? '-40%' : '-28%')};
+  left: 50%;
+  transform: translateX(-50%);
+`;
+
+const TopContainer = styled.img`
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+`;
+
+const BottomContainer = styled.img`
+  position: absolute;
+  bottom: 0;
+  left: 44%;
+  transform: translateX(-50%);
+`;
+
+const ShoeContainer = styled.img`
+  position: absolute;
+  top: 100%;
+  left: 43.5%;
+  transform: translateX(-50%);
+`;
+
+const AccContainer = styled.img`
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translateX(-50%, -50%);
 `;
