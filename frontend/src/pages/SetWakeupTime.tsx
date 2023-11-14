@@ -5,6 +5,8 @@ import { useTimePick } from '../hooks/useTimePick';
 import Button from '../components/shared/atoms/Button';
 import { http } from '../api/instance';
 import { useNavigate } from 'react-router';
+import { useState } from 'react';
+import moment, { Moment } from 'moment';
 
 export interface Time {
   hour: string;
@@ -14,25 +16,35 @@ export interface Time {
 
 function SetWakeupTime() {
   const navigate = useNavigate();
-  const curDate = new Date();
 
-  const { time, setHour, setMeridiem, setMinute } = useTimePick({
-    hour: String(curDate.getHours()).padStart(2, '0'),
-    minute: String(curDate.getMinutes()).padStart(2, '0'),
-    meridiem: curDate.getHours() >= 12 ? 'AM' : 'PM',
-  });
+  const [today, setToday] = useState<Moment>(moment());
 
-  const hourOf24HourFormat =
-    time.meridiem === 'AM'
-      ? String(parseInt(time.hour) % 12).padStart(2, '0')
-      : String((parseInt(time.hour) % 12) + 12);
+  const onSelectHour = (hour: string) => {
+    const hourNumber = parseInt(hour);
+    const isAfternoon = today.format('A') === 'PM';
+    const nxtHour = isAfternoon ? (hourNumber % 12) + 12 : hourNumber % 12;
+
+    setToday((prev) => prev.clone().set('hour', nxtHour));
+  };
+
+  const onSelectMinute = (minute: string) => {
+    const minuteNumber = parseInt(minute);
+
+    setToday((prev) => prev.clone().set('minute', minuteNumber));
+  };
+
+  const onSelectMeridiem = (day: string) => {
+    const hourNumber = today.hour();
+    const isAfternoon = day === 'PM';
+    const nxtHour = isAfternoon ? (hourNumber % 12) + 12 : hourNumber % 12;
+
+    setToday((prev) => prev.clone().set('hour', nxtHour));
+  };
 
   const onClickComplete = async () => {
-    const { hour, minute } = time;
-
     try {
       await http.post('/api/member/time', {
-        wakeTime: `${hour}:${minute}:00`,
+        wakeTime: `${today.hour()}:${today.minute()}:00`,
       });
 
       navigate('/home');
@@ -44,17 +56,17 @@ function SetWakeupTime() {
   return (
     <TitleLayout title="기상 시간을 설정해주세요">
       <ClockContainer>
-        <Clock>{hourOf24HourFormat[0]}</Clock>
-        <Clock>{hourOf24HourFormat[1]}</Clock>
+        <Clock>{today.format('HH')[0]}</Clock>
+        <Clock>{today.format('HH')[1]}</Clock>
         <ClockSplit>:</ClockSplit>
-        <Clock>{time.minute[0]}</Clock>
-        <Clock>{time.minute[1]}</Clock>
+        <Clock>{today.format('mm')[0]}</Clock>
+        <Clock>{today.format('mm')[1]}</Clock>
       </ClockContainer>
       <TimePicker
-        time={time}
-        onSelectHour={setHour}
-        onSelectMinute={setMinute}
-        onSelectMeridiem={setMeridiem}
+        time={today}
+        onSelectHour={onSelectHour}
+        onSelectMinute={onSelectMinute}
+        onSelectMeridiem={onSelectMeridiem}
       ></TimePicker>
 
       <ButtonContainer>
