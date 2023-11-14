@@ -181,6 +181,7 @@ export default function Store() {
   };
 
   const handleCompleteBuy = () => {
+    getCurQoinList();
     getAllItemList();
     getMyItemList();
   };
@@ -366,6 +367,7 @@ export default function Store() {
             totalList={checkItemToBuy()}
             onClose={onCartHandler}
             isComplete={handleCompleteBuy}
+            curQoin={curQoin}
           />
         }
       />

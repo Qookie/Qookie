@@ -14,9 +14,13 @@ export default function Qookie({ ...props }: QookieInfo) {
               <BagImg src={props.extraBody} alt="bag" />
             </BagContainer>
           )}
+          {props.bottom.media && (
+            <BottomContainer src={props.bottom.media} level={props.level} alt="bottom" />
+          )}
           {props.hat.media && <HatContainer src={props.hat.media} alt="hat" level={props.level} />}
-          {props.bottom.media && <BottomContainer src={props.bottom.media} alt="bottom" />}
-          {props.shoe.media && <ShoeContainer src={props.shoe.media} alt="shoe" />}
+          {props.shoe.media && (
+            <ShoeContainer src={props.shoe.media} level={props.level} alt="shoe" />
+          )}
           {props.top.media && <TopContainer src={props.top.media} alt="top" />}
           {props.accessories &&
             props.accessories.map(
@@ -75,17 +79,17 @@ const TopContainer = styled.img`
   transform: translateX(-50%);
 `;
 
-const BottomContainer = styled.img`
+const BottomContainer = styled.img<{ level: number }>`
   position: absolute;
   bottom: 0;
-  left: 44%;
+  left: ${({ level }) => (level >= 40 ? '43.5%' : '43%')};
   transform: translateX(-50%);
 `;
 
-const ShoeContainer = styled.img`
+const ShoeContainer = styled.img<{ level: number }>`
   position: absolute;
   bottom: -2%;
-  left: 42%;
+  left: ${({ level }) => (level >= 40 || level < 30 ? '42%' : '40%')};
   transform: translateX(-50%);
 `;
 
