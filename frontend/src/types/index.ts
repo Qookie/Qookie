@@ -3,7 +3,6 @@ import { ItemProps } from './item';
 export interface QookieInfo {
   name: string;
   createdAt: string;
-  active: number;
   exp: number;
   level: number;
   body: string;
