@@ -6,7 +6,7 @@ export interface CommonQuestLayoutProps {
   title: React.ReactNode;
   desc: React.ReactNode;
   completeButtonText: string;
-  onSuccessQuest: (img?: FormData) => void;
+  onSuccessQuest: (img?: FormData) => Promise<QuestResponse | undefined>;
   children?: React.ReactNode;
 }
 
@@ -26,3 +26,8 @@ export type QuestStatusResponse = {
     image: string | null;
   };
 };
+
+export interface QuestResponse {
+  msg: string;
+  payload: boolean;
+}
