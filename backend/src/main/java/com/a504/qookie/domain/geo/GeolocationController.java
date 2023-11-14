@@ -38,7 +38,8 @@ public class GeolocationController {
     }
 
     private String toS(GeoRequest gr, double dis) {
-        return "DIS: " + dis
+        return "TIME: " + gr.getTime()
+                + " DIS: " + dis
                 + " ACC: " + gr.getAcc()
                 + " LAT: " + gr.getLat()
                 + " LON: " + gr.getLon()

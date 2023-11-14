@@ -18,6 +18,8 @@ public class GeoRequest {
     private double heading;
     @JsonProperty("spd")
     private double spd;
+    @JsonProperty("time")
+    private long time;
 
 
     public String toString() {
