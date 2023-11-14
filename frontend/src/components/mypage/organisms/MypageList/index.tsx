@@ -31,7 +31,7 @@ export default function MypageList() {
     {
       icon: '',
       intro: '회원 정보',
-      path: 'info',
+      path: 'profile',
     },
     {
       icon: '',

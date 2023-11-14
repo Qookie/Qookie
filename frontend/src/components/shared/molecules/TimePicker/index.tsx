@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import 'swiper/css';
 import { Swiper, SwiperClass, SwiperSlide } from 'swiper/react';
-import { Time } from '../../../../pages/SetWakeupTime';
+import { Moment } from 'moment';
 
 interface Props {
-  time: Time;
+  time: Moment;
   onSelectHour?: (hour: string) => void;
   onSelectMinute?: (minute: string) => void;
   onSelectMeridiem?: (day: string) => void;
@@ -31,7 +31,7 @@ function TimePicker({ time, onSelectHour, onSelectMinute, onSelectMeridiem }: Pr
             loop={true}
             direction="vertical"
             centeredSlides={true}
-            initialSlide={(parseInt(time.hour) % 12 ? parseInt(time.hour) % 12 : 12) - 1}
+            initialSlide={(time.hour() % 12) - 1}
             onTransitionEnd={(swiper: SwiperClass) => {
               onSelectHour?.(hours[swiper.realIndex]);
             }}
@@ -51,7 +51,7 @@ function TimePicker({ time, onSelectHour, onSelectMinute, onSelectMeridiem }: Pr
             loop={true}
             direction="vertical"
             centeredSlides={true}
-            initialSlide={parseInt(time.minute)}
+            initialSlide={time.minute() / 10}
             onTransitionEnd={(swiper: SwiperClass) => {
               onSelectMinute?.(minutes[swiper.realIndex]);
             }}
@@ -72,7 +72,7 @@ function TimePicker({ time, onSelectHour, onSelectMinute, onSelectMeridiem }: Pr
             slidesPerView={4}
             direction="vertical"
             centeredSlides={true}
-            initialSlide={parseInt(time.hour) >= 12 ? 1 : 0}
+            initialSlide={meridiem.findIndex((amOrpn: string) => amOrpn === time.format('A'))}
             onTransitionEnd={(swiper: SwiperClass) => {
               onSelectMeridiem?.(meridiem[swiper.realIndex]);
             }}
