@@ -4,7 +4,7 @@ import { showToast } from '../../components/shared/molecules/Alert';
 import CalendarImage from '../../assets/pngs/calendar_big.png';
 import moment from 'moment';
 import QuestInnerLayout from '../../components/quest/templates/QuestInnerLayout';
-import { QuestStatus, QuestSubText } from '../../components/quest/types';
+import { QuestResponse, QuestStatus, QuestSubText } from '../../components/quest/types';
 import Text from '../../components/shared/atoms/Text';
 import Calendar from '../../components/shared/molecules/Calendar';
 import AttendanceImage from '../../assets/svgs/attendance.svg';
@@ -32,9 +32,11 @@ function AttendanceQuest() {
 
   const onSuccessQuest = async () => {
     try {
-      await http.post('/api/quest/attendance');
+      const response = await http.post<QuestResponse>('/api/quest/attendance');
       showToast({ title: '10 포인트 적립🌟', content: '출석 퀘스트가 달성되었습니다.' });
       fetchAttendance();
+
+      return response;
     } catch (error) {
       console.log(error);
     }
