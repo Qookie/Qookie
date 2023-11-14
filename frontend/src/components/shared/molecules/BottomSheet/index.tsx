@@ -82,6 +82,7 @@ const ChildrenContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   width: 100%;
   padding: 0 1rem;
   box-sizing: border-box;

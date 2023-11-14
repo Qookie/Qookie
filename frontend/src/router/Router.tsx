@@ -30,6 +30,9 @@ import Withdraw from '../pages/Withdraw';
 import Myqookie from '../pages/Myqookie';
 import Badge from '../pages/Badge';
 import Profile from '../pages/Profile';
+import Coinlist from '../pages/Coinlist';
+import Mind from '../pages/Mind';
+import PastMind from '../pages/PastMind';
 
 const Router = () => {
   const [userState, _] = useRecoilState(UserState);
@@ -45,7 +48,7 @@ const Router = () => {
           <Route path="/init" element={<InitQookie />} />
           <Route path="/set-wakeup" element={<SetWakeupTime />} />
           <Route path="/home" element={<Home />} />
-          <Route path="/mind" element={<Login />} />
+          <Route path="/mind" element={<Mind />} />
           <Route path="/mypage" element={<Mypage />} />
           <Route path="/store" element={<Store />} />
           <Route path="/admin" element={<ItemUpload />} />
@@ -57,6 +60,8 @@ const Router = () => {
           <Route path="/myqookie" element={<Myqookie />} />
           <Route path="/badge" element={<Badge />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/qoinlist" element={<Coinlist />} />
+          <Route path="/past-mind" element={<PastMind />} />
 
           <Route path="/quest">
             <Route path="wake" element={<WakeupQuest />} />

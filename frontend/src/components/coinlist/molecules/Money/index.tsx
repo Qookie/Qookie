@@ -4,18 +4,17 @@ import Text from '../../../shared/atoms/Text';
 
 interface MoneyProps {
   MoneyTheme?: 'default' | 'disabled';
+  qoin?: number;
 }
 
-export default function Money({ MoneyTheme = 'default' }: MoneyProps) {
-  const coin = 14200;
-
+export default function Money({ MoneyTheme = 'default', qoin }: MoneyProps) {
   return (
     <MoneyCard MoneyTheme={MoneyTheme}>
       <StyledText>보유 코인</StyledText>
       <Container>
         <CoinContainer>
           <Qoin width={20} height={20} />
-          {coin}
+          {qoin}
         </CoinContainer>
       </Container>
     </MoneyCard>
@@ -34,7 +33,6 @@ const MoneyCard = styled.div<MoneyProps>`
   flex-flow: column;
   justify-content: space-between;
   padding: 1rem 0rem;
-  margin: 40px 0;
 
   ${({ MoneyTheme }) =>
     MoneyTheme === 'disabled' ? 'background: var(--MR_GRAY2)' : 'background: var(--MR_RED)'}
