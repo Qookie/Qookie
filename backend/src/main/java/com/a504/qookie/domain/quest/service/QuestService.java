@@ -495,7 +495,7 @@ public class QuestService {
 		} else {
 			LocalDateTime now = LocalDateTime.now();
 			int year = now.getYear();
-			int month = now.getDayOfMonth();
+			int month = now.getMonthValue();
 			String monthlyChallengeKey = request.questName() + ":" + year + ":" + month;
 			template.opsForSet().add(monthlyChallengeKey, member.getId() + "");
 		}
