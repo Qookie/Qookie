@@ -38,6 +38,7 @@ services:
       RABBITMQ_PORT: 5672
       RABBITMQ_USER: ${RABBITMQ_USER}
       RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+      GPT_API_KEY: ${GPT_API_KEY}
 
   # redis
   backend_redis:

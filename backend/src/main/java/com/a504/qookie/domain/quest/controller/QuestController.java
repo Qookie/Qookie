@@ -1,5 +1,10 @@
 package com.a504.qookie.domain.quest.controller;
 
+
+import com.a504.qookie.domain.geo.GeoRequest;
+import com.a504.qookie.domain.geo.GeolocationService;
+import com.a504.qookie.domain.member.entity.Member;
+import com.a504.qookie.domain.quest.dto.AttendanceCalendarResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,6 +27,9 @@ import com.a504.qookie.global.security.CustomMemberDetails;
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/quest")
@@ -29,6 +37,7 @@ public class QuestController {
 
 	private final QuestService questService;
 	private final AwsS3Service awsS3Service;
+	private final GeolocationService geolocationService;
 
 	@GetMapping("/{questName}")
 	public ResponseEntity<?> checkQuest(@AuthenticationPrincipal CustomMemberDetails member,
@@ -40,7 +49,7 @@ public class QuestController {
 	// 사진 안쓰는 퀘스트
 	@PostMapping("/{questName}")
 	public ResponseEntity<?> completeQuest(@AuthenticationPrincipal CustomMemberDetails member
-		, @PathVariable String questName) {
+		, @PathVariable String questName){
 		QuestType questType = QuestType.valueOf(questName.toUpperCase());
 		if (!questService.completeQuest(member.getMember(), questName.toUpperCase())){
 			return BaseResponse.okWithData(HttpStatus.OK, questType.getMessage() + " 퀘스트를 완료할 수 없습니다.", false);

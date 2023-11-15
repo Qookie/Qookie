@@ -1,5 +1,5 @@
-import Axios, { AxiosResponse, AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { auth } from '../firebase/firebaseConfig';
+import Axios, { AxiosResponse, AxiosError, InternalAxiosRequestConfig } from 'axios';
 import axios from 'axios';
 
 export const BASE_URL = process.env.REACT_APP_HOST;
@@ -13,7 +13,6 @@ const axiosInstance = Axios.create({
 
 const onFailure = async (error: AxiosError) => {
   const config = error.config;
-  await auth.authStateReady();
   const currentUser = auth.currentUser;
   if (error.response?.status !== 401 || config === undefined || currentUser === null) {
     return Promise.reject(error);
