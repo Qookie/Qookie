@@ -60,5 +60,6 @@ def send_to_gpt(user_name, category, user_input):
                     f"""
                         ERROR AT LISTENING: {e}
                         {attempt}'th try failed. Retrying in {backoff_factor**attempt} seconds.
-                    """)
+                    """
+                )
                 time.sleep(backoff_factor**attempt)

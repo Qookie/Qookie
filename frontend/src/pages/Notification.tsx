@@ -12,13 +12,11 @@ export default function Notification() {
   const [notificationListList, setNotificationListList] = useState<NotificationProp[][]>();
 
   const isempty = (notificationListList: NotificationProp[][] | undefined) => {
-    if (notificationListList === undefined || 
-      )
-      {
-        return true
-      }
-      return false
-  }
+    if (notificationListList !== undefined && notificationListList.length === 0) {
+      return true;
+    }
+    return false;
+  };
 
   const getNotifications = async () => {
     return http
@@ -42,7 +40,7 @@ export default function Notification() {
       <TitleContainer>
         <Text typography="title">알림</Text>
       </TitleContainer>
-      {notificationListList === undefined && <Error children="404 NOT FOUND" />}
+      {isempty(notificationListList) && <Error children="받은 알림이 없어요." />}
       <NotificationListContainer>
         {notificationListList !== undefined &&
           notificationListList.map((nl) => {
