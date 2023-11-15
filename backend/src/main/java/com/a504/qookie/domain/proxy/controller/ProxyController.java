@@ -27,6 +27,8 @@ public class ProxyController {
 	public byte[] html2canvasProxy(@RequestParam String url) {
 		byte[] data = null;
 		try {
+			System.out.println("***********************************************************");
+			System.out.println(url);
 			URL s3Url = new URL(URLDecoder.decode(url,
 				StandardCharsets.UTF_8));
 

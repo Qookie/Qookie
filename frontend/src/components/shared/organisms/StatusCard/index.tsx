@@ -127,9 +127,12 @@ export default function StatusCard({ ...props }: QookieInfo) {
     } catch (err) {
       console.log(err);
     }
-    const bodyUrl = await getS3UrlHandler(lastBody);
     const eyeUrl = await getS3UrlHandler(props.eye);
     const mouthUrl = await getS3UrlHandler(props.mouth);
+    console.log('eyeURL: ', eyeUrl);
+    console.log('mouthURL: ', mouthUrl);
+    const bodyUrl = await getS3UrlHandler(lastBody);
+    console.log('bodyURL: ', bodyUrl);
 
     const itemUrl = {
       hat: { id: props.hat.id, media: await checkIsItem(props.hat) },
