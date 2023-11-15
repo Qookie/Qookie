@@ -41,13 +41,21 @@ function QuestInnerLayout({
     setQuestStatus('SUCCESS');
   };
 
+  const questButtonText: {
+    [key in QuestStatus]: string;
+  } = {
+    DEFAULT: completeButtonText,
+    DISABLED: completeButtonText,
+    SUCCESS: '성공',
+  };
+
   return (
     <TitleLayout title={title} desc={desc}>
       {children}
       <ButtonConatainer>
         {Subcomponent}
         <Button theme={ButtomThemeMap[questStatus]} onClick={onClickComplete}>
-          {completeButtonText}
+          {questButtonText[questStatus]}
         </Button>
       </ButtonConatainer>
     </TitleLayout>
