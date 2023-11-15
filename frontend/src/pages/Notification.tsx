@@ -6,9 +6,17 @@ import styled from 'styled-components';
 import { http } from '../api/instance';
 import { ResponseType } from '../types';
 import { getMonthDate } from '../utils/date';
+import Error from '../components/shared/atoms/error';
 
 export default function Notification() {
   const [notificationListList, setNotificationListList] = useState<NotificationProp[][]>();
+
+  const isempty = (notificationListList: NotificationProp[][] | undefined) => {
+    if (notificationListList !== undefined && notificationListList.length === 0) {
+      return true;
+    }
+    return false;
+  };
 
   const getNotifications = async () => {
     return http
@@ -32,6 +40,7 @@ export default function Notification() {
       <TitleContainer>
         <Text typography="title">알림</Text>
       </TitleContainer>
+      {isempty(notificationListList) && <Error children="받은 알림이 없어요." />}
       <NotificationListContainer>
         {notificationListList !== undefined &&
           notificationListList.map((nl) => {

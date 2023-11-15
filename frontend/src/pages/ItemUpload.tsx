@@ -69,8 +69,7 @@ export default function ItemUpload() {
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  margin-top: 5rem;
   gap: 1rem;
-  padding: 1rem;
+  padding: 6rem 1rem 1rem 1rem;
   box-sizing: border-box;
 `;

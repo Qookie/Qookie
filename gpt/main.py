@@ -1,19 +1,22 @@
-import sys
-
 import pika
 import json
-import logging
 
 from rabbitmq_connection import make_connection
 from gpt_client import send_to_gpt
+from logger import logger as log
 import variables
 
 
 def callback(ch, method, properties, body):
     try:
-        print("received from spring: ", str(body))
         global connection
         data = json.loads(body)
+        log.info(
+            "received from spring: "
+            + str(data["username"])
+            + " / "
+            + str(data["content"])
+        )
         gpt_reply = send_to_gpt(data["username"], data["category"], data["content"])
         # send back to spring
         ret = {"heartId": data["heartId"], "content": gpt_reply}
@@ -26,15 +29,15 @@ def callback(ch, method, properties, body):
         )
         channel.close()
 
-        print("send to spring: " + str(json.dumps(ret)))
+        log.info("send success: " + gpt_reply)
+
     except Exception as e:
-        logging.error(e)
-        print(f"ERROR AT CALLBACK: {e}")
+        log.error(f"ERROR AT CALLBACK: {e}")
 
 
 def listen_spring(connection_: pika.BlockingConnection):
     try:
-        print("listening")
+        log.info("listening")
         channel = connection_.channel()
 
         channel.queue_declare(queue=variables.queue_from_spring, durable=True)
@@ -50,12 +53,10 @@ def listen_spring(connection_: pika.BlockingConnection):
         )
         channel.start_consuming()
     except Exception as e:
-        logging.error(e)
-        print(f"ERROR AT LISTENING: {e}")
+        log.error(f"ERROR AT LISTENING: {e}")
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
     # rabbitMQ
     connection = make_connection()
     listen_spring(connection)

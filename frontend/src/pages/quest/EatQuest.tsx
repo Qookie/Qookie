@@ -6,6 +6,7 @@ import { http } from '../../api/instance';
 import styled from 'styled-components';
 import RewardText from '../../components/quest/molecules/RewardText';
 import { showToast } from '../../components/shared/molecules/Alert';
+import { QuestResponse } from '../../components/quest/types';
 
 function EatQuest() {
   const onSuccessQuest = async (img?: FormData) => {
@@ -14,8 +15,10 @@ function EatQuest() {
     }
 
     try {
-      await http.post('/api/quest/photo/eat', img, true);
+      const response = await http.post<QuestResponse>('/api/quest/photo/eat', img, true);
       showToast({ title: '10 포인트 적립🌟', content: '식사 퀘스트가 달성되었습니다.' });
+
+      return response;
     } catch (error) {
       console.log(error);
     }

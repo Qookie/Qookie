@@ -2,8 +2,8 @@ import json
 import time
 
 import requests
-import logging
 import variables
+from logger import logger as log
 
 
 def prompt(user_name, category):
@@ -48,16 +48,16 @@ def send_to_gpt(user_name, category, user_input):
                 },
                 data=data,
             )
+            print("RRR:", response)
             response.raise_for_status()
             json_response = response.json()
-            logging.info(json_response)
+            log.info("from gpt: ", json_response)
             return json_response["choices"][0]["message"]["content"]
         except requests.exceptions.RequestException as e:
             if attempt == max_retries:
                 raise
             else:
-                logging.error(e)
-                print(
+                log.error(
                     f"""
                         ERROR AT LISTENING: {e}
                         {attempt}'th try failed. Retrying in {backoff_factor**attempt} seconds.

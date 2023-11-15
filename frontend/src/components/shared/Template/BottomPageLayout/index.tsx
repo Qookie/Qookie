@@ -81,8 +81,6 @@ const Top = styled.div`
   }
 `;
 
-const ChildrenContainer = styled.div`
-  margin-top: 4rem;
-`;
+const ChildrenContainer = styled.div``;
 
 export default BottomPageLayout;

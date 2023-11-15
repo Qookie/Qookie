@@ -16,6 +16,8 @@ import QookieBag from '../../../../assets/pngs/QookieBag.png';
 import Text from '../../atoms/Text';
 import { useResetRecoilState } from 'recoil';
 import { QookieInfoState } from '../../../../modules/qookie';
+import { ItemProps } from '../../../../types/item';
+import Spinner from '../../atoms/Spinner';
 
 export interface StatusCardProps {
   level: number;
@@ -29,7 +31,9 @@ export default function StatusCard({ ...props }: QookieInfo) {
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [isBottomOpen, setIsBottomOpen] = useState<boolean>(false);
   const [bakeProps, setBakeProps] = useState<QookieInfo>(props);
+  const [isDataLoading, setIsDataLoading] = useState<boolean>(false);
   const divRef = useRef<HTMLDivElement>(null);
+  const Base64 = 'data:image/png;base64,';
 
   const handleBakeClick = async () => {
     const res = await bakePng(divRef);
@@ -37,9 +41,14 @@ export default function StatusCard({ ...props }: QookieInfo) {
       const imgFile = await converUrltoFile(res);
       qookieApi.bakeQookieReq(imgFile).then(() => {
         resetList();
-        openBottomHandler();
+        setIsBottomOpen((pre) => !pre);
       });
     }
+  };
+
+  const handleMoveMyqookie = async () => {
+    await handleBakeClick();
+    navigate('/myqookie');
   };
 
   const converUrltoFile = async (url: string) => {
@@ -56,13 +65,15 @@ export default function StatusCard({ ...props }: QookieInfo) {
   const openDialogHandler = () => {
     setIsDialogOpen((pre) => !pre);
     if (isDialogOpen) {
+      setIsDataLoading(true);
       makeBakeProps().then((res) => {
         setBakeProps(res);
+        setIsDataLoading(false);
       });
     }
   };
 
-  const openBottomHandler = () => {
+  const openBottomHandler = async () => {
     setIsBottomOpen((pre) => !pre);
   };
   const navigate = useNavigate();
@@ -120,12 +131,47 @@ export default function StatusCard({ ...props }: QookieInfo) {
     const eyeUrl = await getS3UrlHandler(props.eye);
     const mouthUrl = await getS3UrlHandler(props.mouth);
 
+    const itemUrl = {
+      hat: { id: props.hat.id, media: await checkIsItem(props.hat) },
+      shoe: { id: props.shoe.id, media: await checkIsItem(props.shoe) },
+      bottom: {
+        id: props.bottom.id,
+        media: await checkIsItem(props.bottom),
+      },
+      top: { id: props.top.id, media: await checkIsItem(props.top) },
+    };
+
+    const getAccUrls = async () => {
+      const updateList: ItemProps[] = await Promise.all(
+        props.accessories.map(async (acc: ItemProps) => ({
+          id: acc.id,
+          media: await checkIsItem(acc),
+        })),
+      );
+      return updateList;
+    };
+
+    const accUrl: { accessories: ItemProps[] } = {
+      accessories: await getAccUrls(),
+    };
+
     return {
       ...props,
-      body: `data:image/png;base64,${bodyUrl}`,
-      eye: `data:image/png;base64,${eyeUrl}`,
-      mouth: `data:image/png;base64,${mouthUrl}`,
+      body: Base64 + bodyUrl,
+      eye: Base64 + eyeUrl,
+      mouth: Base64 + mouthUrl,
+      ...itemUrl,
+      ...accUrl,
     };
+  };
+
+  const checkIsItem = async (item: ItemProps) => {
+    let convertUrl = null;
+    if (item.media) {
+      const res = await getS3UrlHandler(item.media);
+      convertUrl = `${Base64 + res}`;
+    }
+    return convertUrl;
   };
 
   return (
@@ -158,7 +204,7 @@ export default function StatusCard({ ...props }: QookieInfo) {
         />
         <BottomPageLayout
           isopen={isBottomOpen}
-          onCloseRequest={openBottomHandler}
+          onCloseRequest={handleBakeClick}
           children={
             <TitleLayout
               title={'쿠키 만들기가 완료되었습니다.'}
@@ -167,17 +213,21 @@ export default function StatusCard({ ...props }: QookieInfo) {
               <BottomInner>
                 <BakedQookie>
                   <BakeSize ref={divRef}>
-                    <QookieContainer>
-                      <Qookie {...bakeProps} />
-                      <QookieBagImg src={QookieBag} alt="bag" />
-                    </QookieContainer>
+                    {isDataLoading ? (
+                      <Spinner />
+                    ) : (
+                      <QookieContainer>
+                        <Qookie {...bakeProps} />
+                        <QookieBagImg src={QookieBag} alt="bag" />
+                      </QookieContainer>
+                    )}
                   </BakeSize>
                   <NameTag>
                     <Text typography="button">{props.name}</Text>({getToday()})
                   </NameTag>
                 </BakedQookie>
                 <BottomBtnContainer>
-                  <TextBtn onClick={() => navigate('/myqookie')}>쿠키 보러 가기</TextBtn>
+                  <TextBtn onClick={handleMoveMyqookie}>쿠키 보러 가기</TextBtn>
                   <Button onClick={handleBakeClick}>완료</Button>
                 </BottomBtnContainer>
               </BottomInner>
@@ -243,8 +293,9 @@ const BakedQookie = styled.div`
 
 const BakeSize = styled.div`
   width: 12rem;
-  height: 15rem;
-  margin: auto;
+  height: 18rem;
+  display: flex;
+  justify-content: center;
   padding-bottom: 5rem;
 `;
 
@@ -254,9 +305,8 @@ const NameTag = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   position: absolute;
-  bottom: 22%;
+  bottom: 0;
   transform: translateY(-50%);
   border-radius: 0.5rem;
   background-color: var(--MR_YELLOW);
@@ -284,9 +334,9 @@ const QookieContainer = styled.div`
 
 const QookieBagImg = styled.img`
   position: absolute;
-  top: 34%;
+  top: 60%;
   left: 50%;
-  transform: translate(-50%, -50%) scale(0.25);
+  transform: translate(-50%, -50%) scale(0.38);
 `;
 
 const BottomBtnContainer = styled.div`

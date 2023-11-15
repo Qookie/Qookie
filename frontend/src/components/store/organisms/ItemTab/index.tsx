@@ -4,6 +4,7 @@ import { ItemProps } from '../../../../types/item';
 import { useRecoilValue } from 'recoil';
 import { QookieInfoState } from '../../../../modules/qookie';
 import { useEffect, useState } from 'react';
+import Error from '../../../shared/atoms/error';
 
 interface TabProps {
   curCategory: string;
@@ -20,22 +21,22 @@ export default function ItemTab({ curCategory, tabItemProps, handleCheck, isChec
   const levelCheck = () => {
     const level = qookie.level;
     if (curCategory === 'accessories' || curCategory === 'top') {
-      if (level > 40) {
+      if (level >= 40) {
         return true;
       }
     }
     if (curCategory === 'bottom') {
-      if (level > 30) {
+      if (level >= 30) {
         return true;
       }
     }
     if (curCategory === 'shoe') {
-      if (level > 20) {
+      if (level >= 20) {
         return true;
       }
     }
     if (curCategory === 'hat') {
-      if (level > 10) {
+      if (level >= 10) {
         return true;
       }
     }
@@ -60,7 +61,9 @@ export default function ItemTab({ curCategory, tabItemProps, handleCheck, isChec
             ))}
         </ItemContainer>
       ) : (
-        <LockContainer>지금은 착용할 수 없어요ㅠ</LockContainer>
+        <LockContainer>
+          <Error children="지금 레벨에서는 착용할 수 없어요ㅠ" />
+        </LockContainer>
       )}
     </Container>
   );
