@@ -5,12 +5,15 @@ import { http } from '../../api/instance';
 import { showToast } from '../../components/shared/molecules/Alert';
 import { Quest } from '../../types/quest';
 import RewardText from '../../components/quest/molecules/RewardText';
+import { QuestResponse } from '../../components/quest/types';
 
 function WalkQuest() {
   const onSuccessQuest = async () => {
     try {
-      await http.post('/api/quest/walk');
+      const response = await http.post<QuestResponse>('/api/quest/walk');
       showToast({ title: '10 포인트 적립🌟', content: '산책 퀘스트가 달성되었습니다.' });
+
+      return response;
     } catch (error) {
       console.log(error);
     }
