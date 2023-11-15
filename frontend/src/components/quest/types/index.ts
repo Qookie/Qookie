@@ -29,5 +29,5 @@ export type QuestStatusResponse = {
 
 export interface QuestResponse {
   msg: string;
-  payload: boolean;
+  payload: boolean | string;
 }
