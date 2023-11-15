@@ -442,24 +442,23 @@ public class QuestService {
         Long cnt = tmp == null ? 0 : Long.parseLong(tmp);
         int flag = 0;
         for (int i = 0; i < 3; i++) {  // 뱃지 아이디는 연속적으로 있으니까.
-            badgeId += 1;
             String key =
-                    badgeId + ":" + questName + ":" + (i + 1) + ":badge";
+                (badgeId + i) + ":" + questName + ":" + (i + 1) + ":badge";
             if (!template.opsForSet().isMember(key, memberId + "")) {  // 이번 뱃지 획득못함
                 flag = 1;
                 if (i == 0) {
-                    list.add(new ChallengeStatus(30, sentence, cnt, targetCnt1, questName, "incomplete", badgeId));
+                    list.add(new ChallengeStatus(30, sentence, cnt, targetCnt1, questName, "incomplete", badgeId + i));
                 } else if (i == 1) {
-                    list.add(new ChallengeStatus(50, sentence, cnt, targetCnt2, questName, "incomplete", badgeId));
+                    list.add(new ChallengeStatus(50, sentence, cnt, targetCnt2, questName, "incomplete", badgeId + i));
                 } else {
-                    list.add(new ChallengeStatus(100, sentence, cnt, targetCnt3, questName, "incomplete", badgeId));
+                    list.add(new ChallengeStatus(100, sentence, cnt, targetCnt3, questName, "incomplete", badgeId + i));
                 }
                 break;
             }
         }
         // 마지막 뱃지까지 획득한 상태
         if (flag == 0)
-            list.add(new ChallengeStatus(100, sentence, cnt, targetCnt3, questName, "complete", badgeId));
+            list.add(new ChallengeStatus(100, sentence, cnt, targetCnt3, questName, "complete", badgeId + 2));
     }
 
     void checkMonthlyChallenge(String questName, Member member, int year, int month, List<ChallengeStatus> list,
