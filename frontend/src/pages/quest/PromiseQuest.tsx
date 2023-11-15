@@ -5,12 +5,15 @@ import { http } from '../../api/instance';
 import CoffeeImage from '../../assets/pngs/coffee.png';
 import { Quest } from '../../types/quest';
 import RewardText from '../../components/quest/molecules/RewardText';
+import { QuestResponse } from '../../components/quest/types';
 
 function PromiseQuest() {
   const onSuccessQuest = async () => {
     try {
-      await http.post('/api/quest/promise');
+      const response = await http.post<QuestResponse>('/api/quest/promise');
       showToast({ title: '10 포인트 적립🌟', content: '약속 퀘스트가 달성되었습니다.' });
+
+      return response;
     } catch (error) {
       console.log(error);
     }
