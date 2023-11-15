@@ -27,8 +27,6 @@ public class ProxyController {
 	public byte[] html2canvasProxy(@RequestParam String url) {
 		byte[] data = null;
 		try {
-			System.out.println("***********************************************************");
-			System.out.println(url);
 			URL s3Url = new URL(URLDecoder.decode(url,
 				StandardCharsets.UTF_8));
 
@@ -46,10 +44,7 @@ public class ProxyController {
 			data = "wrong URL".getBytes(java.nio.charset.StandardCharsets.UTF_8);
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println(e);
 		}
-		System.out.println("*************************************************************");
-		System.out.println(data);
 		return Base64.getEncoder().encode(data);
 	}
 }
