@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { http } from '../../api/instance';
 import { showToast } from '../../components/shared/molecules/Alert';
-import CalendarImage from '../../assets/pngs/calendar_big.png';
+import CalendarImage from '../../assets/pngs/calendar.png';
 import moment from 'moment';
 import QuestInnerLayout from '../../components/quest/templates/QuestInnerLayout';
 import { QuestResponse, QuestStatus, QuestSubText } from '../../components/quest/types';
@@ -82,6 +82,7 @@ function AttendanceQuest() {
         <img
           src={CalendarImage}
           style={{
+            width: '144px',
             display: 'block',
             margin: '0 auto',
           }}
@@ -99,6 +100,7 @@ function AttendanceQuest() {
 
 const CalendarContainer = styled.div`
   margin: 3.75rem 1rem 0 1rem;
+  padding-bottom: 1rem;
 `;
 
 export default AttendanceQuest;
