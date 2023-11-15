@@ -6,7 +6,7 @@ importScripts('https://www.gstatic.com/firebasejs/9.4.0/firebase-messaging-compa
 firebase.initializeApp({
   apiKey: 'AIzaSyBbV_QLBEaOANp8Mr7rghh_tIVEYHa4Tas',
   // authDomain: 'a504-qookie.firebaseapp.com',
-  authDomain: 'k9a504a.p.ssafy.io',
+  authDomain: 'k9a504.p.ssafy.io',
   projectId: 'a504-qookie',
   storageBucket: 'a504-qookie.appspot.com',
   messagingSenderId: '786533856529',
