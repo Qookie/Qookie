@@ -99,6 +99,7 @@ function AttendanceQuest() {
 
 const CalendarContainer = styled.div`
   margin: 3.75rem 1rem 0 1rem;
+  padding-bottom: 1rem;
 `;
 
 export default AttendanceQuest;
