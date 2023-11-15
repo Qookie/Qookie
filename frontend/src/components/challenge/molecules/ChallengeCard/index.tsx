@@ -73,7 +73,7 @@ export default function ChallengeCard({
           <TextContainer>
             <ChallengeTitle typography="title">{challengeName}</ChallengeTitle>
             <ChallengeCondition typography="main" color="var(--MR_GRAY2)">
-              {curCnt} / {totalCnt}일
+              {curCnt} / {totalCnt}
             </ChallengeCondition>
           </TextContainer>
         </LeftContainer>
@@ -88,7 +88,7 @@ export default function ChallengeCard({
 const Container = styled.div`
   width: 100%;
   position: relative;
-  margin-bottom: 8px;
+  margin-bottom: 15px;
 `;
 
 const CardContainer = styled.div`

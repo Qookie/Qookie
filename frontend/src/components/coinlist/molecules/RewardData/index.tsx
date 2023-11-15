@@ -32,7 +32,6 @@ const Container = styled.div`
 
 const LeftContainer = styled.div`
   display: flex;
-  gap: 1.5rem;
 `;
 
 const RewardContainer = styled.div`

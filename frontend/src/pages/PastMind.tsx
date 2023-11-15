@@ -53,12 +53,14 @@ export default function PastMind() {
   return (
     <Container>
       <TitleLayout title={'지난 마음'} />
-      <MonthSelector
-        onClick={onMonthSelectorClick}
-        onClickNextMonth={onChangeMonth}
-        onClickPrevMonth={onChangeMonth}
-        selectedMonth={today.month() + 1}
-      />
+      <MonthContainer>
+        <MonthSelector
+          onClick={onMonthSelectorClick}
+          onClickNextMonth={onChangeMonth}
+          onClickPrevMonth={onChangeMonth}
+          selectedMonth={today.month() + 1}
+        />
+      </MonthContainer>
       {mindData && mindData.length > 0 ? (
         mindData.map((data, index) => (
           <MessageCard
@@ -86,7 +88,12 @@ export default function PastMind() {
   );
 }
 
-const Container = styled.div``;
+const Container = styled.div`
+`;
+
+const MonthContainer = styled.div`
+  padding: 0 1rem;
+`;
 
 const Nothing = styled.div`
   display: flex;

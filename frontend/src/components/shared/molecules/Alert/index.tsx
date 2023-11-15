@@ -26,7 +26,7 @@ export default function Toast() {
         hideProgressBar={true} // 진행시간바 숨김
         closeButton={false} // 닫기 버튼 숨김
         transition={Zoom} // 알림 등장 애니메이션
-        draggablePercent={70} // 좌우 드래그로 닫기
+        draggablePercent={30} // 좌우 드래그로 닫기
         icon={<Qookie />} // 아이콘 SVG
         newestOnTop={true} // 새로운 알림 위치 위로
       />
