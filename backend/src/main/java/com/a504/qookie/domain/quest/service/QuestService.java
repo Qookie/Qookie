@@ -435,7 +435,9 @@ public class QuestService {
         int flag = 0;
         for (int i = 0; i < 3; i++) {  // 뱃지 아이디는 연속적으로 있으니까.
             badgeId += i;
-            String key = badgeId + ":badge";
+            // String key = badgeId + ":badge";
+            String key =
+                    badgeId + ":" + questName + ":" + ((badgeId - 1L) % 3 + 1) + ":badge";
             if (!template.opsForSet().isMember(key, memberId + "")) {  // 이번 뱃지 획득못함
                 flag = 1;
                 if (i == 0) {
@@ -495,7 +497,7 @@ public class QuestService {
         } else {
             LocalDateTime now = LocalDateTime.now();
             int year = now.getYear();
-            int month = now.getDayOfMonth();
+            int month = now.getMonthValue();
             String monthlyChallengeKey = request.questName() + ":" + year + ":" + month;
             template.opsForSet().add(monthlyChallengeKey, member.getId() + "");
         }
