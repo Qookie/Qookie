@@ -79,9 +79,17 @@ public class QuestService {
         if (!questName.equals("ATTENDANCE")) {
             if (questName.equals("WAKE")) {
                 LocalTime memberWakeTime = member.getWakeUp();
-                LocalTime limitTime = memberWakeTime.minus(1, ChronoUnit.HOURS);
                 LocalTime curTime = LocalDateTime.now().toLocalTime();
-                if (curTime.isAfter(memberWakeTime) || curTime.isBefore(limitTime)) return false;
+                int memberH = memberWakeTime.getHour();
+                int memberM = memberWakeTime.getMinute();
+                int curH = curTime.getHour();
+                int curM = curTime.getMinute();
+                if (memberH == 0) memberH = 24;
+                if (curH == 0) curH = 24;
+                int setting = memberH * 60 + memberM;
+                int limit = setting - 60;
+                int cur = curH * 60 + curM;
+                if (!(limit <= cur && cur <= setting)) return false;
             }
             memberQuestRepository.save(
                     MemberQuest.builder()
