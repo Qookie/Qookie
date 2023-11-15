@@ -10,10 +10,17 @@ import { http } from '../api/instance';
 import Error from '../components/shared/atoms/error';
 
 interface coinProps {
-  totalCoin?: number;
   message?: string;
   cost?: number;
   createdAt?: string;
+}
+
+interface ResProps {
+  msg: string;
+  payload: {
+    totalCoin: number;
+    list: coinProps[];
+  };
 }
 
 export default function Coinlist() {
@@ -26,7 +33,7 @@ export default function Coinlist() {
     const curYear = today.get('y');
     const curMonth = String(today.month() + 1).padStart(2, '0');
     try {
-      const res = await http.get<any>(`/api/member/history/${curYear}/${curMonth}`);
+      const res = await http.get<ResProps>(`/api/member/history/${curYear}/${curMonth}`);
       setCoinData(res.payload.list);
       setTotalCoin(res.payload.totalCoin);
     } catch (e) {

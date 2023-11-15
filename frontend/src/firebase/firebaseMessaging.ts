@@ -6,10 +6,8 @@ const initiateFirebaseMessaging = () => {
   // get permission from user
   void Notification.requestPermission().then((permission) => {
     if (permission === 'granted') {
-      // TODO: move vapid key to .env file
       getToken(messaging, {
-        vapidKey:
-          'BFDtwwUfuzdxNUWEds5C6AuVIyJRyiB2S9qVRfCXA-moG9Lfn6JNu6sc5L2DaXDHoiW0iC3vJBLEqwkRTsxblcQ',
+        vapidKey: process.env.REACT_APP_VAPID_KEY,
       })
         .then((currentToken) => {
           if (currentToken) {
@@ -31,7 +29,9 @@ const initiateFirebaseMessaging = () => {
         }
       });
     } else {
-      console.log('notification permission denied');
+      alert(
+        '알림이 허용되지 않았습니다.\n브라우저 설정에서 k9a504.p.ssafy.io 알림을 허용해주세요!',
+      );
     }
   });
 };

@@ -15,7 +15,7 @@ interface Props {
 function FaceOptionSelctor({ label, optionData, onSelectItem, selected }: Props) {
   return (
     <>
-      <Text typography="main" color="var(--MR_GRAY2)">
+      <Text typography="button" color="var(--MR_GRAY2)">
         {label}
       </Text>
       <SwiperContainer>
@@ -41,6 +41,7 @@ function FaceOptionSelctor({ label, optionData, onSelectItem, selected }: Props)
 }
 
 const SwiperContainer = styled.div`
+  margin-top: 0.4rem;
   .swiper {
     width: 100%;
   }

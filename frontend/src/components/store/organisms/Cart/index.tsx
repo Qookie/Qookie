@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import CartItem from '../../molecules/CartItem';
 import Button from '../../../shared/atoms/Button';
 import Chip from '../../../shared/molecules/Chip';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { itemApi } from '../../../../api';
 import { ItemProps } from '../../../../types/item';
 import { showToast } from '../../../shared/molecules/Alert';
@@ -15,11 +15,26 @@ export interface orderReqProps {
 interface CartProps {
   totalList: ItemProps[];
   onClose: () => void;
+  isComplete: () => void;
+  curQoin: number;
 }
 
-export default function Cart({ totalList, onClose }: CartProps) {
+export default function Cart({ totalList, onClose, isComplete, curQoin }: CartProps) {
   const [selectedItemList, setSelectedItemList] = useState<ItemProps[]>([]);
   const [selectedPrice, setSelectedPrice] = useState<number>(0);
+  const [haveQoin, setHaveQoin] = useState<boolean>(false);
+
+  useEffect(() => {
+    checkEnoughQoin();
+  }, [selectedPrice]);
+
+  const checkEnoughQoin = () => {
+    if (selectedPrice <= curQoin) {
+      setHaveQoin(true);
+    } else {
+      setHaveQoin(false);
+    }
+  };
 
   const selectProductHandler = (item: ItemProps, checked: boolean) => {
     if (checked) {
@@ -39,6 +54,7 @@ export default function Cart({ totalList, onClose }: CartProps) {
         title: '아이템 구매 완료',
         content: `${selectedItemList.length}개의 상품이 구매되었습니다.`,
       });
+      isComplete();
       onClose();
     });
   };
@@ -58,7 +74,17 @@ export default function Cart({ totalList, onClose }: CartProps) {
         총 {selectedItemList.length}개의 아이템
         <Chip type="qoin" text={selectedPrice} />
       </PriceContainer>
-      <Button onClick={handleBuyItems}>구매하기</Button>
+      <Button
+        onClick={handleBuyItems}
+        theme={haveQoin && selectedItemList.length > 0 ? 'default' : 'disabled'}
+        disabled={!haveQoin || selectedItemList.length === 0}
+      >
+        {selectedItemList.length > 0
+          ? haveQoin
+            ? '구매하기'
+            : '코인이 부족합니다'
+          : '선택된 아이템이 없습니다'}
+      </Button>
     </Container>
   );
 }

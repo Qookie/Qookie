@@ -31,18 +31,18 @@ export default function MyqookieListItem({ ...props }: MyqookieProps) {
 const Container = styled.div`
   display: flex;
   align-items: center;
-  height: 160px;
   width: 100%;
 `;
 
 const ImageContainer = styled.div`
   width: fit-content;
+  height: 170px;
   overflow: hidden;
 `;
 
 const ImageDiv = styled.img`
-  width: 120px;
-  margin-top: -2rem;
+  width: 110px;
+  margin-top: -0.1rem;
 `;
 
 const RightSection = styled.div`
@@ -50,7 +50,7 @@ const RightSection = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 0 1.2rem;
+  padding: 0 1.6rem;
   box-sizing: border-box;
 `;
 

@@ -82,11 +82,15 @@ public class Member {
 		email = loginRequest.getEmail();
 		name = loginRequest.getDisplayName();
 		uid = loginRequest.getUid();
-		messageToken = loginRequest.getMessageToken();
+		if (loginRequest.getMessageToken() != null) {
+			messageToken = loginRequest.getMessageToken();
+		}
 	}
 
 	public void updateMessageToken(String mt) {
-		messageToken = mt;
+		if (mt != null) {
+			messageToken = mt;
+		}
 	}
 
 	public void setTime(LocalTime wakeUp) {

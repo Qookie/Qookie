@@ -5,8 +5,8 @@ import { http } from '../../api/instance';
 import { showToast } from '../../components/shared/molecules/Alert';
 import { Quest } from '../../types/quest';
 import RewardText from '../../components/quest/molecules/RewardText';
-import ProgressBar from '../../components/shared/atoms/ProgressBar';
 import { QuestResponse } from '../../components/quest/types';
+import ProgressBar from '../../components/shared/atoms/ProgressBar';
 
 type DistanceResponse = {
   msg: string;
@@ -26,50 +26,52 @@ function WalkQuest() {
   const [distance, setDistance] = useState<number>(0);
   const [walking, setWalking] = useState<boolean>(false);
 
-  const checkIfWalking = async () => {
-    return (await http.get<CheckResponse>('api/geo/check')).payload.started;
-  };
+  // const checkIfWalking = async () => {
+  //   return (await http.get<CheckResponse>('api/geo/check')).payload.started;
+  // };
 
   const onSuccessQuest = async () => {
     try {
+      const response = await http.post<QuestResponse>('/api/quest/walk');
       showToast({ title: '10 포인트 적립🌟', content: '산책 퀘스트가 달성되었습니다.' });
-      return await http.post<QuestResponse>('/api/quest/walk');
+
+      return response;
     } catch (error) {
       console.log(error);
     }
   };
 
-  const sendLocation = async () => {
-    return await navigator.geolocation.getCurrentPosition(
-      async (data: GeolocationPosition) => {
-        const body = {
-          lat: data.coords.latitude,
-          lon: data.coords.longitude,
-        };
-        const dist = (await http.post<DistanceResponse>('api/geo', body)).payload.distance;
-        setDistance(dist);
-        if (dist > 500) {
-          onSuccessQuest();
-          setWalking(false);
-        }
-        return dist;
-      },
-      null,
-      {
-        enableHighAccuracy: true,
-      },
-    );
-  };
+  // const sendLocation = async () => {
+  //   return await navigator.geolocation.getCurrentPosition(
+  //     async (data: GeolocationPosition) => {
+  //       const body = {
+  //         lat: data.coords.latitude,
+  //         lon: data.coords.longitude,
+  //       };
+  //       const dist = (await http.post<DistanceResponse>('api/geo', body)).payload.distance;
+  //       setDistance(dist);
+  //       if (dist > 500) {
+  //         onSuccessQuest();
+  //         setWalking(false);
+  //       }
+  //       return dist;
+  //     },
+  //     null,
+  //     {
+  //       enableHighAccuracy: true,
+  //     },
+  //   );
+  // };
 
-  useEffect(() => {
-    checkIfWalking().then((started) => setWalking(started));
-  }, [distance]);
+  // useEffect(() => {
+  //   checkIfWalking().then((started) => setWalking(started));
+  // }, [distance]);
 
-  useEffect(() => {
-    if (walking && 'geolocation' in navigator) {
-      sendLocation();
-    }
-  }, [walking]);
+  // useEffect(() => {
+  //   if (walking && 'geolocation' in navigator) {
+  //     sendLocation();
+  //   }
+  // }, [walking]);
 
   return (
     <QuestLayout
@@ -91,7 +93,7 @@ function WalkQuest() {
           margin: '0 auto',
         }}
       />
-      {walking ? <ProgressBar total={500} now={distance} /> : <></>}
+      {/* {walking ? <ProgressBar total={500} now={distance} /> : <></>} */}
     </QuestLayout>
   );
 }

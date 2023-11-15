@@ -72,7 +72,7 @@ export default function Mind() {
         <Chip
           type="category"
           setInput={() => clickEmotion('감사')}
-          isClicked={emotion === '감사'}
+          disabled={emotion !== '감사'}
           icon={
             <img
               src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Smiling%20Face%20with%20Open%20Hands.png"
@@ -85,7 +85,7 @@ export default function Mind() {
         <Chip
           type="category"
           setInput={() => clickEmotion('행복')}
-          isClicked={emotion === '행복'}
+          disabled={emotion !== '행복'}
           icon={
             <img
               src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Smiling%20Face%20with%20Hearts.png"
@@ -98,7 +98,7 @@ export default function Mind() {
         <Chip
           type="category"
           setInput={() => clickEmotion('불안')}
-          isClicked={emotion === '불안'}
+          disabled={emotion !== '불안'}
           icon={
             <img
               src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Confounded%20Face.png"
@@ -111,7 +111,7 @@ export default function Mind() {
         <Chip
           type="category"
           setInput={() => clickEmotion('걱정')}
-          isClicked={emotion === '걱정'}
+          disabled={emotion !== '걱정'}
           icon={
             <img
               src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Anxious%20Face%20with%20Sweat.png"
@@ -125,7 +125,7 @@ export default function Mind() {
 
       <MiddleContainer>
         <TextArea
-          placeholder="오늘은 어떤 감사함을 느꼈나요?"
+          placeholder={`오늘은 어떤 ${emotion}을/를 느꼈나요?`}
           value={inputValue}
           onChange={handleChange}
         />
@@ -191,7 +191,7 @@ export default function Mind() {
             <BottomPageText typography="main" color="var(--MR_GRAY2)">
               {'마음 보내기가\n완료되었습니다.'}
             </BottomPageText>
-            <Button onClick={() => navigate('/')}>마음 확인하기</Button>
+            <Button onClick={() => navigate('/past-mind')}>마음 확인하기</Button>
           </BottomPageContainer>
         }
       />
