@@ -6,7 +6,13 @@ import Qookie from '../../molecules/Qookie';
 export default function QookieStatus({ ...props }: QookieInfo) {
   return (
     <QookieContainer>
-      <BackgroundContainer background={props.background.media ? props.background.media : ''}>
+      <BackgroundContainer
+        background={
+          props.background.media
+            ? props.background.media
+            : 'https://bangle.s3.ap-northeast-2.amazonaws.com/f7db6e44-ad5b-4d22-a60e-ad9bfd0737c4.png'
+        }
+      >
         <Qookie {...props} />
       </BackgroundContainer>
       <ContentsWrapper>
