@@ -34,7 +34,7 @@ const NavContainer = styled.div`
   justify-content: center;
   background-color: var(--MR_WHITE);
   box-shadow: 0px -4px 8px 0px rgba(224, 224, 224, 0.15);
-  padding: 0.7rem 0;
+  padding: 0.7rem 0 calc(env(safe-area-inset-bottom) + 0.7rem) 0;
   z-index: 5;
 `;
 

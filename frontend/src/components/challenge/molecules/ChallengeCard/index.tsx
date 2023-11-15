@@ -2,14 +2,66 @@ import styled from 'styled-components';
 import Button from '../../../shared/atoms/Button';
 import Text from '../../../shared/atoms/Text';
 import { Qoin } from '../../../../assets/svgs';
+import { http } from '../../../../api/instance';
+import { showToast } from '../../../shared/molecules/Alert';
+import { useEffect, useState } from 'react';
 
-interface ChallengeProps {
-  title?: string;
-  condition?: string;
-  coin?: number;
+export interface ChallengeProps {
+  challengeName: string;
+  coin: number;
+  badgeId: number;
+  questName: string;
+  curCnt: number;
+  totalCnt: number;
+  status: string;
+  onUpdate: () => void;
 }
 
-export default function ChallengeCard({ title, condition, coin }: ChallengeProps) {
+type StateProps = 'default' | 'disabled' | 'finished'
+
+export default function ChallengeCard({
+  challengeName,
+  coin,
+  curCnt,
+  totalCnt,
+  questName,
+  status,
+  badgeId,
+  onUpdate
+}: ChallengeProps) {
+  const [challengeStatus, setChallengeStatus] = useState<StateProps>('default');
+
+  const completeChallenge = async (challengeStatus: StateProps) => {
+    if (challengeStatus == 'default') {
+      try {
+        const res = await http.post<ChallengeProps>('/api/quest/challenge', {
+          coin: coin,
+          badgeId: badgeId || 0,
+          questName: questName,
+        });
+        onUpdate();
+        showToast({
+          title: `${coin} 포인트 적립 🌟`,
+          content: `${challengeName} 달성되었습니다.`,
+        });
+      } catch (e) {
+        console.log('completeChallenge Error : ', e);
+      }
+    } else {
+      return ;
+    }
+  };
+
+  useEffect(() => {
+    if (curCnt >= totalCnt && status === 'incomplete') {
+      setChallengeStatus('default');
+    } else if (curCnt >= totalCnt && status === 'complete') {
+      setChallengeStatus('finished')
+    } else {
+      setChallengeStatus('disabled')
+    }
+  }, [status])
+
   return (
     <Container>
       <CardContainer>
@@ -19,13 +71,15 @@ export default function ChallengeCard({ title, condition, coin }: ChallengeProps
             <AmountCoin>{coin}</AmountCoin>
           </EarnCoin>
           <TextContainer>
-            <ChallengeTitle typography="title">{title}</ChallengeTitle>
+            <ChallengeTitle typography="title">{challengeName}</ChallengeTitle>
             <ChallengeCondition typography="main" color="var(--MR_GRAY2)">
-              {condition}
+              {curCnt} / {totalCnt}일
             </ChallengeCondition>
           </TextContainer>
         </LeftContainer>
-        <Button size="small">받기</Button>
+          <Button size="small" theme={challengeStatus} onClick={() => completeChallenge(challengeStatus)}>
+            받기
+          </Button>
       </CardContainer>
     </Container>
   );

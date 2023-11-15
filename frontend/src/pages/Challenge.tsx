@@ -1,39 +1,87 @@
 import styled from 'styled-components';
+import TitleLayout from '../components/shared/Template/TitleLayout';
 import Text from '../components/shared/atoms/Text';
 import ChallengeCard from '../components/challenge/molecules/ChallengeCard';
+import { http } from '../api/instance';
+import { useEffect, useState } from 'react';
+import { ChallengeProps } from '../components/challenge/molecules/ChallengeCard';
+import { useNavigate } from 'react-router-dom';
+
+interface ResProps {
+  msg: string;
+  payload: {
+    monthlyChallenge: ChallengeProps[];
+    badgeChallenge: ChallengeProps[];
+  };
+}
 
 export default function Challenge() {
+  const [monthly, setMonthly] = useState<ChallengeProps[]>([]);
+  const [badge, setBadge] = useState<ChallengeProps[]>([]);
+  const navigate = useNavigate();
+
+  const getChallenge = async () => {
+    try {
+      const res = await http.get<ResProps>('/api/quest/challenge');
+      setMonthly(res.payload.monthlyChallenge);
+      setBadge(res.payload.badgeChallenge);
+    } catch (e) {
+      console.log('completeChallenge Error : ', e);
+    }
+  };
+  
+  useEffect(() => {
+    getChallenge();
+  }, []);
+
   return (
     <Container>
-      <TitleContainer>
-        <ChallengeText typography="title" color="var(--MR_BLACK)">
-          챌린지
-        </ChallengeText>
-        <Text typography="main" color="var(--MR_GRAY2)">
-          꾸준한 하루를 모아 더 큰 목표에 도전해 보세요.
-        </Text>
-        <Text typography="main" color="var(--MR_GRAY2)">
-          챌린지 달성 성공 시, 배지가 지급됩니다.
-        </Text>
-        <ClickableText typography="main" color="var(--MR_GRAY2)">
-          내 배지 확인하기 {'>'}
-        </ClickableText>
-      </TitleContainer>
+      <TitleLayout
+        title="챌린지"
+        desc={
+          '꾸준한 하루를 모아 더 큰 목표에 도전해 보세요.\n챌린지 달성 성공 시, 배지가 지급됩니다.'
+        }
+      />
+      <ClickableText typography="main" color="var(--MR_GRAY2)" onClick={() => navigate('/badge')}>
+        내 배지 확인하기 {'>'}
+      </ClickableText>
 
       <ChallengeContainer>
         <TitleText typography="title" color="var(--MR_BLACK)">
           이번 달 진행 중
         </TitleText>
-        <ChallengeCard title="15일 기상 챌린지" condition="15일 / 15일" coin={100} />
-        <ChallengeCard title="규칙적인 식사" condition="5일 / 15일" coin={100} />
-        <ChallengeCard title="30000 걸음" condition="10일 / 10일" coin={100} />
+        {monthly.map((data, index) => (
+          <ChallengeCard
+            key={index}
+            challengeName={data.challengeName}
+            curCnt={data.curCnt}
+            totalCnt={data.totalCnt}
+            coin={data.coin}
+            questName={data.questName}
+            status={data.status}
+            badgeId={data.badgeId}
+            onUpdate={getChallenge}
+          />
+        ))}
       </ChallengeContainer>
 
       <ChallengeContainer>
         <TitleText typography="title" color="var(--MR_BLACK)">
           배지 챌린지
         </TitleText>
-        <ChallengeCard title="상쾌한 아침과 함께" condition="10일 / 10일" coin={50} />
+        {badge.map((data, index) => (
+          <ChallengeCard
+            key={index}
+            challengeName={data.challengeName}
+            curCnt={data.curCnt}
+            totalCnt={data.totalCnt}
+            coin={data.coin}
+            questName={data.questName}
+            status={data.status}
+            badgeId={data.badgeId}
+            onUpdate={getChallenge}
+          />
+        ))}
       </ChallengeContainer>
     </Container>
   );
@@ -53,6 +101,7 @@ const ClickableText = styled(Text)`
   text-align: right;
   margin-top: 16px;
   margin-bottom: 20px;
+  padding: 0 1rem;
 `;
 
 const Container = styled.div`
@@ -60,13 +109,6 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-`;
-
-const TitleContainer = styled.div`
-  padding: 0 1rem;
-  margin-top: 80px;
-  display: flex;
-  flex-direction: column;
 `;
 
 const ChallengeContainer = styled.div`

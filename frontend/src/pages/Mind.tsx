@@ -125,7 +125,7 @@ export default function Mind() {
 
       <MiddleContainer>
         <TextArea
-          placeholder="오늘은 어떤 감사함을 느꼈나요?"
+          placeholder={`오늘은 어떤 ${emotion}을/를 느꼈나요?`}
           value={inputValue}
           onChange={handleChange}
         />
@@ -191,7 +191,7 @@ export default function Mind() {
             <BottomPageText typography="main" color="var(--MR_GRAY2)">
               {'마음 보내기가\n완료되었습니다.'}
             </BottomPageText>
-            <Button onClick={() => navigate('/')}>마음 확인하기</Button>
+            <Button onClick={() => navigate('/past-mind')}>마음 확인하기</Button>
           </BottomPageContainer>
         }
       />
