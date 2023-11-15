@@ -1,6 +1,5 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app';
-import { getAnalytics } from 'firebase/analytics';
 import { getAuth } from 'firebase/auth';
 import { getMessaging } from 'firebase/messaging';
 
@@ -11,6 +10,8 @@ import { getMessaging } from 'firebase/messaging';
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: 'AIzaSyBbV_QLBEaOANp8Mr7rghh_tIVEYHa4Tas',
+  // authDomain: 'a504-qookie.firebaseapp.com',
+  // authDomain: 'k9a504a.p.ssafy.io',
   authDomain: process.env.REACT_APP_DOMAIN,
   projectId: 'a504-qookie',
   storageBucket: 'a504-qookie.appspot.com',
@@ -23,5 +24,4 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const messaging = getMessaging(app);
-const analytics = getAnalytics(app);
-export { app, auth, messaging, analytics };
+export { app, auth, messaging };

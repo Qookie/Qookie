@@ -24,7 +24,9 @@ logging:
           descriptor:
             sql:
               BasicBinder: TRACE
-
+  file:
+    path: '/'
+    name: 'spring.log'
 rabbitmq:
   host: localhost
   port: 5672

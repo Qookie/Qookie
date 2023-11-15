@@ -5,7 +5,8 @@ importScripts('https://www.gstatic.com/firebasejs/9.4.0/firebase-messaging-compa
 
 firebase.initializeApp({
   apiKey: 'AIzaSyBbV_QLBEaOANp8Mr7rghh_tIVEYHa4Tas',
-  authDomain: 'k9a504.p.ssafy.io',
+  // authDomain: 'a504-qookie.firebaseapp.com',
+  authDomain: 'k9a504a.p.ssafy.io',
   projectId: 'a504-qookie',
   storageBucket: 'a504-qookie.appspot.com',
   messagingSenderId: '786533856529',
@@ -14,44 +15,24 @@ firebase.initializeApp({
 });
 
 const messaging = firebase.messaging();
-messaging.onBackgroundMessage(messaging, (payload) => {
-  console.log('BG PAYLOAD: ', payload);
 
-  const notificationTitle = payload.notification.title;
-  const notificationOptions = {
-    body: payload.notification.body,
-    icon: '/192.png',
-  };
-  self.registration.showNotification(notificationTitle, notificationOptions);
+self.addEventListener('push', (event) => {
+  messaging.onBackgroundMessage((payload) => {
+    console.log('payload', payload);
+    const notificationTitle = payload.data.title;
+    const notificationOptions = {
+      body: payload.data.body,
+      icon: '/logo192.png',
+      data: { url: payload.data.url },
+    };
+    var show = self.registration.showNotification(notificationTitle, notificationOptions);
+    event.waitUntil(show);
+  });
 });
 
-// self.addEventListener('install', function (e) {
-//   console.log('fcm sw install');
-//   self.skipWaiting();
-// });
-
-// self.addEventListener('activate', function (e) {
-//   console.log('fcm activate');
-// });
-
-// self.addEventListener('push', function (e) {
-//   if (!e.data.json()) return;
-
-//   console.log(e);
-//   const resultData = e.data.json().notification;
-//   const notificationTitle = resultData.title;
-//   const notificationOptions = {
-//     body: resultData.body,
-//     icon: resultData.icon,
-//     tgag: resultData.tag,
-//   };
-
-//   self.registration.showNotification(notificationTitle, notificationOptions);
-// });
-
-// self.addEventListener("notificationclick", function (event) {
-//   console.log("notification click");
-//   const url = "/";
-//   event.notification.close();
-//   event.waitUntil(clients.openWindow(url));
-// });
+self.addEventListener('notificationclick', function (event) {
+  console.log('E', event);
+  const url = event.notification.data.url;
+  event.notification.close();
+  event.waitUntil(clients.openWindow(url));
+});
