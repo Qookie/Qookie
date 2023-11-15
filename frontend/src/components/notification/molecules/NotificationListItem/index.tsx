@@ -16,7 +16,7 @@ export default function NotificationListItem({ prop }: { prop: NotificationProp 
       case 'Cookie':
         return '/home';
       case 'Heart':
-        return '/mind';
+        return '/past-mind';
       case 'Item':
         return '/store';
       case 'Quest':
