@@ -292,7 +292,7 @@ public class QuestService {
 			}
 		}
 		// 뱃지 챌린지 업데이트 및 알림해주는 기능
-		String badge_challenge_key = member.getId() + ":" + questName + ":badge"; // (유저PK):(퀘스트이름)
+		String badge_challenge_key = member.getId() + ":" + questName + ":badge"; // (유저PK):(퀘스트이름):badge
 		String badgeCnt = template.opsForValue().get(badge_challenge_key);
 		if (badgeCnt == null) {
 			template.opsForValue().set(badge_challenge_key, "1");
@@ -435,7 +435,9 @@ public class QuestService {
 		int flag = 0;
 		for (int i = 0; i < 3; i++) {  // 뱃지 아이디는 연속적으로 있으니까.
 			badgeId += i;
-			String key = badgeId + ":badge";
+			// String key = badgeId + ":badge";
+			String key =
+				badgeId + ":" + questName + ":" + ((badgeId - 1L) % 3 + 1) + ":badge";
 			if (!template.opsForSet().isMember(key, memberId + "")) {  // 이번 뱃지 획득못함
 				flag = 1;
 				if (i == 0) {
