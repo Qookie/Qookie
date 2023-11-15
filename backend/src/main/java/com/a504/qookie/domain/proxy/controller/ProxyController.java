@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/html2canvas")
+@RequestMapping("/api/html2canvas")
 public class ProxyController {
 
 	@GetMapping("/proxy.json")
@@ -48,6 +48,8 @@ public class ProxyController {
 			e.printStackTrace();
 			System.out.println(e);
 		}
+		System.out.println("*************************************************************");
+		System.out.println(data);
 		return Base64.getEncoder().encode(data);
 	}
 }
