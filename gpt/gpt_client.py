@@ -50,7 +50,7 @@ def send_to_gpt(user_name, category, user_input):
             )
             response.raise_for_status()
             json_response = response.json()
-            log.info("from gpt: " + json_response)
+            log.info("from gpt: ", json_response)
             return json_response["choices"][0]["message"]["content"]
         except requests.exceptions.RequestException as e:
             if attempt == max_retries:

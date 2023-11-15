@@ -507,7 +507,7 @@ public class QuestService {
         try {
             firebaseService.sendMessage(
                     "쿠키가 진화했어요!",
-                    "여기엔 뭐라고 적어야 할까요!!!!",
+                    "새로운 쿠키의 모습을 확인해보세요.",
                     "home",
                     member.getMessageToken());
         } catch (FirebaseMessagingException e) {
@@ -526,7 +526,7 @@ public class QuestService {
 
             firebaseService.sendMessage(
                     challengeName + "챌린지 완료!",
-                    "여기엔 뭐라고 적어야 할까요!!!",
+                    "오늘도 수고했어요.",
                     "challenge",
                     member.getMessageToken());
         } catch (FirebaseMessagingException e) {

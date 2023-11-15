@@ -24,7 +24,7 @@ def callback(ch, method, properties, body):
         )
         channel.close()
 
-        log.info("send to spring: " + str(json.dumps(ret)))
+        log.info("send to spring: ", str(json.dumps(ret)))
 
     except Exception as e:
         log.error(f"ERROR AT CALLBACK: {e}")
