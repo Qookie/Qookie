@@ -9,9 +9,14 @@ import variables
 
 def callback(ch, method, properties, body):
     try:
-        log.info("received from spring: ", str(body))
         global connection
         data = json.loads(body)
+        log.info(
+            "received from spring: "
+            + str(data["username"])
+            + " / "
+            + str(data["content"])
+        )
         gpt_reply = send_to_gpt(data["username"], data["category"], data["content"])
         # send back to spring
         ret = {"heartId": data["heartId"], "content": gpt_reply}
@@ -24,7 +29,7 @@ def callback(ch, method, properties, body):
         )
         channel.close()
 
-        log.info("send success")
+        log.info("send success: " + gpt_reply)
 
     except Exception as e:
         log.error(f"ERROR AT CALLBACK: {e}")

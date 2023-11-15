@@ -48,6 +48,7 @@ def send_to_gpt(user_name, category, user_input):
                 },
                 data=data,
             )
+            print("RRR:", response)
             response.raise_for_status()
             json_response = response.json()
             log.info("from gpt: ", json_response)
