@@ -442,10 +442,9 @@ public class QuestService {
         Long cnt = tmp == null ? 0 : Long.parseLong(tmp);
         int flag = 0;
         for (int i = 0; i < 3; i++) {  // 뱃지 아이디는 연속적으로 있으니까.
-            badgeId += i;
-            // String key = badgeId + ":badge";
+            badgeId += 1;
             String key =
-                    badgeId + ":" + questName + ":" + ((badgeId - 1L) % 3 + 1) + ":badge";
+                    badgeId + ":" + questName + ":" + (i + 1) + ":badge";
             if (!template.opsForSet().isMember(key, memberId + "")) {  // 이번 뱃지 획득못함
                 flag = 1;
                 if (i == 0) {
