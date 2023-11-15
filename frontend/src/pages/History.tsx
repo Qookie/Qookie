@@ -149,6 +149,7 @@ function History() {
           style={{
             marginTop: '1.5rem',
             marginBottom: '3.75rem',
+            padding: '0 1rem',
           }}
         >
           캘린더
@@ -206,7 +207,6 @@ function History() {
 }
 
 const Container = styled.div`
-  margin: 0 1rem;
   height: calc(100vh - 4rem);
   overflow: auto;
   display: flex;
@@ -214,6 +214,7 @@ const Container = styled.div`
 `;
 
 const CalendarContainer = styled.div`
+  padding: 0 1rem;
   margin-bottom: 2rem;
 `;
 const QuestContainer = styled.div`
