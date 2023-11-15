@@ -1,4 +1,6 @@
 import json
+import time
+
 import requests
 import variables
 from logger import logger as log
@@ -34,14 +36,29 @@ def send_to_gpt(user_name, category, user_input):
             "temperature": 0.8,
         }
     )
-    json_response = requests.post(
-        "https://api.openai.com/v1/chat/completions",
-        headers={
-            "Content-Type": "application/json",
-            "Authorization": "Bearer " + variables.gpt_api_key,
-        },
-        data=data,
-    ).json()
-    log.info(json_response)
-
-    return json_response["choices"][0]["message"]["content"]
+    max_retries = 5
+    backoff_factor = 2
+    for attempt in range(1, max_retries + 1):
+        try:
+            response = requests.post(
+                "https://api.openai.com/v1/chat/completions",
+                headers={
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + variables.gpt_api_key,
+                },
+                data=data,
+            )
+            response.raise_for_status()
+            json_response = response.json()
+            log.info("from gpt: " + json_response)
+            return json_response["choices"][0]["message"]["content"]
+        except requests.exceptions.RequestException as e:
+            if attempt == max_retries:
+                raise
+            else:
+                log.error(
+                    f"""
+                        ERROR AT LISTENING: {e}
+                        {attempt}'th try failed. Retrying in {backoff_factor**attempt} seconds.
+                    """)
+                time.sleep(backoff_factor**attempt)
