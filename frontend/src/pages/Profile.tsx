@@ -82,7 +82,7 @@ function Profile() {
     await http.patch('/api/member/modify', {
       memberName,
       cookieName,
-      wakeTime: `${wakeTime.hour()}:${wakeTime.minute()}:00`,
+      wakeTime: `${wakeTime.hour().toString().padStart(2, '0')}:${wakeTime.minute()}:00`,
     });
 
     setMode('VIEW');
