@@ -64,8 +64,8 @@ export default function Coinlist() {
 
   return (
     <Container>
+      <TitleLayout title={'재화 목록'}/>
       <TopContainer>
-				<TitleLayout title={'재화 목록'}/>
         <Money qoin={totalCoin} />
       </TopContainer>
       <Divider />
