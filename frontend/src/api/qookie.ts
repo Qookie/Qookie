@@ -32,9 +32,7 @@ const getQookieLastBody = async () => {
 
 const getProxyUrl = async (url: string) => {
   try {
-    console.log('URL: ', url);
     const res = await http.get<string>(`/api/html2canvas/proxy.json?url=${url}`);
-    console.log('GETPROXYURL: ', res);
     return res;
   } catch (e) {
     console.log('getProxyUrl', e);
