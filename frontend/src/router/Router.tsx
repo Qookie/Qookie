@@ -33,18 +33,21 @@ import Profile from '../pages/Profile';
 import Coinlist from '../pages/Coinlist';
 import Mind from '../pages/Mind';
 import PastMind from '../pages/PastMind';
+import { PrivateRoute } from './PrivateRoute';
 
 const Router = () => {
   const [userState, _] = useRecoilState(UserState);
 
-  const reload = () => window.location.reload();
-
   return (
     <BrowserRouter>
       <HeaderWrapper />
-      {userState ? (
-        <Routes>
-          <Route path="/*" element={<NotFound />} />
+      <Routes>
+        <Route path="/loading" element={<Loading />} />
+        <Route path="/.well-known/assetlinks.json" element={<KeyPage />} />
+        <Route path="/*" element={<NotFound signedIn={userState ? true : false} />} />
+
+        <Route element={<PrivateRoute signedIn={userState ? true : false} />}>
+          <Route path="/" element={<Login />} />
           <Route path="/init" element={<InitQookie />} />
           <Route path="/set-wakeup" element={<SetWakeupTime />} />
           <Route path="/home" element={<Home />} />
@@ -62,7 +65,6 @@ const Router = () => {
           <Route path="/profile" element={<Profile />} />
           <Route path="/qoinlist" element={<Coinlist />} />
           <Route path="/past-mind" element={<PastMind />} />
-
           <Route path="/quest">
             <Route path="wake" element={<WakeupQuest />} />
             <Route path="eat" element={<EatQuest />} />
@@ -75,14 +77,9 @@ const Router = () => {
             <Route path="water" element={<WaterQuest />} />
             <Route path="attendance" element={<AttendanceQuest />} />
           </Route>
-        </Routes>
-      ) : (
-        <Routes>
-          <Route path="/*" element={<Login />} />
-          <Route path="/loading" element={<Loading />} />
-          <Route path="/.well-known/assetlinks.json" element={<KeyPage />} />
-        </Routes>
-      )}
+          <Route path="/*" element={<NotFound signedIn={userState ? true : false} />} />
+        </Route>
+      </Routes>
       <NavBarWrapper />
     </BrowserRouter>
   );

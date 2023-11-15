@@ -8,7 +8,7 @@ import Button from '../components/shared/atoms/Button';
 import styled from 'styled-components';
 import TitleLayout from '../components/shared/Template/TitleLayout';
 
-export default function NotFound() {
+export default function NotFound({ signedIn }: { signedIn: boolean }) {
   const navigate = useNavigate();
   const setUserState = useSetRecoilState(UserState);
   // logout
@@ -29,9 +29,13 @@ export default function NotFound() {
           <Button theme="transparent" onClick={() => navigate('/home')}>
             홈으로
           </Button>
-          <Button theme="default" onClick={logout}>
-            로그아웃
-          </Button>
+          {signedIn ? (
+            <Button theme="default" onClick={logout}>
+              로그아웃
+            </Button>
+          ) : (
+            <></>
+          )}
         </Container>
       }
     />
