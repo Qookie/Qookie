@@ -35,11 +35,6 @@ export default function MypageList() {
     },
     {
       icon: '',
-      intro: '공지사항',
-      path: 'notice',
-    },
-    {
-      icon: '',
       intro: '개인정보처리방침',
       path: 'privacy',
     },
