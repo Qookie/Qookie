@@ -1,11 +1,11 @@
 import pika
 import atexit
-import logging
 import variables
+from logger import logger as log
 
 
 def make_connection():
-    logging.info("START: CREATING CONNECTION")
+    log.info("START: CREATING CONNECTION")
     # rabbitMQ
     cred = pika.PlainCredentials(
         username=variables.rabbitmq_user,
@@ -21,5 +21,5 @@ def make_connection():
     )
 
     atexit.register(connection.close)
-    logging.info("DONE: CREATING CONNECTION")
+    log.info("DONE: CREATING CONNECTION")
     return connection

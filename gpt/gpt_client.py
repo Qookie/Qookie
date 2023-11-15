@@ -1,7 +1,7 @@
 import json
 import requests
-import logging
 import variables
+from logger import logger as log
 
 
 def prompt(user_name, category):
@@ -42,6 +42,6 @@ def send_to_gpt(user_name, category, user_input):
         },
         data=data,
     ).json()
-    logging.info(json_response)
+    log.info(json_response)
 
     return json_response["choices"][0]["message"]["content"]
