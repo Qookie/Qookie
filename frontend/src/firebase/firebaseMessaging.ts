@@ -29,7 +29,9 @@ const initiateFirebaseMessaging = () => {
         }
       });
     } else {
-      alert('알림이 허용되지 않았습니다. 알림을 받을 수 없어요!');
+      alert(
+        '알림이 허용되지 않았습니다.\n브라우저 설정에서 k9a504.p.ssafy.io 알림을 허용해주세요!',
+      );
     }
   });
 };

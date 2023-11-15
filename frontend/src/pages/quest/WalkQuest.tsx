@@ -26,9 +26,9 @@ function WalkQuest() {
   const [distance, setDistance] = useState<number>(0);
   const [walking, setWalking] = useState<boolean>(false);
 
-  const checkIfWalking = async () => {
-    return (await http.get<CheckResponse>('api/geo/check')).payload.started;
-  };
+  // const checkIfWalking = async () => {
+  //   return (await http.get<CheckResponse>('api/geo/check')).payload.started;
+  // };
 
   const onSuccessQuest = async () => {
     try {
@@ -41,37 +41,37 @@ function WalkQuest() {
     }
   };
 
-  const sendLocation = async () => {
-    return await navigator.geolocation.getCurrentPosition(
-      async (data: GeolocationPosition) => {
-        const body = {
-          lat: data.coords.latitude,
-          lon: data.coords.longitude,
-        };
-        const dist = (await http.post<DistanceResponse>('api/geo', body)).payload.distance;
-        setDistance(dist);
-        if (dist > 500) {
-          onSuccessQuest();
-          setWalking(false);
-        }
-        return dist;
-      },
-      null,
-      {
-        enableHighAccuracy: true,
-      },
-    );
-  };
+  // const sendLocation = async () => {
+  //   return await navigator.geolocation.getCurrentPosition(
+  //     async (data: GeolocationPosition) => {
+  //       const body = {
+  //         lat: data.coords.latitude,
+  //         lon: data.coords.longitude,
+  //       };
+  //       const dist = (await http.post<DistanceResponse>('api/geo', body)).payload.distance;
+  //       setDistance(dist);
+  //       if (dist > 500) {
+  //         onSuccessQuest();
+  //         setWalking(false);
+  //       }
+  //       return dist;
+  //     },
+  //     null,
+  //     {
+  //       enableHighAccuracy: true,
+  //     },
+  //   );
+  // };
 
-  useEffect(() => {
-    checkIfWalking().then((started) => setWalking(started));
-  }, [distance]);
+  // useEffect(() => {
+  //   checkIfWalking().then((started) => setWalking(started));
+  // }, [distance]);
 
-  useEffect(() => {
-    if (walking && 'geolocation' in navigator) {
-      sendLocation();
-    }
-  }, [walking]);
+  // useEffect(() => {
+  //   if (walking && 'geolocation' in navigator) {
+  //     sendLocation();
+  //   }
+  // }, [walking]);
 
   return (
     <QuestLayout
@@ -93,7 +93,7 @@ function WalkQuest() {
           margin: '0 auto',
         }}
       />
-      {walking ? <ProgressBar total={500} now={distance} /> : <></>}
+      {/* {walking ? <ProgressBar total={500} now={distance} /> : <></>} */}
     </QuestLayout>
   );
 }
