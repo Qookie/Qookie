@@ -20,18 +20,17 @@ export default function Challenge() {
   const [badge, setBadge] = useState<ChallengeProps[]>([]);
   const navigate = useNavigate();
 
+  const getChallenge = async () => {
+    try {
+      const res = await http.get<ResProps>('/api/quest/challenge');
+      setMonthly(res.payload.monthlyChallenge);
+      setBadge(res.payload.badgeChallenge);
+    } catch (e) {
+      console.log('completeChallenge Error : ', e);
+    }
+  };
+  
   useEffect(() => {
-    const getChallenge = async () => {
-      try {
-        const res = await http.get<ResProps>('/api/quest/challenge');
-        console.log('completeChallenge: ', res.payload);
-        setMonthly(res.payload.monthlyChallenge);
-        setBadge(res.payload.badgeChallenge);
-      } catch (e) {
-        console.log('completeChallenge Error : ', e);
-      }
-    };
-
     getChallenge();
   }, []);
 
@@ -61,6 +60,7 @@ export default function Challenge() {
             questName={data.questName}
             status={data.status}
             badgeId={data.badgeId}
+            onUpdate={getChallenge}
           />
         ))}
       </ChallengeContainer>
@@ -79,6 +79,7 @@ export default function Challenge() {
             questName={data.questName}
             status={data.status}
             badgeId={data.badgeId}
+            onUpdate={getChallenge}
           />
         ))}
       </ChallengeContainer>

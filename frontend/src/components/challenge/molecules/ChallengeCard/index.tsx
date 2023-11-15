@@ -4,6 +4,7 @@ import Text from '../../../shared/atoms/Text';
 import { Qoin } from '../../../../assets/svgs';
 import { http } from '../../../../api/instance';
 import { showToast } from '../../../shared/molecules/Alert';
+import { useEffect, useState } from 'react';
 
 export interface ChallengeProps {
   challengeName: string;
@@ -13,7 +14,10 @@ export interface ChallengeProps {
   curCnt: number;
   totalCnt: number;
   status: string;
+  onUpdate: () => void;
 }
+
+type StateProps = 'default' | 'disabled' | 'finished'
 
 export default function ChallengeCard({
   challengeName,
@@ -23,22 +27,40 @@ export default function ChallengeCard({
   questName,
   status,
   badgeId,
+  onUpdate
 }: ChallengeProps) {
-  const completeChallenge = async (url: string) => {
-    try {
-      const res = await http.post<any>(url, {
-        coin: coin,
-        badgeId: badgeId || 0,
-        questName: questName,
-      });
-      showToast({
-        title: `${coin} 포인트 적립 🌟`,
-        content: `${challengeName} 달성되었습니다.`,
-      });
-    } catch (e) {
-      console.log('completeChallenge Error : ', e);
+  const [challengeStatus, setChallengeStatus] = useState<StateProps>('default');
+
+  const completeChallenge = async (challengeStatus: StateProps) => {
+    if (challengeStatus == 'default') {
+      try {
+        const res = await http.post<ChallengeProps>('/api/quest/challenge', {
+          coin: coin,
+          badgeId: badgeId || 0,
+          questName: questName,
+        });
+        onUpdate();
+        showToast({
+          title: `${coin} 포인트 적립 🌟`,
+          content: `${challengeName} 달성되었습니다.`,
+        });
+      } catch (e) {
+        console.log('completeChallenge Error : ', e);
+      }
+    } else {
+      return ;
     }
   };
+
+  useEffect(() => {
+    if (curCnt >= totalCnt && status === 'incomplete') {
+      setChallengeStatus('default');
+    } else if (curCnt >= totalCnt && status === 'complete') {
+      setChallengeStatus('finished')
+    } else {
+      setChallengeStatus('disabled')
+    }
+  }, [status])
 
   return (
     <Container>
@@ -55,14 +77,9 @@ export default function ChallengeCard({
             </ChallengeCondition>
           </TextContainer>
         </LeftContainer>
-        {curCnt >= totalCnt && status === 'incomplete' ? 
-          <Button size="small" onClick={() => completeChallenge('/api/quest/challenge')}>
-            받기
-          </Button> : (
-          <Button size="small" theme='disabled' onClick={() => null}>
+          <Button size="small" theme={challengeStatus} onClick={() => completeChallenge(challengeStatus)}>
             받기
           </Button>
-        )}
       </CardContainer>
     </Container>
   );
