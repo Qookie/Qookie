@@ -16,7 +16,7 @@ function MeditaionQuest() {
     }
   };
 
-  const meditationVideo = 'https://youtu.be/pzS-0oAYmr4?si=Or1NlUOQze0fSDCb';
+  const meditationVideo = 'https://www.youtube.com/watch?v=CptcSAlN8ug';
 
   return (
     <VideoQuestLayout
