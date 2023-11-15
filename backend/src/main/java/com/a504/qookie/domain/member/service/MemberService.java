@@ -149,4 +149,9 @@ public class MemberService {
 		}
 		return monthQuestList;
 	}
+
+	public void updateMessageToken(Member member, String messageToken) {
+		member.updateMessageToken(messageToken);
+		memberRepository.save(member);
+	}
 }

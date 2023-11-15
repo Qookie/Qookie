@@ -19,7 +19,7 @@ function App() {
       setUser(currentUser);
     });
 
-    initiateFirebaseMessaging();
+    // initiateFirebaseMessaging();
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/firebase-messaging-sw.js');
     }

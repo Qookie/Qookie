@@ -9,6 +9,7 @@ import HomeButton from '../components/home/molecules/HomeButton';
 import { useNavigate } from 'react-router-dom';
 import attendance from '../assets/pngs/calendar.png';
 import challenge from '../assets/pngs/challenge.png';
+import initiateFirebaseMessaging from '../firebase/firebaseMessaging';
 
 const Home = () => {
   const [qookie, setQookie] = useRecoilState(QookieInfoState);
@@ -18,6 +19,10 @@ const Home = () => {
   useEffect(() => {
     qookieApi.getQookieInfo().then((res) => res !== null && setQookie({ ...qookie, ...res }));
   }, []);
+
+  const notifi = () => {
+    initiateFirebaseMessaging();
+  };
 
   return (
     <HomeContainer>
@@ -37,6 +42,7 @@ const Home = () => {
             onClick={() => navigate('/challenge')}
           />
         </ButtonContainer>
+        <button onClick={notifi}>알림 허용하기 버튼</button>
         <QuestList title="일일 퀘스트" />
         <QuestList title="추가 퀘스트" />
       </QuestContainer>

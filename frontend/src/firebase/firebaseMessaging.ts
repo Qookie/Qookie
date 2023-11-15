@@ -1,6 +1,11 @@
 import { messaging } from './firebaseConfig';
 import { getToken, onMessage, isSupported } from '@firebase/messaging';
 import { showToast } from '../components/shared/molecules/Alert';
+import { http } from '../api/instance';
+
+type UpdateMessageTokenResponse = {
+  msg: string;
+};
 
 const initiateFirebaseMessaging = () => {
   // get permission from user
@@ -11,6 +16,9 @@ const initiateFirebaseMessaging = () => {
       })
         .then((currentToken) => {
           if (currentToken) {
+            http.post<UpdateMessageTokenResponse>('/api/member/message/', {
+              messageToken: currentToken,
+            });
             localStorage.setItem('messageToken', currentToken);
           } else {
             console.log('No registration token available. Request permission to generate one.');
