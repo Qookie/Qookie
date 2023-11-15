@@ -150,6 +150,7 @@ function InitQookie() {
 
 const MainContainer = styled.div`
   padding: 0 1rem;
+  margin-top: -10vh;
 `;
 
 const ButtonCotainer = styled.div`

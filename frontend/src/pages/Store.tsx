@@ -7,7 +7,7 @@ import { ShoppingCartIcon } from '@heroicons/react/24/outline';
 import Title from '../components/shared/atoms/Title';
 import ItemTab from '../components/store/organisms/ItemTab';
 import { useEffect, useRef, useState } from 'react';
-import { itemApi } from '../api';
+import { itemApi, qoinApi } from '../api';
 import { QookieInfo, wearReqType } from '../types';
 import BottomSheet from '../components/shared/molecules/BottomSheet';
 import Cart from '../components/store/organisms/Cart';
@@ -23,6 +23,7 @@ import {
 } from '../types/item';
 import { ACCItem, BgItem, HatItem, PantsItem, ShoeItem, TopItem } from '../assets/svgs';
 import mouseSwipe from '../utils/mouseSwipe';
+import Chip from '../components/shared/molecules/Chip';
 
 export default function Store() {
   const navigate = useNavigate();
@@ -30,6 +31,7 @@ export default function Store() {
   // selectedItemList 에는 qookie info 가 없어서 showQookie 필요
   const [showQookie, setShowQookie] = useState<QookieInfo>(qookie);
   const [currentTab, setCurrentTab] = useState<number>(0);
+  const [curQoin, setCurQoin] = useState<number>(0);
   const [curCategory, setCurCategory] = useState<string>('background');
   // api 호출로 받아오는 리스트
   const [itemList, setItemList] = useState<AllItemProps>(DefaultAllItem);
@@ -46,12 +48,6 @@ export default function Store() {
   useEffect(() => {
     setShowQookie({ ...qookie, ...selectedItemList });
   }, [selectedItemList]);
-
-  useEffect(() => {
-    getAllItemList();
-    getMyItemList();
-    setCurCategory('background');
-  }, [isCartOpen]);
 
   // recoil 에 있는 내 아이템을 selected default 로 지정
   const defaultItemList = {
@@ -71,7 +67,16 @@ export default function Store() {
     // 시작하면 item list 불러오기
     getAllItemList();
     getMyItemList();
+    getCurQoinList();
   }, []);
+
+  const getCurQoinList = () => {
+    qoinApi.getQoinList().then((res) => {
+      if (res) {
+        setCurQoin(res);
+      }
+    });
+  };
 
   const getAllItemList = () => {
     // all item list 불러오기
@@ -173,6 +178,12 @@ export default function Store() {
       }
     });
     return cartItemList;
+  };
+
+  const handleCompleteBuy = () => {
+    getCurQoinList();
+    getAllItemList();
+    getMyItemList();
   };
 
   const resetItem = () => {
@@ -301,6 +312,7 @@ export default function Store() {
           <Qookie {...showQookie} />
         </QookieContainer>
         <ButtonContainer>
+          <Chip type="qoin" text={`${curQoin}`} size="big" />
           <Button
             theme={checkItemToBuy().length > 0 ? 'default' : 'disabled'}
             size="icon"
@@ -350,7 +362,14 @@ export default function Store() {
         isOpen={isCartOpen}
         title={'장바구니'}
         onClose={onCartHandler}
-        children={<Cart totalList={checkItemToBuy()} onClose={onCartHandler} />}
+        children={
+          <Cart
+            totalList={checkItemToBuy()}
+            onClose={onCartHandler}
+            isComplete={handleCompleteBuy}
+            curQoin={curQoin}
+          />
+        }
       />
       <Dialog
         title="장착한 아이템이 사라져요"
@@ -392,9 +411,13 @@ const BackgroundImg = styled.img`
 
 const ButtonContainer = styled.div`
   position: absolute;
-  right: 0;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
   bottom: 0;
-  padding: 0 1rem 1rem 0;
+  padding: 0 1rem 1rem 1rem;
   margin-top: -2rem;
 `;
 

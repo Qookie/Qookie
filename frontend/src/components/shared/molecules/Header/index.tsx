@@ -100,6 +100,6 @@ const TitleContainer = styled.div`
 `;
 
 const HeaderIcon = styled.div`
-  width: 1.4rem;
+  width: 1.5rem;
   height: 1.4rem;
 `;
