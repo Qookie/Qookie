@@ -8,6 +8,9 @@ import SocialLoginButton, {
 } from '../components/login/atoms/SocialLoginButton';
 import TitleLayout from '../components/shared/Template/TitleLayout';
 import { useNavigate } from 'react-router-dom';
+import Dialog from '../components/shared/molecules/Dialog';
+import { useEffect, useState } from 'react';
+import initiateFirebaseMessaging from '../firebase/firebaseMessaging';
 
 const provider = {
   kakao: new OAuthProvider('oidc.kakao'),
@@ -16,10 +19,31 @@ const provider = {
 
 const Login = () => {
   const navigate = useNavigate();
+  const [dialogState, setDialogState] = useState<boolean>(false);
 
   const onClickSocialLogin = (provider: OAuthProvider | GoogleAuthProvider) => {
     navigate('/loading?provider=' + provider.providerId);
   };
+
+  const dialogHandler = (e?: React.MouseEvent<HTMLElement>) => {
+    if (e) {
+      e.stopPropagation();
+      alert('언제든 마이페이지에서 알림을 설정할 수 있어요!');
+      setDialogState((dialogState) => !dialogState);
+    }
+  };
+
+  const notifi = (e?: React.MouseEvent<HTMLElement>) => {
+    e?.stopPropagation();
+    initiateFirebaseMessaging();
+    setDialogState(false);
+  };
+
+  useEffect(() => {
+    if (Notification.permission !== 'granted') {
+      setDialogState(true);
+    }
+  }, []);
 
   return (
     <TitleLayout
@@ -36,6 +60,16 @@ const Login = () => {
           />
         ))}
       </ButtonContainer>
+      <Dialog
+        title={'알림을 허용해 주세요!'}
+        content={'쿠키 서비스를 전부 사용하기 위해서는 알림 권한이 필요해요.'}
+        negative={'아니요'}
+        onNegativeClick={dialogHandler}
+        positive={'네'}
+        onPositiveClick={notifi}
+        isopen={dialogState}
+        onCloseRequest={dialogHandler}
+      />
     </TitleLayout>
   );
 };

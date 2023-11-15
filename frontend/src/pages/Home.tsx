@@ -20,10 +20,6 @@ const Home = () => {
     qookieApi.getQookieInfo().then((res) => res !== null && setQookie({ ...qookie, ...res }));
   }, []);
 
-  const notifi = () => {
-    initiateFirebaseMessaging();
-  };
-
   return (
     <HomeContainer>
       <QookieStatus {...qookie} />
@@ -42,7 +38,6 @@ const Home = () => {
             onClick={() => navigate('/challenge')}
           />
         </ButtonContainer>
-        <button onClick={notifi}>알림 허용하기 버튼</button>
         <QuestList title="일일 퀘스트" />
         <QuestList title="추가 퀘스트" />
       </QuestContainer>
