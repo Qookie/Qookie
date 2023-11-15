@@ -3,21 +3,25 @@ import { HomeIcon, CalendarIcon, EnvelopeIcon, UserIcon } from '@heroicons/react
 import { NavLink } from 'react-router-dom';
 
 export default function NavBar() {
+  const scrollTo = () => {
+    window.scrollTo(0, 0);
+  };
+
   return (
     <NavContainer>
-      <NavItem to={'/home'}>
+      <NavItem to={'/home'} onClick={scrollTo}>
         <HomeIcon />
         <NavName>홈</NavName>
       </NavItem>
-      <NavItem to={'/calendar'}>
+      <NavItem to={'/calendar'} onClick={scrollTo}>
         <CalendarIcon />
         <NavName>캘린더</NavName>
       </NavItem>
-      <NavItem to={'/mind'}>
+      <NavItem to={'/mind'} onClick={scrollTo}>
         <EnvelopeIcon />
         <NavName>마음함</NavName>
       </NavItem>
-      <NavItem to={'/mypage'}>
+      <NavItem to={'/mypage'} onClick={scrollTo}>
         <UserIcon />
         <NavName>마이페이지</NavName>
       </NavItem>
