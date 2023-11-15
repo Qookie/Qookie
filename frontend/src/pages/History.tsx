@@ -194,14 +194,14 @@ function History() {
             <></>
           )}
         </QuestContainer>
-        <BottomDatePicker
-          isOpen={isDatePickerOpen}
-          title="조회 기간"
-          initialTime={today}
-          onClose={onCloseDatePicker}
-          onChangeYearMonth={onChangeYearMonth}
-        />
       </Container>
+      <BottomDatePicker
+        isOpen={isDatePickerOpen}
+        title="조회 기간"
+        initialTime={today}
+        onClose={onCloseDatePicker}
+        onChangeYearMonth={onChangeYearMonth}
+      />
     </>
   );
 }
