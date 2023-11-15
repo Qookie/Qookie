@@ -82,7 +82,7 @@ const TopContainer = styled.img`
 const BottomContainer = styled.img<{ level: number }>`
   position: absolute;
   bottom: 0;
-  left: ${({ level }) => (level >= 40 ? '43.5%' : '43%')};
+  left: ${({ level }) => (level >= 40 ? '44%' : '43%')};
   transform: translateX(-50%);
 `;
 

@@ -34,6 +34,7 @@ import Coinlist from '../pages/Coinlist';
 import Mind from '../pages/Mind';
 import PastMind from '../pages/PastMind';
 import { PrivateRoute } from './PrivateRoute';
+import Privacy from '../pages/Privacy';
 
 const Router = () => {
   const [userState, _] = useRecoilState(UserState);
@@ -64,6 +65,7 @@ const Router = () => {
           <Route path="/badge" element={<Badge />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/qoinlist" element={<Coinlist />} />
+          <Route path="/privacy" element={<Privacy />} />
           <Route path="/past-mind" element={<PastMind />} />
           <Route path="/quest">
             <Route path="wake" element={<WakeupQuest />} />
