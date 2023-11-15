@@ -3,23 +3,12 @@ package com.a504.qookie.domain.member.controller;
 import java.security.NoSuchAlgorithmException;
 import java.time.Month;
 
+import com.a504.qookie.domain.member.dto.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.a504.qookie.domain.member.dto.LoginRequest;
-import com.a504.qookie.domain.member.dto.LoginResponse;
-import com.a504.qookie.domain.member.dto.MemberRequest;
-import com.a504.qookie.domain.member.dto.MemberResponse;
-import com.a504.qookie.domain.member.dto.WakeTimeRequest;
 import com.a504.qookie.domain.member.entity.Member;
 import com.a504.qookie.domain.member.service.MemberService;
 import com.a504.qookie.global.response.BaseResponse;
@@ -32,6 +21,17 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/member")
 public class MemberController {
 	private final MemberService memberService;
+
+	@PostMapping("/message/")
+	public ResponseEntity<?> updateMessageToken(
+			@AuthenticationPrincipal CustomMemberDetails customMemberDetails,
+			@RequestBody MessageTokenRequest messageTokenRequest
+	) {
+		Member member = customMemberDetails.getMember();
+		memberService.updateMessageToken(member, messageTokenRequest.getMessageToken());
+		System.out.println("MT: " + messageTokenRequest.getMessageToken());
+		return BaseResponse.ok(HttpStatus.OK, "good");
+	}
 
 	@PostMapping("/login")
 	public ResponseEntity<?> oidcLogin(

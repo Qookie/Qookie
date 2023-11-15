@@ -9,6 +9,7 @@ import HomeButton from '../components/home/molecules/HomeButton';
 import { useNavigate } from 'react-router-dom';
 import attendance from '../assets/pngs/calendar.png';
 import challenge from '../assets/pngs/challenge.png';
+import initiateFirebaseMessaging from '../firebase/firebaseMessaging';
 
 const Home = () => {
   const [qookie, setQookie] = useRecoilState(QookieInfoState);

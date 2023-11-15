@@ -8,6 +8,7 @@ import { useSetRecoilState } from 'recoil';
 import { UserState } from '../../../../modules/user';
 import Dialog from '../../../shared/molecules/Dialog';
 import { useState } from 'react';
+import initiateFirebaseMessaging from '../../../../firebase/firebaseMessaging';
 
 interface Props {
   icon?: React.ReactNode;
@@ -24,6 +25,8 @@ export default function MypageListItem({ icon, intro, path }: Props) {
     // logout
     if (path === 'logout') {
       setDialogState(true);
+    } else if (path === 'notificate') {
+      initiateFirebaseMessaging();
     } else {
       navigate(`/${path}`);
     }

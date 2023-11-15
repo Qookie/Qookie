@@ -38,6 +38,11 @@ export default function MypageList() {
       intro: '개인정보처리방침',
       path: 'privacy',
     },
+    {
+      icon: '',
+      intro: '알림 허용하기',
+      path: 'notificate',
+    },
   ];
 
   const warnSection = [
@@ -58,9 +63,16 @@ export default function MypageList() {
         <MypageListItem icon={item.icon} intro={item.intro} path={item.path} key={index} />
       ))}
       <Divider />
-      {userSection.map((item, index) => (
-        <MypageListItem icon={item.icon} intro={item.intro} path={item.path} key={index} />
-      ))}
+      {userSection
+        .filter((item) => {
+          if (Notification.permission === 'granted' && item.path === 'notificate') {
+            return false;
+          }
+          return true;
+        })
+        .map((item, index) => (
+          <MypageListItem icon={item.icon} intro={item.intro} path={item.path} key={index} />
+        ))}
       <Divider />
       {warnSection.map((item, index) => (
         <MypageListItem icon={item.icon} intro={item.intro} path={item.path} key={index} />

@@ -1,6 +1,11 @@
 import { messaging } from './firebaseConfig';
 import { getToken, onMessage, isSupported } from '@firebase/messaging';
 import { showToast } from '../components/shared/molecules/Alert';
+import { http } from '../api/instance';
+
+type UpdateMessageTokenResponse = {
+  msg: string;
+};
 
 const initiateFirebaseMessaging = () => {
   // get permission from user
@@ -11,6 +16,9 @@ const initiateFirebaseMessaging = () => {
       })
         .then((currentToken) => {
           if (currentToken) {
+            http.post<UpdateMessageTokenResponse>('/api/member/message/', {
+              messageToken: currentToken,
+            });
             localStorage.setItem('messageToken', currentToken);
           } else {
             console.log('No registration token available. Request permission to generate one.');
@@ -29,9 +37,7 @@ const initiateFirebaseMessaging = () => {
         }
       });
     } else {
-      alert(
-        '알림이 허용되지 않았습니다.\n브라우저 설정에서 k9a504.p.ssafy.io 알림을 허용해주세요!',
-      );
+      alert('브라우저 설정에서 k9a504.p.ssafy.io 알림을 허용해주세요!');
     }
   });
 };
