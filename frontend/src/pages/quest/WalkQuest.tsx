@@ -61,7 +61,6 @@ function WalkQuest() {
     );
   };
 
-  // TODO: add distance bar and useEffect to render
   useEffect(() => {
     checkIfWalking().then((started) => setWalking(started));
   }, [distance]);

@@ -1,7 +1,9 @@
 package com.a504.qookie.domain.quest.controller;
 
 
+import com.a504.qookie.domain.geo.GeoRequest;
 import com.a504.qookie.domain.geo.GeolocationService;
+import com.a504.qookie.domain.member.entity.Member;
 import com.a504.qookie.domain.quest.dto.AttendanceCalendarResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +27,9 @@ import com.a504.qookie.global.security.CustomMemberDetails;
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/quest")
@@ -45,9 +50,6 @@ public class QuestController {
 	@PostMapping("/{questName}")
 	public ResponseEntity<?> completeQuest(@AuthenticationPrincipal CustomMemberDetails member
 		, @PathVariable String questName){
-		if (questName.equalsIgnoreCase("WALK")) {
-			geolocationService.resetDistance(member.getMember());
-		}
 		QuestType questType = QuestType.valueOf(questName.toUpperCase());
 		if (!questService.completeQuest(member.getMember(), questName.toUpperCase())){
 			return BaseResponse.okWithData(HttpStatus.OK, questType.getMessage() + " 퀘스트를 완료할 수 없습니다.", false);
