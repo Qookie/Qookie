@@ -62,11 +62,14 @@ public class MessageService {
             notificationRepository.save(notification);
 
             // send firebase notification
-            firebaseService.sendMessage(
-                    "오쿠키의 마음 답장이 도착했어요!",
-                    "지금 확인해보세요!",
-                    "mind",
-                    heartMessage.member().getMessageToken());
+            String messageToken = heartMessage.member().getMessageToken();
+            if (messageToken != null) {
+                firebaseService.sendMessage(
+                        "오쿠키의 마음 답장이 도착했어요!",
+                        "지금 확인해보세요!",
+                        "mind",
+                        heartMessage.member().getMessageToken());
+            }
         } catch (FirebaseMessagingException | NoSuchElementException | NullPointerException e) {
             // delete message if error
             e.printStackTrace();
