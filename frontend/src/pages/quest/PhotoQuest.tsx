@@ -5,6 +5,7 @@ import { showToast } from '../../components/shared/molecules/Alert';
 import { Quest } from '../../types/quest';
 import CameraImage from '../../assets/pngs/camera.png';
 import RewardText from '../../components/quest/molecules/RewardText';
+import { QuestResponse } from '../../components/quest/types';
 
 function PhotoQuest() {
   const onSuccessQuest = async (img?: FormData) => {
@@ -13,8 +14,10 @@ function PhotoQuest() {
     }
 
     try {
-      await http.post('/api/quest/photo/photo', img, true);
+      const response = await http.post<QuestResponse>('/api/quest/photo/photo', img, true);
       showToast({ title: '10 포인트 적립🌟', content: '사진 찍기 퀘스트가 달성되었습니다.' });
+
+      return response;
     } catch (error) {
       console.log(error);
     }

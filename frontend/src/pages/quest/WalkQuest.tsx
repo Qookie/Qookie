@@ -5,8 +5,8 @@ import { http } from '../../api/instance';
 import { showToast } from '../../components/shared/molecules/Alert';
 import { Quest } from '../../types/quest';
 import RewardText from '../../components/quest/molecules/RewardText';
-import ProgressBar from '../../components/shared/atoms/ProgressBar';
 import { QuestResponse } from '../../components/quest/types';
+import ProgressBar from '../../components/shared/atoms/ProgressBar';
 
 type DistanceResponse = {
   msg: string;
@@ -32,8 +32,10 @@ function WalkQuest() {
 
   const onSuccessQuest = async () => {
     try {
+      const response = await http.post<QuestResponse>('/api/quest/walk');
       showToast({ title: '10 포인트 적립🌟', content: '산책 퀘스트가 달성되었습니다.' });
-      return await http.post<QuestResponse>('/api/quest/walk');
+
+      return response;
     } catch (error) {
       console.log(error);
     }
