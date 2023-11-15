@@ -49,7 +49,6 @@ const MessageContent = styled.div`
 `;
 
 const StyledToast = styled(ToastContainer)`
-  width: 100%;
   /* Toast 컨테이너 */
   .Toastify__toast {
     display: flex;
