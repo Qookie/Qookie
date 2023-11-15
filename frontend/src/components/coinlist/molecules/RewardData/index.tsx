@@ -36,9 +36,7 @@ const LeftContainer = styled.div`
 `;
 
 const RewardContainer = styled.div`
-  width: 4rem;
   display: flex;
-  justify-content: flex-start;
   align-items: center;
   gap: 1rem;
 `;
