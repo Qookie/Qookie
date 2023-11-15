@@ -63,10 +63,10 @@ const Login = () => {
       <Dialog
         title={'알림을 허용해 주세요!'}
         content={'쿠키 서비스를 전부 사용하기 위해서는 알림 권한이 필요해요.'}
-        negative={'아니요'}
-        onNegativeClick={dialogHandler}
-        positive={'네'}
-        onPositiveClick={notifi}
+        negative={'네'}
+        onNegativeClick={notifi}
+        positive={'아니오'}
+        onPositiveClick={dialogHandler}
         isopen={dialogState}
         onCloseRequest={dialogHandler}
       />
