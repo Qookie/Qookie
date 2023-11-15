@@ -33,6 +33,7 @@ export default function StatusCard({ ...props }: QookieInfo) {
   const [bakeProps, setBakeProps] = useState<QookieInfo>(props);
   const [isDataLoading, setIsDataLoading] = useState<boolean>(false);
   const divRef = useRef<HTMLDivElement>(null);
+  const Base64 = 'data:image/png;base64,';
 
   const handleBakeClick = async () => {
     const res = await bakePng(divRef);
@@ -131,20 +132,20 @@ export default function StatusCard({ ...props }: QookieInfo) {
     const mouthUrl = await getS3UrlHandler(props.mouth);
 
     const itemUrl = {
-      hat: { id: props.hat.id, media: `data:image/png;base64,${await checkIsItem(props.hat)}` },
-      shoe: { id: props.shoe.id, media: `data:image/png;base64,${await checkIsItem(props.shoe)}` },
+      hat: { id: props.hat.id, media: await checkIsItem(props.hat) },
+      shoe: { id: props.shoe.id, media: await checkIsItem(props.shoe) },
       bottom: {
         id: props.bottom.id,
-        media: `data:image/png;base64,${await checkIsItem(props.bottom)}`,
+        media: await checkIsItem(props.bottom),
       },
-      top: { id: props.top.id, media: `data:image/png;base64,${await checkIsItem(props.top)}` },
+      top: { id: props.top.id, media: await checkIsItem(props.top) },
     };
 
     const getAccUrls = async () => {
       const updateList: ItemProps[] = await Promise.all(
         props.accessories.map(async (acc: ItemProps) => ({
           id: acc.id,
-          media: `data:image/png;base64,${await checkIsItem(acc)}`,
+          media: await checkIsItem(acc),
         })),
       );
       return updateList;
@@ -156,9 +157,9 @@ export default function StatusCard({ ...props }: QookieInfo) {
 
     return {
       ...props,
-      body: `data:image/png;base64,${bodyUrl}`,
-      eye: `data:image/png;base64,${eyeUrl}`,
-      mouth: `data:image/png;base64,${mouthUrl}`,
+      body: Base64 + bodyUrl,
+      eye: Base64 + eyeUrl,
+      mouth: Base64 + mouthUrl,
       ...itemUrl,
       ...accUrl,
     };
@@ -167,7 +168,8 @@ export default function StatusCard({ ...props }: QookieInfo) {
   const checkIsItem = async (item: ItemProps) => {
     let convertUrl = null;
     if (item.media) {
-      convertUrl = await getS3UrlHandler(item.media);
+      const res = await getS3UrlHandler(item.media);
+      convertUrl = `${Base64 + res}`;
     }
     return convertUrl;
   };
