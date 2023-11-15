@@ -44,7 +44,7 @@ function SetWakeupTime() {
   const onClickComplete = async () => {
     try {
       await http.post('/api/member/time', {
-        wakeTime: `${today.hour()}:${today.minute()}:00`,
+        wakeTime: `${today.hour().toString().padStart(2, '0')}:${today.minute()}:00`,
       });
 
       navigate('/home');
