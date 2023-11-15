@@ -44,9 +44,9 @@ const DoughContainer = styled.img`
 
 const BagContainer = styled.div`
   position: absolute;
-  top: 44%;
+  top: 30%;
   left: 50%;
-  transform: translate(-50%, -50%) scale(0.4);
+  transform: translate(-50%, -50%);
 `;
 
 const BagImg = styled.img``;
