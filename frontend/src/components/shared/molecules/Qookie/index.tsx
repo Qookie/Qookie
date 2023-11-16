@@ -67,10 +67,22 @@ const MouthContainer = styled.img`
 
 const HatContainer = styled.img<{ level: number }>`
   position: absolute;
-  top: ${({ level }) => (level < 30 ? '-40%' : '-28%')};
-  left: 50%;
   transform: translateX(-50%);
+  ${({ level }) => hatPosition(level)};
 `;
+
+const hatPosition = (level: number) => {
+  switch (true) {
+    case level >= 40:
+      return `top: -35%; left: 50%`;
+    case level >= 30:
+      return `top: -35%; left: 51%`;
+    case level >= 20:
+      return `top: -44%; left: 49%`;
+    default:
+      return `top: -60%; left: 47%`;
+  }
+};
 
 const TopContainer = styled.img`
   position: absolute;
