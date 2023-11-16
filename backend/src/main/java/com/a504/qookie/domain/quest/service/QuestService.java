@@ -22,6 +22,7 @@ import com.a504.qookie.domain.quest.repository.QuestRepository;
 import com.a504.qookie.global.firebase.FirebaseService;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import jakarta.transaction.Transactional;
+import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -275,6 +276,10 @@ public class QuestService {
             String monthly_challenge_key =
                     member.getId() + ":" + cur_year + ":" + cur_month + ":" + questName; // (유저PK):(년도):(이번달):(퀘스트이름)
             template.opsForSet().add(monthly_challenge_key, cur_day + ""); // 날짜
+
+            // 만료기간을 한달로 설정
+            template.expire(monthly_challenge_key, 31 , TimeUnit.DAYS);
+
             if (questName.equals("WAKE") || questName.equals("EAT")) {
                 if (template.opsForSet().size(monthly_challenge_key) == 15) {
                     member.setPoint(100);
