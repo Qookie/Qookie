@@ -17,6 +17,6 @@ const onClose = () => {
 
 export const Default: Story = {
   render: (args) => (
-    <BottomSheet isOpen={true} onClose={onClose} children={<DatePicker />} title={'조회'} />
+    <BottomSheet isOpen={true} onClose={onClose} children={<DatePicker year={2023} month={11} />} title={'조회'} />
   ),
 };

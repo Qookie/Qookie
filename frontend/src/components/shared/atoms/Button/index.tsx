@@ -2,12 +2,12 @@ import { ButtonHTMLAttributes } from 'react';
 import { styled } from 'styled-components';
 
 interface BtnProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  theme?: 'default' | 'finished' | 'disabled' | 'transparent';
+  themes?: 'default' | 'finished' | 'disabled' | 'transparent';
   size?: 'small' | 'icon' | 'medium' | 'large';
 }
 
-export default function Button({ theme = 'default', size = 'large', ...props }: BtnProps) {
-  return <DefaultBtn theme={theme} size={size} {...props} />;
+export default function Button({ themes = 'default', size = 'large', ...props }: BtnProps) {
+  return <DefaultBtn themes={themes} size={size} {...props} />;
 }
 
 const DefaultBtn = styled.button<BtnProps>`
@@ -24,11 +24,11 @@ const DefaultBtn = styled.button<BtnProps>`
   background: var(--MR_RED);
   cursor: pointer;
 
-  ${({ theme }) => (theme ? THEME_VARIANT[theme] : '')};
+  ${({ themes }) => (themes ? THEMES_VARIANT[themes] : '')};
   ${({ size }) => (size ? SIZE_VARIANT[size] : '')}
 `;
 
-const THEME_VARIANT = {
+const THEMES_VARIANT = {
   default: `
   `,
   finished: `

@@ -71,10 +71,10 @@ export default function Withdraw() {
               <Money MoneyTheme="disabled" qoin={curCoin}></Money>
             </MonneyContainer>
             <ButtonContainer>
-              <Button size="medium" theme="transparent" onClick={dialogHandler}>
+              <Button size="medium" themes="transparent" onClick={dialogHandler}>
                 탈퇴하기
               </Button>
-              <Button size="medium" theme="default" onClick={cancel}>
+              <Button size="medium" themes="default" onClick={cancel}>
                 취소
               </Button>
             </ButtonContainer>
