@@ -77,7 +77,7 @@ export default function ChallengeCard({
             </ChallengeCondition>
           </TextContainer>
         </LeftContainer>
-          <Button size="small" theme={challengeStatus} onClick={() => completeChallenge(challengeStatus)}>
+          <Button size="small" themes={challengeStatus} onClick={() => completeChallenge(challengeStatus)}>
             받기
           </Button>
       </CardContainer>

@@ -136,7 +136,7 @@ export default function Mind() {
         {inputValue ? (
           <Button onClick={() => postMind('/api/heart/create')}>보내기</Button>
         ) : (
-          <Button onClick={() => null} theme="disabled">
+          <Button onClick={() => null} themes="disabled">
             보내기
           </Button>
         )}
@@ -177,7 +177,7 @@ export default function Mind() {
           desc={'조금 기다리면 당신을 위한 상담사 오쿠키 박사님이 답장을 보내줄거예요!'}
         />
         <Button
-          theme="transparent"
+          themes="transparent"
           size="icon"
           onClick={() => window.scroll({ top: 0, left: 0, behavior: 'smooth' })}
         >

@@ -33,7 +33,7 @@ export default function Dialog({
           <Text typography="button">{title}</Text>
           <Text typography="main">{content}</Text>
           <ButtonContainer>
-            <Button size="medium" theme="transparent" onClick={onPositiveClick}>
+            <Button size="medium" themes="transparent" onClick={onPositiveClick}>
               {positive}
             </Button>
             <Button size="medium" onClick={onNegativeClick}>

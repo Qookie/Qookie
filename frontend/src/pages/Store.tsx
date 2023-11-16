@@ -314,7 +314,7 @@ export default function Store() {
         <ButtonContainer>
           <Chip type="qoin" text={`${curQoin}`} size="big" />
           <Button
-            theme={checkItemToBuy().length > 0 ? 'default' : 'disabled'}
+            themes={checkItemToBuy().length > 0 ? 'default' : 'disabled'}
             size="icon"
             onClick={onCartHandler}
           >
