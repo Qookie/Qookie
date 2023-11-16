@@ -62,16 +62,18 @@ function SetWakeupTime() {
         <Clock>{today.format('mm')[0]}</Clock>
         <Clock>{today.format('mm')[1]}</Clock>
       </ClockContainer>
-      <TimePicker
-        time={today}
-        onSelectHour={onSelectHour}
-        onSelectMinute={onSelectMinute}
-        onSelectMeridiem={onSelectMeridiem}
-      ></TimePicker>
+      <PaddingContainer>
+        <TimePicker
+          time={today}
+          onSelectHour={onSelectHour}
+          onSelectMinute={onSelectMinute}
+          onSelectMeridiem={onSelectMeridiem}
+        ></TimePicker>
 
-      <ButtonContainer>
-        <Button onClick={onClickComplete}>완료</Button>
-      </ButtonContainer>
+        <ButtonContainer>
+          <Button onClick={onClickComplete}>완료</Button>
+        </ButtonContainer>
+      </PaddingContainer>
     </TitleLayout>
   );
 }
@@ -99,6 +101,10 @@ const ClockSplit = styled.div`
   justify-content: center;
   align-items: center;
   font-size: 40px;
+`;
+
+const PaddingContainer = styled.div`
+  padding: 0 1rem;
 `;
 
 const ButtonContainer = styled.div`
