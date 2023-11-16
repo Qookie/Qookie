@@ -13,11 +13,14 @@ const axiosInstance = Axios.create({
 
 const onFailure = async (error: AxiosError) => {
   const config = error.config;
+  await auth.authStateReady();
   const currentUser = auth.currentUser;
   if (error.response?.status !== 401 || config === undefined || currentUser === null) {
+    console.log('EXPIRED');
     return Promise.reject(error);
   }
   const accessToken = await currentUser.getIdToken();
+  console.log('NEW TOKEN');
   localStorage.setItem('accessToken', accessToken);
   config.headers['Authorization'] = 'Bearer ' + accessToken;
   return axios(config);
