@@ -20,11 +20,7 @@
   ],
   "start_url": ".",
   "display": "standalone",
+  "orientation": "portrait",
   "theme_color": "#F3574A",
-  "theme_dark_color": "#710900",
-  "background_color": "#000000",
-  "nav_color": "#FFD600",
-  "nav_dark_color": "#947C00",
-  "nav_divider_color": "#0029FF",
-  "nav_divier_dark_color": "#001AA2"
+  "background_color": "#ffffff"
 }
