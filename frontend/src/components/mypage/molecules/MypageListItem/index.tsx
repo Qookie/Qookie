@@ -4,11 +4,12 @@ import { ChevronRightIcon } from '@heroicons/react/24/outline';
 import { useNavigate } from 'react-router-dom';
 import { signOut } from '@firebase/auth';
 import { auth } from '../../../../firebase/firebaseConfig';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { UserState } from '../../../../modules/user';
 import Dialog from '../../../shared/molecules/Dialog';
 import { useState } from 'react';
 import initiateFirebaseMessaging from '../../../../firebase/firebaseMessaging';
+import { QookieInfoState } from '../../../../modules/qookie';
 
 interface Props {
   icon?: React.ReactNode;
@@ -19,7 +20,9 @@ interface Props {
 export default function MypageListItem({ icon, intro, path }: Props) {
   const navigate = useNavigate();
   const setUserState = useSetRecoilState(UserState);
-  const [dialogState, setDialogState] = useState(false);
+  const qookie = useRecoilValue(QookieInfoState);
+  const [dialogState, setDialogState] = useState<boolean>(false);
+  const [storeOpen, setStoreOpen] = useState<boolean>(false);
 
   const navigateHandler = () => {
     // logout
@@ -27,6 +30,13 @@ export default function MypageListItem({ icon, intro, path }: Props) {
       setDialogState(true);
     } else if (path === 'notificate') {
       initiateFirebaseMessaging();
+    } else if (path === 'store') {
+      console.log(qookie);
+      if (qookie.level === 0) {
+        setStoreOpen(true);
+      } else {
+        navigate(`/${path}`);
+      }
     } else {
       navigate(`/${path}`);
     }
@@ -37,6 +47,10 @@ export default function MypageListItem({ icon, intro, path }: Props) {
       setUserState(null);
       navigate('/');
     });
+  };
+
+  const storeOpenHandler = () => {
+    setStoreOpen(false);
   };
 
   const dialogHandler = (e?: React.MouseEvent<HTMLElement>) => {
@@ -55,6 +69,16 @@ export default function MypageListItem({ icon, intro, path }: Props) {
         </LeftContainer>
         <ChevronRightIcon width={20} />
       </ItemContainer>
+      <Dialog
+        title={'쿠키 반죽이 없어요ㅠ'}
+        content={'반죽이 있어야 꾸밀 수 있습니다. 반죽을 만들까요?'}
+        negative={'만들기'}
+        onNegativeClick={() => navigate('/init')}
+        positive={'나중에'}
+        onPositiveClick={storeOpenHandler}
+        isopen={storeOpen}
+        onCloseRequest={storeOpenHandler}
+      />
       <Dialog
         title={'로그아웃 할까요?'}
         content={'정말 로그아웃 할까요?'}
