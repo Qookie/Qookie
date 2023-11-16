@@ -67,17 +67,19 @@ export default function Withdraw() {
         children={
           <ChildrenContainer>
             <QookieStatus {...qookie} />
-            <MonneyContainer>
-              <Money MoneyTheme="disabled" qoin={curCoin}></Money>
-            </MonneyContainer>
-            <ButtonContainer>
-              <Button size="medium" theme="transparent" onClick={dialogHandler}>
-                탈퇴하기
-              </Button>
-              <Button size="medium" theme="default" onClick={cancel}>
-                취소
-              </Button>
-            </ButtonContainer>
+            <InnerContainer>
+              <MonneyContainer>
+                <Money MoneyTheme="disabled" qoin={curCoin}></Money>
+              </MonneyContainer>
+              <ButtonContainer>
+                <Button size="medium" theme="transparent" onClick={dialogHandler}>
+                  탈퇴하기
+                </Button>
+                <Button size="medium" theme="default" onClick={cancel}>
+                  취소
+                </Button>
+              </ButtonContainer>
+            </InnerContainer>
           </ChildrenContainer>
         }
       ></TitleLayout>
@@ -87,6 +89,10 @@ export default function Withdraw() {
 
 const ChildrenContainer = styled.div`
   margin-top: -3rem;
+`;
+
+const InnerContainer = styled.div`
+  padding: 0 1rem 0;
 `;
 
 const MonneyContainer = styled.div`
