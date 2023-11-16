@@ -54,7 +54,7 @@ function QuestInnerLayout({
       {children}
       <ButtonConatainer>
         {Subcomponent}
-        <Button theme={ButtomThemeMap[questStatus]} onClick={onClickComplete}>
+        <Button themes={ButtomThemeMap[questStatus]} onClick={onClickComplete}>
           {questButtonText[questStatus]}
         </Button>
       </ButtonConatainer>

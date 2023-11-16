@@ -38,7 +38,7 @@ function ImageQuestLayout({ defaultImage, questSubText, quest, onSuccessQuest, .
     DEFAULT: <Text color="var(--MR_GRAY2)">{questSubText['DEFAULT']}</Text>,
     SUCCESS: <Text color="var(--MR_GRAY2)">{questSubText['SUCCESS']}</Text>,
     DISABLED: (
-      <Button theme="transparent" onClick={onClickUploadImage}>
+      <Button themes="transparent" onClick={onClickUploadImage}>
         사진 첨부
       </Button>
     ),
