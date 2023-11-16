@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import Text from '../../atoms/Text';
 import styled from 'styled-components';
 
@@ -7,15 +7,15 @@ interface Props {
   desc: React.ReactNode;
 }
 
-export default function TextImgLayout( { image, desc }: Props) {
+export default function TextImgLayout({ image, desc }: Props) {
   return (
     <>
       <Layout>
-        <img src={image} width={144} height={144} />
-        <Text typography='main'>{desc}</Text>
+        <ImageDiv src={image} />
+        <Text typography="main">{desc}</Text>
       </Layout>
     </>
-  )
+  );
 }
 
 const Layout = styled.div`
@@ -25,4 +25,8 @@ const Layout = styled.div`
   align-items: center;
   justify-content: center;
   margin: 10px 0;
+`;
+
+const ImageDiv = styled.img`
+  width: 144px;
 `;

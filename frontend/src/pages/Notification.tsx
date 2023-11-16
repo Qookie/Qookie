@@ -47,9 +47,7 @@ export default function Notification() {
             return (
               <div key={nl[0].notificationId}>
                 <DateContainer>
-                  <Text typography="button" color="gray">
-                    {getMonthDate(nl[0].createdAt)}
-                  </Text>
+                  <DateText>{getMonthDate(nl[0].createdAt)}</DateText>
                 </DateContainer>
 
                 <NotificationList notificationList={nl} />
@@ -74,4 +72,10 @@ const NotificationListContainer = styled.div``;
 const DateContainer = styled.div`
   margin-top: 2vh;
   margin-bottom: 0.8vh;
+`;
+
+const DateText = styled(Text)`
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--MR_GRAY2);
 `;

@@ -31,7 +31,7 @@ export const DefaultAllItem: AllItemProps = {
     {
       id: 2,
       media:
-        'https://bangle.s3.ap-northeast-2.amazonaws.com/a5d63241-f5f7-44ca-a40a-45b026c07d10.png',
+        'https://bangle.s3.ap-northeast-2.amazonaws.com/f7db6e44-ad5b-4d22-a60e-ad9bfd0737c4.png',
     },
   ],
   hat: [{ id: 1, media: null }],
@@ -45,7 +45,7 @@ export const DefaultSelected: SelectedItemProps = {
   background: {
     id: 2,
     media:
-      'https://bangle.s3.ap-northeast-2.amazonaws.com/a5d63241-f5f7-44ca-a40a-45b026c07d10.png',
+      'https://bangle.s3.ap-northeast-2.amazonaws.com/f7db6e44-ad5b-4d22-a60e-ad9bfd0737c4.png',
   },
   hat: { id: 1, media: null },
   shoe: { id: 1, media: null },

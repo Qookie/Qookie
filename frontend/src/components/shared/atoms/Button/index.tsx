@@ -53,8 +53,9 @@ const SIZE_VARIANT = {
     border-radius: 1rem;
   `,
   icon: `
-    width: 114px;
     gap: 8px;
+    width: fit-content;
+    padding: 0 1rem;
   `,
   medium: `
   `,
