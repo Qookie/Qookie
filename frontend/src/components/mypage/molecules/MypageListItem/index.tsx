@@ -11,13 +11,13 @@ import { useState } from 'react';
 import initiateFirebaseMessaging from '../../../../firebase/firebaseMessaging';
 import { QookieInfoState } from '../../../../modules/qookie';
 
-interface Props {
+export interface MypageItemProps {
   icon?: React.ReactNode;
   intro: string;
   path: string;
 }
 
-export default function MypageListItem({ icon, intro, path }: Props) {
+export default function MypageListItem({ icon, intro, path }: MypageItemProps) {
   const navigate = useNavigate();
   const setUserState = useSetRecoilState(UserState);
   const qookie = useRecoilValue(QookieInfoState);

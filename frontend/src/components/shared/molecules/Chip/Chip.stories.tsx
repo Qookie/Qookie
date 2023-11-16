@@ -15,6 +15,6 @@ export const Default: Story = {
     type: 'category',
     icon: '🍅',
     text: '500',
-    isClicked: true,
+    disabled: true,
   },
 };

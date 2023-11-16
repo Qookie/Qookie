@@ -5,14 +5,14 @@ import { NoSymbolIcon } from '@heroicons/react/24/outline';
 import NewItem from '../../../../assets/pngs/new.png';
 import { ItemProps } from '../../../../types/item';
 
-interface Props {
+export interface ItemPageProps {
   item: ItemProps;
   chip?: boolean;
   handleCheck?: (item: ItemProps) => boolean;
   isCheck: boolean;
 }
 
-export default function Item({ item, chip, handleCheck, isCheck }: Props) {
+export default function Item({ item, chip, handleCheck, isCheck }: ItemPageProps) {
   const selectHandler = () => {
     if (handleCheck) {
       handleCheck(item);
