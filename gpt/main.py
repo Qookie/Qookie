@@ -27,7 +27,7 @@ def callback(ch, method, properties, body):
             routing_key=variables.routing_key_to_spring,
             body=json.dumps(ret),
         )
-        channel.close()
+        # channel.close()
 
         log.info("send success: " + gpt_reply)
 
