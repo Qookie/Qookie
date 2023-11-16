@@ -13,6 +13,7 @@ type Story = StoryObj<typeof TimePicker>;
 
 export const Default: Story = {
   args: {
+    time: moment(),
   },
   render: (args) => <TimePicker {...args} />,
 };
