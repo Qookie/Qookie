@@ -102,4 +102,5 @@ const MonneyContainer = styled.div`
 
 const ButtonContainer = styled.div`
   display: flex;
+  padding-bottom: 1rem;
 `;
