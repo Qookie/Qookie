@@ -40,6 +40,10 @@ function App() {
 
     window.addEventListener('beforeinstallprompt', function (e) {});
 
+    if (history.scrollRestoration) {
+      history.scrollRestoration = 'manual';
+    }
+
     return () => unsubscribe();
   }, []);
 
