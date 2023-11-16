@@ -39,11 +39,11 @@ export default function ChallengeCard({
           badgeId: badgeId || 0,
           questName: questName,
         });
-        onUpdate();
         showToast({
           title: `${coin} 포인트 적립 🌟`,
           content: `${challengeName} 달성되었습니다.`,
         });
+        onUpdate();
       } catch (e) {
         console.log('completeChallenge Error : ', e);
       }
@@ -60,7 +60,7 @@ export default function ChallengeCard({
     } else {
       setChallengeStatus('disabled')
     }
-  }, [status])
+  }, [status, totalCnt])
 
   return (
     <Container>
