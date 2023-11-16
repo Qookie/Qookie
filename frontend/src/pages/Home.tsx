@@ -62,7 +62,7 @@ const HomeContainer = styled.div``;
 
 const QuestContainer = styled.div`
   display: grid;
-  padding: 2.5rem 1rem 8rem 1rem;
+  padding: 2.5rem 1rem 6rem 1rem;
   gap: 3rem;
 `;
 

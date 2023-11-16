@@ -1,8 +1,9 @@
 import styled from 'styled-components';
-import { ChevronLeftIcon, BellIcon } from '@heroicons/react/24/outline';
+import { ChevronLeftIcon } from '@heroicons/react/24/outline';
+import bellIcon from '../../../../assets/pngs/alertBell.png';
+import qoinIcon from '../../../../assets/pngs/qoin.png';
 import { useNavigate } from 'react-router-dom';
 import Text from '../../atoms/Text';
-import { CoinLogo } from '../../../../assets/svgs';
 import { useEffect, useState } from 'react';
 
 export interface HeaderProps {
@@ -45,12 +46,8 @@ export default function Header({ page, title }: HeaderProps) {
       case 'home':
         return (
           <HomeContainer>
-            <HeaderIcon>
-              <CoinLogo onClick={toCoinlistPage}/>
-            </HeaderIcon>
-            <HeaderIcon>
-              <BellIcon onClick={toNotificationPage} />
-            </HeaderIcon>
+            <IconDiv src={qoinIcon} onClick={toCoinlistPage} />
+            <IconDiv src={bellIcon} onClick={toNotificationPage} />
           </HomeContainer>
         );
       case 'tab':
@@ -100,6 +97,10 @@ const TitleContainer = styled.div`
 `;
 
 const HeaderIcon = styled.div`
-  width: 1.5rem;
+  width: 1.4rem;
   height: 1.4rem;
+`;
+
+const IconDiv = styled.img`
+  height: 1.5rem;
 `;
