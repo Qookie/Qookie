@@ -109,7 +109,7 @@ const TopContainer = styled.div`
 `;
 
 const BottomContainer = styled.div`
-  padding: 0 1rem;
+  padding: 0 1rem 1rem 1rem;
 `;
 
 const Divider = styled.div`
