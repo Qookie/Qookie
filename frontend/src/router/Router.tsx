@@ -129,7 +129,7 @@ const NavBarWrapper = () => {
     }
   };
 
-  return checkPath() && <NavBar />;
+  return checkPath() ? <NavBar /> : null;
 };
 
 export default Router;
