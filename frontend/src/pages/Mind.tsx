@@ -279,6 +279,6 @@ const Counter = styled(Text)`
 
 const ChipContainer = styled.div`
   padding: 0 1rem;
-  display: flex;
-  gap: 0.75rem;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
 `;
