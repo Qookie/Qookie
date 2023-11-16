@@ -7,18 +7,16 @@ import Money from '../components/coinlist/molecules/Money';
 import Button from '../components/shared/atoms/Button';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../firebase/firebaseConfig';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Dialog from '../components/shared/molecules/Dialog';
-import { http } from '../api/instance';
 import TitleLayout from '../components/shared/Template/TitleLayout';
+import qoin from '../api/qoin';
 
 export default function Withdraw() {
+  const [curCoin, setCurCoin] = useState(0);
   const [dialogState, setDialogState] = useState(false);
   const navigate = useNavigate();
   const qookie = useRecoilValue(QookieInfoState);
-  // TODO: add crying eye item
-  // const cryingQookieProp = { ...qookie, background: '', eye: '여기에 우는 아이템 url' };
-  const cryingQookieProp = { ...qookie, background: '' };
 
   const doWithdraw = async () => {
     await auth.authStateReady();
@@ -43,52 +41,66 @@ export default function Withdraw() {
     }
   };
 
+  useEffect(() => {
+    qoin.getQoinList().then((c) => {
+      if (c !== undefined) {
+        setCurCoin(c);
+      }
+    });
+  }, []);
+
   return (
-    <WithdrawContainer>
+    <>
+      <Dialog
+        title={'탈퇴를 진행할까요?'}
+        content={'탈퇴시 모든 데이터가 사라집니다.'}
+        negative={'아니요'}
+        onNegativeClick={dialogHandler}
+        positive={'네'}
+        onPositiveClick={doWithdraw}
+        isopen={dialogState}
+        onCloseRequest={dialogHandler}
+      />
       <TitleLayout
         title="탈퇴하기"
         desc="탈퇴시 모든 데이터가 사라집니다."
         children={
           <ChildrenContainer>
-            <QookieStatus {...cryingQookieProp} />
-            <Money MoneyTheme="disabled"></Money>
-            <ButtonContainer>
-              <Button size="medium" theme="transparent" onClick={dialogHandler}>
-                탈퇴하기
-              </Button>
-              <Button size="medium" theme="default" onClick={cancel}>
-                취소
-              </Button>
-            </ButtonContainer>
-            <Dialog
-              title={'탈퇴를 진행할까요?'}
-              content={'탈퇴시 모든 데이터가 사라집니다.'}
-              negative={'아니요'}
-              onNegativeClick={dialogHandler}
-              positive={'네'}
-              onPositiveClick={doWithdraw}
-              isopen={dialogState}
-              onCloseRequest={dialogHandler}
-            />
+            <QookieStatus {...qookie} />
+            <InnerContainer>
+              <MonneyContainer>
+                <Money MoneyTheme="disabled" qoin={curCoin}></Money>
+              </MonneyContainer>
+              <ButtonContainer>
+                <Button size="medium" themes="transparent" onClick={dialogHandler}>
+                  탈퇴하기
+                </Button>
+                <Button size="medium" themes="default" onClick={cancel}>
+                  취소
+                </Button>
+              </ButtonContainer>
+            </InnerContainer>
           </ChildrenContainer>
         }
       ></TitleLayout>
-    </WithdrawContainer>
+    </>
   );
 }
 
-const WithdrawContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin-top: 4rem;
-  padding: 0 2vh 1rem;
+const ChildrenContainer = styled.div`
+  margin-top: -3rem;
 `;
 
-const ChildrenContainer = styled.div`
-  margin-top: -4rem;
+const InnerContainer = styled.div`
+  padding: 0 1rem 0;
+`;
+
+const MonneyContainer = styled.div`
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 `;
 
 const ButtonContainer = styled.div`
   display: flex;
+  padding-bottom: 1rem;
 `;

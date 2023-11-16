@@ -10,5 +10,5 @@ export default meta;
 type Story = StoryObj<typeof MonthSelector>;
 
 export const Default: Story = {
-  render: (args) => <MonthSelector />,
+  render: (args) => <MonthSelector onClickNextMonth={() => 12} onClickPrevMonth={() => 10} selectedMonth={11} />,
 };

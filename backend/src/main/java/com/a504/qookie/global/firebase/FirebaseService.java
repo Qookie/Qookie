@@ -16,6 +16,7 @@ public class FirebaseService {
 
     public String sendMessage(String title, String body, String url, String messageToken)
             throws FirebaseMessagingException, NullPointerException {
+        System.out.println("========================================MT: " + messageToken);
         if (messageToken == null) {
             throw new NullPointerException("message Token is null");
         }

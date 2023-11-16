@@ -6,10 +6,11 @@ import Text from '../components/shared/atoms/Text';
 import TextArea from '../components/mind/atoms/TextArea';
 import Chip from '../components/shared/molecules/Chip';
 import Button from '../components/shared/atoms/Button';
-import Letter from '../assets/pngs/letter.png';
-import HandHeart from '../assets/pngs/handheart.png';
-import HandPen from '../assets/pngs/handpen.png';
-import LetterQookie from '../assets/pngs/letterqookie.png';
+import Letter from '../assets/pngs/mind.png';
+import Heart from '../assets/pngs/heart.png';
+import HandHeart from '../assets/pngs/hand.png';
+import HandPen from '../assets/pngs/pencil.png';
+import LetterQookie from '../assets/pngs/oh.png';
 import Check from '../assets/pngs/check.png';
 import TitleLayout from '../components/shared/Template/TitleLayout';
 import TextImgLayout from '../components/shared/molecules/TextImg';
@@ -18,8 +19,8 @@ import { showToast } from '../components/shared/molecules/Alert';
 import { MessageProps } from '../components/mind/molcules/MessageCard';
 
 interface ResProps {
-  msg: string, 
-  payload: MessageProps[] 
+  msg: string;
+  payload: MessageProps[];
 }
 
 export default function Mind() {
@@ -125,7 +126,7 @@ export default function Mind() {
 
       <MiddleContainer>
         <TextArea
-          placeholder={`오늘은 어떤 ${emotion}을/를 느꼈나요?`}
+          placeholder={`오늘은 어떤 ${emotion}을(를) 느꼈나요?`}
           value={inputValue}
           onChange={handleChange}
         />
@@ -135,14 +136,14 @@ export default function Mind() {
         {inputValue ? (
           <Button onClick={() => postMind('/api/heart/create')}>보내기</Button>
         ) : (
-          <Button onClick={() => null} theme="disabled">
+          <Button onClick={() => null} themes="disabled">
             보내기
           </Button>
         )}
         <PastMind onClick={() => navigate('/past-mind')}>
           <PastText>지난 마음</PastText>
           <ImgDiv>
-            <img src={Letter} />
+            <img src={Letter} width={60} />
           </ImgDiv>
         </PastMind>
       </MiddleContainer>
@@ -173,13 +174,15 @@ export default function Mind() {
         />
         <TextImgLayout
           image={LetterQookie}
-          desc={
-            '조금 기다리면 당신을 위한 상담사 오쿠키 박사님이 답장을 보내줄거예요!'
-          }
+          desc={'조금 기다리면 당신을 위한 상담사 오쿠키 박사님이 답장을 보내줄거예요!'}
         />
-        <Button theme="transparent" onClick={() => window.scroll({top:0, left:0, behavior:'smooth'})}>
-          <img src={Letter} width={25} height={25} />
-          &nbsp;마음 보내기
+        <Button
+          themes="transparent"
+          size="icon"
+          onClick={() => window.scroll({ top: 0, left: 0, behavior: 'smooth' })}
+        >
+          <img src={Heart} width={25} height={25} />
+          마음 보내기
         </Button>
       </BottomContainer>
       <BottomPageLayout
@@ -208,6 +211,7 @@ const Container = styled.div`
 
 const MiddleContainer = styled.div`
   padding: 0 1rem;
+  box-sizing: border-box;
 `;
 
 const BottomContainer = styled.div`
@@ -230,6 +234,7 @@ const PastMind = styled.div`
   height: 70px;
   padding: 14px 16px 6px 16px;
   margin-top: 40px;
+  position: relative;
 `;
 
 const PastText = styled(Text)`
@@ -239,8 +244,10 @@ const PastText = styled(Text)`
 `;
 
 const ImgDiv = styled.div`
-  display: flex;
-  justify-content: end;
+  margin-left: auto;
+  position: absolute;
+  right: 0.75rem;
+  bottom: 0.25rem;
 `;
 
 const Divider = styled.div`
@@ -272,6 +279,6 @@ const Counter = styled(Text)`
 
 const ChipContainer = styled.div`
   padding: 0 1rem;
-  display: flex;
-  justify-content: space-around;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
 `;

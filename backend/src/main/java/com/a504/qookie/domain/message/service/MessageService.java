@@ -51,6 +51,9 @@ public class MessageService {
         try {
             HeartMessage heartMessage = heartRepository.makeHeartMessageFromHeartId(messageResponse.getHeartId());
 
+            System.out.println("========================================");
+            System.out.println(heartMessage.member().getName());
+            System.out.println(heartMessage.heart().getContent());
             // save reply to db
             heartMessage.heart().saveReply(messageResponse.getContent());
             // save notification to db
@@ -63,12 +66,14 @@ public class MessageService {
 
             // send firebase notification
             String messageToken = heartMessage.member().getMessageToken();
+            System.out.println("MT: " + messageToken);
             if (messageToken != null) {
-                firebaseService.sendMessage(
+                String ret = firebaseService.sendMessage(
                         "오쿠키의 마음 답장이 도착했어요!",
                         "지금 확인해보세요!",
                         "mind",
                         heartMessage.member().getMessageToken());
+                System.out.println("RET: " + ret);
             }
         } catch (FirebaseMessagingException | NoSuchElementException | NullPointerException e) {
             // delete message if error

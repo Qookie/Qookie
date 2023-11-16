@@ -76,7 +76,7 @@ export default function Cart({ totalList, onClose, isComplete, curQoin }: CartPr
       </PriceContainer>
       <Button
         onClick={handleBuyItems}
-        theme={haveQoin && selectedItemList.length > 0 ? 'default' : 'disabled'}
+        themes={haveQoin && selectedItemList.length > 0 ? 'default' : 'disabled'}
         disabled={!haveQoin || selectedItemList.length === 0}
       >
         {selectedItemList.length > 0

@@ -1,6 +1,6 @@
 import { StoryObj, Meta } from '@storybook/react';
 import { BrowserRouter } from 'react-router-dom';
-import Item from '.';
+import Item, { ItemPageProps } from '.';
 
 const meta: Meta<typeof Item> = {
   component: Item,
@@ -20,7 +20,11 @@ type Story = StoryObj<typeof Item>;
 export const Default: Story = {
   name: 'item',
   args: {
-    media:
-      'https://cdn3.vectorstock.com/i/1000x1000/10/22/seamless-triangular-patter-vector-21431022.jpg',
+    item: {
+      id: 0,
+      media:
+        'https://cdn3.vectorstock.com/i/1000x1000/10/22/seamless-triangular-patter-vector-21431022.jpg',
+    },
+    isCheck: false,
   },
 };

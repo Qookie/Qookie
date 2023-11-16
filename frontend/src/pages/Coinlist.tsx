@@ -64,7 +64,7 @@ export default function Coinlist() {
 
   return (
     <Container>
-      <TitleLayout title={'재화 목록'}/>
+      <TitleLayout title={'재화 목록'} />
       <TopContainer>
         <Money qoin={totalCoin} />
       </TopContainer>
@@ -109,7 +109,7 @@ const TopContainer = styled.div`
 `;
 
 const BottomContainer = styled.div`
-  padding: 0 1rem;
+  padding: 0 1rem 1rem 1rem;
 `;
 
 const Divider = styled.div`

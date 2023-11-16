@@ -24,6 +24,7 @@ public class FirebaseTestController {
                     "test body",
                     "mind",
                     customMemberDetails.getMember().getMessageToken());
+            System.out.println("===================================================RET: " + ret);
             return BaseResponse.okWithData(HttpStatus.OK, "good", ret);
         } catch (Exception e) {
             e.printStackTrace();

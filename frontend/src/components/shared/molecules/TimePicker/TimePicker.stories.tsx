@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import TimePicker from '.';
+import moment from 'moment';
 
 const meta: Meta<typeof TimePicker> = {
   component: TimePicker,
@@ -12,12 +13,7 @@ type Story = StoryObj<typeof TimePicker>;
 
 export const Default: Story = {
   args: {
-    time: {
-      hour: '12',
-      minute: '34',
-      meridiem: 'PM',
-    },
+    time: moment(),
   },
-
   render: (args) => <TimePicker {...args} />,
 };
