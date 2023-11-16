@@ -60,6 +60,7 @@ const Layout = styled.div`
   min-height: 100vh;
   position: relative;
   height: 1px;
+  padding-bottom: env(safe-area-inset-bottom);
   @media screen and (min-width: 431px) {
     margin: 0 auto;
   }
