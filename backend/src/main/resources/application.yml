@@ -3,6 +3,8 @@ server:
   ssl:
     enabled: false
 spring:
+  jackson:
+    time-zone: Asia/Seoul
   profiles:
     active: secret
   mvc:
@@ -10,8 +12,8 @@ spring:
       matching-strategy: ant_path_matcher
   servlet:
     multipart:
-      max-file-size: 1MB
-      max-request-size: 1MB
+      max-file-size: 20MB
+      max-request-size: 20MB
 
 logging:
   level:
@@ -22,3 +24,8 @@ logging:
           descriptor:
             sql:
               BasicBinder: TRACE
+rabbitmq:
+  host: localhost
+  port: 5672
+  user: newjeans
+  password: ss501ss501
