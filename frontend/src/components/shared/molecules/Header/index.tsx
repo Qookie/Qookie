@@ -102,5 +102,5 @@ const HeaderIcon = styled.div`
 `;
 
 const IconDiv = styled.img`
-  height: 1.5rem;
+  height: 1.7rem;
 `;
