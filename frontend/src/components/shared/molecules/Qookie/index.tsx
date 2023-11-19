@@ -101,7 +101,7 @@ const BottomContainer = styled.img<{ level: number }>`
 const ShoeContainer = styled.img<{ level: number }>`
   position: absolute;
   bottom: -2%;
-  left: ${({ level }) => (level >= 40 || level < 30 ? '42%' : '40%')};
+  left: ${({ level }) => (level >= 40 ? '42%' : level >= 30 ? '40%' : '43%')};
   transform: translateX(-50%);
 `;
 
