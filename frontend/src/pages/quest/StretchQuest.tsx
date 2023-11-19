@@ -22,7 +22,7 @@ function StretchQuest() {
     <VideoQuestLayout
       quest={Quest.STRETCH}
       title={'스트레칭'}
-      desc={'스트레칭으로 뭉친 몸을 풀어보아요!\n몸에 활력이 돌거에요.'}
+      desc={'스트레칭으로 뭉친 몸을 풀어보아요!\n영상을 끝까지 시청하면 퀘스트 버튼이 활성화됩니다.'}
       completeButtonText="스트레칭 완료"
       onSuccessQuest={onSuccessQuest}
       questSubText={{

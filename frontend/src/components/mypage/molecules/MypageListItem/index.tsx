@@ -4,7 +4,7 @@ import { ChevronRightIcon } from '@heroicons/react/24/outline';
 import { useNavigate } from 'react-router-dom';
 import { signOut } from '@firebase/auth';
 import { auth } from '../../../../firebase/firebaseConfig';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
 import { UserState } from '../../../../modules/user';
 import Dialog from '../../../shared/molecules/Dialog';
 import { useState } from 'react';
@@ -20,6 +20,7 @@ export interface MypageItemProps {
 export default function MypageListItem({ icon, intro, path }: MypageItemProps) {
   const navigate = useNavigate();
   const setUserState = useSetRecoilState(UserState);
+  const resetList = useResetRecoilState(QookieInfoState);
   const qookie = useRecoilValue(QookieInfoState);
   const [dialogState, setDialogState] = useState<boolean>(false);
   const [storeOpen, setStoreOpen] = useState<boolean>(false);
@@ -45,6 +46,7 @@ export default function MypageListItem({ icon, intro, path }: MypageItemProps) {
   const doSignOut = () => {
     signOut(auth).then(() => {
       setUserState(null);
+      resetList();
       navigate('/');
     });
   };

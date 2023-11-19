@@ -9,8 +9,8 @@ import TitleLayout from '../components/shared/Template/TitleLayout';
 import Error from '../components/shared/atoms/error';
 
 interface ResProps {
-  msg: string, 
-  payload: MessageProps[] 
+  msg: string;
+  payload: MessageProps[];
 }
 
 export default function PastMind() {
@@ -89,6 +89,7 @@ export default function PastMind() {
 }
 
 const Container = styled.div`
+  padding-bottom: 2rem;
 `;
 
 const MonthContainer = styled.div`

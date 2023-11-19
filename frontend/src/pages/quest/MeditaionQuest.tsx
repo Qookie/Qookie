@@ -22,7 +22,7 @@ function MeditaionQuest() {
     <VideoQuestLayout
       quest={Quest.MEDITATION}
       title={'명상'}
-      desc={'눈을 감고, 호흡에 집중해보세요.\n마음이 편안해지고, 긍정적인 에너지가 샘솟을 거에요.'}
+      desc={'눈을 감고, 호흡에 집중해보세요.\n마음이 편안해지고, 긍정적인 에너지가 샘솟을 거에요.\n영상을 끝까지 시청하면 퀘스트 버튼이 활성화됩니다.'}
       completeButtonText="명상 완료"
       onSuccessQuest={onSuccessQuest}
       questSubText={{

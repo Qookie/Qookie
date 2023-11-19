@@ -229,7 +229,7 @@ export default function Store() {
     });
 
     return unCheckBackEvent;
-  }, [selectedItemList]);
+  }, [selectedItemList, myItemList]);
 
   const selectAllTabHandler = async () => {
     // 상점 tab 클릭시

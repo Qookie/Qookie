@@ -35,12 +35,14 @@ import Mind from '../pages/Mind';
 import PastMind from '../pages/PastMind';
 import { PrivateRoute } from './PrivateRoute';
 import Privacy from '../pages/Privacy';
+import ScrollToTop from '../utils/scrollToTop';
 
 const Router = () => {
   const [userState, _] = useRecoilState(UserState);
 
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <HeaderWrapper />
       <Routes>
         <Route path="/loading" element={<Loading />} />
